@@ -13,8 +13,8 @@ export default function HowItWorks() {
   return (
     <section className="space-y-5">
       <div className="text-center">
-        <h2 className="font-heading text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground hidden">Cómo funciona</h2>
-        <p className="font-display text-2xl font-semibold tracking-tight mt-1 hidden">¿Qué hace AutoReiki por ti?</p>
+        
+        
       </div>
 
       <div className="rounded-3xl overflow-hidden neon-border">
