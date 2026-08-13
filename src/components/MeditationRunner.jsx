@@ -15,7 +15,15 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const timerRef = useRef(null);
 
   const isGuided = config.mode === "guided";
-  const script = isGuided ? GUIDED_SCRIPTS[config.level] : null;
+  let script = config.customScript || null;
+  if (!script && isGuided) {
+    if (config.level === "beginner") {
+      const day = new Date().getDay();
+      script = day % 2 === 0 ? GUIDED_SCRIPTS.beginner : GUIDED_SCRIPTS.beginner2;
+    } else {
+      script = GUIDED_SCRIPTS.intermediate;
+    }
+  }
 
   // calcular paso actual guiado
   useEffect(() => {

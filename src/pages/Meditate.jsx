@@ -1,15 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import SessionForm from "@/components/SessionForm";
 import MeditationRunner from "@/components/MeditationRunner";
 import ReflectionForm from "@/components/ReflectionForm";
-import { useNavigate } from "react-router-dom";
+import { buildChakraScript } from "@/lib/guidedScripts";
 
 export default function Meditate() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [stage, setStage] = useState("setup"); // setup | running | reflection
   const [config, setConfig] = useState(null);
   const [result, setResult] = useState(null);
+
+  // Permite iniciar con un preset desde Recorrido o Configurar.
+  useEffect(() => {
+    const preset = location.state?.preset;
+    if (preset) {
+      const cfg = { ...preset };
+      if (cfg.chakras && cfg.chakras.length) {
+        cfg.customScript = buildChakraScript(cfg.chakras);
+      }
+      setConfig(cfg);
+      setStage("running");
+    }
+  }, [location.state]);
 
   const start = (cfg) => {
     setConfig(cfg);
@@ -33,6 +48,9 @@ export default function Meditate() {
         notes,
         completed: result.completed,
       });
+      if (config.journeyDay) {
+        await base44.entities.JourneyProgress.create({ day_number: config.journeyDay });
+      }
     } catch (e) {
       // ignore save errors
     }

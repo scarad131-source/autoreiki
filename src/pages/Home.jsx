@@ -7,6 +7,8 @@ import { IMAGES } from "@/lib/assets";
 import StatsOverview from "@/components/StatsOverview";
 import SessionCard from "@/components/SessionCard";
 import HowItWorks from "@/components/HowItWorks";
+import StreakBanner from "@/components/StreakBanner";
+import { computeStreak } from "@/lib/journey";
 
 const QUOTES = [
   "Cada respiración es una oportunidad de volver al presente.",
@@ -37,6 +39,7 @@ export default function Home() {
 
   const quote = QUOTES[new Date().getDate() % QUOTES.length];
   const recent = sessions.slice(0, 3);
+  const streak = computeStreak(sessions);
   const firstName = user?.full_name?.split(" ")[0] || "alma";
 
   return (
@@ -76,7 +79,10 @@ export default function Home() {
       {loading ? (
         <div className="h-24 rounded-2xl bg-accent/40 animate-pulse" />
       ) : (
-        <StatsOverview sessions={sessions} />
+        <>
+          <StatsOverview sessions={sessions} />
+          {sessions.length > 0 && <StreakBanner streak={streak} />}
+        </>
       )}
 
       <HowItWorks />

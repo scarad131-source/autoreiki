@@ -1,12 +1,14 @@
 import { Outlet, NavLink } from "react-router-dom";
-import { Home as HomeIcon, Wind, History, LogOut } from "lucide-react";
+import { Home as HomeIcon, Wind, History, LogOut, Footprints, Settings } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
 import { IMAGES } from "@/lib/assets";
 
 const navItems = [
   { to: "/", label: "Inicio", icon: HomeIcon, end: true },
+  { to: "/recorrido", label: "21 días", icon: Footprints },
   { to: "/meditar", label: "Meditar", icon: Wind },
+  { to: "/configurar", label: "Configurar", icon: Settings },
   { to: "/historial", label: "Historial", icon: History },
 ];
 
@@ -43,14 +45,14 @@ export default function Layout() {
       </main>
 
       <nav className="fixed bottom-0 inset-x-0 z-30 border-t border-glow/20 bg-background/85 backdrop-blur-xl">
-        <div className="max-w-3xl mx-auto px-5 h-16 flex items-center justify-around">
+        <div className="max-w-3xl mx-auto px-2 h-16 flex items-center justify-around">
           {navItems.map(({ to, label, icon: Icon, end }) => (
             <NavLink
               key={to}
               to={to}
               end={end}
               className={({ isActive }) =>
-                `flex flex-col items-center gap-1 px-4 py-1.5 rounded-2xl transition-all ${
+                `flex flex-col items-center gap-1 px-2 py-1.5 rounded-2xl transition-all ${
                   isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
                 }`
               }
@@ -61,7 +63,7 @@ export default function Layout() {
                     className={`w-5 h-5 ${isActive ? "scale-110 neon-text" : ""} transition-transform`}
                     strokeWidth={isActive ? 2.4 : 2}
                   />
-                  <span className="text-[11px] font-medium">{label}</span>
+                  <span className="text-[10px] font-medium">{label}</span>
                 </>
               )}
             </NavLink>

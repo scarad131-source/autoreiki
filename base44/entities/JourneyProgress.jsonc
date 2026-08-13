@@ -1,0 +1,29 @@
+{
+  "name": "JourneyProgress",
+  "type": "object",
+  "properties": {
+    "day_number": {
+      "type": "number",
+      "description": "N\u00famero de d\u00eda del recorrido (1-21)"
+    },
+    "note": {
+      "type": "string",
+      "description": "Nota opcional del d\u00eda"
+    }
+  },
+  "required": [
+    "day_number"
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}

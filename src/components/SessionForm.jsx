@@ -14,7 +14,7 @@ const LEVELS = [
   { id: "intermediate", name: "Intermedio", desc: "Profundiza con chakras" },
 ];
 
-const DURATIONS = [5, 10, 15, 20];
+const DURATIONS = [5, 10, 15, 20, 30, 45, 60, 90];
 
 export default function SessionForm({ onStart }) {
   const [mode, setMode] = useState("guided");
