@@ -1,0 +1,88 @@
+{
+  "name": "MeditationSession",
+  "type": "object",
+  "properties": {
+    "mode": {
+      "type": "string",
+      "enum": [
+        "guided",
+        "unguided"
+      ],
+      "description": "Tipo de sesi\u00f3n: guiada o no guiada"
+    },
+    "level": {
+      "type": "string",
+      "enum": [
+        "beginner",
+        "intermediate"
+      ],
+      "description": "Nivel de experiencia"
+    },
+    "audio": {
+      "type": "string",
+      "enum": [
+        "beach",
+        "forest",
+        "healing"
+      ],
+      "description": "Ambiente sonoro elegido"
+    },
+    "planned_minutes": {
+      "type": "number",
+      "description": "Duraci\u00f3n planificada en minutos"
+    },
+    "actual_seconds": {
+      "type": "number",
+      "description": "Tiempo real meditado en segundos"
+    },
+    "mood_before": {
+      "type": "string",
+      "enum": [
+        "calm",
+        "anxious",
+        "tired",
+        "stressed",
+        "neutral"
+      ],
+      "description": "Estado de \u00e1nimo antes de la sesi\u00f3n"
+    },
+    "mood_after": {
+      "type": "string",
+      "enum": [
+        "relaxed",
+        "centered",
+        "energized",
+        "peaceful",
+        "neutral"
+      ],
+      "description": "Estado de \u00e1nimo despu\u00e9s de la sesi\u00f3n"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Notas personales de la sesi\u00f3n"
+    },
+    "completed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Si la sesi\u00f3n se complet\u00f3"
+    }
+  },
+  "required": [
+    "mode",
+    "level",
+    "audio",
+    "planned_minutes"
+  ],
+  "rls": {
+    "create": true,
+    "read": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}
