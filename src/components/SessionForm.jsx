@@ -98,7 +98,7 @@ export default function SessionForm({ onStart }) {
               >
                 <button onClick={() => setAudio(a.id)} className="flex items-center gap-3 flex-1 text-left">
                   <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${a.gradient} flex items-center justify-center shrink-0`}>
-                    <Icon className="w-5 h-5 text-white" strokeWidth={2} />
+                    <Icon className="w-5 h-5 text-primary-foreground" strokeWidth={2} />
                   </div>
                   <div className="min-w-0">
                     <p className="font-medium text-sm">{a.name}</p>

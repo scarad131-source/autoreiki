@@ -60,7 +60,7 @@ export default function Configurar() {
                 className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center"
                 style={{ background: isSel ? c.color : `${c.color}22`, boxShadow: isSel ? `0 0 12px ${c.color}88` : "none" }}
               >
-                <span className="w-2.5 h-2.5 rounded-full" style={{ background: isSel ? "#fff" : c.color }} />
+                <span className="w-2.5 h-2.5 rounded-full" style={{ background: isSel ? "hsl(var(--primary-foreground))" : c.color }} />
               </span>
               <div className="min-w-0">
                 <p className="text-sm font-medium">{c.name}</p>
