@@ -113,7 +113,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       {/* barra de progreso */}
       <div className="w-full h-1 bg-accent rounded-full overflow-hidden mb-6">
         <motion.div
-          className="h-full bg-gradient-to-r from-teal-500 to-violet-500"
+          className="h-full bg-gradient-to-r from-primary to-glow-cyan"
           style={{ width: `${progress}%` }}
           transition={{ ease: "linear" }}
         />
@@ -130,7 +130,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         </button>
         <button
           onClick={() => setPaused((p) => !p)}
-          className="w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-teal-600 to-violet-600 text-white shadow-lg shadow-teal-600/30 transition-transform active:scale-95"
+          className="w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-primary to-glow-cyan text-primary-foreground neon-glow transition-transform active:scale-95"
           aria-label={paused ? "Reanudar" : "Pausar"}
         >
           {paused ? <Play className="w-6 h-6 ml-0.5" /> : <Pause className="w-6 h-6" />}

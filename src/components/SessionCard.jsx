@@ -9,9 +9,9 @@ export default function SessionCard({ session }) {
   const mins = Math.round((session.actual_seconds || session.planned_minutes * 60) / 60);
 
   return (
-    <div className="flex items-center gap-3.5 p-3.5 rounded-2xl border border-border bg-card hover:border-teal-300 transition-colors">
+    <div className="flex items-center gap-3.5 p-3.5 rounded-2xl border border-glow/20 bg-card/50 backdrop-blur-sm hover:border-primary/50 transition-colors">
       <div className="w-11 h-11 rounded-xl bg-accent flex items-center justify-center shrink-0">
-        <Icon className="w-5 h-5 text-teal-600" />
+        <Icon className="w-5 h-5 text-primary" />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
@@ -28,7 +28,7 @@ export default function SessionCard({ session }) {
         </p>
       </div>
       {session.completed && (
-        <span className="text-[10px] px-2 py-1 rounded-full bg-teal-50 text-teal-700 font-medium shrink-0">
+        <span className="text-[10px] px-2 py-1 rounded-full bg-primary/20 text-primary font-medium shrink-0 neon-text">
           ✓
         </span>
       )}

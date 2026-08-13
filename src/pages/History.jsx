@@ -32,19 +32,19 @@ export default function History() {
       {loading ? (
         <div className="space-y-3">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-16 rounded-2xl bg-accent animate-pulse" />
+            <div key={i} className="h-16 rounded-2xl bg-accent/40 animate-pulse" />
           ))}
         </div>
       ) : sessions.length === 0 ? (
         <div className="text-center py-20">
-          <div className="w-16 h-16 mx-auto rounded-full bg-accent flex items-center justify-center mb-4">
-            <Wind className="w-7 h-7 text-muted-foreground" />
+          <div className="w-16 h-16 mx-auto rounded-full bg-accent flex items-center justify-center mb-4 neon-glow">
+            <Wind className="w-7 h-7 text-primary" />
           </div>
           <p className="font-medium">Aún no hay sesiones</p>
           <p className="text-sm text-muted-foreground mt-1 mb-5">Comienza tu primera meditación</p>
           <button
             onClick={() => navigate("/meditar")}
-            className="px-6 py-3 rounded-2xl bg-gradient-to-r from-teal-600 to-violet-600 text-white font-medium shadow-lg shadow-teal-600/20"
+            className="px-6 py-3 rounded-2xl bg-gradient-to-r from-primary to-glow-cyan text-primary-foreground font-medium neon-glow"
           >
             Meditar ahora
           </button>
