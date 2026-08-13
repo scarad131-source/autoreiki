@@ -5,6 +5,7 @@ import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
 import { IMAGES } from "@/lib/assets";
 import StatsOverview from "@/components/StatsOverview";
+import WeeklyStats from "@/components/WeeklyStats";
 import SessionCard from "@/components/SessionCard";
 import HowItWorks from "@/components/HowItWorks";
 import StreakBanner from "@/components/StreakBanner";
@@ -82,6 +83,7 @@ export default function Home() {
         <>
           <StatsOverview sessions={sessions} />
           {sessions.length > 0 && <StreakBanner streak={streak} />}
+          {sessions.length > 0 && <WeeklyStats sessions={sessions} />}
         </>
       )}
 
