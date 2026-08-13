@@ -5,6 +5,8 @@ import ChakraFigure from "@/components/ChakraFigure";
 import { CHAKRAS } from "@/lib/guidedScripts";
 
 const DURATIONS = [5, 10, 15, 20, 30, 45];
+// Mostrar de corona (arriba) a raíz (abajo) como en la referencia.
+const ORDERED = [...CHAKRAS].reverse();
 
 export default function Configurar() {
   const navigate = useNavigate();
@@ -38,23 +40,36 @@ export default function Configurar() {
 
       <ChakraFigure selected={selected} onToggle={toggle} />
 
-      <div className="flex flex-wrap gap-2 justify-center">
-        {CHAKRAS.map((c) => {
+      {/* lista de objetivos por chakra (corona → raíz) */}
+      <section className="space-y-2.5">
+        <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+          ¿Qué resuelve cada chakra?
+        </h3>
+        {ORDERED.map((c) => {
           const isSel = selected.includes(c.id);
           return (
             <button
               key={c.id}
               onClick={() => toggle(c.id)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs border transition-all ${
-                isSel ? "border-primary bg-accent neon-glow" : "border-glow/20 bg-card/50"
+              className={`w-full flex items-center gap-3 p-3.5 rounded-2xl border text-left transition-all ${
+                isSel ? "bg-accent/60" : "border-glow/20 bg-card/50"
               }`}
+              style={isSel ? { borderColor: c.color, boxShadow: `0 0 18px ${c.color}33` } : {}}
             >
-              <span className="w-2.5 h-2.5 rounded-full" style={{ background: c.color }} />
-              {c.name}
+              <span
+                className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center"
+                style={{ background: isSel ? c.color : `${c.color}22`, boxShadow: isSel ? `0 0 12px ${c.color}88` : "none" }}
+              >
+                <span className="w-2.5 h-2.5 rounded-full" style={{ background: isSel ? "#fff" : c.color }} />
+              </span>
+              <div className="min-w-0">
+                <p className="text-sm font-medium">{c.name}</p>
+                <p className="text-xs text-muted-foreground mt-0.5 leading-snug">{c.objective}</p>
+              </div>
             </button>
           );
         })}
-      </div>
+      </section>
 
       <section>
         <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3 flex items-center gap-1.5">

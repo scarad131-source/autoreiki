@@ -52,13 +52,13 @@ export const GUIDED_SCRIPTS = {
 };
 
 export const CHAKRAS = [
-  { id: "root", name: "Raíz", color: "#e5484d", colorName: "roja", position: "la base de la columna", affirmation: "Estoy a salvo y enraizado." },
-  { id: "sacral", name: "Sacro", color: "#f97316", colorName: "naranja", position: "el bajo abdomen", affirmation: "Mi creatividad y emociones fluyen en equilibrio." },
-  { id: "solar", name: "Plexo solar", color: "#facc15", colorName: "amarilla", position: "el plexo solar", affirmation: "Mi poder personal resplandece sin esfuerzo." },
-  { id: "heart", name: "Corazón", color: "#22c55e", colorName: "verde esmeralda", position: "el centro del pecho", affirmation: "Soy amor y me abro a recibir." },
-  { id: "throat", name: "Garganta", color: "#3b82f6", colorName: "azul cielo", position: "la garganta", affirmation: "Mi voz es verdad y me expreso con libertad." },
-  { id: "third_eye", name: "Tercer ojo", color: "#6366f1", colorName: "índigo", position: "entre las cejas", affirmation: "Mi intuición es clara y confío en ella." },
-  { id: "crown", name: "Corona", color: "#a855f7", colorName: "violeta", position: "la coronilla", affirmation: "Me abro a la conexión con algo más grande que yo." },
+  { id: "root", name: "Raíz", color: "#c0392b", colorName: "roja", position: "la base de la columna", affirmation: "Estoy a salvo y enraizado.", objective: "Bases en la vida, supervivencia, seguridad, instinto y temores" },
+  { id: "sacral", name: "Sacro", color: "#e67e22", colorName: "naranja", position: "el bajo abdomen", affirmation: "Mi creatividad y emociones fluyen en equilibrio.", objective: "Emociones, creatividad, relación con otros, necesidades y placeres" },
+  { id: "solar", name: "Plexo solar", color: "#f1c40f", colorName: "amarilla", position: "el plexo solar", affirmation: "Mi poder personal resplandece sin esfuerzo.", objective: "Voluntad, energía, mente, poder y libertad propia" },
+  { id: "heart", name: "Corazón", color: "#27ae60", colorName: "verde esmeralda", position: "el centro del pecho", affirmation: "Soy amor y me abro a recibir.", objective: "Amor, respeto, autoestima, sanación y tolerancia" },
+  { id: "throat", name: "Garganta", color: "#3498db", colorName: "azul cielo", position: "la garganta", affirmation: "Mi voz es verdad y me expreso con libertad.", objective: "Comunicación interna y externa, habla y auto-expresión" },
+  { id: "third_eye", name: "Tercer ojo", color: "#2980b9", colorName: "índigo", position: "entre las cejas", affirmation: "Mi intuición es clara y confío en ella.", objective: "Intuición, imaginación y percepción extrasensorial" },
+  { id: "crown", name: "Corona", color: "#9b59b6", colorName: "violeta", position: "la coronilla", affirmation: "Me abro a la conexión con algo más grande que yo.", objective: "Conexión con lo divino y la espiritualidad" },
 ];
 
 export function buildChakraScript(selectedIds) {
