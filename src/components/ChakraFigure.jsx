@@ -3,19 +3,19 @@ import { CHAKRAS } from "@/lib/guidedScripts";
 
 // Figura humana traslúcida en pose de loto con 7 chakras activables.
 const POSITIONS = {
-  crown: 20,
-  third_eye: 45,
-  throat: 78,
-  heart: 108,
-  solar: 138,
-  sacral: 165,
-  root: 188,
+  crown: 16,
+  third_eye: 38,
+  throat: 66,
+  heart: 96,
+  solar: 124,
+  sacral: 150,
+  root: 174,
 };
 
 export default function ChakraFigure({ selected = [], onToggle }) {
   return (
-    <div className="relative w-full max-w-[240px] mx-auto">
-      <svg viewBox="0 0 200 245" className="w-full">
+    <div className="relative w-full max-w-[260px] mx-auto">
+      <svg viewBox="0 0 200 250" className="w-full">
         <defs>
           <filter id="fig-glow" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="2.5" result="b" />
@@ -24,28 +24,69 @@ export default function ChakraFigure({ selected = [], onToggle }) {
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
-          <radialGradient id="body-fill" cx="50%" cy="40%" r="65%">
-            <stop offset="0%" stopColor="hsl(var(--glow))" stopOpacity="0.2" />
-            <stop offset="100%" stopColor="hsl(var(--glow-cyan))" stopOpacity="0.05" />
+          <filter id="body-glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="4" result="b" />
+            <feMerge>
+              <feMergeNode in="b" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          <radialGradient id="body-fill" cx="50%" cy="45%" r="65%">
+            <stop offset="0%" stopColor="hsl(var(--glow))" stopOpacity="0.22" />
+            <stop offset="60%" stopColor="hsl(var(--glow))" stopOpacity="0.1" />
+            <stop offset="100%" stopColor="hsl(var(--glow-cyan))" stopOpacity="0.04" />
           </radialGradient>
         </defs>
 
         {/* aura */}
-        <circle cx="100" cy="120" r="116" fill="none" stroke="hsl(var(--glow))" strokeOpacity="0.25" strokeWidth="1" strokeDasharray="3 7" />
+        <circle cx="100" cy="118" r="118" fill="none" stroke="hsl(var(--glow))" strokeOpacity="0.25" strokeWidth="1" strokeDasharray="3 7" />
+        <circle cx="100" cy="118" r="96" fill="none" stroke="hsl(var(--glow-cyan))" strokeOpacity="0.12" strokeWidth="1" />
 
-        {/* columna */}
-        <line x1="100" y1="45" x2="100" y2="188" stroke="hsl(var(--glow))" strokeOpacity="0.4" strokeWidth="1.5" />
+        {/* columna / sushumna */}
+        <line x1="100" y1="58" x2="100" y2="174" stroke="hsl(var(--glow))" strokeOpacity="0.45" strokeWidth="1.5" />
 
-        {/* cuerpo en loto */}
+        {/* torso + piernas en loto */}
         <path
-          d="M100,68 C84,68 74,80 73,95 L77,160 C77,172 66,180 52,190 C66,206 84,214 100,218 C116,214 134,206 148,190 C134,180 123,172 123,160 L127,95 C126,80 116,68 100,68 Z"
+          d="M100,66 C86,66 76,74 74,88 C72,102 80,120 82,136 C80,150 70,158 58,170 C72,184 86,192 100,194 C114,192 128,184 142,170 C130,158 120,150 118,136 C120,120 128,102 126,88 C124,74 114,66 100,66 Z"
           fill="url(#body-fill)"
           stroke="hsl(var(--glow))"
-          strokeOpacity="0.4"
-          strokeWidth="1.2"
+          strokeOpacity="0.5"
+          strokeWidth="1.3"
+          filter="url(#body-glow)"
         />
+
+        {/* brazos descansando sobre las rodillas */}
+        <path
+          d="M78,84 C64,104 58,134 64,164"
+          fill="none"
+          stroke="hsl(var(--glow))"
+          strokeOpacity="0.5"
+          strokeWidth="1.3"
+          filter="url(#body-glow)"
+        />
+        <path
+          d="M122,84 C136,104 142,134 136,164"
+          fill="none"
+          stroke="hsl(var(--glow))"
+          strokeOpacity="0.5"
+          strokeWidth="1.3"
+          filter="url(#body-glow)"
+        />
+
         {/* cabeza */}
-        <circle cx="100" cy="48" r="20" fill="url(#body-fill)" stroke="hsl(var(--glow))" strokeOpacity="0.4" strokeWidth="1.2" />
+        <ellipse
+          cx="100"
+          cy="44"
+          rx="17"
+          ry="20"
+          fill="url(#body-fill)"
+          stroke="hsl(var(--glow))"
+          strokeOpacity="0.5"
+          strokeWidth="1.3"
+          filter="url(#body-glow)"
+        />
+        {/* cuello */}
+        <path d="M93,62 L93,70 M107,62 L107,70" stroke="hsl(var(--glow))" strokeOpacity="0.4" strokeWidth="1.3" />
 
         {/* chakras */}
         {CHAKRAS.map((c) => {
