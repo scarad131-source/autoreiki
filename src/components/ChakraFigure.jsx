@@ -7,24 +7,13 @@ const FIGURE_URL =
 
 // Posición vertical (en % de la altura de la imagen) de cada chakra sobre el eje central
 const POSITIONS = {
-  crown: 11,
-  third_eye: 19,
-  throat: 30,
-  heart: 42,
-  solar: 53,
-  sacral: 64,
-  root: 74,
-};
-
-// Lado donde aparece la etiqueta cápsula (alterna para no amontonarse)
-const LABEL_SIDE = {
-  crown: "right",
-  third_eye: "left",
-  throat: "right",
-  heart: "left",
-  solar: "right",
-  sacral: "left",
-  root: "right",
+  crown: 13,      // Corona – círculo violeta en la coronilla
+  third_eye: 20,  // Tercer ojo – azul rey en la frente
+  throat: 27,     // Garganta – turquesa en el cuello
+  heart: 38,      // Corazón – verde en el pecho
+  solar: 48,      // Plexo solar – amarillo en el diafragma
+  sacral: 58,     // Sacro – naranja bajo el ombligo
+  root: 67,       // Raíz – rojo en la pelvis
 };
 
 function cap(s) {
@@ -48,111 +37,90 @@ export default function ChakraFigure({ selected = [], onToggle }) {
   const infoIncluded = infoChakra ? selected.includes(infoChakra.id) : false;
 
   return (
-    <div className="relative w-full max-w-[300px] mx-auto">
-      {/* ilustración base */}
-      <img
-        src={FIGURE_URL}
-        alt="Silueta en meditación con chakras"
-        className="block w-full h-auto rounded-3xl"
-        draggable={false}
-      />
-
-      {/* marcadores interactivos sobre los orbes */}
-      <div className="absolute inset-0">
-        {CHAKRAS.map((c) => {
-          const top = POSITIONS[c.id];
-          const isSel = selected.includes(c.id);
-          const side = LABEL_SIDE[c.id];
-          return (
-            <div
-              key={c.id}
-              className="absolute"
-              style={{ left: "50%", top: `${top}%`, transform: "translate(-50%, -50%)" }}
-            >
+    <div className="grid grid-cols-1 sm:grid-cols-[300px_1fr] sm:gap-6 max-w-[560px] mx-auto">
+      {/* figura con marcadores tocables */}
+      <div className="relative w-full max-w-[300px] mx-auto sm:mx-0 justify-self-center sm:justify-self-start">
+        <img
+          src={FIGURE_URL}
+          alt="Silueta en meditación con chakras"
+          className="block w-full h-auto rounded-3xl"
+          draggable={false}
+        />
+        <div className="absolute inset-0">
+          {CHAKRAS.map((c) => {
+            const top = POSITIONS[c.id];
+            const isSel = selected.includes(c.id);
+            return (
               <div
-                onClick={() => handleTap(c)}
-                className="relative flex items-center justify-center"
-                style={{ width: 48, height: 48, cursor: "pointer" }}
+                key={c.id}
+                className="absolute"
+                style={{ left: "50%", top: `${top}%`, transform: "translate(-50%, -50%)" }}
               >
-                {isSel && (
+                <div
+                  onClick={() => handleTap(c)}
+                  className="relative flex items-center justify-center"
+                  style={{ width: 48, height: 48, cursor: "pointer" }}
+                >
+                  {isSel && (
+                    <div
+                      className="absolute rounded-full"
+                      style={{ width: 42, height: 42, background: c.color, opacity: 0.28, filter: "blur(10px)" }}
+                    />
+                  )}
                   <div
                     className="absolute rounded-full"
-                    style={{ width: 42, height: 42, background: c.color, opacity: 0.28, filter: "blur(10px)" }}
+                    style={{
+                      width: 26,
+                      height: 26,
+                      border: `2px ${isSel ? "solid" : "dashed"} ${c.color}`,
+                      opacity: isSel ? 1 : 0.6,
+                      boxShadow: isSel ? `0 0 12px ${c.color}` : "none",
+                      background: isSel ? `${c.color}22` : "transparent",
+                    }}
                   />
-                )}
-                <div
-                  className="absolute rounded-full"
-                  style={{
-                    width: 26,
-                    height: 26,
-                    border: `2px ${isSel ? "solid" : "dashed"} ${c.color}`,
-                    opacity: isSel ? 1 : 0.6,
-                    boxShadow: isSel ? `0 0 12px ${c.color}` : "none",
-                    background: isSel ? `${c.color}22` : "transparent",
-                  }}
-                />
+                </div>
               </div>
-              <span
-                className="absolute whitespace-nowrap rounded-full select-none"
-                style={{
-                  left: side === "right" ? 30 : "auto",
-                  right: side === "left" ? 30 : "auto",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  background: "#2E1A47",
-                  color: "#FFFFFF",
-                  fontSize: 10,
-                  fontWeight: 600,
-                  padding: "2px 10px",
-                  border: `1px solid ${isSel ? c.color : "rgba(255,255,255,0.15)"}`,
-                  boxShadow: isSel ? `0 0 10px ${c.color}aa` : "none",
-                }}
-              >
-                {c.name}
-              </span>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
 
-      {/* tooltip flotante al tocar un chakra */}
-      <AnimatePresence>
-        {infoChakra && (
-          <motion.div
-            key={infoChakra.id}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.18 }}
-            className="absolute z-20"
-            style={{
-              left: "50%",
-              top: `${POSITIONS[infoChakra.id]}%`,
-              transform: `translate(-50%, ${POSITIONS[infoChakra.id] > 60 ? "calc(-100% - 26px)" : "26px"})`,
-            }}
-          >
-            <div
-              className="w-[168px] rounded-xl border bg-card/95 backdrop-blur p-3 shadow-lg"
-              style={{ borderColor: `${infoChakra.color}88`, boxShadow: `0 0 16px ${infoChakra.color}33` }}
+      {/* columna lateral: el tooltip aparece aquí, no sobre la figura */}
+      <div className="relative">
+        <AnimatePresence>
+          {infoChakra && (
+            <motion.div
+              key={infoChakra.id}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18 }}
+              className="static sm:absolute sm:left-0 sm:-translate-y-1/2 w-full sm:w-[180px]"
+              style={{ top: `${POSITIONS[infoChakra.id]}%` }}
             >
-              <div className="flex items-center justify-between mb-1.5">
-                <p className="font-display text-sm font-semibold" style={{ color: infoChakra.color }}>{infoChakra.name}</p>
-                <span
-                  className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
-                  style={{
-                    background: infoIncluded ? infoChakra.color : "rgba(255,255,255,0.1)",
-                    color: infoIncluded ? "#1A0B2E" : "hsl(var(--muted-foreground))",
-                  }}
-                >
-                  {infoIncluded ? "Incluida" : "Fuera"}
-                </span>
+              <div
+                className="mt-3 sm:mt-0 rounded-xl border bg-card/95 backdrop-blur p-3 shadow-lg"
+                style={{ borderColor: `${infoChakra.color}88`, boxShadow: `0 0 16px ${infoChakra.color}33` }}
+              >
+                <div className="flex items-center justify-between mb-1.5">
+                  <p className="font-display text-sm font-semibold" style={{ color: infoChakra.color }}>{infoChakra.name}</p>
+                  <span
+                    className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
+                    style={{
+                      background: infoIncluded ? infoChakra.color : "rgba(255,255,255,0.1)",
+                      color: infoIncluded ? "#1A0B2E" : "hsl(var(--muted-foreground))",
+                    }}
+                  >
+                    {infoIncluded ? "Incluida" : "Fuera"}
+                  </span>
+                </div>
+                <p className="text-[11px] text-muted-foreground leading-snug"><span className="text-foreground/70 font-medium">Zona: </span>{cap(infoChakra.position)}</p>
+                <p className="text-[11px] text-muted-foreground leading-snug mt-1"><span className="text-foreground/70 font-medium">Beneficios: </span>{infoChakra.objective}</p>
               </div>
-              <p className="text-[11px] text-muted-foreground leading-snug"><span className="text-foreground/70 font-medium">Zona: </span>{cap(infoChakra.position)}</p>
-              <p className="text-[11px] text-muted-foreground leading-snug mt-1"><span className="text-foreground/70 font-medium">Beneficios: </span>{infoChakra.objective}</p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }
