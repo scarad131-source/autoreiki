@@ -46,6 +46,26 @@ export function computeStreak(sessions) {
   return streak;
 }
 
+// La racha más larga (días consecutivos) alcanzada alguna vez.
+export function computeBestStreak(sessions) {
+  const days = Array.from(
+    new Set((sessions || []).map((s) => new Date(s.created_date).toISOString().slice(0, 10)))
+  ).sort();
+  if (!days.length) return 0;
+  let best = 1;
+  let cur = 1;
+  for (let i = 1; i < days.length; i++) {
+    const diff = Math.round((new Date(days[i]) - new Date(days[i - 1])) / 86400000);
+    if (diff === 1) {
+      cur++;
+      if (cur > best) best = cur;
+    } else if (diff > 1) {
+      cur = 1;
+    }
+  }
+  return best;
+}
+
 export function getStreakMessage(streak) {
   if (streak === 0) return { title: "Hoy es un buen día para empezar", body: "Cada gran viaje comienza con una sola respiración consciente." };
   if (streak === 1) return { title: "¡Lo lograste! 🌱", body: "El primer día es el más importante. Mañana querrás volver." };

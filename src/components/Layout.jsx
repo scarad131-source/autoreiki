@@ -1,5 +1,5 @@
 import { Outlet, NavLink } from "react-router-dom";
-import { Star, SlidersHorizontal, Timer, CalendarDays, LayoutGrid, LogOut } from "lucide-react";
+import { Star, SlidersHorizontal, Timer, CalendarDays, LayoutGrid, Award, LogOut } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
 import { IMAGES } from "@/lib/assets";
@@ -10,6 +10,7 @@ const navItems = [
   { to: "/meditar", label: "Sesión", icon: Timer },
   { to: "/recorrido", label: "21 días", icon: CalendarDays },
   { to: "/historial", label: "Más", icon: LayoutGrid },
+  { to: "/perfil", label: "Perfil", icon: Award },
 ];
 
 export default function Layout() {
