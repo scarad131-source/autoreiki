@@ -1,9 +1,36 @@
 import { useState, useEffect, useRef } from "react";
-import { Pause, Play, Square, Volume2, VolumeX } from "lucide-react";
+import { ArrowLeft, Pause, Play, Square, Volume2, VolumeX } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ambient } from "@/lib/audioEngine";
 import { GUIDED_SCRIPTS } from "@/lib/guidedScripts";
 import BreathingOrb from "@/components/BreathingOrb";
+
+// Voz guía en español (síntesis del navegador, sin archivos externos)
+let cachedVoices = [];
+if (typeof window !== "undefined" && "speechSynthesis" in window) {
+  cachedVoices = window.speechSynthesis.getVoices();
+  window.speechSynthesis.onvoiceschanged = () => {
+    cachedVoices = window.speechSynthesis.getVoices();
+  };
+}
+
+function speak(text) {
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "es-ES";
+  u.rate = 0.82;
+  u.pitch = 1;
+  const es = cachedVoices.find((v) => v.lang && v.lang.toLowerCase().startsWith("es"));
+  if (es) u.voice = es;
+  window.speechSynthesis.speak(u);
+}
+
+function cancelSpeech() {
+  if (typeof window !== "undefined" && "speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+}
 
 export default function MeditationRunner({ config, onFinish, onCancel }) {
   const totalSeconds = config.minutes * 60;
@@ -39,11 +66,14 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     setStepIndex(script.steps.length - 1);
   }, [elapsed, script]);
 
-  // iniciar audio
+  // iniciar audio ambiental
   useEffect(() => {
     ambient.play(config.audio);
     ambient.setVolume(0.5);
-    return () => ambient.stop();
+    return () => {
+      ambient.stop();
+      cancelSpeech();
+    };
   }, [config.audio]);
 
   // timer
@@ -55,10 +85,32 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     return () => clearInterval(timerRef.current);
   }, [paused]);
 
-  // fin
+  // pausa: detener audio ambiental y voz
+  useEffect(() => {
+    if (paused) {
+      ambient.suspend();
+      cancelSpeech();
+    } else {
+      ambient.resumeCtx();
+    }
+  }, [paused]);
+
+  // voz guía + cuenco al cambiar de chakra
+  useEffect(() => {
+    if (paused || !script) return;
+    const step = script.steps[stepIndex];
+    if (!step) return;
+    if (step.bowl) ambient.playBowl(step.bowlFreq || 440);
+    const delay = step.bowl ? 950 : 250;
+    const t = setTimeout(() => speak(step.text), delay);
+    return () => clearTimeout(t);
+  }, [stepIndex, paused, script]);
+
+  // fin de sesión
   useEffect(() => {
     if (elapsed >= totalSeconds) {
       ambient.stop();
+      cancelSpeech();
       onFinish({ actualSeconds: totalSeconds, completed: true });
     }
   }, [elapsed, totalSeconds]);
@@ -76,18 +128,23 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
 
   const handleStop = () => {
     ambient.stop();
+    cancelSpeech();
     onFinish({ actualSeconds: elapsed, completed: elapsed >= totalSeconds * 0.5 });
   };
 
   return (
     <div className="flex flex-col items-center min-h-[70vh] justify-between py-6">
       <div className="w-full flex items-center justify-between text-xs text-muted-foreground">
+        <button
+          onClick={onCancel}
+          className="flex items-center gap-1.5 hover:text-foreground transition-colors -ml-1"
+          aria-label="Volver"
+        >
+          <ArrowLeft className="w-4 h-4" /> Volver
+        </button>
         <span className="uppercase tracking-[0.18em]">
           {isGuided ? "Guiada" : "No guiada"} · {config.level === "beginner" ? "Principiante" : "Intermedio"}
         </span>
-        <button onClick={onCancel} className="flex items-center gap-1 hover:text-foreground transition-colors">
-          <Square className="w-3.5 h-3.5" /> Salir
-        </button>
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full">

@@ -38,13 +38,13 @@ export const GUIDED_SCRIPTS = {
     subtitle: "Profundiza tu práctica Reiki",
     steps: [
       { seconds: 35, text: "Comienza con tres respiraciones profundas. Inhala calma, exhala cualquier tensión acumulada." },
-      { seconds: 45, text: "Dirige tu atención a la base de la columna. Visualiza un disco de luz roja que gira lentamente. Es tu raíz." },
-      { seconds: 45, text: "Sube al abdomen. Imagina un disco naranja brillante. Siente tu creatividad y emociones fluir en equilibrio." },
-      { seconds: 45, text: "En el plexo solar, un sol amarillo. Tu poder personal, tu voluntad, resplandecen sin esfuerzo." },
-      { seconds: 45, text: "En el centro del pecho, una luz verde esmeralda. Ábrela con cada respiración. Eres amor." },
-      { seconds: 45, text: "En la garganta, un cielo azul claro. Tu voz es verdad. Permítete expresar y escucharte." },
-      { seconds: 45, text: "Entre las cejas, un índigo profundo. Tu intuición se afina, ves con claridad interior." },
-      { seconds: 45, text: "En la corona, una luz violeta que se abre hacia arriba. Conectas con algo más grande que tú." },
+      { seconds: 45, bowl: true, bowlFreq: 396, text: "Dirige tu atención a la base de la columna. Visualiza un disco de luz roja que gira lentamente. Es tu raíz." },
+      { seconds: 45, bowl: true, bowlFreq: 417, text: "Sube al abdomen. Imagina un disco naranja brillante. Siente tu creatividad y emociones fluir en equilibrio." },
+      { seconds: 45, bowl: true, bowlFreq: 528, text: "En el plexo solar, un sol amarillo. Tu poder personal, tu voluntad, resplandecen sin esfuerzo." },
+      { seconds: 45, bowl: true, bowlFreq: 639, text: "En el centro del pecho, una luz verde esmeralda. Ábrela con cada respiración. Eres amor." },
+      { seconds: 45, bowl: true, bowlFreq: 741, text: "En la garganta, un cielo azul claro. Tu voz es verdad. Permítete expresar y escucharte." },
+      { seconds: 45, bowl: true, bowlFreq: 852, text: "Entre las cejas, un índigo profundo. Tu intuición se afina, ves con claridad interior." },
+      { seconds: 45, bowl: true, bowlFreq: 963, text: "En la corona, una luz violeta que se abre hacia arriba. Conectas con algo más grande que tú." },
       { seconds: 50, text: "Deja que todas las luces fluyan juntas. Eres un canal de energía. Permite que la sanación ocurra." },
       { seconds: 40, text: "Agradece a tu cuerpo y a tu práctica. Regresa lentamente, integrando esta energía." },
     ],
@@ -52,20 +52,20 @@ export const GUIDED_SCRIPTS = {
 };
 
 export const CHAKRAS = [
-  { id: "root", name: "Raíz", color: "#FF0000", colorName: "roja", position: "la base de la columna", affirmation: "Estoy a salvo y enraizado.", objective: "Bases en la vida, supervivencia, seguridad, instinto y temores" },
-  { id: "sacral", name: "Sacro", color: "#FF8000", colorName: "naranja", position: "el bajo abdomen", affirmation: "Mi creatividad y emociones fluyen en equilibrio.", objective: "Emociones, creatividad, relación con otros, necesidades y placeres" },
-  { id: "solar", name: "Plexo solar", color: "#FFFF00", colorName: "amarilla", position: "el plexo solar", affirmation: "Mi poder personal resplandece sin esfuerzo.", objective: "Voluntad, energía, mente, poder y libertad propia" },
-  { id: "heart", name: "Corazón", color: "#00FF00", colorName: "verde esmeralda", position: "el centro del pecho", affirmation: "Soy amor y me abro a recibir.", objective: "Amor, respeto, autoestima, sanación y tolerancia" },
-  { id: "throat", name: "Garganta", color: "#00BFFF", colorName: "azul cielo", position: "la garganta", affirmation: "Mi voz es verdad y me expreso con libertad.", objective: "Comunicación interna y externa, habla y auto-expresión" },
-  { id: "third_eye", name: "Tercer ojo", color: "#4B0082", colorName: "índigo", position: "entre las cejas", affirmation: "Mi intuición es clara y confío en ella.", objective: "Intuición, imaginación y percepción extrasensorial" },
-  { id: "crown", name: "Corona", color: "#8000FF", colorName: "violeta", position: "la coronilla", affirmation: "Me abro a la conexión con algo más grande que yo.", objective: "Conexión con lo divino y la espiritualidad" },
+  { id: "root", name: "Raíz", color: "#FF0000", colorName: "roja", position: "la base de la columna", affirmation: "Estoy a salvo y enraizado.", objective: "Bases en la vida, supervivencia, seguridad, instinto y temores", freq: 396 },
+  { id: "sacral", name: "Sacro", color: "#FF8000", colorName: "naranja", position: "el bajo abdomen", affirmation: "Mi creatividad y emociones fluyen en equilibrio.", objective: "Emociones, creatividad, relación con otros, necesidades y placeres", freq: 417 },
+  { id: "solar", name: "Plexo solar", color: "#FFFF00", colorName: "amarilla", position: "el plexo solar", affirmation: "Mi poder personal resplandece sin esfuerzo.", objective: "Voluntad, energía, mente, poder y libertad propia", freq: 528 },
+  { id: "heart", name: "Corazón", color: "#00FF00", colorName: "verde esmeralda", position: "el centro del pecho", affirmation: "Soy amor y me abro a recibir.", objective: "Amor, respeto, autoestima, sanación y tolerancia", freq: 639 },
+  { id: "throat", name: "Garganta", color: "#00BFFF", colorName: "azul cielo", position: "la garganta", affirmation: "Mi voz es verdad y me expreso con libertad.", objective: "Comunicación interna y externa, habla y auto-expresión", freq: 741 },
+  { id: "third_eye", name: "Tercer ojo", color: "#4B0082", colorName: "índigo", position: "entre las cejas", affirmation: "Mi intuición es clara y confío en ella.", objective: "Intuición, imaginación y percepción extrasensorial", freq: 852 },
+  { id: "crown", name: "Corona", color: "#8000FF", colorName: "violeta", position: "la coronilla", affirmation: "Me abro a la conexión con algo más grande que yo.", objective: "Conexión con lo divino y la espiritualidad", freq: 963 },
 ];
 
 export function buildChakraScript(selectedIds) {
   const opening = { seconds: 30, text: "Comienza con tres respiraciones profundas. Inhala calma, exhala cualquier tensión acumulada." };
   const steps = (selectedIds || []).map((id) => {
     const c = CHAKRAS.find((x) => x.id === id);
-    return { seconds: 45, text: `Dirige la atención a ${c.position}. Visualiza una luz ${c.colorName} que gira lentamente. ${c.affirmation}` };
+    return { seconds: 45, bowl: true, bowlFreq: c.freq, text: `Dirige la atención a ${c.position}. Visualiza una luz ${c.colorName} que gira lentamente. ${c.affirmation}` };
   });
   const closing = { seconds: 40, text: "Deja que todas las luces fluyan juntas. Eres un canal de energía. Permite que la sanación ocurra. Agradece a tu cuerpo y regresa lentamente." };
   return { title: "Terapia de chakras", subtitle: "Personalizada", steps: [opening, ...steps, closing] };

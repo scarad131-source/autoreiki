@@ -57,6 +57,48 @@ export class AmbientAudio {
     }
   }
 
+  async suspend() {
+    if (this.ctx && this.ctx.state === "running") {
+      try { await this.ctx.suspend(); } catch (e) {}
+    }
+  }
+
+  async resumeCtx() {
+    if (this.ctx && this.ctx.state === "suspended") {
+      try { await this.ctx.resume(); } catch (e) {}
+    }
+  }
+
+  // Cuenco tibetano sintetizado: golpe con armónicos inarmónicos y decay largo
+  playBowl(freq = 440) {
+    this.init();
+    if (this.ctx.state === "suspended") this.ctx.resume();
+    const ctx = this.ctx;
+    const now = ctx.currentTime;
+    const bus = ctx.createGain();
+    bus.gain.value = 0;
+    bus.connect(this.master);
+    const partials = [
+      { ratio: 1, gain: 0.5 },
+      { ratio: 2.76, gain: 0.22 },
+      { ratio: 5.4, gain: 0.1 },
+    ];
+    partials.forEach((p) => {
+      const osc = ctx.createOscillator();
+      osc.type = "sine";
+      osc.frequency.value = freq * p.ratio;
+      const og = ctx.createGain();
+      og.gain.value = p.gain;
+      osc.connect(og);
+      og.connect(bus);
+      osc.start(now);
+      osc.stop(now + 4.5);
+    });
+    bus.gain.setValueAtTime(0, now);
+    bus.gain.linearRampToValueAtTime(0.7, now + 0.03);
+    bus.gain.exponentialRampToValueAtTime(0.0001, now + 4);
+  }
+
   makeNoiseBuffer(seconds = 2, brown = false) {
     const ctx = this.ctx;
     const size = seconds * ctx.sampleRate;
