@@ -58,27 +58,17 @@ export default function ChakraFigure({ selected = [], onToggle }) {
               >
                 <div
                   onClick={() => handleTap(c)}
-                  className="relative flex items-center justify-center"
-                  style={{ width: 48, height: 48, cursor: "pointer" }}
-                >
-                  {isSel && (
-                    <div
-                      className="absolute rounded-full"
-                      style={{ width: 42, height: 42, background: c.color, opacity: 0.28, filter: "blur(10px)" }}
-                    />
-                  )}
-                  <div
-                    className="absolute rounded-full"
-                    style={{
-                      width: 26,
-                      height: 26,
-                      border: `2px ${isSel ? "solid" : "dashed"} ${c.color}`,
-                      opacity: isSel ? 1 : 0.6,
-                      boxShadow: isSel ? `0 0 12px ${c.color}` : "none",
-                      background: isSel ? `${c.color}22` : "transparent",
-                    }}
-                  />
-                </div>
+                  className="absolute rounded-full"
+                  style={{
+                    width: 26,
+                    height: 26,
+                    border: `2px ${isSel ? "solid" : "dashed"} ${c.color}`,
+                    opacity: isSel ? 1 : 0.6,
+                    boxShadow: isSel ? `0 0 12px ${c.color}, 0 0 22px ${c.color}66` : "none",
+                    background: isSel ? `${c.color}22` : "transparent",
+                    cursor: "pointer",
+                  }}
+                />
               </div>
             );
           })}
