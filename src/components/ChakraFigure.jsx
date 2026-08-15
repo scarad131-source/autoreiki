@@ -8,11 +8,11 @@ const FIGURE_URL =
 // Posición vertical (en % de la altura de la imagen) de cada chakra sobre el eje central
 const POSITIONS = {
   crown: 13,      // Corona – círculo violeta en la coronilla
-  third_eye: 20,  // Tercer ojo – azul rey en la frente
+  third_eye: 16,  // Tercer ojo – azul rey en la frente
   throat: 27,     // Garganta – turquesa en el cuello
   heart: 38,      // Corazón – verde en el pecho
-  solar: 48,      // Plexo solar – amarillo en el diafragma
-  sacral: 58,     // Sacro – naranja bajo el ombligo
+  solar: 48,     // Plexo solar – amarillo en el diafragma
+  sacral: 63,     // Sacro – naranja bajo el ombligo
   root: 67,       // Raíz – rojo en la pelvis
 };
 
