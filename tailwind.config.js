@@ -46,6 +46,10 @@ module.exports = {
   			glow: 'hsl(var(--glow))',
   			'glow-cyan': 'hsl(var(--glow-cyan))',
   			gold: 'hsl(var(--gold))',
+  			'amber-light': 'hsl(var(--amber-light))',
+  			purple: 'hsl(var(--purple))',
+  			lilac: 'hsl(var(--lilac))',
+  			success: 'hsl(var(--success))',
   			chart: {
   				'1': 'hsl(var(--chart-1))',
   				'2': 'hsl(var(--chart-2))',

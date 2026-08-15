@@ -6,14 +6,16 @@ const FIGURE_URL =
   "https://media.base44.com/images/public/6a7d30a899098694894dbd88/685c375af_siluetameditacionconchackras.png";
 
 // Posición vertical (en % de la altura de la imagen) de cada chakra sobre el eje central
+// Posición vertical (en % de la altura de la imagen) de cada chakra sobre el eje central.
+// Valores ajustados a los orbes reales de la silueta.
 const POSITIONS = {
-  crown: 13,      // Corona – círculo violeta en la coronilla
-  third_eye: 16,  // Tercer ojo – azul rey en la frente
-  throat: 27,     // Garganta – turquesa en el cuello
-  heart: 38,      // Corazón – verde en el pecho
-  solar: 48,     // Plexo solar – amarillo en el diafragma
-  sacral: 63,     // Sacro – naranja bajo el ombligo
-  root: 67,       // Raíz – rojo en la pelvis
+  crown: 20,      // Corona – violeta claro en la coronilla
+  third_eye: 32,  // Tercer ojo – índigo en la frente
+  throat: 43,     // Garganta – violeta en el cuello
+  heart: 51,      // Corazón – verde en el pecho
+  solar: 59,      // Plexo solar – amarillo en el abdomen superior
+  sacral: 67,     // Sacro – naranja en el abdomen bajo
+  root: 75,       // Raíz – rojo en la pelvis
 };
 
 function cap(s) {
@@ -104,8 +106,9 @@ export default function ChakraFigure({ selected = [], onToggle }) {
                     {infoIncluded ? "Incluida" : "Fuera"}
                   </span>
                 </div>
-                <p className="text-[11px] text-muted-foreground leading-snug"><span className="text-foreground/70 font-medium">Zona: </span>{cap(infoChakra.position)}</p>
-                <p className="text-[11px] text-muted-foreground leading-snug mt-1"><span className="text-foreground/70 font-medium">Beneficios: </span>{infoChakra.objective}</p>
+                <p className="text-[11px] text-muted-foreground leading-snug"><span className="text-foreground/70 font-medium">Zona: </span>{infoChakra.zone}</p>
+                <p className="text-[11px] text-muted-foreground leading-snug mt-1"><span className="text-foreground/70 font-medium">Manos: </span>{infoChakra.placement}</p>
+                <p className="text-[11px] text-muted-foreground leading-snug mt-1"><span className="text-foreground/70 font-medium">Beneficios: </span>{infoChakra.benefits}</p>
               </div>
             </motion.div>
           )}
