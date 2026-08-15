@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { ArrowLeft, Pause, Play, Square, Volume2, VolumeX } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ambient } from "@/lib/audioEngine";
-import { GUIDED_SCRIPTS } from "@/lib/guidedScripts";
+import { GUIDED_SCRIPTS, CHAKRAS } from "@/lib/guidedScripts";
 import BreathingOrb from "@/components/BreathingOrb";
 
 // Voz guía en español (síntesis del navegador, sin archivos externos)
@@ -51,6 +51,14 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       script = GUIDED_SCRIPTS.intermediate;
     }
   }
+
+  // Chakras a tratar y espaciado de cuencos: un cuenco por chakra repartido en la duración total
+  const bowlChakras = useMemo(
+    () => (config.chakras || []).map((id) => CHAKRAS.find((c) => c.id === id)).filter(Boolean),
+    [config.chakras]
+  );
+  const bowlIntervalSec = bowlChakras.length ? (config.minutes * 60) / bowlChakras.length : 0;
+  const bowlIdxRef = useRef(0);
 
   // calcular paso actual guiado
   useEffect(() => {
@@ -105,6 +113,17 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     const t = setTimeout(() => speak(step.text), delay);
     return () => clearTimeout(t);
   }, [stepIndex, paused, script]);
+
+  // Marcador de cuenco tibetano: un cuenco por chakra, espaciado según duración / nº de chakras
+  useEffect(() => {
+    if (!bowlIntervalSec || !bowlChakras.length) return;
+    const target = Math.min(Math.floor(elapsed / bowlIntervalSec) + 1, bowlChakras.length);
+    while (bowlIdxRef.current < target) {
+      const c = bowlChakras[bowlIdxRef.current];
+      if (c) ambient.playBowl(c.freq, 0.7);
+      bowlIdxRef.current++;
+    }
+  }, [elapsed, bowlIntervalSec, bowlChakras]);
 
   // fin de sesión
   useEffect(() => {

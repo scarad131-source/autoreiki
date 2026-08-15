@@ -47,7 +47,6 @@ export class AmbientAudio {
     if (type === "beach") this.playBeach();
     else if (type === "rain") this.playRain();
     else if (type === "forest") this.playForest();
-    else if (type === "bowls") this.playBowls();
     else if (type === "healing") this.playHealing();
   }
 
@@ -295,17 +294,6 @@ export class AmbientAudio {
     osc.stop(t + 0.12);
   }
 
-  // Cuencos tibetanos: golpes periódicos con resonancia larga
-  playBowls() {
-    const freqs = [396, 417, 528, 639];
-    this.playBowl(freqs[0], 0.3);
-    const id = setInterval(() => {
-      if (this.currentType !== "bowls") return;
-      const f = freqs[Math.floor(Math.random() * freqs.length)];
-      this.playBowl(f, 0.28);
-    }, 5200);
-    this.intervals.push(id);
-  }
 }
 
 export const ambient = new AmbientAudio();
@@ -331,13 +319,6 @@ export const AUDIO_OPTIONS = [
     description: "Aves y brisa entre los árboles",
     icon: "Trees",
     gradient: "from-emerald-700 to-indigo-900",
-  },
-  {
-    id: "bowls",
-    name: "Cuencos tibetanos",
-    description: "Resonancias largas que centran",
-    icon: "Disc3",
-    gradient: "from-amber-300 to-rose-300",
   },
   {
     id: "healing",

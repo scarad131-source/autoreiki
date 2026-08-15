@@ -1,8 +1,8 @@
-import { Waves, Trees, Sparkles, CloudRain, Disc3, Calendar } from "lucide-react";
+import { Waves, Trees, Sparkles, CloudRain, Calendar } from "lucide-react";
 import moment from "moment";
 
-const iconMap = { beach: Waves, rain: CloudRain, forest: Trees, bowls: Disc3, healing: Sparkles };
-const audioNames = { beach: "Mar", rain: "Lluvia", forest: "Bosque", bowls: "Cuencos", healing: "Frecuencias" };
+const iconMap = { beach: Waves, rain: CloudRain, forest: Trees, healing: Sparkles };
+const audioNames = { beach: "Mar", rain: "Lluvia", forest: "Bosque", healing: "Frecuencias" };
 
 export default function SessionCard({ session }) {
   const Icon = iconMap[session.audio] || Sparkles;

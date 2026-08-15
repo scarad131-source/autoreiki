@@ -65,7 +65,7 @@ export function buildChakraScript(selectedIds) {
   const opening = { seconds: 30, text: "Comienza con tres respiraciones profundas. Inhala calma, exhala cualquier tensión acumulada." };
   const steps = (selectedIds || []).map((id) => {
     const c = CHAKRAS.find((x) => x.id === id);
-    return { seconds: 45, bowl: true, bowlFreq: c.freq, text: `Dirige la atención a ${c.position}. Visualiza una luz ${c.colorName} que gira lentamente. ${c.affirmation}` };
+    return { seconds: 45, text: `Dirige la atención a ${c.position}. Visualiza una luz ${c.colorName} que gira lentamente. ${c.affirmation}` };
   });
   const closing = { seconds: 40, text: "Deja que todas las luces fluyan juntas. Eres un canal de energía. Permite que la sanación ocurra. Agradece a tu cuerpo y regresa lentamente." };
   return { title: "Terapia de chakras", subtitle: "Personalizada", steps: [opening, ...steps, closing] };

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Waves, Trees, Sparkles, CloudRain, Disc3, Clock, ArrowRight } from "lucide-react";
+import { Waves, Trees, Sparkles, CloudRain, Clock, ArrowRight } from "lucide-react";
 import { AUDIO_OPTIONS, ambient } from "@/lib/audioEngine";
 
-const iconMap = { Waves, Trees, Sparkles, CloudRain, Disc3 };
+const iconMap = { Waves, Trees, Sparkles, CloudRain };
 
 const MODES = [
   { id: "guided", name: "Guiada", desc: "Voz interior que te acompasa paso a paso" },
