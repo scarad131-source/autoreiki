@@ -47,6 +47,8 @@ function cancelSpeech() {
   }
 }
 
+const COUNTDOWN_WORDS = { 3: "tres", 2: "dos", 1: "uno" };
+
 export default function MeditationRunner({ config, onFinish, onCancel }) {
   const totalSeconds = config.minutes * 60;
   const [countdown, setCountdown] = useState(3);
@@ -61,13 +63,20 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const started = countdown === 0;
 
   const isGuided = config.mode === "guided";
-  let script = config.customScript || null;
-  if (!script && isGuided) {
-    // Meditación guiada de liberación emocional (preparación para Reiki):
-    // sesiones de 5, 10 y 20 min con su propio guion; el resto queda con ambientación.
+  const isJourney = !!config.journeyDay;
+  // Voz extra (cuenta hablada, recordatorio de respiración y cierre) solo en
+  // sesiones no guiadas y en el recorrido de 21 días.
+  const voiceExtras = !isGuided || isJourney;
+  const script = useMemo(() => {
+    if (config.customScript) return config.customScript;
+    if (!isGuided) return null;
     const m = config.minutes;
-    script = m <= 5 ? RELEASE_SCRIPTS.min5 : m <= 10 ? RELEASE_SCRIPTS.min10 : RELEASE_SCRIPTS.min20;
-  }
+    const base = m <= 5 ? RELEASE_SCRIPTS.min5 : m <= 10 ? RELEASE_SCRIPTS.min10 : RELEASE_SCRIPTS.min20;
+    if (isJourney) {
+      return { ...base, steps: [{ seconds: 8, text: "Realiza tres respiraciones lentas y profundas." }, ...base.steps] };
+    }
+    return base;
+  }, [config.customScript, config.minutes, isGuided, isJourney]);
   const scriptTotalSec = script ? script.steps.reduce((a, s) => a + s.seconds, 0) : 0;
   const voiceActive = script ? elapsed < scriptTotalSec : false;
 
@@ -78,6 +87,8 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   );
   const bowlIntervalSec = bowlChakras.length ? (config.minutes * 60) / bowlChakras.length : 0;
   const bowlIdxRef = useRef(0);
+  const closingSpokenRef = useRef(false);
+  const finishedRef = useRef(false);
   const isReikiUnguided = !isGuided && bowlChakras.length > 0;
 
   // cuenta regresiva de inicio (3 segundos)
@@ -86,6 +97,12 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     const t = setTimeout(() => setCountdown((c) => c - 1), 1000);
     return () => clearTimeout(t);
   }, [countdown]);
+
+  // cuenta regresiva hablada para sesiones no guiadas y recorrido de 21 días
+  useEffect(() => {
+    if (!voiceExtras || countdown <= 0) return;
+    speak(COUNTDOWN_WORDS[countdown]);
+  }, [countdown, voiceExtras]);
 
   // desbloquear el audio ambiental al montar (gesto del usuario reciente) y mantenerlo silencioso durante la cuenta
   useEffect(() => {
@@ -152,13 +169,15 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     return () => clearTimeout(t);
   }, [stepIndex, paused, script, started]);
 
-  // Reiki no guiado: solo voz de bienvenida breve tras la cuenta regresiva, luego silencio.
+  // No guiado: recordatorio de respiración (+ bienvenida breve en Reiki) tras la cuenta regresiva, luego silencio.
   useEffect(() => {
-    if (!started || paused || !isReikiUnguided) return;
-    const msg = `Bienvenida a la sesión de Reiki. Hoy trabajaremos con ${bowlChakras.length} chakras. Relaja tus manos y deja que el sonido del cuenco marque cada cambio de posición.`;
+    if (!started || isGuided) return;
+    const msg = isReikiUnguided
+      ? `Realiza tres respiraciones lentas y profundas. Bienvenida a la sesión de Reiki. Hoy trabajaremos con ${bowlChakras.length} chakras. Relaja tus manos y deja que el sonido del cuenco marque cada cambio de posición.`
+      : "Realiza tres respiraciones lentas y profundas.";
     const t = setTimeout(() => speak(msg), 400);
     return () => clearTimeout(t);
-  }, [started, isReikiUnguided]);
+  }, [started, isReikiUnguided, isGuided]);
 
   // Marcador de cuenco tibetano: un cuenco por chakra, espaciado según duración / nº de chakras
   useEffect(() => {
@@ -174,16 +193,31 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     }
   }, [elapsed, bowlIntervalSec, bowlChakras, started]);
 
+  // voz de cierre en los últimos segundos (solo no guiadas y recorrido de 21 días)
+  useEffect(() => {
+    if (!started || !voiceExtras) return;
+    if (elapsed >= totalSeconds - 10 && !closingSpokenRef.current) {
+      closingSpokenRef.current = true;
+      speak("Has terminado tu sesión del día de hoy. Éxito, amor y bendiciones para ti.");
+    }
+  }, [elapsed, totalSeconds, started, voiceExtras]);
+
   // fin de sesión
   useEffect(() => {
-    if (!started) return;
+    if (!started || finishedRef.current) return;
     if (elapsed >= totalSeconds) {
+      finishedRef.current = true;
       const el = audioRef.current;
       if (el) el.pause();
-      cancelSpeech();
-      onFinish({ actualSeconds: totalSeconds, completed: true });
+      if (!voiceExtras) {
+        cancelSpeech();
+        onFinish({ actualSeconds: totalSeconds, completed: true });
+      } else {
+        // dejar que la voz de cierre termine antes de salir
+        setTimeout(() => onFinish({ actualSeconds: totalSeconds, completed: true }), 4000);
+      }
     }
-  }, [elapsed, totalSeconds, started]);
+  }, [elapsed, totalSeconds, started, voiceExtras, onFinish]);
 
   useEffect(() => {
     const el = audioRef.current;
