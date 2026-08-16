@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { Clock, ArrowRight } from "lucide-react";
 import ChakraFigure from "@/components/ChakraFigure";
 
-const DURATIONS = [5, 10, 15, 20, 30, 45];
+const DURATIONS = [20, 30, 45, 60];
 
 export default function Configurar() {
   const navigate = useNavigate();
   const [selected, setSelected] = useState([]);
-  const [minutes, setMinutes] = useState(10);
+  const [minutes, setMinutes] = useState(20);
 
   const toggle = (id) =>
     setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
