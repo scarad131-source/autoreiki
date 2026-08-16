@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Clock, ArrowRight } from "lucide-react";
 import ChakraFigure from "@/components/ChakraFigure";
 import { AUDIO_SOURCES } from "@/lib/audioSources";
+import { CHAKRAS } from "@/lib/guidedScripts";
 
 const MODES = [
   { id: "guided", name: "Guiada", desc: "Voz interior que te acompasa paso a paso" },
@@ -27,6 +28,8 @@ export default function Configurar() {
   const toggle = (id) =>
     setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
 
+  const selectAll = () => setSelected(CHAKRAS.map((c) => c.id));
+
   const start = () => {
     if (!selected.length) return;
     navigate("/meditar", {
@@ -50,6 +53,13 @@ export default function Configurar() {
       </header>
 
       <ChakraFigure selected={selected} onToggle={toggle} />
+
+      <button
+        onClick={selectAll}
+        className="w-full py-3 rounded-2xl border border-primary/40 bg-card text-primary font-semibold text-sm uppercase tracking-[0.14em] hover:bg-accent transition-colors active:scale-[0.99]"
+      >
+        Seleccionar todos
+      </button>
 
       <section>
         <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Modo</h2>
