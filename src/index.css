@@ -37,9 +37,9 @@
     --chart-4: 260 87% 85%;
     --chart-5: 258 40% 29%;
     --radius: 1.25rem;
-    --font-heading: "Cormorant Garamond", ui-serif, Georgia, serif;
+    --font-heading: "DM Serif Display", ui-serif, Georgia, serif;
     --font-body: "Mulish", ui-sans-serif, system-ui, sans-serif;
-    --font-display: "Cormorant Garamond", ui-serif, Georgia, serif;
+    --font-display: "DM Serif Display", ui-serif, Georgia, serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     --sidebar-background: 256 46% 18%;
     --sidebar-foreground: 266 73% 96%;
@@ -103,6 +103,10 @@
     @apply text-foreground font-body;
     background: radial-gradient(ellipse 80% 50% at 50% 0%, hsl(256 46% 15%), hsl(256 47% 11%));
     min-height: 100vh;
+  }
+
+  button {
+    font-family: var(--font-display);
   }
 }
 
