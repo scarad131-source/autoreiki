@@ -6,8 +6,8 @@ import { AUDIO_SOURCES } from "@/lib/audioSources";
 import { CHAKRAS } from "@/lib/guidedScripts";
 
 const MODES = [
-{ id: "guided", name: "Guiada", desc: "Voz interior que te acompasa paso a paso" },
-{ id: "unguided", name: "No guiada", desc: "Solo tú, tu respiración y el sonido" }];
+{ id: "guided", name: "Guiada", desc: "Voz interior que te acompasa paso a paso", color: "#00C698" },
+{ id: "unguided", name: "No guiada", desc: "Solo tú, tu respiración y el sonido", color: "#FF7A00" }];
 
 
 const LEVELS = [
@@ -63,21 +63,27 @@ export default function Configurar() {
 
       <section>
         <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Modo</h2>
-        <div className="grid grid-cols-2 gap-3">
-          {MODES.map((m) =>
+        <div className="grid grid-cols-2 gap-4">
+          {MODES.map((m) => {
+          const active = mode === m.id;
+          return (
           <button
             key={m.id}
             onClick={() => setMode(m.id)}
-            className={`text-left p-4 rounded-2xl border transition-all ${
-            mode === m.id ?
-            "border-primary bg-accent neon-glow" :
-            "border-glow/20 bg-card/50 hover:border-primary/50"}`
+            style={{
+              borderColor: m.color,
+              background: "#1A1426",
+              boxShadow: active ? `0 0 22px ${m.color}66, inset 0 0 14px ${m.color}22` : "none",
+              opacity: active ? 1 : 0.55
+            }}
+            className={`flex flex-col items-center justify-center text-center min-h-[112px] px-4 py-5 rounded-full border-2 transition-all duration-300 active:scale-[0.98] ${
+            active ? "scale-[1.01]" : "hover:opacity-80"}`
             }>
-            
-              <p className="font-medium text-sm">{m.name}</p>
-              <p className="text-xs text-muted-foreground mt-1 leading-snug">{m.desc}</p>
+              <p className="font-display text-base font-semibold tracking-tight" style={{ color: m.color }}>{m.name}</p>
+              <p className="text-[11px] text-muted-foreground mt-1.5 leading-snug max-w-[140px]">{m.desc}</p>
             </button>
-          )}
+          );
+          })}
         </div>
       </section>
 
