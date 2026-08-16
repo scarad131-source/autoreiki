@@ -11,7 +11,7 @@ const LEVELS = [
   { id: "intermediate", name: "Intermedio", desc: "Profundiza con chakras" },
 ];
 
-const DURATIONS = [5, 10, 15, 20, 30, 45, 60, 90];
+const DURATIONS = [5, 10, 30];
 
 export default function SessionForm({ onStart }) {
   const [mode, setMode] = useState("guided");
@@ -68,7 +68,7 @@ export default function SessionForm({ onStart }) {
         <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3 flex items-center gap-1.5">
           <Clock className="w-3.5 h-3.5" /> Duración
         </h2>
-        <div className="grid grid-cols-4 gap-2.5">
+        <div className="grid grid-cols-3 gap-2.5">
           {DURATIONS.map((d) => (
             <button
               key={d}

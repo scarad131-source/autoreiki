@@ -3,12 +3,24 @@ import { useNavigate } from "react-router-dom";
 import { Clock, ArrowRight } from "lucide-react";
 import ChakraFigure from "@/components/ChakraFigure";
 
-const DURATIONS = [20, 30, 45, 60];
+const MODES = [
+  { id: "guided", name: "Guiada", desc: "Voz interior que te acompasa paso a paso" },
+  { id: "unguided", name: "No guiada", desc: "Solo tú, tu respiración y el sonido" },
+];
+
+const LEVELS = [
+  { id: "beginner", name: "Principiante", desc: "Base suave para empezar" },
+  { id: "intermediate", name: "Intermedio", desc: "Profundiza con chakras" },
+];
+
+const DURATIONS = [30, 45, 60, 90];
 
 export default function Configurar() {
   const navigate = useNavigate();
   const [selected, setSelected] = useState([]);
-  const [minutes, setMinutes] = useState(20);
+  const [mode, setMode] = useState("guided");
+  const [level, setLevel] = useState("intermediate");
+  const [minutes, setMinutes] = useState(30);
 
   const toggle = (id) =>
     setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
@@ -18,8 +30,8 @@ export default function Configurar() {
     navigate("/meditar", {
       state: {
         preset: {
-          mode: "guided",
-          level: "intermediate",
+          mode,
+          level,
           audio: "healing",
           minutes,
           chakras: selected,
@@ -31,25 +43,65 @@ export default function Configurar() {
   return (
     <div className="space-y-7">
       <header className="text-center pt-2">
-        <h1 className="font-display text-2xl font-semibold tracking-tight">Terapia personalizada</h1>
+        <h1 className="font-display text-2xl font-semibold tracking-tight">Sesión de Reiki</h1>
         <p className="text-sm text-muted-foreground mt-1">Toca los chakras que quieras trabajar</p>
       </header>
 
       <ChakraFigure selected={selected} onToggle={toggle} />
 
       <section>
-        <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3 flex items-center gap-1.5">
+        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Modo</h2>
+        <div className="grid grid-cols-2 gap-3">
+          {MODES.map((m) => (
+            <button
+              key={m.id}
+              onClick={() => setMode(m.id)}
+              className={`text-left p-4 rounded-2xl border transition-all ${
+                mode === m.id
+                  ? "border-primary bg-accent neon-glow"
+                  : "border-glow/20 bg-card/50 hover:border-primary/50"
+              }`}
+            >
+              <p className="font-medium text-sm">{m.name}</p>
+              <p className="text-xs text-muted-foreground mt-1 leading-snug">{m.desc}</p>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Nivel</h2>
+        <div className="grid grid-cols-2 gap-3">
+          {LEVELS.map((l) => (
+            <button
+              key={l.id}
+              onClick={() => setLevel(l.id)}
+              className={`text-left p-4 rounded-2xl border transition-all ${
+                level === l.id
+                  ? "border-primary bg-accent neon-glow"
+                  : "border-glow/20 bg-card/50 hover:border-primary/50"
+              }`}
+            >
+              <p className="font-medium text-sm">{l.name}</p>
+              <p className="text-xs text-muted-foreground mt-1 leading-snug">{l.desc}</p>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3 flex items-center gap-1.5">
           <Clock className="w-3.5 h-3.5" /> Duración
-        </h3>
-        <div className="grid grid-cols-6 gap-2">
+        </h2>
+        <div className="grid grid-cols-4 gap-2.5">
           {DURATIONS.map((d) => (
             <button
               key={d}
               onClick={() => setMinutes(d)}
-              className={`py-2.5 rounded-xl border text-xs font-medium transition-all ${
+              className={`py-3 rounded-2xl border text-sm font-medium transition-all ${
                 minutes === d
                   ? "border-primary bg-accent text-primary neon-glow"
-                  : "border-glow/20 bg-card/50"
+                  : "border-glow/20 bg-card/50 text-foreground hover:border-primary/50"
               }`}
             >
               {d}

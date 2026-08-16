@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowUpRight, Sun, Clock, Waves, Trees, Sparkles, Calendar, Compass, Check, ChevronRight, Flame } from "lucide-react";
+import { Sun, Clock, Waves, Trees, Sparkles, Calendar, ChevronRight, Flame } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import StatsOverview from "@/components/StatsOverview";
 import WeeklyStats from "@/components/WeeklyStats";
@@ -26,7 +26,6 @@ export default function Home() {
   const [user, setUser] = useState(null);
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [level, setLevel] = useState("beginner");
 
   useEffect(() => {
     (async () => {
@@ -51,11 +50,6 @@ export default function Home() {
   const todayJourney = JOURNEY[currentDay - 1];
   const audio = audioMeta[todayJourney.config.audio] || audioMeta.healing;
   const AudioIcon = audio.icon;
-
-  const startWithLevel = () =>
-    navigate("/meditar", {
-      state: { preset: { mode: "guided", level, audio: "healing", minutes: level === "beginner" ? 10 : 15 } },
-    });
 
   const startToday = () =>
     navigate("/meditar", { state: { preset: { ...todayJourney.config, journeyDay: currentDay } } });
@@ -88,12 +82,24 @@ export default function Home() {
         <p className="text-sm text-muted-foreground mt-2 max-w-[16rem] leading-relaxed">
           Auto-Reiki guiado, a tu ritmo y con una señal clara en cada paso.
         </p>
-        <button
-          onClick={startWithLevel}
-          className="mt-5 w-full rounded-2xl bg-primary text-primary-foreground font-semibold py-3.5 flex items-center justify-center gap-2 hover:opacity-90 transition-opacity active:scale-[0.99]"
-        >
-          Preparar mi sesión <ArrowUpRight className="w-4 h-4" />
-        </button>
+        <div className="mt-5 grid grid-cols-2 gap-3">
+          <button
+            onClick={() => navigate("/meditar")}
+            className="flex flex-col items-center gap-1.5 py-4 rounded-2xl bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity active:scale-[0.99]"
+          >
+            <Waves className="w-5 h-5" />
+            <span className="text-sm">Meditación</span>
+            <span className="text-[11px] font-normal opacity-80">5 · 10 · 30 min</span>
+          </button>
+          <button
+            onClick={() => navigate("/configurar")}
+            className="flex flex-col items-center gap-1.5 py-4 rounded-2xl border border-primary/40 bg-card text-foreground font-semibold hover:border-primary/60 transition-colors active:scale-[0.99]"
+          >
+            <Sparkles className="w-5 h-5 text-primary" />
+            <span className="text-sm">Sesión de Reiki</span>
+            <span className="text-[11px] font-normal text-muted-foreground">30 · 45 · 60 · 90 min</span>
+          </button>
+        </div>
       </section>
 
       {/* Práctica de hoy */}
@@ -117,28 +123,6 @@ export default function Home() {
         <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/5">
           <span className="text-sm text-muted-foreground">Continuar preparación</span>
           <ChevronRight className="w-4 h-4 text-muted-foreground" />
-        </div>
-      </section>
-
-      {/* Selección de nivel */}
-      <section>
-        <div className="flex items-center gap-2 mb-3">
-          <Compass className="w-4 h-4 text-primary" />
-          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Tu punto de partida</h2>
-        </div>
-        <div className="grid grid-cols-2 gap-3">
-          <LevelCard
-            title="Principiante"
-            desc="Una ruta suave para comenzar con confianza"
-            selected={level === "beginner"}
-            onClick={() => setLevel("beginner")}
-          />
-          <LevelCard
-            title="Intermedio / Retorno"
-            desc="Estructura y constancia para volver a tu práctica"
-            selected={level === "intermediate"}
-            onClick={() => setLevel("intermediate")}
-          />
         </div>
       </section>
 
@@ -172,24 +156,5 @@ export default function Home() {
 
       <p className="text-center text-[11px] text-muted-foreground/60 pt-2">Bienvenida de nuevo, {firstName} ✦</p>
     </div>
-  );
-}
-
-function LevelCard({ title, desc, selected, onClick }) {
-  return (
-    <button
-      onClick={onClick}
-      className={`relative text-left p-4 rounded-2xl border transition-all ${
-        selected ? "border-primary bg-primary/10" : "border-white/5 bg-card hover:border-white/15"
-      }`}
-    >
-      {selected && (
-        <span className="absolute top-3 right-3 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
-          <Check className="w-3 h-3 text-primary-foreground" />
-        </span>
-      )}
-      <p className="font-semibold text-sm pr-6">{title}</p>
-      <p className="text-xs text-muted-foreground mt-1 leading-snug">{desc}</p>
-    </button>
   );
 }
