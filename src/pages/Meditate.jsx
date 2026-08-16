@@ -18,7 +18,7 @@ export default function Meditate() {
     const preset = location.state?.preset;
     if (preset) {
       const cfg = { ...preset };
-      if (cfg.chakras && cfg.chakras.length) {
+      if (cfg.mode === "guided" && cfg.chakras && cfg.chakras.length) {
         cfg.customScript = buildChakraScript(cfg.chakras);
       }
       setConfig(cfg);
@@ -28,7 +28,7 @@ export default function Meditate() {
 
   const start = (cfg) => {
     const finalCfg = { ...cfg };
-    if (finalCfg.chakras && finalCfg.chakras.length) {
+    if (finalCfg.mode === "guided" && finalCfg.chakras && finalCfg.chakras.length) {
       finalCfg.customScript = buildChakraScript(finalCfg.chakras);
     }
     setConfig(finalCfg);

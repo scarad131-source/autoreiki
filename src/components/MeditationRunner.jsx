@@ -78,6 +78,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   );
   const bowlIntervalSec = bowlChakras.length ? (config.minutes * 60) / bowlChakras.length : 0;
   const bowlIdxRef = useRef(0);
+  const isReikiUnguided = !isGuided && bowlChakras.length > 0;
 
   // cuenta regresiva de inicio (3 segundos)
   useEffect(() => {
@@ -151,13 +152,24 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     return () => clearTimeout(t);
   }, [stepIndex, paused, script, started]);
 
+  // Reiki no guiado: solo voz de bienvenida breve tras la cuenta regresiva, luego silencio.
+  useEffect(() => {
+    if (!started || paused || !isReikiUnguided) return;
+    const msg = `Bienvenida a la sesión de Reiki. Hoy trabajaremos con ${bowlChakras.length} chakras. Relaja tus manos y deja que el sonido del cuenco marque cada cambio de posición.`;
+    const t = setTimeout(() => speak(msg), 400);
+    return () => clearTimeout(t);
+  }, [started, isReikiUnguided]);
+
   // Marcador de cuenco tibetano: un cuenco por chakra, espaciado según duración / nº de chakras
   useEffect(() => {
     if (!started || !bowlIntervalSec || !bowlChakras.length) return;
     const target = Math.min(Math.floor(elapsed / bowlIntervalSec) + 1, bowlChakras.length);
     while (bowlIdxRef.current < target) {
       const c = bowlChakras[bowlIdxRef.current];
-      if (c) ambient.playBowl(c.freq, 0.7);
+      if (c) {
+        ambient.playBowl(c.freq, 0.7);
+        setTimeout(() => ambient.playBowl(c.freq, 0.7), 650);
+      }
       bowlIdxRef.current++;
     }
   }, [elapsed, bowlIntervalSec, bowlChakras, started]);
