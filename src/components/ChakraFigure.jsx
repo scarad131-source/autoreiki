@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { CHAKRAS } from "@/lib/guidedScripts";
 
 const FIGURE_URL =
-"https://media.base44.com/images/public/6a7d30a899098694894dbd88/685c375af_siluetameditacionconchackras.png";
+  "https://media.base44.com/images/public/6a7d30a899098694894dbd88/1e13ded10_image.png";
 
 // Posición vertical (en % de la altura de la imagen) de cada chakra sobre el eje central
 // Posición vertical (en % de la altura de la imagen) de cada chakra sobre el eje central.
@@ -55,24 +55,27 @@ export default function ChakraFigure({ selected = [], onToggle }) {
             return (
               <div
                 key={c.id}
-                className="absolute"
+                className="absolute group"
                 style={{ left: "50%", top: `${top}%`, transform: "translate(-50%, -50%)" }}>
-                
-                <div
+                <button
                   onClick={() => handleTap(c)}
-                  className="absolute rounded-full"
-                  style={{
-                    width: 26,
-                    height: 26,
-                    border: `2px ${isSel ? "solid" : "dashed"} ${c.color}`,
-                    opacity: isSel ? 1 : 0.6,
-                    boxShadow: isSel ? `0 0 12px ${c.color}, 0 0 22px ${c.color}66` : "none",
-                    background: isSel ? `${c.color}22` : "transparent",
-                    cursor: "pointer"
-                  }} />
-                
+                  aria-label={c.name}
+                  className="relative w-9 h-9 -m-1 rounded-full flex items-center justify-center cursor-pointer">
+                  {isSel ? (
+                    <span
+                      className="absolute inset-0 rounded-full animate-pulse"
+                      style={{
+                        border: `2px solid ${c.color}`,
+                        background: `${c.color}33`,
+                        boxShadow: `0 0 14px ${c.color}, 0 0 28px ${c.color}99`
+                      }} />
+                  ) : (
+                    <span
+                      className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-80 transition-opacity duration-300"
+                      style={{ border: `2px dashed ${c.color}`, boxShadow: `0 0 10px ${c.color}66` }} />
+                  )}
+                </button>
               </div>);
-
           })}
         </div>
       </div>
