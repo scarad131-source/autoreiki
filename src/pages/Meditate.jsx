@@ -60,9 +60,9 @@ export default function Meditate() {
       }
     } catch (e) {
 
+
       // ignore save errors
-    }navigate("/historial");
-  };
+    }navigate("/historial");};
 
   if (stage === "running" && config) {
     return <MeditationRunner config={config} onFinish={finish} onCancel={() => setStage("setup")} />;
@@ -75,7 +75,7 @@ export default function Meditate() {
   return (
     <div className="space-y-6">
       <header className="text-center pt-2">
-        <h1 className="font-display text-2xl font-semibold tracking-tight hidden">Nueva sesión</h1>
+        
         <p className="text-muted-foreground mt-1 [font-family:'Bodoni_Moda',_serif] text-xl">Configura tu espacio sagrado</p>
       </header>
       <SessionForm onStart={start} />
