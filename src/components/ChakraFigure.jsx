@@ -39,9 +39,9 @@ export default function ChakraFigure({ selected = [], onToggle }) {
   const infoIncluded = infoChakra ? selected.includes(infoChakra.id) : false;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-[300px_1fr] sm:gap-6 max-w-[560px] mx-auto">
+    <div className="grid grid-cols-1 sm:grid-cols-[1fr_180px] sm:gap-6 max-w-[560px] mx-auto">
       {/* figura con marcadores tocables */}
-      <div className="relative w-full max-w-[300px] mx-auto sm:mx-0 justify-self-center sm:justify-self-start">
+      <div className="relative w-full max-w-[300px] mx-auto sm:mx-auto justify-self-center sm:justify-self-center">
         <img
           src={FIGURE_URL}
           alt="Silueta en meditación con chakras"
