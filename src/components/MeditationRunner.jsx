@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { ArrowLeft, Pause, Play, Square, Volume2, VolumeX } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ambient } from "@/lib/audioEngine";
-import { GUIDED_SCRIPTS, CHAKRAS } from "@/lib/guidedScripts";
+import { RELEASE_SCRIPTS, CHAKRAS } from "@/lib/guidedScripts";
 import BreathingOrb from "@/components/BreathingOrb";
 
 // Voz guía en español (síntesis del navegador, sin archivos externos)
@@ -14,15 +14,25 @@ if (typeof window !== "undefined" && "speechSynthesis" in window) {
   };
 }
 
+function pickFemaleEsVoice() {
+  const pool = cachedVoices.filter((v) => v.lang && v.lang.toLowerCase().startsWith("es"));
+  const list = pool.length ? pool : cachedVoices;
+  if (!list.length) return null;
+  const female = list.find((v) =>
+    /female|mujer|femenino|helena|laura|monic|paulina|sabina|marisol|lucia|soledad|esperanza|carmen|elvira|victoria|lorena|isabel/i.test(v.name)
+  );
+  return female || list[0];
+}
+
 function speak(text) {
   if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
   u.lang = "es-ES";
-  u.rate = 0.82;
-  u.pitch = 1;
-  const es = cachedVoices.find((v) => v.lang && v.lang.toLowerCase().startsWith("es"));
-  if (es) u.voice = es;
+  u.rate = 0.8;
+  u.pitch = 1.05;
+  const v = pickFemaleEsVoice();
+  if (v) u.voice = v;
   window.speechSynthesis.speak(u);
 }
 
@@ -44,13 +54,13 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const isGuided = config.mode === "guided";
   let script = config.customScript || null;
   if (!script && isGuided) {
-    if (config.level === "beginner") {
-      const day = new Date().getDay();
-      script = day % 2 === 0 ? GUIDED_SCRIPTS.beginner : GUIDED_SCRIPTS.beginner2;
-    } else {
-      script = GUIDED_SCRIPTS.intermediate;
-    }
+    // Meditación guiada de liberación emocional (preparación para Reiki):
+    // sesiones de 5-10 min → voz de 3 min; sesiones de 15-20 min → voz de 5 min.
+    // El resto de la sesión queda solo con la ambientación elegida.
+    script = config.minutes <= 10 ? RELEASE_SCRIPTS.short : RELEASE_SCRIPTS.long;
   }
+  const scriptTotalSec = script ? script.steps.reduce((a, s) => a + s.seconds, 0) : 0;
+  const voiceActive = script ? elapsed < scriptTotalSec : false;
 
   // Chakras a tratar y espaciado de cuencos: un cuenco por chakra repartido en la duración total
   const bowlChakras = useMemo(
@@ -179,7 +189,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         </div>
 
         <AnimatePresence mode="wait">
-          {currentStep && !paused && (
+          {currentStep && !paused && voiceActive && (
             <motion.div
               key={stepIndex}
               initial={{ opacity: 0, y: 8 }}

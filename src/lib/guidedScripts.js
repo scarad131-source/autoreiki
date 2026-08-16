@@ -1,52 +1,38 @@
-// Guiones de meditación guiada por nivel. Cada paso dura `seconds` segundos.
+// Guiones de meditación guiada enfocados en liberación emocional y preparación para Reiki.
+// Voz de 3 min (sesiones de 5-10 min) y voz de 5 min (sesiones de 15-20 min); el resto de la
+// sesión queda solo con la ambientación elegida.
 
-export const GUIDED_SCRIPTS = {
-  beginner: {
-    title: "Introducción a la calma",
-    subtitle: "Ideal para tus primeras sesiones",
+export const RELEASE_SCRIPTS = {
+  short: {
+    title: "Liberación emocional · Preparación para Reiki",
+    subtitle: "Voz de 3 minutos · ideal para 5-10 min",
     steps: [
-      { seconds: 40, text: "Siéntate cómodamente. Cierra los ojos suavemente y deja que tu cuerpo se acomode en su posición natural." },
-      { seconds: 40, text: "Lleva la atención a tu respiración. No la cambies, solo obsérvala. Entra… y sale." },
-      { seconds: 45, text: "Coloca una mano en el pecho y otra en el abdomen. Siente cómo se elevan al inhalar y se relajan al exhalar." },
-      { seconds: 45, text: "Inhala contando hasta cuatro… y exhala contando hasta seis. Deja que la exhalación sea más larga." },
-      { seconds: 50, text: "Imagina una luz suave en el centro del pecho. Con cada respiración, esa luz crece un poco más." },
-      { seconds: 50, text: "Si aparece un pensamiento, no lo juzgues. Obsérvalo como una nube que pasa y vuelve a tu respiración." },
-      { seconds: 45, text: "Repite en silencio: «Estoy en calma. Estoy a salvo. Estoy en paz»." },
-      { seconds: 40, text: "Deja que la respiración vuelva a su ritmo natural. Solo reposa aquí, en este instante." },
-      { seconds: 35, text: "Poco a poco, toma conciencia de tu cuerpo, de la superficie donde estás sentado." },
-      { seconds: 30, text: "Cuando estés listo, abre los ojos suavemente. Lleva esta calma contigo." },
+      { seconds: 18, text: "Bienvenida. Acomódate con suavidad y cierra los ojos. Respira sin prisa, dejando que el cuerpo descanse." },
+      { seconds: 20, text: "Inhala calma… y al exhalar, suelta el día. Aquí no hay nada que resolver, solo estar." },
+      { seconds: 22, text: "Coloca una mano sobre el pecho. Siente el calor de tu mano, tu propia presencia que te acompaña." },
+      { seconds: 24, text: "Si hay una emoción pesada, no la rechaces. Mírala con ternura, como a una amiga cansada." },
+      { seconds: 26, text: "Con cada exhalación, deja que esa emoción se disuelva, como niebla que se aclara con la luz." },
+      { seconds: 26, text: "No hace falta retener nada. Permítete soltar. Estás a salvo dejando ir lo que ya no te nutre." },
+      { seconds: 22, text: "Respira hacia el espacio que queda. Ese espacio es paz, es claridad, es tu corazón abierto y sereno." },
+      { seconds: 22, text: "Prepara tu cuerpo y tu energía para recibir. Eres un canal limpio, dispuesta a sanar." },
     ],
   },
-  beginner2: {
-    title: "Relajación profunda",
-    subtitle: "Suelta tensiones paso a paso",
+  long: {
+    title: "Liberación emocional · Preparación para Reiki",
+    subtitle: "Voz de 5 minutos · ideal para 15-20 min",
     steps: [
-      { seconds: 40, text: "Siéntate o acuéstate cómodamente. Cierra los ojos y respira profundo tres veces." },
-      { seconds: 45, text: "Lleva la atención a los pies. Suelta cualquier tensión que encuentres. Se vuelven pesados y cálidos." },
-      { seconds: 45, text: "Sube por las piernas, las caderas, el abdomen. Cada zona se relaja al exhalar." },
-      { seconds: 45, text: "Siente la espalda, los hombros. Deja que caigan, sin sostener nada. Suelta el peso del día." },
-      { seconds: 45, text: "Relaja brazos, manos, cuello y rostro. Afloja la mandíbula y el espacio entre las cejas." },
-      { seconds: 50, text: "Ahora todo el cuerpo reposa. Respira y con cada exhalación, suéltate un poco más." },
-      { seconds: 50, text: "Repite en silencio: «Me permito descansar. Estoy en paz. Todo está bien»." },
-      { seconds: 40, text: "Reposa en esta quietud. No hay nada que hacer, solo estar." },
-      { seconds: 35, text: "Poco a poco, vuelve a sentir tu cuerpo y el ritmo de tu respiración." },
-      { seconds: 30, text: "Cuando estés listo, abre los ojos suavemente, llevando esta calma contigo." },
-    ],
-  },
-  intermediate: {
-    title: "Equilibrio de chakras",
-    subtitle: "Profundiza tu práctica Reiki",
-    steps: [
-      { seconds: 35, text: "Comienza con tres respiraciones profundas. Inhala calma, exhala cualquier tensión acumulada." },
-      { seconds: 45, bowl: true, bowlFreq: 396, text: "Dirige tu atención a la base de la columna. Visualiza un disco de luz roja que gira lentamente. Es tu raíz." },
-      { seconds: 45, bowl: true, bowlFreq: 417, text: "Sube al abdomen. Imagina un disco naranja brillante. Siente tu creatividad y emociones fluir en equilibrio." },
-      { seconds: 45, bowl: true, bowlFreq: 528, text: "En el plexo solar, un sol amarillo. Tu poder personal, tu voluntad, resplandecen sin esfuerzo." },
-      { seconds: 45, bowl: true, bowlFreq: 639, text: "En el centro del pecho, una luz verde esmeralda. Ábrela con cada respiración. Eres amor." },
-      { seconds: 45, bowl: true, bowlFreq: 741, text: "En la garganta, un cielo azul claro. Tu voz es verdad. Permítete expresar y escucharte." },
-      { seconds: 45, bowl: true, bowlFreq: 852, text: "Entre las cejas, un índigo profundo. Tu intuición se afina, ves con claridad interior." },
-      { seconds: 45, bowl: true, bowlFreq: 963, text: "En la corona, una luz violeta que se abre hacia arriba. Conectas con algo más grande que tú." },
-      { seconds: 50, text: "Deja que todas las luces fluyan juntas. Eres un canal de energía. Permite que la sanación ocurra." },
-      { seconds: 40, text: "Agradece a tu cuerpo y a tu práctica. Regresa lentamente, integrando esta energía." },
+      { seconds: 20, text: "Bienvenida. Acomódate con suavidad y cierra los ojos. Respira sin prisa, dejando que el cuerpo descanse." },
+      { seconds: 22, text: "Inhala calma… y al exhalar, suelta el día. Aquí no hay nada que resolver, solo estar." },
+      { seconds: 24, text: "Lleva la atención a los pies, a las piernas, al abdomen. Deja que cada zona se relaje al exhalar." },
+      { seconds: 26, text: "Coloca una mano sobre el pecho. Siente el calor de tu mano, tu propia presencia que te acompaña." },
+      { seconds: 26, text: "Si hay una emoción pesada, no la rechaces. Mírala con ternura, como a una amiga cansada." },
+      { seconds: 28, text: "Pregúntale a esa emoción qué quiere decirte. Escucha sin juzgar. Solo respira y acompáñala." },
+      { seconds: 28, text: "Con cada exhalación, deja que se disuelva, como niebla que se aclara con la luz del amanecer." },
+      { seconds: 28, text: "No hace falta retener nada. Permítete soltar. Estás a salvo dejando ir lo que ya no te nutre." },
+      { seconds: 26, text: "Imagina una luz cálida en el pecho que crece con cada respiración, llenando el espacio liberado." },
+      { seconds: 24, text: "Ese espacio es paz, es claridad, es tu corazón abierto. Aquí habita la compasión por ti misma." },
+      { seconds: 24, text: "Prepara tu cuerpo y tu energía para recibir. Eres un canal limpio, dispuesta a sanar." },
+      { seconds: 24, text: "Reposa en esta quietud. Cuando estés lista, lleva esta calma contigo al recibir tu terapia." },
     ],
   },
 };
