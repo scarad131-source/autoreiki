@@ -76,10 +76,10 @@ export default function Home() {
           <Sun className="w-5 h-5 text-primary" />
         </div>
         <p className="text-xs text-muted-foreground tracking-wide">Vuelve a ti</p>
-        <h2 className="font-display text-[22px] font-semibold leading-snug mt-2 max-w-[15rem]">
+        <h2 className="font-display text-[22px] font-semibold leading-snug mt-2">
           Una pausa para escuchar lo que tu cuerpo ya sabe.
         </h2>
-        <p className="text-sm text-muted-foreground mt-2 max-w-[16rem] leading-relaxed">
+        <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
           Auto-Reiki guiado, a tu ritmo y con una señal clara en cada paso.
         </p>
         <div className="mt-5 grid grid-cols-2 gap-3">
