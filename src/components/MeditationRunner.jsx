@@ -34,8 +34,8 @@ function speak(text) {
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
   u.lang = "es-ES";
-  u.rate = 0.72;
-  u.pitch = 1.05;
+  u.rate = 0.58;
+  u.pitch = 0.98;
   const v = pickFemaleEsVoice();
   if (v) u.voice = v;
   window.speechSynthesis.speak(u);
