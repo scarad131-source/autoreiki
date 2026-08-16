@@ -51,8 +51,7 @@ export default function Home() {
   const audio = audioMeta[todayJourney.config.audio] || audioMeta.healing;
   const AudioIcon = audio.icon;
 
-  const startToday = () =>
-    navigate("/meditar", { state: { preset: { ...todayJourney.config, journeyDay: currentDay } } });
+  const startToday = () => navigate("/meditar");
 
   return (
     <div className="space-y-6">
