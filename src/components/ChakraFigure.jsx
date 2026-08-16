@@ -78,41 +78,41 @@ export default function ChakraFigure({ selected = [], onToggle }) {
       </div>
 
       {/* tooltip debajo de la figura */}
-      <div className="mt-4 min-h-[40px] hidden">
-        <AnimatePresence>
-          {infoChakra &&
-          <motion.div
-            key={infoChakra.id}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.18 }}
-            className="w-full max-w-[320px] mx-auto">
-            
-              <div
-              className="rounded-xl border bg-card/95 backdrop-blur p-3 shadow-lg"
-              style={{ borderColor: `${infoChakra.color}88`, boxShadow: `0 0 16px ${infoChakra.color}33` }}>
-              
-                <div className="flex items-center justify-between mb-1.5">
-                  <p className="font-display text-sm font-semibold" style={{ color: infoChakra.color }}>{infoChakra.name}</p>
-                  <span
-                  className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
-                  style={{
-                    background: infoIncluded ? infoChakra.color : "rgba(255,255,255,0.1)",
-                    color: infoIncluded ? "#1A0B2E" : "hsl(var(--muted-foreground))"
-                  }}>
-                  
-                    {infoIncluded ? "Incluida" : "Fuera"}
-                  </span>
-                </div>
-                <p className="text-[11px] text-muted-foreground leading-snug"><span className="text-foreground/70 font-medium">Zona: </span>{infoChakra.zone}</p>
-                <p className="text-[11px] text-muted-foreground leading-snug mt-1"><span className="text-foreground/70 font-medium">Manos: </span>{infoChakra.placement}</p>
-                <p className="text-[11px] text-muted-foreground leading-snug mt-1"><span className="text-foreground/70 font-medium">Beneficios: </span>{infoChakra.benefits}</p>
-              </div>
-            </motion.div>
-          }
-        </AnimatePresence>
-      </div>
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
     </div>);
 
 }
