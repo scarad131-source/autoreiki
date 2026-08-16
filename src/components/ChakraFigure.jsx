@@ -39,9 +39,9 @@ export default function ChakraFigure({ selected = [], onToggle }) {
   const infoIncluded = infoChakra ? selected.includes(infoChakra.id) : false;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-[1fr_180px] sm:gap-6 max-w-[560px] mx-auto">
+    <div className="max-w-[560px] mx-auto">
       {/* figura con marcadores tocables */}
-      <div className="relative w-full max-w-[300px] mx-auto sm:mx-auto justify-self-center sm:justify-self-center">
+      <div className="relative w-full max-w-[300px] mx-auto">
         <img
           src={FIGURE_URL}
           alt="Silueta en meditación con chakras"
@@ -77,8 +77,8 @@ export default function ChakraFigure({ selected = [], onToggle }) {
         </div>
       </div>
 
-      {/* columna lateral: el tooltip aparece aquí, no sobre la figura */}
-      <div className="relative">
+      {/* tooltip debajo de la figura */}
+      <div className="mt-4 min-h-[40px]">
         <AnimatePresence>
           {infoChakra &&
           <motion.div
@@ -87,11 +87,10 @@ export default function ChakraFigure({ selected = [], onToggle }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.18 }}
-            className="static sm:absolute sm:left-0 sm:-translate-y-1/2 w-full sm:w-[180px]"
-            style={{ top: `${POSITIONS[infoChakra.id]}%` }}>
+            className="w-full max-w-[320px] mx-auto">
             
               <div
-              className="mt-3 sm:mt-0 rounded-xl border bg-card/95 backdrop-blur p-3 shadow-lg"
+              className="rounded-xl border bg-card/95 backdrop-blur p-3 shadow-lg"
               style={{ borderColor: `${infoChakra.color}88`, boxShadow: `0 0 16px ${infoChakra.color}33` }}>
               
                 <div className="flex items-center justify-between mb-1.5">
