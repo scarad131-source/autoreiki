@@ -41,7 +41,7 @@ export default function ChakraFigure({ selected = [], onToggle }) {
   return (
     <div className="max-w-[560px] mx-auto">
       {/* figura con marcadores tocables */}
-      <div className="relative w-full max-w-[300px] mx-auto">
+      <div className="relative w-full max-w-[440px] mx-auto">
         <img
           src={FIGURE_URL}
           alt="Silueta en meditación con chakras"
