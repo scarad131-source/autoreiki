@@ -54,12 +54,13 @@ export default function Configurar() {
 
       <ChakraFigure selected={selected} onToggle={toggle} />
 
-      <button
-        onClick={selectAll}
-        className="w-full py-3 rounded-2xl border border-primary/40 bg-card text-primary font-semibold text-sm uppercase tracking-[0.14em] hover:bg-accent transition-colors active:scale-[0.99] px-1 mx-10">
-        
-        Seleccionar todos
-      </button>
+      <div className="flex justify-center">
+        <button
+          onClick={selectAll}
+          className="inline-flex py-2 px-4 rounded-full border border-primary/40 bg-card text-primary font-semibold text-xs uppercase tracking-[0.14em] hover:bg-accent transition-colors active:scale-[0.99]">
+          Seleccionar todos
+        </button>
+      </div>
 
       <section>
         <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Modo</h2>
