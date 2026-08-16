@@ -5,11 +5,7 @@ import { ambient } from "@/lib/audioEngine";
 import { RELEASE_SCRIPTS, CHAKRAS } from "@/lib/guidedScripts";
 import BreathingOrb from "@/components/BreathingOrb";
 import { speak, cancelSpeech, COUNTDOWN_WORDS, unlockSpeech } from "@/lib/speech";
-
-// Sonido ambiental único para todas las meditaciones (mar al amanecer).
-// Se reproduce en bucle hasta completar el tiempo total de la sesión.
-const AMBIENT_URL =
-  "https://media.base44.com/videos/public/6a7d30a899098694894dbd88/af73fce44_sonidodeplayatranqullaalamanecer.mp4";
+import { audioUrlFor } from "@/lib/audioSources";
 
 // Posición concisa de las manos por chakra para las instrucciones de voz
 const HAND_HINTS = {
@@ -236,7 +232,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
 
   return (
     <div className="flex flex-col items-center min-h-[70vh] justify-between py-6">
-      <audio ref={audioRef} src={AMBIENT_URL} loop preload="auto" className="hidden" />
+      <audio ref={audioRef} src={audioUrlFor(config.audio)} loop preload="auto" className="hidden" />
 
       <div className="w-full flex items-center justify-between text-xs text-muted-foreground">
         <button

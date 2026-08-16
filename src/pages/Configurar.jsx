@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Clock, ArrowRight } from "lucide-react";
 import ChakraFigure from "@/components/ChakraFigure";
+import { AUDIO_SOURCES } from "@/lib/audioSources";
 
 const MODES = [
   { id: "guided", name: "Guiada", desc: "Voz interior que te acompasa paso a paso" },
@@ -13,7 +14,7 @@ const LEVELS = [
   { id: "intermediate", name: "Intermedio", desc: "Profundiza con chakras" },
 ];
 
-const DURATIONS = [30, 45, 60, 90];
+const DURATIONS = [30, 60, 90];
 
 export default function Configurar() {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ export default function Configurar() {
   const [mode, setMode] = useState("guided");
   const [level, setLevel] = useState("intermediate");
   const [minutes, setMinutes] = useState(30);
+  const [audio, setAudio] = useState("bowls");
 
   const toggle = (id) =>
     setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
@@ -32,7 +34,7 @@ export default function Configurar() {
         preset: {
           mode,
           level,
-          audio: "healing",
+          audio: mode === "unguided" ? audio : "healing",
           minutes,
           chakras: selected,
         },
@@ -109,6 +111,27 @@ export default function Configurar() {
           ))}
         </div>
       </section>
+
+      {mode === "unguided" && (
+        <section>
+          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Sonido ambiente</h2>
+          <div className="grid grid-cols-2 gap-3">
+            {Object.values(AUDIO_SOURCES).map((a) => (
+              <button
+                key={a.id}
+                onClick={() => setAudio(a.id)}
+                className={`text-left p-4 rounded-2xl border transition-all ${
+                  audio === a.id
+                    ? "border-primary bg-accent neon-glow"
+                    : "border-glow/20 bg-card/50 hover:border-primary/50"
+                }`}
+              >
+                <p className="font-medium text-sm">{a.name}</p>
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
 
       <p className="text-center text-sm text-muted-foreground mb-3">
         <span className="text-primary font-semibold">{selected.length}</span> de 7 zonas elegidas

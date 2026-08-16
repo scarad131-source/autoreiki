@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Clock, ArrowRight } from "lucide-react";
+import { AUDIO_SOURCES } from "@/lib/audioSources";
 
 const MODES = [
   { id: "guided", name: "Guiada", desc: "Voz interior que te acompasa paso a paso" },
@@ -17,9 +18,10 @@ export default function SessionForm({ onStart }) {
   const [mode, setMode] = useState("guided");
   const [level, setLevel] = useState("beginner");
   const [minutes, setMinutes] = useState(10);
+  const [audio, setAudio] = useState("beach");
 
   const start = () => {
-    onStart({ mode, level, audio: "beach", minutes });
+    onStart({ mode, level, audio: mode === "unguided" ? audio : "beach", minutes });
   };
 
   return (
@@ -84,6 +86,27 @@ export default function SessionForm({ onStart }) {
           ))}
         </div>
       </section>
+
+      {mode === "unguided" && (
+        <section>
+          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Sonido ambiente</h2>
+          <div className="grid grid-cols-2 gap-3">
+            {Object.values(AUDIO_SOURCES).map((a) => (
+              <button
+                key={a.id}
+                onClick={() => setAudio(a.id)}
+                className={`text-left p-4 rounded-2xl border transition-all ${
+                  audio === a.id
+                    ? "border-primary bg-accent neon-glow"
+                    : "border-glow/20 bg-card/50 hover:border-primary/50"
+                }`}
+              >
+                <p className="font-medium text-sm">{a.name}</p>
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
 
       <button
         onClick={start}
