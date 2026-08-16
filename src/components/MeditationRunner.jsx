@@ -47,7 +47,8 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     () => (config.chakras || []).map((id) => CHAKRAS.find((c) => c.id === id)).filter(Boolean),
     [config.chakras]
   );
-  const bowlIntervalSec = bowlChakras.length ? (config.minutes * 60) / bowlChakras.length : 0;
+  // Mínimo 3 minutos (180 s) de canalización por chakra
+  const bowlIntervalSec = bowlChakras.length ? Math.max(180, (config.minutes * 60) / bowlChakras.length) : 0;
   const bowlIdxRef = useRef(0);
   const closingSpokenRef = useRef(false);
   const finishedRef = useRef(false);
@@ -139,8 +140,9 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   // No guiado: recordatorio de respiración (+ bienvenida breve en Reiki) tras la cuenta regresiva, luego silencio.
   useEffect(() => {
     if (!started || isGuided) return;
+    const firstC = bowlChakras[0];
     const msg = isReikiUnguided
-      ? `Realiza tres respiraciones lentas y profundas. Bienvenida a la sesión de Reiki. Hoy trabajaremos con ${bowlChakras.length} chakras. Relaja tus manos y deja que el sonido del cuenco marque cada cambio de posición.`
+      ? `Realiza tres respiraciones lentas y profundas. Bienvenida a la sesión de Reiki. Hoy trabajaremos con ${bowlChakras.length} chakras. ${firstC ? firstC.placement : ""} Deja que el sonido del cuenco marque cada cambio de posición.`
       : "Realiza tres respiraciones lentas y profundas.";
     const t = setTimeout(() => speak(msg), 400);
     return () => clearTimeout(t);
@@ -155,6 +157,11 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       if (c) {
         ambient.playBowl(c.freq, 0.7);
         setTimeout(() => ambient.playBowl(c.freq, 0.7), 650);
+        // instrucción de colocación de manos al cambiar de chakra
+        // (el primer chakra ya se indica en la bienvenida)
+        if (bowlIdxRef.current > 0) {
+          setTimeout(() => speak(c.placement), 1400);
+        }
       }
       bowlIdxRef.current++;
     }
