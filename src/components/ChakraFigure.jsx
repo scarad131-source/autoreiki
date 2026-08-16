@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { CHAKRAS } from "@/lib/guidedScripts";
 
 const FIGURE_URL =
-  "https://media.base44.com/images/public/6a7d30a899098694894dbd88/1e13ded10_image.png";
+"https://media.base44.com/images/public/6a7d30a899098694894dbd88/1e13ded10_image.png";
 
 // Posición vertical (en % de la altura de la imagen) de cada chakra sobre el eje central
 // Posición vertical (en % de la altura de la imagen) de cada chakra sobre el eje central.
@@ -72,13 +72,13 @@ export default function ChakraFigure({ selected = [], onToggle }) {
               </span>
               <span className="text-[10px] font-semibold uppercase tracking-wide leading-none" style={{ color: isSel ? c.color : "hsl(var(--muted-foreground))" }}>{c.name}</span>
               <span className="text-[9px] text-muted-foreground/60 leading-none">{c.sanskrit}</span>
-            </button>
-          );
+            </button>);
+
         })}
       </div>
 
       {/* tooltip debajo de la figura */}
-      <div className="mt-4 min-h-[40px]">
+      <div className="mt-4 min-h-[40px] hidden">
         <AnimatePresence>
           {infoChakra &&
           <motion.div
