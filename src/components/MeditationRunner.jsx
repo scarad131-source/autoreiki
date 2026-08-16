@@ -11,6 +11,17 @@ import { speak, cancelSpeech, COUNTDOWN_WORDS, unlockSpeech } from "@/lib/speech
 const AMBIENT_URL =
   "https://media.base44.com/videos/public/6a7d30a899098694894dbd88/af73fce44_sonidodeplayatranqullaalamanecer.mp4";
 
+// Posición concisa de las manos por chakra para las instrucciones de voz
+const HAND_HINTS = {
+  root: "cerca de la pelvis",
+  sacral: "debajo del ombligo",
+  solar: "sobre el plexo solar, debajo de las costillas",
+  heart: "en el centro del pecho",
+  throat: "cerca de la garganta",
+  third_eye: "entre las cejas",
+  crown: "sobre la coronilla",
+};
+
 export default function MeditationRunner({ config, onFinish, onCancel }) {
   const totalSeconds = config.minutes * 60;
   const [countdown, setCountdown] = useState(3);
@@ -49,7 +60,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   );
   // Mínimo 3 minutos (180 s) de canalización por chakra
   const bowlIntervalSec = bowlChakras.length ? Math.max(180, (config.minutes * 60) / bowlChakras.length) : 0;
-  const bowlIdxRef = useRef(0);
   const closingSpokenRef = useRef(false);
   const finishedRef = useRef(false);
   const isReikiUnguided = !isGuided && bowlChakras.length > 0;
@@ -140,32 +150,37 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   // No guiado: recordatorio de respiración (+ bienvenida breve en Reiki) tras la cuenta regresiva, luego silencio.
   useEffect(() => {
     if (!started || isGuided) return;
-    const firstC = bowlChakras[0];
     const msg = isReikiUnguided
-      ? `Realiza tres respiraciones lentas y profundas. Bienvenida a la sesión de Reiki. Hoy trabajaremos con ${bowlChakras.length} chakras. ${firstC ? firstC.placement : ""} Deja que el sonido del cuenco marque cada cambio de posición.`
+      ? `Realiza tres respiraciones lentas y profundas. Bienvenida a la sesión de Reiki. Hoy trabajaremos con ${bowlChakras.length} chakras. Deja que el sonido del cuenco marque cada cambio de posición.`
       : "Realiza tres respiraciones lentas y profundas.";
     const t = setTimeout(() => speak(msg), 400);
     return () => clearTimeout(t);
   }, [started, isReikiUnguided, isGuided]);
 
-  // Marcador de cuenco tibetano: un cuenco por chakra, espaciado según duración / nº de chakras
+  // Secuencia de chakras (Reiki no guiado): cuenco + instrucción de manos, luego
+  // mínimo 3 min de silencio antes del siguiente chakra.
   useEffect(() => {
-    if (!started || !bowlIntervalSec || !bowlChakras.length) return;
-    const target = Math.min(Math.floor(elapsed / bowlIntervalSec) + 1, bowlChakras.length);
-    while (bowlIdxRef.current < target) {
-      const c = bowlChakras[bowlIdxRef.current];
-      if (c) {
-        ambient.playBowl(c.freq, 0.7);
-        setTimeout(() => ambient.playBowl(c.freq, 0.7), 650);
-        // instrucción de colocación de manos al cambiar de chakra
-        // (el primer chakra ya se indica en la bienvenida)
-        if (bowlIdxRef.current > 0) {
-          setTimeout(() => speak(c.placement), 1400);
-        }
-      }
-      bowlIdxRef.current++;
-    }
-  }, [elapsed, bowlIntervalSec, bowlChakras, started]);
+    if (!started || !isReikiUnguided || !bowlChakras.length) return;
+    let cancelled = false;
+    const timers = [];
+    const welcomeMs = 12000;
+    const runChakra = (i) => {
+      if (cancelled || i >= bowlChakras.length) return;
+      const c = bowlChakras[i];
+      ambient.playBowl(c.freq, 0.7);
+      timers.push(setTimeout(() => ambient.playBowl(c.freq, 0.7), 650));
+      timers.push(setTimeout(() => {
+        if (cancelled) return;
+        speak(`Chakra ${c.name}. Posiciona tus manos ${HAND_HINTS[c.id]}, sin toque físico. Siente la energía que fluye.`);
+      }, 1400));
+      timers.push(setTimeout(() => runChakra(i + 1), bowlIntervalSec * 1000));
+    };
+    timers.push(setTimeout(() => runChakra(0), welcomeMs));
+    return () => {
+      cancelled = true;
+      timers.forEach(clearTimeout);
+    };
+  }, [started, isReikiUnguided, bowlChakras, bowlIntervalSec]);
 
   // voz de cierre en los últimos segundos (solo no guiadas y recorrido de 21 días)
   useEffect(() => {
