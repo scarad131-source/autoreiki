@@ -80,6 +80,32 @@ export default function ChakraFigure({ selected = [], onToggle }) {
         </div>
       </div>
 
+      {/* círculos de chakras para elegir */}
+      <div className="mt-5 flex flex-wrap justify-center gap-x-4 gap-y-3">
+        {CHAKRAS.map((c) => {
+          const isSel = selected.includes(c.id);
+          return (
+            <button
+              key={c.id}
+              onClick={() => onToggle(c.id)}
+              className="flex flex-col items-center gap-1 w-[64px]">
+              <span
+                className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300"
+                style={{
+                  background: isSel ? `${c.color}33` : "transparent",
+                  border: `2px ${isSel ? "solid" : "dashed"} ${c.color}`,
+                  boxShadow: isSel ? `0 0 14px ${c.color}, 0 0 24px ${c.color}88` : "none",
+                  opacity: isSel ? 1 : 0.45
+                }}>
+                <span className="w-2 h-2 rounded-full" style={{ background: c.color, boxShadow: isSel ? `0 0 8px ${c.color}` : "none" }} />
+              </span>
+              <span className="text-[10px] font-semibold uppercase tracking-wide leading-none" style={{ color: isSel ? c.color : "hsl(var(--muted-foreground))" }}>{c.name}</span>
+              <span className="text-[9px] text-muted-foreground/60 leading-none">{c.sanskrit}</span>
+            </button>
+          );
+        })}
+      </div>
+
       {/* tooltip debajo de la figura */}
       <div className="mt-4 min-h-[40px]">
         <AnimatePresence>
