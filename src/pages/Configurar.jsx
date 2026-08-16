@@ -66,24 +66,24 @@ export default function Configurar() {
         <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Modo</h2>
         <div className="grid grid-cols-2 gap-4">
           {MODES.map((m) => {
-          const active = mode === m.id;
-          return (
-          <button
-            key={m.id}
-            onClick={() => setMode(m.id)}
-            style={{
-              borderColor: m.color,
-              background: "#1A1426",
-              boxShadow: active ? `0 0 22px ${m.color}66, inset 0 0 14px ${m.color}22` : "none",
-              opacity: active ? 1 : 0.55
-            }}
-            className={`flex flex-col items-center justify-center text-center min-h-[112px] px-4 py-5 rounded-full border-2 transition-all duration-300 active:scale-[0.98] ${
-            active ? "scale-[1.01]" : "hover:opacity-80"}`
-            }>
-              <p className="font-display text-base font-semibold tracking-tight" style={{ color: m.color }}>{m.name}</p>
+            const active = mode === m.id;
+            return (
+              <button
+                key={m.id}
+                onClick={() => setMode(m.id)}
+                style={{
+                  borderColor: m.color,
+                  background: "#1A1426",
+                  boxShadow: active ? `0 0 22px ${m.color}66, inset 0 0 14px ${m.color}22` : "none",
+                  opacity: active ? 1 : 0.55
+                }}
+                className={`flex flex-col items-center justify-center text-center min-h-[112px] px-4 py-5 rounded-full border-2 transition-all duration-300 active:scale-[0.98] ${
+                active ? "scale-[1.01]" : "hover:opacity-80"}`
+                }>
+              <p className="font-semibold tracking-tight text-xl [font-family:'Abril_Fatface',_system-ui]" style={{ color: m.color }}>{m.name}</p>
               <p className="text-[11px] text-muted-foreground mt-1.5 leading-snug max-w-[140px]">{m.desc}</p>
-            </button>
-          );
+            </button>);
+
           })}
         </div>
       </section>
