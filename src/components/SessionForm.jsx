@@ -27,7 +27,7 @@ export default function SessionForm({ onStart }) {
   return (
     <div className="space-y-8">
       <section>
-        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Modo</h2>
+        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Hoy quiero mi meditación...</h2>
         <div className="grid grid-cols-2 gap-3">
           {MODES.map((m) => (
             <button
