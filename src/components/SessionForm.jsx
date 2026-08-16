@@ -4,7 +4,7 @@ import { AUDIO_SOURCES } from "@/lib/audioSources";
 
 const MODES = [
 { id: "guided", name: "Guiada", desc: "Asistente durante la meditacion que te guia paso a paso" },
-{ id: "unguided", name: "No guiada", desc: "MeSolo tu respiraci\xF3n y el sonido" }];
+{ id: "unguided", name: "No guiada", desc: "Me quedo respiraci\xF3n y el sonido" }];
 
 
 const LEVELS = [
