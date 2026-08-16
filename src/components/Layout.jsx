@@ -7,7 +7,7 @@ import { IMAGES } from "@/lib/assets";
 const navItems = [
   { to: "/", label: "Inicio", icon: Star, end: true },
   { to: "/configurar", label: "Mi sesión", icon: SlidersHorizontal },
-  { to: "/meditar", label: "Sesión", icon: Timer },
+  { to: "/meditar", label: "Meditación", icon: Timer },
   { to: "/recorrido", label: "21 días", icon: CalendarDays },
   { to: "/historial", label: "Más", icon: LayoutGrid },
   { to: "/perfil", label: "Perfil", icon: Award },
