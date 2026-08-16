@@ -56,7 +56,7 @@ export default function Configurar() {
 
       <button
         onClick={selectAll}
-        className="w-full py-3 rounded-2xl border border-primary/40 bg-card text-primary font-semibold text-sm uppercase tracking-[0.14em] hover:bg-accent transition-colors active:scale-[0.99] px-1">
+        className="w-full py-3 rounded-2xl border border-primary/40 bg-card text-primary font-semibold text-sm uppercase tracking-[0.14em] hover:bg-accent transition-colors active:scale-[0.99] px-1 mx-10">
         
         Seleccionar todos
       </button>
