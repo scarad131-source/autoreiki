@@ -3,7 +3,7 @@ import { Clock, ArrowRight } from "lucide-react";
 import { AUDIO_SOURCES } from "@/lib/audioSources";
 
 const MODES = [
-{ id: "guided", name: "Guiada", desc: "Asistente durante para que te guia paso a paso" },
+{ id: "guided", name: "Guiada", desc: "Asistente durante la meditacion que te guia paso a paso" },
 { id: "unguided", name: "No guiada", desc: "Solo tú, tu respiración y el sonido" }];
 
 
