@@ -48,36 +48,7 @@ export default function ChakraFigure({ selected = [], onToggle }) {
           className="block w-full h-auto rounded-3xl"
           draggable={false} />
         
-        <div className="absolute inset-0 rounded-lg">
-          {CHAKRAS.map((c) => {
-            const top = POSITIONS[c.id];
-            const isSel = selected.includes(c.id);
-            return (
-              <div
-                key={c.id}
-                className="absolute group"
-                style={{ left: "50%", top: `${top}%`, transform: "translate(-50%, -50%)" }}>
-                <button
-                  onClick={() => handleTap(c)}
-                  aria-label={c.name}
-                  className="relative w-9 h-9 -m-1 rounded-full flex items-center justify-center cursor-pointer">
-                  {isSel ? (
-                    <span
-                      className="absolute inset-0 rounded-full animate-pulse"
-                      style={{
-                        border: `2px solid ${c.color}`,
-                        background: `${c.color}33`,
-                        boxShadow: `0 0 14px ${c.color}, 0 0 28px ${c.color}99`
-                      }} />
-                  ) : (
-                    <span
-                      className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-80 transition-opacity duration-300"
-                      style={{ border: `2px dashed ${c.color}`, boxShadow: `0 0 10px ${c.color}66` }} />
-                  )}
-                </button>
-              </div>);
-          })}
-        </div>
+
       </div>
 
       {/* círculos de chakras para elegir */}
