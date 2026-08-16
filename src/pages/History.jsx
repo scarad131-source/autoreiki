@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import SessionCard from "@/components/SessionCard";
 import StatsOverview from "@/components/StatsOverview";
+import MonthlyMinutes from "@/components/MonthlyMinutes";
 import { Wind } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -52,6 +53,7 @@ export default function History() {
       ) : (
         <>
           <StatsOverview sessions={sessions} />
+          <MonthlyMinutes sessions={sessions} />
           <div className="space-y-2.5">
             {sessions.map((s) => (
               <SessionCard key={s.id} session={s} />
