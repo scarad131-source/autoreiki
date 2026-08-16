@@ -8,7 +8,7 @@ export const AUDIO_SOURCES = {
   },
   bowls: {
     id: "bowls",
-    name: "Cuencos de chakras",
+    name: "Frecuencias Sanadoras",
     url: "https://media.base44.com/files/public/6a7d30a899098694894dbd88/fccced0cf_completerebalancing7chakrasSingingBowls.mp3",
   },
 };
