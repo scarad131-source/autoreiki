@@ -98,11 +98,11 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     return () => clearTimeout(t);
   }, [countdown]);
 
-  // cuenta regresiva hablada para sesiones no guiadas y recorrido de 21 días
+  // cuenta regresiva hablada al inicio de toda sesión
   useEffect(() => {
-    if (!voiceExtras || countdown <= 0) return;
+    if (countdown <= 0) return;
     speak(COUNTDOWN_WORDS[countdown]);
-  }, [countdown, voiceExtras]);
+  }, [countdown]);
 
   // desbloquear el audio ambiental al montar (gesto del usuario reciente) y mantenerlo silencioso durante la cuenta
   useEffect(() => {
