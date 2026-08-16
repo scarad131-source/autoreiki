@@ -1,8 +1,5 @@
 import { useState } from "react";
-import { Waves, Trees, Sparkles, CloudRain, Clock, ArrowRight } from "lucide-react";
-import { AUDIO_OPTIONS, ambient } from "@/lib/audioEngine";
-
-const iconMap = { Waves, Trees, Sparkles, CloudRain };
+import { Clock, ArrowRight } from "lucide-react";
 
 const MODES = [
   { id: "guided", name: "Guiada", desc: "Voz interior que te acompasa paso a paso" },
@@ -19,25 +16,10 @@ const DURATIONS = [5, 10, 15, 20, 30, 45, 60, 90];
 export default function SessionForm({ onStart }) {
   const [mode, setMode] = useState("guided");
   const [level, setLevel] = useState("beginner");
-  const [audio, setAudio] = useState("beach");
   const [minutes, setMinutes] = useState(10);
-  const [previewing, setPreviewing] = useState(null);
-
-  const preview = async (id) => {
-    if (previewing === id) {
-      ambient.stop();
-      setPreviewing(null);
-      return;
-    }
-    await ambient.play(id);
-    ambient.setVolume(0.4);
-    setPreviewing(id);
-  };
 
   const start = () => {
-    ambient.stop();
-    setPreviewing(null);
-    onStart({ mode, level, audio, minutes });
+    onStart({ mode, level, audio: "beach", minutes });
   };
 
   return (
@@ -79,43 +61,6 @@ export default function SessionForm({ onStart }) {
               <p className="text-xs text-muted-foreground mt-1 leading-snug">{l.desc}</p>
             </button>
           ))}
-        </div>
-      </section>
-
-      <section>
-        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Ambiente sonoro</h2>
-        <div className="space-y-2.5">
-          {AUDIO_OPTIONS.map((a) => {
-            const Icon = iconMap[a.icon];
-            const active = audio === a.id;
-            const playing = previewing === a.id;
-            return (
-              <div
-                key={a.id}
-                className={`flex items-center gap-3 p-3 rounded-2xl border transition-all ${
-                  active ? "border-primary bg-accent/60 neon-glow" : "border-glow/20 bg-card/50"
-                }`}
-              >
-                <button onClick={() => setAudio(a.id)} className="flex items-center gap-3 flex-1 text-left">
-                  <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${a.gradient} flex items-center justify-center shrink-0`}>
-                    <Icon className="w-5 h-5 text-primary-foreground" strokeWidth={2} />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="font-medium text-sm">{a.name}</p>
-                    <p className="text-xs text-muted-foreground leading-snug truncate">{a.description}</p>
-                  </div>
-                </button>
-                <button
-                  onClick={() => preview(a.id)}
-                  className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                    playing ? "bg-primary text-primary-foreground" : "bg-accent text-foreground hover:bg-accent/70"
-                  }`}
-                >
-                  {playing ? "Detener" : "Probar"}
-                </button>
-              </div>
-            );
-          })}
         </div>
       </section>
 

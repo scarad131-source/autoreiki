@@ -5,6 +5,11 @@ import { ambient } from "@/lib/audioEngine";
 import { RELEASE_SCRIPTS, CHAKRAS } from "@/lib/guidedScripts";
 import BreathingOrb from "@/components/BreathingOrb";
 
+// Sonido ambiental único para todas las meditaciones (mar al amanecer).
+// Se reproduce en bucle hasta completar el tiempo total de la sesión.
+const AMBIENT_URL =
+  "https://media.base44.com/videos/public/6a7d30a899098694894dbd88/af73fce44_sonidodeplayatranqullaalamanecer.mp4";
+
 // Voz guía en español (síntesis del navegador, sin archivos externos)
 let cachedVoices = [];
 if (typeof window !== "undefined" && "speechSynthesis" in window) {
@@ -44,12 +49,16 @@ function cancelSpeech() {
 
 export default function MeditationRunner({ config, onFinish, onCancel }) {
   const totalSeconds = config.minutes * 60;
+  const [countdown, setCountdown] = useState(3);
   const [elapsed, setElapsed] = useState(0);
   const [paused, setPaused] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [muted, setMuted] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
   const timerRef = useRef(null);
+  const audioRef = useRef(null);
+
+  const started = countdown === 0;
 
   const isGuided = config.mode === "guided";
   let script = config.customScript || null;
@@ -70,9 +79,35 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const bowlIntervalSec = bowlChakras.length ? (config.minutes * 60) / bowlChakras.length : 0;
   const bowlIdxRef = useRef(0);
 
+  // cuenta regresiva de inicio (3 segundos)
+  useEffect(() => {
+    if (countdown <= 0) return;
+    const t = setTimeout(() => setCountdown((c) => c - 1), 1000);
+    return () => clearTimeout(t);
+  }, [countdown]);
+
+  // desbloquear el audio ambiental al montar (gesto del usuario reciente) y mantenerlo silencioso durante la cuenta
+  useEffect(() => {
+    const el = audioRef.current;
+    if (!el) return;
+    el.volume = 0;
+    el.play().catch(() => {});
+    return () => {
+      try { el.pause(); } catch (e) {}
+      cancelSpeech();
+    };
+  }, []);
+
+  // al terminar la cuenta, subir el volumen del ambiental
+  useEffect(() => {
+    const el = audioRef.current;
+    if (!el || !started) return;
+    el.volume = muted ? 0 : volume;
+  }, [started, volume, muted]);
+
   // calcular paso actual guiado
   useEffect(() => {
-    if (!script) return;
+    if (!started || !script) return;
     let acc = 0;
     for (let i = 0; i < script.steps.length; i++) {
       acc += script.steps[i].seconds;
@@ -82,71 +117,66 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       }
     }
     setStepIndex(script.steps.length - 1);
-  }, [elapsed, script]);
-
-  // iniciar audio ambiental
-  useEffect(() => {
-    ambient.play(config.audio);
-    ambient.setVolume(0.5);
-    return () => {
-      ambient.stop();
-      cancelSpeech();
-    };
-  }, [config.audio]);
+  }, [elapsed, script, started]);
 
   // timer
   useEffect(() => {
-    if (paused) return;
+    if (!started || paused) return;
     timerRef.current = setInterval(() => {
       setElapsed((e) => e + 1);
     }, 1000);
     return () => clearInterval(timerRef.current);
-  }, [paused]);
+  }, [started, paused]);
 
   // pausa: detener audio ambiental y voz
   useEffect(() => {
+    if (!started) return;
+    const el = audioRef.current;
     if (paused) {
-      ambient.suspend();
+      if (el) el.pause();
       cancelSpeech();
     } else {
-      ambient.resumeCtx();
+      if (el) el.play().catch(() => {});
     }
-  }, [paused]);
+  }, [paused, started]);
 
   // voz guía + cuenco al cambiar de chakra
   useEffect(() => {
-    if (paused || !script) return;
+    if (!started || paused || !script) return;
     const step = script.steps[stepIndex];
     if (!step) return;
     if (step.bowl) ambient.playBowl(step.bowlFreq || 440);
     const delay = step.bowl ? 950 : 250;
     const t = setTimeout(() => speak(step.text), delay);
     return () => clearTimeout(t);
-  }, [stepIndex, paused, script]);
+  }, [stepIndex, paused, script, started]);
 
   // Marcador de cuenco tibetano: un cuenco por chakra, espaciado según duración / nº de chakras
   useEffect(() => {
-    if (!bowlIntervalSec || !bowlChakras.length) return;
+    if (!started || !bowlIntervalSec || !bowlChakras.length) return;
     const target = Math.min(Math.floor(elapsed / bowlIntervalSec) + 1, bowlChakras.length);
     while (bowlIdxRef.current < target) {
       const c = bowlChakras[bowlIdxRef.current];
       if (c) ambient.playBowl(c.freq, 0.7);
       bowlIdxRef.current++;
     }
-  }, [elapsed, bowlIntervalSec, bowlChakras]);
+  }, [elapsed, bowlIntervalSec, bowlChakras, started]);
 
   // fin de sesión
   useEffect(() => {
+    if (!started) return;
     if (elapsed >= totalSeconds) {
-      ambient.stop();
+      const el = audioRef.current;
+      if (el) el.pause();
       cancelSpeech();
       onFinish({ actualSeconds: totalSeconds, completed: true });
     }
-  }, [elapsed, totalSeconds]);
+  }, [elapsed, totalSeconds, started]);
 
   useEffect(() => {
-    ambient.setVolume(muted ? 0 : volume);
-  }, [volume, muted]);
+    const el = audioRef.current;
+    if (el && started) el.volume = muted ? 0 : volume;
+  }, [volume, muted, started]);
 
   const remaining = Math.max(0, totalSeconds - elapsed);
   const mm = String(Math.floor(remaining / 60)).padStart(2, "0");
@@ -156,13 +186,16 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const phase = elapsed % 10 < 4 ? "Inhala" : "Exhala";
 
   const handleStop = () => {
-    ambient.stop();
+    const el = audioRef.current;
+    if (el) el.pause();
     cancelSpeech();
     onFinish({ actualSeconds: elapsed, completed: elapsed >= totalSeconds * 0.5 });
   };
 
   return (
     <div className="flex flex-col items-center min-h-[70vh] justify-between py-6">
+      <audio ref={audioRef} src={AMBIENT_URL} loop preload="auto" className="hidden" />
+
       <div className="w-full flex items-center justify-between text-xs text-muted-foreground">
         <button
           onClick={onCancel}
@@ -177,31 +210,49 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full">
-        <BreathingOrb active={!paused} label={paused ? "Pausa" : phase} />
+        <BreathingOrb active={started && !paused} label={countdown > 0 ? "Comienza" : paused ? "Pausa" : phase} />
 
-        <div className="text-center">
-          <p className="text-5xl font-display font-light tracking-tight tabular-nums">
-            {mm}:{ss}
-          </p>
-          <p className="text-xs text-muted-foreground mt-2 uppercase tracking-[0.18em]">
-            {paused ? "En pausa" : "Respira con calma"}
-          </p>
-        </div>
-
-        <AnimatePresence mode="wait">
-          {currentStep && !paused && voiceActive && (
-            <motion.div
-              key={stepIndex}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 1.2 }}
-              className="max-w-md text-center px-2"
+        {countdown > 0 ? (
+          <div className="text-center">
+            <motion.p
+              key={countdown}
+              initial={{ opacity: 0, scale: 1.4 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.4 }}
+              className="text-7xl font-display font-light tabular-nums neon-text"
             >
-              <p className="text-[15px] leading-relaxed text-foreground/90 font-light">{currentStep.text}</p>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              {countdown}
+            </motion.p>
+            <p className="text-xs text-muted-foreground mt-3 uppercase tracking-[0.18em]">Preparando tu espacio</p>
+          </div>
+        ) : (
+          <>
+            <div className="text-center">
+              <p className="text-5xl font-display font-light tracking-tight tabular-nums">
+                {mm}:{ss}
+              </p>
+              <p className="text-xs text-muted-foreground mt-2 uppercase tracking-[0.18em]">
+                {paused ? "En pausa" : "Respira con calma"}
+              </p>
+            </div>
+
+            <AnimatePresence mode="wait">
+              {currentStep && !paused && voiceActive && (
+                <motion.div
+                  key={stepIndex}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 1.2 }}
+                  className="max-w-md text-center px-2"
+                >
+                  <p className="text-[15px] leading-relaxed text-foreground/90 font-light">{currentStep.text}</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </>
+        )}
       </div>
 
       {/* barra de progreso */}
@@ -224,7 +275,8 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         </button>
         <button
           onClick={() => setPaused((p) => !p)}
-          className="w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-primary to-glow-cyan text-primary-foreground neon-glow transition-transform active:scale-95"
+          disabled={countdown > 0}
+          className="w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-primary to-glow-cyan text-primary-foreground neon-glow transition-transform active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
           aria-label={paused ? "Reanudar" : "Pausar"}
         >
           {paused ? <Play className="w-6 h-6 ml-0.5" /> : <Pause className="w-6 h-6" />}
