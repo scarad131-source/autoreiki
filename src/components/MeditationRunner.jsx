@@ -29,7 +29,7 @@ function speak(text) {
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
   u.lang = "es-ES";
-  u.rate = 0.8;
+  u.rate = 0.72;
   u.pitch = 1.05;
   const v = pickFemaleEsVoice();
   if (v) u.voice = v;
@@ -55,9 +55,9 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   let script = config.customScript || null;
   if (!script && isGuided) {
     // Meditación guiada de liberación emocional (preparación para Reiki):
-    // sesiones de 5-10 min → voz de 3 min; sesiones de 15-20 min → voz de 5 min.
-    // El resto de la sesión queda solo con la ambientación elegida.
-    script = config.minutes <= 10 ? RELEASE_SCRIPTS.short : RELEASE_SCRIPTS.long;
+    // sesiones de 5, 10 y 20 min con su propio guion; el resto queda con ambientación.
+    const m = config.minutes;
+    script = m <= 5 ? RELEASE_SCRIPTS.min5 : m <= 10 ? RELEASE_SCRIPTS.min10 : RELEASE_SCRIPTS.min20;
   }
   const scriptTotalSec = script ? script.steps.reduce((a, s) => a + s.seconds, 0) : 0;
   const voiceActive = script ? elapsed < scriptTotalSec : false;
