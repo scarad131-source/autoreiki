@@ -27,7 +27,11 @@ export default function Meditate() {
   }, [location.state]);
 
   const start = (cfg) => {
-    setConfig(cfg);
+    const finalCfg = { ...cfg };
+    if (finalCfg.chakras && finalCfg.chakras.length) {
+      finalCfg.customScript = buildChakraScript(finalCfg.chakras);
+    }
+    setConfig(finalCfg);
     setStage("running");
   };
 
