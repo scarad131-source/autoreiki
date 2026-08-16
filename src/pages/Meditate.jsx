@@ -5,6 +5,7 @@ import SessionForm from "@/components/SessionForm";
 import MeditationRunner from "@/components/MeditationRunner";
 import ReflectionForm from "@/components/ReflectionForm";
 import { buildChakraScript } from "@/lib/guidedScripts";
+import { unlockSpeech } from "@/lib/speech";
 
 export default function Meditate() {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ export default function Meditate() {
   useEffect(() => {
     const preset = location.state?.preset;
     if (preset) {
+      unlockSpeech();
       const cfg = { ...preset };
       if (cfg.mode === "guided" && cfg.chakras && cfg.chakras.length) {
         cfg.customScript = buildChakraScript(cfg.chakras);
@@ -27,6 +29,7 @@ export default function Meditate() {
   }, [location.state]);
 
   const start = (cfg) => {
+    unlockSpeech();
     const finalCfg = { ...cfg };
     if (finalCfg.mode === "guided" && finalCfg.chakras && finalCfg.chakras.length) {
       finalCfg.customScript = buildChakraScript(finalCfg.chakras);

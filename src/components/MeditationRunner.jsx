@@ -4,50 +4,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ambient } from "@/lib/audioEngine";
 import { RELEASE_SCRIPTS, CHAKRAS } from "@/lib/guidedScripts";
 import BreathingOrb from "@/components/BreathingOrb";
+import { speak, cancelSpeech, COUNTDOWN_WORDS, unlockSpeech } from "@/lib/speech";
 
 // Sonido ambiental único para todas las meditaciones (mar al amanecer).
 // Se reproduce en bucle hasta completar el tiempo total de la sesión.
 const AMBIENT_URL =
   "https://media.base44.com/videos/public/6a7d30a899098694894dbd88/af73fce44_sonidodeplayatranqullaalamanecer.mp4";
-
-// Voz guía en español (síntesis del navegador, sin archivos externos)
-let cachedVoices = [];
-if (typeof window !== "undefined" && "speechSynthesis" in window) {
-  cachedVoices = window.speechSynthesis.getVoices();
-  window.speechSynthesis.onvoiceschanged = () => {
-    cachedVoices = window.speechSynthesis.getVoices();
-  };
-}
-
-function pickFemaleEsVoice() {
-  const pool = cachedVoices.filter((v) => v.lang && v.lang.toLowerCase().startsWith("es"));
-  const list = pool.length ? pool : cachedVoices;
-  if (!list.length) return null;
-  const female = list.find((v) =>
-    /female|mujer|femenino|helena|laura|monic|paulina|sabina|marisol|lucia|soledad|esperanza|carmen|elvira|victoria|lorena|isabel/i.test(v.name)
-  );
-  return female || list[0];
-}
-
-function speak(text) {
-  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = "es-ES";
-  u.rate = 0.58;
-  u.pitch = 0.98;
-  const v = pickFemaleEsVoice();
-  if (v) u.voice = v;
-  window.speechSynthesis.speak(u);
-}
-
-function cancelSpeech() {
-  if (typeof window !== "undefined" && "speechSynthesis" in window) {
-    window.speechSynthesis.cancel();
-  }
-}
-
-const COUNTDOWN_WORDS = { 3: "tres", 2: "dos", 1: "uno" };
 
 export default function MeditationRunner({ config, onFinish, onCancel }) {
   const totalSeconds = config.minutes * 60;
@@ -90,6 +52,11 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const closingSpokenRef = useRef(false);
   const finishedRef = useRef(false);
   const isReikiUnguided = !isGuided && bowlChakras.length > 0;
+
+  // desbloquear la síntesis de voz lo antes posible
+  useEffect(() => {
+    unlockSpeech();
+  }, []);
 
   // cuenta regresiva de inicio (3 segundos)
   useEffect(() => {
