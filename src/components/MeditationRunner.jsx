@@ -33,9 +33,12 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
 
   const isGuided = config.mode === "guided";
   const isJourney = !!config.journeyDay;
+  // Sesiones no guiadas simples (sin chakras y fuera del recorrido): sin voz,
+  // únicamente el audio ambiental.
+  const silentUnguided = !isGuided && !isJourney && !(config.chakras && config.chakras.length);
   // Voz extra (cuenta hablada, recordatorio de respiración y cierre) solo en
-  // sesiones no guiadas y en el recorrido de 21 días.
-  const voiceExtras = !isGuided || isJourney;
+  // sesiones no guiadas con chakras (Reiki) y en el recorrido de 21 días.
+  const voiceExtras = (!isGuided || isJourney) && !silentUnguided;
   const script = useMemo(() => {
     if (config.chakras && config.chakras.length) return null; // Reiki: secuencia de cuencos, sin narración guiada
     if (config.customScript) return config.customScript;
@@ -72,11 +75,11 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     return () => clearTimeout(t);
   }, [countdown]);
 
-  // cuenta regresiva hablada al inicio de toda sesión
+  // cuenta regresiva hablada al inicio de toda sesión (no en sesiones no guiadas simples)
   useEffect(() => {
-    if (countdown <= 0) return;
+    if (countdown <= 0 || silentUnguided) return;
     speak(COUNTDOWN_WORDS[countdown]);
-  }, [countdown]);
+  }, [countdown, silentUnguided]);
 
   // desbloquear el audio ambiental al montar (gesto del usuario reciente) y mantenerlo silencioso durante la cuenta
   useEffect(() => {
@@ -145,7 +148,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
 
   // Bienvenida tras la cuenta regresiva: Reiki (guiada o no) y sesiones no guiadas simples
   useEffect(() => {
-    if (!started) return;
+    if (!started || silentUnguided) return;
     let msg;
     if (bowlChakras.length) {
       msg = `Realiza tres respiraciones lentas y profundas. Bienvenida a la sesión de Reiki. Hoy trabajaremos con ${bowlChakras.length} chakras. Deja que el sonido del cuenco marque cada cambio de posición.`;
@@ -156,7 +159,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     }
     const t = setTimeout(() => speak(msg), 400);
     return () => clearTimeout(t);
-  }, [started, bowlChakras.length, isGuided]);
+  }, [started, bowlChakras.length, isGuided, silentUnguided]);
 
   // Secuencia de chakras (Reiki): cuenco + instrucción de voz según modo/nivel, luego
   // mínimo 3 min de silencio antes del siguiente chakra.
