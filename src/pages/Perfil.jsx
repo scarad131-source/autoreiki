@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Flame } from "lucide-react";
 import Badges from "@/components/Badges";
+import ReminderSettings from "@/components/ReminderSettings";
 import { computeStreak, computeBestStreak, getStreakMessage } from "@/lib/journey";
 
 export default function Perfil() {
@@ -24,6 +25,13 @@ export default function Perfil() {
       }
     })();
   }, []);
+
+  const refreshUser = async () => {
+    try {
+      const u = await base44.auth.me();
+      setUser(u);
+    } catch (e) {}
+  };
 
   const currentStreak = computeStreak(sessions);
   const bestStreak = computeBestStreak(sessions);
@@ -52,6 +60,9 @@ export default function Perfil() {
           <p className="text-xs text-muted-foreground leading-snug">{loading ? "" : msg.body}</p>
         </div>
       </div>
+
+      {/* recordatorio diario */}
+      {!loading && <ReminderSettings user={user} onSaved={refreshUser} />}
 
       {/* insignias */}
       <section>

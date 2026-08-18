@@ -7,6 +7,19 @@
         "admin",
         "user"
       ]
+    },
+    "reminder_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Si el recordatorio diario de Reiki est\u00e1 activo"
+    },
+    "reminder_time": {
+      "type": "string",
+      "description": "Hora local del recordatorio en formato HH:MM (pasos de 15 min)"
+    },
+    "reminder_timezone": {
+      "type": "string",
+      "description": "Zona horaria IANA del usuario para calcular el recordatorio"
     }
   },
   "required": [

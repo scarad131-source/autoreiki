@@ -1,0 +1,44 @@
+{
+  "description": "Cada 15 minutos env\u00eda push a usuarios con recordatorio activo cuya hora local coincide",
+  "name": "Recordatorio Diario Reiki",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "reiki_reminder",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "send_reminders": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "sendReikiReminders"
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Enviar recordatorios",
+            "description": "Push a usuarios con recordatorio activo"
+          }
+        }
+      }
+    ]
+  },
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "*/15 * * * *",
+      "one_time_date": null,
+      "timezone": "America/Tijuana",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  }
+}
