@@ -1,31 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  ChevronLeft,
-  Zap,
-  Sun,
-  Wind,
-  Droplet,
-  Moon,
-  Circle,
-  AlertCircle,
-  Save,
-} from "lucide-react";
+import { ChevronLeft, Save } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { toast } from "@/components/ui/use-toast";
-
-const SENSATIONS = [
-  { id: "hormigueo", label: "Hormigueo", icon: Zap, color: "text-primary" },
-  { id: "calor", label: "Calor suave", icon: Sun, color: "text-primary" },
-  { id: "frio", label: "Frío o brisa", icon: Wind, color: "text-glow-cyan" },
-  { id: "liberacion", label: "Liberación emocional", icon: Droplet, color: "text-purple" },
-  { id: "somnolencia", label: "Somnolencia", icon: Moon, color: "text-purple" },
-  { id: "nada", label: "Nada en particular", icon: Circle, color: "text-muted-foreground" },
-  { id: "dolor", label: "Dolor persistente", icon: AlertCircle, color: "text-destructive" },
-];
+import { SENSATIONS, sensationMap } from "@/lib/diarySensations";
+import DiaryHistory from "@/components/DiaryHistory";
 
 export default function Diario() {
   const navigate = useNavigate();
+  const [view, setView] = useState("nueva");
   const [selected, setSelected] = useState([]);
   const [note, setNote] = useState("");
   const [saving, setSaving] = useState(false);
@@ -38,7 +21,9 @@ export default function Diario() {
     try {
       await base44.entities.DiaryEntry.create({ sensations: selected, note: note.trim() });
       toast({ title: "Entrada guardada", description: "Tu registro quedó en tu diario." });
-      navigate("/mas");
+      setSelected([]);
+      setNote("");
+      setView("historial");
     } catch (e) {
       toast({ title: "No se pudo guardar", description: e.message, variant: "destructive" });
     } finally {
@@ -60,56 +45,101 @@ export default function Diario() {
         <div className="w-10" />
       </header>
 
-      <section>
-        <p className="text-[11px] tracking-[0.28em] uppercase text-muted-foreground font-medium">Integración</p>
-        <h2 className="font-display text-3xl font-semibold tracking-tight mt-1.5">Escucha lo que quedó</h2>
-        <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
-          Ponerle palabras a tu experiencia también es una forma de cuidarte.
-        </p>
-      </section>
+      <div className="flex p-1 rounded-full bg-card border border-white/5">
+        <button
+          onClick={() => setView("nueva")}
+          className={`flex-1 py-2 rounded-full text-sm font-medium transition-colors ${
+            view === "nueva" ? "bg-primary text-primary-foreground" : "text-muted-foreground"
+          }`}
+        >
+          Nueva entrada
+        </button>
+        <button
+          onClick={() => setView("historial")}
+          className={`flex-1 py-2 rounded-full text-sm font-medium transition-colors ${
+            view === "historial" ? "bg-primary text-primary-foreground" : "text-muted-foreground"
+          }`}
+        >
+          Mis entradas
+        </button>
+      </div>
 
-      <section>
-        <h3 className="text-sm font-semibold mb-3">¿Qué apareció hoy?</h3>
-        <div className="grid grid-cols-3 gap-2.5">
-          {SENSATIONS.map((s) => {
-            const active = selected.includes(s.id);
-            const Icon = s.icon;
-            return (
-              <button
-                key={s.id}
-                onClick={() => toggle(s.id)}
-                className={`flex flex-col items-center gap-2 py-3 px-2 rounded-2xl border transition-all ${
-                  active
-                    ? "border-primary bg-accent neon-glow"
-                    : "border-white/5 bg-card hover:border-primary/30"
-                }`}
-              >
-                <Icon className={`w-5 h-5 ${s.color}`} />
-                <span className="text-[11px] text-center leading-tight">{s.label}</span>
-              </button>
-            );
-          })}
-        </div>
-      </section>
+      {view === "historial" ? (
+        <DiaryHistory />
+      ) : (
+        <>
+          <section>
+            <p className="text-[11px] tracking-[0.28em] uppercase text-muted-foreground font-medium">Integración</p>
+            <h2 className="font-display text-3xl font-semibold tracking-tight mt-1.5">Escucha lo que quedó</h2>
+            <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+              Ponerle palabras a tu experiencia también es una forma de cuidarte.
+            </p>
+          </section>
 
-      <section>
-        <h3 className="text-sm font-semibold mb-3">Una línea para ti</h3>
-        <textarea
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
-          placeholder="¿Cómo llegaste y cómo te vas?"
-          rows={4}
-          className="w-full rounded-2xl bg-card border border-white/5 p-4 text-sm resize-none focus:outline-none focus:border-primary/40"
-        />
-      </section>
+          <section>
+            <h3 className="text-sm font-semibold mb-3">¿Qué apareció hoy?</h3>
+            <div className="grid grid-cols-3 gap-2.5">
+              {SENSATIONS.map((s) => {
+                const active = selected.includes(s.id);
+                const Icon = s.icon;
+                return (
+                  <button
+                    key={s.id}
+                    onClick={() => toggle(s.id)}
+                    className={`flex flex-col items-center gap-2 py-3 px-2 rounded-2xl border transition-all ${
+                      active
+                        ? "border-primary bg-accent neon-glow"
+                        : "border-white/5 bg-card hover:border-primary/30"
+                    }`}
+                  >
+                    <Icon className={`w-5 h-5 ${s.color}`} />
+                    <span className="text-[11px] text-center leading-tight">{s.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </section>
 
-      <button
-        onClick={save}
-        disabled={saving || (!selected.length && !note.trim())}
-        className="w-full py-4 rounded-2xl bg-gradient-to-r from-primary to-glow-cyan text-primary-foreground font-medium neon-glow disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 active:scale-[0.99]"
-      >
-        <Save className="w-4 h-4" /> {saving ? "Guardando..." : "Guardar entrada"}
-      </button>
+          {selected.length > 0 && (
+            <div className="rounded-2xl bg-card border border-primary/20 p-4 space-y-3">
+              <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Lo que aparece</p>
+              {selected.map((id) => {
+                const s = sensationMap[id];
+                if (!s) return null;
+                const Icon = s.icon;
+                return (
+                  <div key={id} className="flex gap-3">
+                    <Icon className={`w-4 h-4 mt-0.5 shrink-0 ${s.color}`} />
+                    <div>
+                      <p className="text-sm font-medium">{s.label}</p>
+                      <p className="text-sm text-muted-foreground mt-0.5 leading-relaxed">{s.desc}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          <section>
+            <h3 className="text-sm font-semibold mb-3">Una línea para ti</h3>
+            <textarea
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="¿Cómo llegaste y cómo te vas?"
+              rows={4}
+              className="w-full rounded-2xl bg-card border border-white/5 p-4 text-sm resize-none focus:outline-none focus:border-primary/40"
+            />
+          </section>
+
+          <button
+            onClick={save}
+            disabled={saving || (!selected.length && !note.trim())}
+            className="w-full py-4 rounded-2xl bg-gradient-to-r from-primary to-glow-cyan text-primary-foreground font-medium neon-glow disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 active:scale-[0.99]"
+          >
+            <Save className="w-4 h-4" /> {saving ? "Guardando..." : "Guardar entrada"}
+          </button>
+        </>
+      )}
     </div>
   );
 }
