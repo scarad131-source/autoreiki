@@ -17,7 +17,7 @@ export default function HowItWorks() {
         
       </div>
 
-      <div className="rounded-3xl overflow-hidden neon-border">
+      <div className="rounded-3xl overflow-hidden neon-border hidden">
         <Image src={IMAGES.howItWorks} alt="Qué hace AutoReiki por ti" className="w-full aspect-square" fittingType="fill" />
       </div>
 
