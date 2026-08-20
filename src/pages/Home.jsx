@@ -76,8 +76,8 @@ export default function Home() {
           <Sun className="w-5 h-5 text-primary" />
         </div>
         <p className="text-xs text-muted-foreground tracking-wide">Vuelve a ti</p>
-        <h2 className="font-display font-semibold leading-snug mt-2 text-4xl text-center">
-          Una pausa para escuchar lo que tu cuerpo ya sabe.
+        <h2 className="font-display font-semibold leading-snug mt-2 text-4xl text-center">Una pausa para escuchar lo que tu cuerpo ya sabe.
+
         </h2>
         <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
           Auto-Reiki guiado, a tu ritmo y con una señal clara en cada paso.
