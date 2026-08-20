@@ -11,7 +11,7 @@ import { computeStreak, JOURNEY } from "@/lib/journey";
 const audioMeta = {
   beach: { name: "Mar tranquilo", icon: Waves },
   forest: { name: "Bosque", icon: Trees },
-  healing: { name: "Frecuencias", icon: Sparkles },
+  healing: { name: "Frecuencias", icon: Sparkles }
 };
 
 function greeting() {
@@ -76,7 +76,7 @@ export default function Home() {
           <Sun className="w-5 h-5 text-primary" />
         </div>
         <p className="text-xs text-muted-foreground tracking-wide">Vuelve a ti</p>
-        <h2 className="font-display text-[22px] font-semibold leading-snug mt-2">
+        <h2 className="font-display font-semibold leading-snug mt-2 text-4xl">
           Una pausa para escuchar lo que tu cuerpo ya sabe.
         </h2>
         <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
@@ -85,16 +85,16 @@ export default function Home() {
         <div className="mt-5 grid grid-cols-2 gap-3">
           <button
             onClick={() => navigate("/meditar")}
-            className="flex flex-col items-center gap-1.5 py-4 rounded-2xl bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity active:scale-[0.99]"
-          >
+            className="flex flex-col items-center gap-1.5 py-4 rounded-2xl bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity active:scale-[0.99]">
+            
             <Waves className="w-5 h-5" />
             <span className="text-sm">Meditación</span>
             <span className="text-[11px] font-normal opacity-80">5 · 10 · 30 min</span>
           </button>
           <button
             onClick={() => navigate("/configurar")}
-            className="flex flex-col items-center gap-1.5 py-4 rounded-2xl border border-primary/40 bg-card text-foreground font-semibold hover:border-primary/60 transition-colors active:scale-[0.99]"
-          >
+            className="flex flex-col items-center gap-1.5 py-4 rounded-2xl border border-primary/40 bg-card text-foreground font-semibold hover:border-primary/60 transition-colors active:scale-[0.99]">
+            
             <Sparkles className="w-5 h-5 text-primary" />
             <span className="text-sm">Sesión de Reiki</span>
             <span className="text-[11px] font-normal text-muted-foreground">30 · 45 · 60 · 90 min</span>
@@ -105,8 +105,8 @@ export default function Home() {
       {/* Práctica de hoy */}
       <section
         onClick={startToday}
-        className="rounded-3xl bg-card border border-white/5 p-5 cursor-pointer hover:border-primary/30 transition-colors"
-      >
+        className="rounded-3xl bg-card border border-white/5 p-5 cursor-pointer hover:border-primary/30 transition-colors">
+        
         <h2 className="font-display text-lg font-semibold">Tu práctica de hoy</h2>
         <p className="text-sm text-muted-foreground mt-1">Un espacio breve también puede cambiar tu día.</p>
         <div className="flex flex-wrap gap-2 mt-4">
@@ -127,19 +127,19 @@ export default function Home() {
       </section>
 
       {/* Datos */}
-      {loading ? (
-        <div className="h-24 rounded-2xl bg-card/60 animate-pulse" />
-      ) : (
-        <>
+      {loading ?
+      <div className="h-24 rounded-2xl bg-card/60 animate-pulse" /> :
+
+      <>
           <StatsOverview sessions={sessions} timezone={tz} />
           {sessions.length > 0 && <WeeklyStats sessions={sessions} timezone={tz} />}
         </>
-      )}
+      }
 
       <HowItWorks />
 
-      {recent.length > 0 && (
-        <section>
+      {recent.length > 0 &&
+      <section>
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Sesiones recientes</h2>
             <button onClick={() => navigate("/historial")} className="text-xs text-primary font-medium">
@@ -147,14 +147,14 @@ export default function Home() {
             </button>
           </div>
           <div className="space-y-2.5">
-            {recent.map((s) => (
-              <SessionCard key={s.id} session={s} />
-            ))}
+            {recent.map((s) =>
+          <SessionCard key={s.id} session={s} />
+          )}
           </div>
         </section>
-      )}
+      }
 
       <p className="text-center text-[11px] text-muted-foreground/60 pt-2">Bienvenida de nuevo, {firstName} ✦</p>
-    </div>
-  );
+    </div>);
+
 }
