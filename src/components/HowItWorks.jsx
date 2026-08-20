@@ -23,7 +23,7 @@ export default function HowItWorks() {
 
       <div className="grid grid-cols-2 gap-3">
         {FEATURES.map((f) =>
-        <div key={f.title} className="p-4 rounded-2xl border border-glow/20 bg-card/60 backdrop-blur-sm">
+        <div key={f.title} className="p-4 rounded-2xl border border-glow/20 bg-card/60 backdrop-blur-sm hidden">
             <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center mb-2.5">
               <f.icon className="w-5 h-5 text-primary" />
             </div>
