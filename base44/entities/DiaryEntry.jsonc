@@ -1,0 +1,39 @@
+{
+  "name": "DiaryEntry",
+  "type": "object",
+  "properties": {
+    "sensations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "hormigueo",
+          "calor",
+          "frio",
+          "liberacion",
+          "somnolencia",
+          "nada",
+          "dolor"
+        ]
+      },
+      "description": "Sensaciones registradas tras la pr\u00e1ctica"
+    },
+    "note": {
+      "type": "string",
+      "description": "Una l\u00ednea personal del d\u00eda"
+    }
+  },
+  "required": [],
+  "rls": {
+    "create": true,
+    "read": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}
