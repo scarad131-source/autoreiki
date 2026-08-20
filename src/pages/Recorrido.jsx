@@ -47,7 +47,7 @@ export default function Recorrido() {
         </div>
       </div>
 
-      <section className="rounded-3xl border border-white/5 bg-card p-4">
+      <section className="rounded-3xl border border-white/10 bg-card/80 backdrop-blur-xl p-4">
         <div className="grid grid-cols-7 gap-1.5 mb-2">
           {WEEKDAYS.map((d, i) => (
             <div key={i} className="text-center text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
