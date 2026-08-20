@@ -33,13 +33,26 @@ export const PHASES = [
   { name: "Integración", from: 15, to: 21 },
 ];
 
+// Clave de día local (YYYY-MM-DD) en la zona horaria del usuario, para que la
+// racha y el historial semanal coincidan con el calendario real y no con UTC.
+export function localDayKey(date) {
+  const d = date instanceof Date ? date : new Date(date);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
 export function computeStreak(sessions) {
-  const days = new Set(
-    (sessions || []).map((s) => new Date(s.created_date).toISOString().slice(0, 10))
-  );
+  const days = new Set((sessions || []).map((s) => localDayKey(s.created_date)));
   let streak = 0;
   const cursor = new Date();
-  while (days.has(cursor.toISOString().slice(0, 10))) {
+  // Si hoy aún no hay sesión, la racha se mantiene desde ayer: no se rompe
+  // hasta que realmente pase un día sin meditar.
+  if (!days.has(localDayKey(cursor))) {
+    cursor.setDate(cursor.getDate() - 1);
+  }
+  while (days.has(localDayKey(cursor))) {
     streak++;
     cursor.setDate(cursor.getDate() - 1);
   }
@@ -49,7 +62,7 @@ export function computeStreak(sessions) {
 // La racha más larga (días consecutivos) alcanzada alguna vez.
 export function computeBestStreak(sessions) {
   const days = Array.from(
-    new Set((sessions || []).map((s) => new Date(s.created_date).toISOString().slice(0, 10)))
+    new Set((sessions || []).map((s) => localDayKey(s.created_date)))
   ).sort();
   if (!days.length) return 0;
   let best = 1;

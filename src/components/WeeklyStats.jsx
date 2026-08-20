@@ -1,5 +1,6 @@
 import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { Clock, Activity } from "lucide-react";
+import { localDayKey } from "@/lib/journey";
 
 const DAYS = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
 
@@ -9,9 +10,9 @@ function buildWeek(sessions) {
   for (let i = 6; i >= 0; i--) {
     const d = new Date(today);
     d.setDate(d.getDate() - i);
-    const key = d.toISOString().slice(0, 10);
+    const key = localDayKey(d);
     const mins = (sessions || [])
-      .filter((s) => new Date(s.created_date).toISOString().slice(0, 10) === key)
+      .filter((s) => localDayKey(s.created_date) === key)
       .reduce((sum, s) => sum + Math.round((s.actual_seconds || 0) / 60), 0);
     data.push({ day: DAYS[d.getDay()], mins, active: mins > 0 });
   }
