@@ -27,7 +27,7 @@ export const SENSATIONS = [
     label: "Liberación emocional",
     icon: Droplet,
     color: "text-purple",
-    desc: "Llorar o soltar también es sanar. Honra lo que se va sin juzgarlo.",
+    desc: "Suspirar, bostezar o llorar puede acompañar una profunda relajación. Deja que la emoción fluya con amabilidad.",
   },
   {
     id: "somnolencia",

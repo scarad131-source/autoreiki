@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, Save } from "lucide-react";
+import { ChevronLeft, Save, Sparkles } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { toast } from "@/components/ui/use-toast";
 import { SENSATIONS, sensationMap } from "@/lib/diarySensations";
@@ -101,18 +101,19 @@ export default function Diario() {
           </section>
 
           {selected.length > 0 && (
-            <div className="rounded-2xl bg-card border border-primary/20 p-4 space-y-3">
-              <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Lo que aparece</p>
+            <div className="space-y-3">
               {selected.map((id) => {
                 const s = sensationMap[id];
                 if (!s) return null;
-                const Icon = s.icon;
                 return (
-                  <div key={id} className="flex gap-3">
-                    <Icon className={`w-4 h-4 mt-0.5 shrink-0 ${s.color}`} />
+                  <div
+                    key={id}
+                    className="rounded-2xl bg-card border border-primary/30 p-4 flex gap-3 gold-glow"
+                  >
+                    <Sparkles className="w-4 h-4 mt-0.5 shrink-0 text-primary" />
                     <div>
                       <p className="text-sm font-medium">{s.label}</p>
-                      <p className="text-sm text-muted-foreground mt-0.5 leading-relaxed">{s.desc}</p>
+                      <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{s.desc}</p>
                     </div>
                   </div>
                 );
