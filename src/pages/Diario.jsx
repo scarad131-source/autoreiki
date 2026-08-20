@@ -108,13 +108,10 @@ export default function Diario() {
                 return (
                   <div
                     key={id}
-                    className="rounded-2xl bg-card border border-primary/30 p-4 flex gap-3 gold-glow"
+                    className="rounded-2xl bg-accent border border-primary/30 p-4 flex gap-3 gold-glow"
                   >
                     <Sparkles className="w-4 h-4 mt-0.5 shrink-0 text-primary" />
-                    <div>
-                      <p className="text-sm font-medium">{s.label}</p>
-                      <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{s.desc}</p>
-                    </div>
+                    <p className="text-sm text-foreground/90 leading-relaxed">{s.desc}</p>
                   </div>
                 );
               })}
