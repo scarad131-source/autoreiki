@@ -35,24 +35,36 @@ export const PHASES = [
 
 // Clave de día local (YYYY-MM-DD) en la zona horaria del usuario, para que la
 // racha y el historial semanal coincidan con el calendario real y no con UTC.
-export function localDayKey(date) {
+// Clave de día (YYYY-MM-DD). Si se indica `timezone` (IANA), se calcula en esa
+// zona; si no, en la zona local del navegador.
+export function localDayKey(date, timezone) {
   const d = date instanceof Date ? date : new Date(date);
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${y}-${m}-${day}`;
+  if (!timezone) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  }
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: timezone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(d);
+  const get = (t) => parts.find((p) => p.type === t)?.value || "";
+  return `${get("year")}-${get("month")}-${get("day")}`;
 }
 
-export function computeStreak(sessions) {
-  const days = new Set((sessions || []).map((s) => localDayKey(s.created_date)));
+export function computeStreak(sessions, timezone) {
+  const days = new Set((sessions || []).map((s) => localDayKey(s.created_date, timezone)));
   let streak = 0;
   const cursor = new Date();
   // Si hoy aún no hay sesión, la racha se mantiene desde ayer: no se rompe
   // hasta que realmente pase un día sin meditar.
-  if (!days.has(localDayKey(cursor))) {
+  if (!days.has(localDayKey(cursor, timezone))) {
     cursor.setDate(cursor.getDate() - 1);
   }
-  while (days.has(localDayKey(cursor))) {
+  while (days.has(localDayKey(cursor, timezone))) {
     streak++;
     cursor.setDate(cursor.getDate() - 1);
   }
@@ -60,9 +72,9 @@ export function computeStreak(sessions) {
 }
 
 // La racha más larga (días consecutivos) alcanzada alguna vez.
-export function computeBestStreak(sessions) {
+export function computeBestStreak(sessions, timezone) {
   const days = Array.from(
-    new Set((sessions || []).map((s) => localDayKey(s.created_date)))
+    new Set((sessions || []).map((s) => localDayKey(s.created_date, timezone)))
   ).sort();
   if (!days.length) return 0;
   let best = 1;

@@ -41,7 +41,8 @@ export default function Home() {
     })();
   }, []);
 
-  const streak = computeStreak(sessions);
+  const tz = user?.reminder_timezone;
+  const streak = computeStreak(sessions, tz);
   const firstName = user?.full_name?.split(" ")[0] || "presencia";
   const recent = sessions.slice(0, 3);
 
@@ -130,8 +131,8 @@ export default function Home() {
         <div className="h-24 rounded-2xl bg-card/60 animate-pulse" />
       ) : (
         <>
-          <StatsOverview sessions={sessions} />
-          {sessions.length > 0 && <WeeklyStats sessions={sessions} />}
+          <StatsOverview sessions={sessions} timezone={tz} />
+          {sessions.length > 0 && <WeeklyStats sessions={sessions} timezone={tz} />}
         </>
       )}
 

@@ -1,9 +1,9 @@
 import { Clock, Flame, Sparkles } from "lucide-react";
 import { computeStreak } from "@/lib/journey";
 
-export default function StatsOverview({ sessions }) {
+export default function StatsOverview({ sessions, timezone }) {
   const totalMinutes = sessions.reduce((sum, s) => sum + Math.round((s.actual_seconds || 0) / 60), 0);
-  const streak = computeStreak(sessions);
+  const streak = computeStreak(sessions, timezone);
 
   const stats = [
     { label: "Sesiones", value: sessions.length, icon: Sparkles, color: "text-primary" },

@@ -45,6 +45,12 @@ export default function Register() {
       const result = await base44.auth.verifyOtp({ email, otpCode });
       if (result?.access_token) {
         base44.auth.setToken(result.access_token);
+        // Guarda la zona horaria del usuario al registrarse para que
+        // recordatorios, historial y rachas se calculen según su ubicación.
+        try {
+          const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+          await base44.auth.updateMe({ reminder_timezone: tz });
+        } catch (e) {}
       }
       window.location.href = safeReturnTo();
     } catch (err) {

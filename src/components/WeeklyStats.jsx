@@ -4,15 +4,15 @@ import { localDayKey } from "@/lib/journey";
 
 const DAYS = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
 
-function buildWeek(sessions) {
+function buildWeek(sessions, timezone) {
   const today = new Date();
   const data = [];
   for (let i = 6; i >= 0; i--) {
     const d = new Date(today);
     d.setDate(d.getDate() - i);
-    const key = localDayKey(d);
+    const key = localDayKey(d, timezone);
     const mins = (sessions || [])
-      .filter((s) => localDayKey(s.created_date) === key)
+      .filter((s) => localDayKey(s.created_date, timezone) === key)
       .reduce((sum, s) => sum + Math.round((s.actual_seconds || 0) / 60), 0);
     data.push({ day: DAYS[d.getDay()], mins, active: mins > 0 });
   }
@@ -48,8 +48,8 @@ function ConsistencyRing({ percent, days }) {
   );
 }
 
-export default function WeeklyStats({ sessions }) {
-  const data = buildWeek(sessions);
+export default function WeeklyStats({ sessions, timezone }) {
+  const data = buildWeek(sessions, timezone);
   const totalMin = data.reduce((sum, d) => sum + d.mins, 0);
   const activeDays = data.filter((d) => d.active).length;
   const consistency = Math.round((activeDays / 7) * 100);

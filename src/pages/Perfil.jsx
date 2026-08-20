@@ -33,8 +33,9 @@ export default function Perfil() {
     } catch (e) {}
   };
 
-  const currentStreak = computeStreak(sessions);
-  const bestStreak = computeBestStreak(sessions);
+  const tz = user?.reminder_timezone;
+  const currentStreak = computeStreak(sessions, tz);
+  const bestStreak = computeBestStreak(sessions, tz);
   const msg = getStreakMessage(currentStreak);
 
   return (

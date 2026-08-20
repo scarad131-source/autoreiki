@@ -9,12 +9,17 @@ import { useNavigate } from "react-router-dom";
 export default function History() {
   const navigate = useNavigate();
   const [sessions, setSessions] = useState([]);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
       try {
-        const list = await base44.entities.MeditationSession.list("-created_date", 100);
+        const [u, list] = await Promise.all([
+          base44.auth.me(),
+          base44.entities.MeditationSession.list("-created_date", 100),
+        ]);
+        setUser(u);
         setSessions(list);
       } catch (e) {
       } finally {
@@ -52,7 +57,7 @@ export default function History() {
         </div>
       ) : (
         <>
-          <StatsOverview sessions={sessions} />
+          <StatsOverview sessions={sessions} timezone={user?.reminder_timezone} />
           <MonthlyMinutes sessions={sessions} />
           <div className="space-y-2.5">
             {sessions.map((s) => (
