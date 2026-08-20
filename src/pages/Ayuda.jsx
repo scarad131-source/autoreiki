@@ -1,22 +1,26 @@
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Clock, Pause, Brain, PersonStanding } from "lucide-react";
 
-const FAQ = [
+const TIPS = [
   {
-    q: "¿Necesito experiencia previa?",
-    a: "No. AutoReiki está diseñado para acompañarte desde tu primera sesión, sin importar tu nivel.",
+    icon: Clock,
+    title: "Miro el reloj y me distraigo",
+    body: "Confía en el aviso de cada cambio de zona. Puedes mantener los ojos cerrados y dejar que el ritmo te sostenga.",
   },
   {
-    q: "¿Cuánto dura una sesión?",
-    a: "Puedes elegir entre 5, 10 o 30 minutos. Lo importante es la constancia, no la duración.",
+    icon: Pause,
+    title: "Tuve que interrumpir la sesión",
+    body: "No pasa nada ni pierdes el efecto. Al volver, coloca tus manos sobre el corazón durante dos minutos para cerrar con calma.",
   },
   {
-    q: "¿Qué es el recorrido de 21 días?",
-    a: "Una guía diaria que te lleva de la toma de conciencia a la integración, paso a paso.",
+    icon: Brain,
+    title: "No logro acallar la mente",
+    body: "No luches contra los pensamientos. Activa la meditación de 5 minutos en la preparación y vuelve una y otra vez a la respiración.",
   },
   {
-    q: "¿Puedo practicar sin voz guía?",
-    a: "Sí. En modo no guiado solo tú, tu respiración y el sonido ambiente.",
+    icon: PersonStanding,
+    title: "Me cansé de una postura",
+    body: "El confort es esencial. Cambia la posición o apoya los brazos en cojines; esta práctica no exige rigidez.",
   },
 ];
 
@@ -36,13 +40,26 @@ export default function Ayuda() {
         <div className="w-10" />
       </header>
 
+      <section>
+        <h2 className="font-display text-3xl font-semibold tracking-tight">Sin hacerlo perfecto</h2>
+        <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+          Respuestas sencillas para que una duda no se convierta en una barrera.
+        </p>
+      </section>
+
       <div className="space-y-3">
-        {FAQ.map((f) => (
-          <div key={f.q} className="rounded-2xl bg-card border border-white/5 p-4">
-            <p className="font-medium text-sm">{f.q}</p>
-            <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">{f.a}</p>
-          </div>
-        ))}
+        {TIPS.map((t) => {
+          const Icon = t.icon;
+          return (
+            <div key={t.title} className="rounded-2xl bg-card border border-white/5 p-4 flex gap-3">
+              <Icon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
+              <div>
+                <p className="font-medium text-sm">{t.title}</p>
+                <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">{t.body}</p>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
