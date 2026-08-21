@@ -11,6 +11,11 @@ export const AUDIO_SOURCES = {
     name: "Frecuencias Sanadoras",
     url: "https://media.base44.com/files/public/6a7d30a899098694894dbd88/fccced0cf_completerebalancing7chakrasSingingBowls.mp3",
   },
+  meditation21: {
+    id: "meditation21",
+    name: "Meditación 21 días",
+    url: "https://media.base44.com/files/public/6a7d30a899098694894dbd88/3bb166317_MEDITACION21DIAS_02.mp3",
+  },
 };
 
 export const AMBIENT_URL_DEFAULT = AUDIO_SOURCES.beach.url;
