@@ -25,10 +25,12 @@ export default function Configurar() {
 
   const selectAll = () => setSelected(CHAKRAS.map((c) => c.id));
 
-  // Guiada (Principiante e Intermedio): selecciona automáticamente todos los chakras
+  // Guiada: selecciona automáticamente todos los chakras. No guiada: limpia la selección.
   useEffect(() => {
     if (mode === "guided") {
       setSelected(CHAKRAS.map((c) => c.id));
+    } else {
+      setSelected([]);
     }
   }, [mode]);
 
@@ -50,7 +52,7 @@ export default function Configurar() {
   return (
     <div className="space-y-7">
       <header className="text-center pt-2">
-        <h1 className="font-display text-2xl font-semibold tracking-tight">Sesión de Reiki</h1>
+        <h1 className="font-display text-[33px] font-semibold tracking-tight">Sesión de Reiki</h1>
         <p className="text-sm text-muted-foreground mt-1">Toca los chakras que quieras trabajar</p>
       </header>
 
