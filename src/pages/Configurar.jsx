@@ -23,17 +23,19 @@ export default function Configurar() {
   const [minutes, setMinutes] = useState(30);
   const [audio, setAudio] = useState("bowls");
 
-  const toggle = (id) =>
+  const toggle = (id) => {
+  if (mode === "guided") return;
   setSelected((s) => s.includes(id) ? s.filter((x) => x !== id) : [...s, id]);
+};
 
   const selectAll = () => setSelected(CHAKRAS.map((c) => c.id));
 
-  // Guiada + Principiante: selecciona automáticamente todos los chakras
+  // Guiada (Principiante e Intermedio): selecciona automáticamente todos los chakras
   useEffect(() => {
-    if (mode === "guided" && level === "beginner") {
+    if (mode === "guided") {
       setSelected(CHAKRAS.map((c) => c.id));
     }
-  }, [mode, level]);
+  }, [mode]);
 
   const start = () => {
     if (!selected.length) return;
