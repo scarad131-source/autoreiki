@@ -7,11 +7,6 @@ const MODES = [
 { id: "unguided", name: "No guiada", desc: "Me quedo unicamente con el audio" }];
 
 
-const LEVELS = [
-{ id: "beginner", name: "Principiante", desc: "Base suave para empezar" },
-{ id: "intermediate", name: "Intermedio", desc: "Profundiza con chakras" }];
-
-
 const DURATIONS = [5, 10, 30];
 
 export default function SessionForm({ onStart }) {
@@ -41,26 +36,6 @@ export default function SessionForm({ onStart }) {
             
               <p className="font-medium text-sm">{m.name}</p>
               <p className="text-xs text-muted-foreground mt-1 leading-snug">{m.desc}</p>
-            </button>
-          )}
-        </div>
-      </section>
-
-      <section>
-        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Nivel</h2>
-        <div className="grid grid-cols-2 gap-3">
-          {LEVELS.map((l) =>
-          <button
-            key={l.id}
-            onClick={() => setLevel(l.id)}
-            className={`text-left p-4 rounded-2xl border transition-all ${
-            level === l.id ?
-            "border-primary bg-accent neon-glow" :
-            "border-glow/20 bg-card/50 hover:border-primary/50"}`
-            }>
-            
-              <p className="font-medium text-sm">{l.name}</p>
-              <p className="text-xs text-muted-foreground mt-1 leading-snug">{l.desc}</p>
             </button>
           )}
         </div>
