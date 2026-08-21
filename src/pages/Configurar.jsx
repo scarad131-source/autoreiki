@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Clock, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import ChakraFigure from "@/components/ChakraFigure";
 import { AUDIO_SOURCES } from "@/lib/audioSources";
 import { CHAKRAS } from "@/lib/guidedScripts";
@@ -14,8 +14,6 @@ const LEVELS = [
 { id: "beginner", name: "Principiante", desc: "Base suave para empezar" },
 { id: "intermediate", name: "Intermedio", desc: "Profundiza con chakras" }];
 
-
-const DURATIONS = [30, 60, 90];
 
 export default function Configurar() {
   const navigate = useNavigate();
@@ -103,27 +101,6 @@ export default function Configurar() {
             
               <p className="font-medium text-sm">{l.name}</p>
               <p className="text-xs text-muted-foreground mt-1 leading-snug">{l.desc}</p>
-            </button>
-          )}
-        </div>
-      </section>
-
-      <section>
-        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3 flex items-center gap-1.5">
-          <Clock className="w-3.5 h-3.5" /> Duración
-        </h2>
-        <div className="grid grid-cols-4 gap-2.5">
-          {DURATIONS.map((d) =>
-          <button
-            key={d}
-            onClick={() => setMinutes(d)}
-            className={`py-3 rounded-2xl border text-sm font-medium transition-all ${
-            minutes === d ?
-            "border-primary bg-accent text-primary neon-glow" :
-            "border-glow/20 bg-card/50 text-foreground hover:border-primary/50"}`
-            }>
-            
-              {d}
             </button>
           )}
         </div>
