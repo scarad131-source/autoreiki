@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import ChakraFigure from "@/components/ChakraFigure";
@@ -27,6 +27,13 @@ export default function Configurar() {
   setSelected((s) => s.includes(id) ? s.filter((x) => x !== id) : [...s, id]);
 
   const selectAll = () => setSelected(CHAKRAS.map((c) => c.id));
+
+  // Guiada + Principiante: selecciona automáticamente todos los chakras
+  useEffect(() => {
+    if (mode === "guided" && level === "beginner") {
+      setSelected(CHAKRAS.map((c) => c.id));
+    }
+  }, [mode, level]);
 
   const start = () => {
     if (!selected.length) return;
