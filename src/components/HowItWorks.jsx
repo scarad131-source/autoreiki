@@ -17,19 +17,19 @@ export default function HowItWorks() {
         
       </div>
 
-      
-
-      
+      <div className="rounded-3xl overflow-hidden neon-border hidden">
+        <Image src={IMAGES.howItWorks} alt="Qué hace AutoReiki por ti" className="w-full aspect-square" fittingType="fill" />
+      </div>
 
       <div className="grid grid-cols-2 gap-3">
-        {FEATURES.map((f) => null
-
-
-
-
-
-
-
+        {FEATURES.map((f) =>
+        <div key={f.title} className="p-4 rounded-2xl border border-glow/20 bg-card/60 backdrop-blur-sm hidden">
+            <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center mb-2.5">
+              <f.icon className="w-5 h-5 text-primary" />
+            </div>
+            <p className="font-medium text-sm">{f.title}</p>
+            <p className="text-xs text-muted-foreground mt-1 leading-snug">{f.body}</p>
+          </div>
         )}
       </div>
 

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Clock, ArrowRight, BellRing } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
+import { Clock, ArrowRight } from "lucide-react";
 import ChakraFigure from "@/components/ChakraFigure";
 import { AUDIO_SOURCES } from "@/lib/audioSources";
 import { CHAKRAS } from "@/lib/guidedScripts";
@@ -25,7 +24,6 @@ export default function Configurar() {
   const [level, setLevel] = useState("intermediate");
   const [minutes, setMinutes] = useState(30);
   const [audio, setAudio] = useState("bowls");
-  const [bowlAlerts, setBowlAlerts] = useState(false);
 
   const toggle = (id) =>
   setSelected((s) => s.includes(id) ? s.filter((x) => x !== id) : [...s, id]);
@@ -41,8 +39,7 @@ export default function Configurar() {
           level,
           audio: mode === "unguided" ? audio : "healing",
           minutes,
-          chakras: selected,
-          bowlAlerts
+          chakras: selected
         }
       }
     });
@@ -51,7 +48,7 @@ export default function Configurar() {
   return (
     <div className="space-y-7">
       <header className="text-center pt-2">
-        <h1 className="font-display font-semibold tracking-tight text-4xl">Sesión de Reiki</h1>
+        <h1 className="font-display text-2xl font-semibold tracking-tight">Sesión de Reiki</h1>
         <p className="text-sm text-muted-foreground mt-1">Toca los chakras que quieras trabajar</p>
       </header>
 
@@ -152,19 +149,6 @@ export default function Configurar() {
           </div>
         </section>
       }
-
-      <section className="flex items-center gap-4 p-4 rounded-2xl border border-glow/20 bg-card/50">
-        <div className="w-10 h-10 rounded-full flex items-center justify-center bg-accent shrink-0">
-          <BellRing className="w-5 h-5 text-primary" />
-        </div>
-        <div className="flex-1 min-w-0">
-          <p className="font-medium text-sm">Alertas con Cuenco Tibetano</p>
-          <p className="text-xs text-muted-foreground mt-0.5 leading-snug">
-            Suena un cuenco cada 3 minutos sobre el ambiente, en bucle, para terapia de chakras.
-          </p>
-        </div>
-        <Switch checked={bowlAlerts} onCheckedChange={setBowlAlerts} aria-label="Alertas con Cuenco Tibetano" />
-      </section>
 
       <p className="text-center text-sm text-muted-foreground mb-3">
         <span className="text-primary font-semibold">{selected.length}</span> de 7 zonas elegidas
