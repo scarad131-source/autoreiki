@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { ArrowLeft, Pause, Play, Square, Volume2, VolumeX } from "lucide-react";
+import { ArrowLeft, Pause, Play, Square, Volume2, VolumeX, BellRing } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { RELEASE_SCRIPTS } from "@/lib/guidedScripts";
+import { RELEASE_SCRIPTS, CHAKRAS } from "@/lib/guidedScripts";
+import { ambient } from "@/lib/audioEngine";
 import BreathingOrb from "@/components/BreathingOrb";
 import { audioUrlFor } from "@/lib/audioSources";
 import { Slider } from "@/components/ui/slider";
@@ -14,6 +15,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const [volume, setVolume] = useState(0.5);
   const [muted, setMuted] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
+  const [bowlsOn, setBowlsOn] = useState(false);
   const timerRef = useRef(null);
   const audioRef = useRef(null);
   const finishedRef = useRef(false);
@@ -22,6 +24,11 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
 
   const isGuided = config.mode === "guided";
   const isJourney = !!config.journeyDay;
+  const bowlChakras = useMemo(
+    () => (config.chakras || []).map((id) => CHAKRAS.find((c) => c.id === id)).filter(Boolean),
+    [config.chakras]
+  );
+  const isReiki = bowlChakras.length > 0;
   const script = useMemo(() => {
     if (config.customScript) return config.customScript;
     if (!isGuided) return null;
@@ -93,6 +100,20 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       if (el) el.play().catch(() => {});
     }
   }, [paused, started]);
+
+  // cuencos: cada 3 minutos en bucle cuando están activados (solo Reiki)
+  useEffect(() => {
+    if (!started || !bowlsOn || paused || !bowlChakras.length) return;
+    let i = 0;
+    const play = () => {
+      const c = bowlChakras[i % bowlChakras.length];
+      ambient.playBowl(c.freq, 0.7);
+      i++;
+    };
+    play();
+    const id = setInterval(play, 180000);
+    return () => clearInterval(id);
+  }, [started, bowlsOn, paused, bowlChakras]);
 
   // fin de sesión
   useEffect(() => {
@@ -214,6 +235,23 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
           aria-label="Volumen"
         />
       </div>
+
+      {/* toggle de cuencos (solo Reiki) */}
+      {isReiki && (
+        <button
+          onClick={() => setBowlsOn((v) => !v)}
+          disabled={countdown > 0}
+          className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed ${
+            bowlsOn
+              ? "border-primary bg-primary/15 text-primary neon-glow"
+              : "border-white/10 bg-card/80 text-muted-foreground hover:text-foreground"
+          }`}
+          aria-label={bowlsOn ? "Desactivar cuencos" : "Activar cuencos"}
+        >
+          <BellRing className="w-4 h-4" />
+          {bowlsOn ? "Desactivar cuencos" : "Activar cuencos"}
+        </button>
+      )}
 
       {/* controles */}
       <div className="flex items-center gap-4">
