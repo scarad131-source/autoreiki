@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Sun, Clock, Waves, Trees, Sparkles, Calendar, ChevronRight, Flame } from "lucide-react";
+import { Clock, Sparkles, Calendar, ChevronRight, Flame } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import StatsOverview from "@/components/StatsOverview";
 import WeeklyStats from "@/components/WeeklyStats";
@@ -9,8 +9,8 @@ import HowItWorks from "@/components/HowItWorks";
 import { computeStreak, JOURNEY } from "@/lib/journey";
 
 const audioMeta = {
-  beach: { name: "Mar tranquilo", icon: Waves },
-  forest: { name: "Bosque", icon: Trees },
+  beach: { name: "Mar tranquilo", icon: Sparkles },
+  forest: { name: "Bosque", icon: Sparkles },
   healing: { name: "Frecuencias", icon: Sparkles }
 };
 
@@ -54,13 +54,19 @@ export default function Home() {
 
   const startToday = () => navigate("/meditar");
 
+  const navRows = [
+    { label: "Sesión de Reiki", icon: Sparkles, to: "/configurar" },
+    { label: "Recorrido 21 días", icon: Calendar, to: "/recorrido" },
+    { label: "Historial", icon: Clock, to: "/historial" }
+  ];
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-10">
       {/* Encabezado */}
       <header className="pt-2 flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="text-[11px] tracking-[0.28em] uppercase text-primary/80 font-medium">AutoReiki</p>
-          <h1 className="font-display text-[28px] font-semibold tracking-tight leading-tight mt-1.5">
+          <h1 className="font-display text-[26px] font-semibold tracking-tight leading-tight mt-1.5">
             {greeting()}, {firstName}
           </h1>
         </div>
@@ -70,76 +76,88 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Tarjeta principal */}
-      <section className="relative overflow-hidden rounded-3xl bg-card border border-white/5 p-6">
-        <div className="absolute top-5 right-5 w-12 h-12 rounded-full bg-primary/15 border border-primary/30 flex items-center justify-center">
-          <Sun className="w-5 h-5 text-primary" />
-        </div>
-        <p className="text-xs text-muted-foreground tracking-wide">Vuelve a ti</p>
-        <h2 className="font-display font-semibold leading-snug mt-2 text-4xl text-center">
+      {/* Hero */}
+      <section className="flex flex-col items-center text-center pt-2">
+        <div
+          className="h-40 w-40 rounded-full mb-7"
+          style={{
+            background:
+              "radial-gradient(circle at 50% 45%, hsl(38 80% 66% / 0.55), hsl(255 92% 76% / 0.20) 42%, transparent 72%)",
+            filter: "blur(6px)"
+          }}
+        />
+        <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">Vuelve a ti</p>
+        <h2 className="font-display text-3xl font-semibold leading-snug mt-3 max-w-md">
           Una pausa para escuchar lo que tu cuerpo ya sabe.
         </h2>
-        <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+        <p className="text-sm text-muted-foreground mt-3 leading-relaxed max-w-sm">
           Auto-Reiki guiado, a tu ritmo y con una señal clara en cada paso.
         </p>
-        <div className="mt-5 grid grid-cols-2 gap-3">
-          <button
-            onClick={() => navigate("/meditar")}
-            className="flex flex-col items-center gap-1.5 py-4 rounded-2xl bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity active:scale-[0.99]">
-            
-            <Waves className="w-5 h-5" />
-            <span className="text-sm">Meditación</span>
-            <span className="text-[11px] font-normal opacity-80">5 · 10 · 30 min</span>
-          </button>
-          <button
-            onClick={() => navigate("/configurar")}
-            className="flex flex-col items-center gap-1.5 py-4 rounded-2xl border border-primary/40 bg-card text-foreground font-semibold hover:border-primary/60 transition-colors active:scale-[0.99]">
-            
-            <Sparkles className="w-5 h-5 text-primary" />
-            <span className="text-sm">Sesión de Reiki</span>
-            <span className="text-[11px] font-normal text-muted-foreground">30 · 45 · 60 · 90 min</span>
-          </button>
-        </div>
+        <button
+          onClick={() => navigate("/meditar")}
+          className="mt-6 rounded-full bg-gradient-to-r from-amber-light to-primary text-primary-foreground font-semibold px-7 py-3 neon-glow active:scale-[0.99] transition-transform"
+        >
+          Comenzar a meditar
+        </button>
       </section>
 
       {/* Práctica de hoy */}
       <section
         onClick={startToday}
-        className="rounded-3xl bg-card border border-white/5 p-5 cursor-pointer hover:border-primary/30 transition-colors">
-        
-        <h2 className="font-display text-lg font-semibold">Tu práctica de hoy</h2>
-        <p className="text-sm text-muted-foreground mt-1">Un espacio breve también puede cambiar tu día.</p>
-        <div className="flex flex-wrap gap-2 mt-4">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-background/60 border border-white/5 px-3 py-1.5 text-xs">
+        className="cursor-pointer rounded-2xl border border-primary/20 bg-primary/5 p-4 hover:border-primary/40 transition-colors">
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">Tu práctica de hoy</p>
+            <p className="font-display text-lg font-semibold mt-0.5 truncate">{todayJourney.title}</p>
+          </div>
+          <ChevronRight className="w-4 h-4 text-primary shrink-0" />
+        </div>
+        <div className="flex flex-wrap gap-2 mt-3">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
             <Clock className="w-3.5 h-3.5 text-primary" /> {todayJourney.config.minutes} min
           </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-background/60 border border-white/5 px-3 py-1.5 text-xs">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
             <AudioIcon className="w-3.5 h-3.5 text-primary" /> {audio.name}
           </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-background/60 border border-white/5 px-3 py-1.5 text-xs">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
             <Calendar className="w-3.5 h-3.5 text-primary" /> Día {currentDay}
           </span>
         </div>
-        <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/5">
-          <span className="text-sm text-muted-foreground">Continuar preparación</span>
-          <ChevronRight className="w-4 h-4 text-muted-foreground" />
-        </div>
       </section>
 
-      {/* Datos */}
-      {loading ?
-      <div className="h-24 rounded-2xl bg-card/60 animate-pulse" /> :
+      {/* Lista de navegación */}
+      <nav className="border-t border-white/5">
+        {navRows.map(({ label, icon: Icon, to }) => (
+          <button
+            key={to}
+            onClick={() => navigate(to)}
+            className="flex w-full items-center gap-4 py-4 border-b border-white/5 text-left hover:bg-white/[0.02] transition-colors">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-card text-primary border border-white/5">
+              <Icon className="w-4 h-4" />
+            </span>
+            <span className="flex-1 text-sm font-medium">{label}</span>
+            <ChevronRight className="w-4 h-4 text-muted-foreground" />
+          </button>
+        ))}
+      </nav>
 
-      <>
+      {/* Datos */}
+      <section className="space-y-3">
+        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Datos</h2>
+        {loading ? (
+          <div className="h-24 rounded-2xl bg-card/60 animate-pulse" />
+        ) : (
           <StatsOverview sessions={sessions} timezone={tz} />
-          {sessions.length > 0 && <WeeklyStats sessions={sessions} timezone={tz} />}
-        </>
-      }
+        )}
+      </section>
+
+      {/* Semana */}
+      {!loading && sessions.length > 0 && <WeeklyStats sessions={sessions} timezone={tz} />}
 
       <HowItWorks />
 
-      {recent.length > 0 &&
-      <section>
+      {recent.length > 0 && (
+        <section>
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Sesiones recientes</h2>
             <button onClick={() => navigate("/historial")} className="text-xs text-primary font-medium">
@@ -147,14 +165,14 @@ export default function Home() {
             </button>
           </div>
           <div className="space-y-2.5">
-            {recent.map((s) =>
-          <SessionCard key={s.id} session={s} />
-          )}
+            {recent.map((s) => (
+              <SessionCard key={s.id} session={s} />
+            ))}
           </div>
         </section>
-      }
+      )}
 
       <p className="text-center text-[11px] text-muted-foreground/60 pt-2">Bienvenida de nuevo, {firstName} ✦</p>
-    </div>);
-
+    </div>
+  );
 }
