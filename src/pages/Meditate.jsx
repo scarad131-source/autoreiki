@@ -13,6 +13,7 @@ export default function Meditate() {
   const [stage, setStage] = useState("setup"); // setup | running | reflection
   const [config, setConfig] = useState(null);
   const [result, setResult] = useState(null);
+  const [meditarHoy, setMeditarHoy] = useState(false);
 
   // Permite iniciar con un preset desde Recorrido o Configurar.
   useEffect(() => {
@@ -86,13 +87,16 @@ export default function Meditate() {
           <p className="text-xs text-muted-foreground mt-1 leading-snug">Sigue el recorrido guiado día a día.</p>
         </button>
         <button
-          className="text-left p-4 rounded-2xl border border-white/10 bg-card/60 hover:border-primary/30 transition-colors">
+          onClick={() => setMeditarHoy(true)}
+          className={`text-left p-4 rounded-2xl border transition-colors active:scale-[0.99] ${
+            meditarHoy ? "border-primary bg-accent neon-glow" : "border-white/10 bg-card/60 hover:border-primary/30"
+          }`}>
           <p className="font-display text-lg font-semibold">Solo necesito meditar hoy</p>
           <p className="text-xs text-muted-foreground mt-1 leading-snug">Configura una sesión a tu medida.</p>
         </button>
       </section>
 
-      <SessionForm onStart={start} />
+      {meditarHoy && <SessionForm onStart={start} />}
     </div>);
 
 }
