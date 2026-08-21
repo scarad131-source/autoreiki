@@ -15,7 +15,6 @@ import ResetPassword from '@/pages/ResetPassword';
 import Home from '@/pages/Home';
 import Meditate from '@/pages/Meditate';
 import History from '@/pages/History';
-import Perfil from '@/pages/Perfil';
 import Recorrido from '@/pages/Recorrido';
 import Configurar from '@/pages/Configurar';
 import Mas from '@/pages/Mas';
@@ -59,7 +58,6 @@ const AuthenticatedApp = () => {
           <Route path="/recorrido" element={<Recorrido />} />
           <Route path="/configurar" element={<Configurar />} />
           <Route path="/historial" element={<History />} />
-          <Route path="/perfil" element={<Perfil />} />
           <Route path="/mas" element={<Mas />} />
           <Route path="/diario" element={<Diario />} />
           <Route path="/ayuda" element={<Ayuda />} />

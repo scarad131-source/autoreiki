@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { BookOpen, Sparkles, ChevronRight, History, Award } from "lucide-react";
+import { BookOpen, Sparkles, ChevronRight, History } from "lucide-react";
 
 const ITEMS = [
   {
@@ -60,20 +60,13 @@ export default function Mas() {
         })}
       </div>
 
-      <div className="grid grid-cols-2 gap-3 pt-2">
+      <div className="pt-2">
         <button
           onClick={() => navigate("/historial")}
-          className="rounded-2xl bg-card border border-white/5 p-4 flex flex-col items-center gap-2 hover:border-primary/30 transition-colors"
+          className="w-full rounded-2xl bg-card border border-white/5 p-4 flex flex-col items-center gap-2 hover:border-primary/30 transition-colors"
         >
           <History className="w-5 h-5 text-primary" />
           <span className="text-sm font-medium">Historial</span>
-        </button>
-        <button
-          onClick={() => navigate("/perfil")}
-          className="rounded-2xl bg-card border border-white/5 p-4 flex flex-col items-center gap-2 hover:border-primary/30 transition-colors"
-        >
-          <Award className="w-5 h-5 text-primary" />
-          <span className="text-sm font-medium">Perfil</span>
         </button>
       </div>
     </div>

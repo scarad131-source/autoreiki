@@ -5,8 +5,9 @@ import { base44 } from "@/api/base44Client";
 import StatsOverview from "@/components/StatsOverview";
 import WeeklyStats from "@/components/WeeklyStats";
 import SessionCard from "@/components/SessionCard";
-import HowItWorks from "@/components/HowItWorks";
-import { computeStreak, JOURNEY } from "@/lib/journey";
+import Badges from "@/components/Badges";
+import ReminderSettings from "@/components/ReminderSettings";
+import { computeStreak, computeBestStreak, getStreakMessage, JOURNEY } from "@/lib/journey";
 
 const audioMeta = {
   beach: { name: "Mar tranquilo", icon: Sparkles },
@@ -32,7 +33,7 @@ export default function Home() {
       try {
         const u = await base44.auth.me();
         setUser(u);
-        const list = await base44.entities.MeditationSession.list("-created_date", 50);
+        const list = await base44.entities.MeditationSession.list("-created_date", 100);
         setSessions(list);
       } catch (e) {
       } finally {
@@ -43,7 +44,16 @@ export default function Home() {
 
   const tz = user?.reminder_timezone;
   const streak = computeStreak(sessions, tz);
+  const bestStreak = computeBestStreak(sessions, tz);
+  const msg = getStreakMessage(streak);
   const firstName = user?.full_name?.split(" ")[0] || "presencia";
+
+  const refreshUser = async () => {
+    try {
+      const u = await base44.auth.me();
+      setUser(u);
+    } catch (e) {}
+  };
   const recent = sessions.slice(0, 3);
 
   // Práctica de hoy según el recorrido de 21 días
@@ -154,7 +164,47 @@ export default function Home() {
       {/* Semana */}
       {!loading && sessions.length > 0 && <WeeklyStats sessions={sessions} timezone={tz} />}
 
-      <HowItWorks />
+      {/* Tu perfil */}
+      <section className="space-y-5">
+        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Tu perfil</h2>
+
+        <div className="rounded-3xl border border-primary/30 bg-gradient-to-br from-accent/50 to-card/40 p-5 flex items-center gap-4 neon-glow">
+          <div className="w-14 h-14 rounded-full flex items-center justify-center bg-primary/15 shrink-0">
+            <Flame className="w-7 h-7 text-primary" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-3xl font-display font-semibold leading-none">
+              {loading ? "–" : streak}
+              <span className="text-sm font-body font-normal text-muted-foreground ml-2">días consecutivos</span>
+            </p>
+            <p className="text-sm text-foreground/80 mt-1.5 leading-snug">{loading ? "" : msg.title}</p>
+            <p className="text-xs text-muted-foreground leading-snug">{loading ? "" : msg.body}</p>
+          </div>
+        </div>
+
+        {!loading && <ReminderSettings user={user} onSaved={refreshUser} />}
+
+        <div>
+          <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Insignias</h3>
+          {loading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="h-44 rounded-2xl bg-accent/30 animate-pulse" />
+              ))}
+            </div>
+          ) : (
+            <Badges bestStreak={bestStreak} />
+          )}
+        </div>
+
+        {!loading && (
+          <p className="text-center text-sm text-muted-foreground">
+            {bestStreak >= 21
+              ? "Has completado el recorrido. Sigue cultivando tu hábito sagrado."
+              : `Mejor racha: ${bestStreak} días · sigue sumando para desbloquear tu próxima insignia.`}
+          </p>
+        )}
+      </section>
 
       {recent.length > 0 && (
         <section>
