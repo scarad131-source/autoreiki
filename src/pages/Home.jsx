@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Clock, Sparkles, Calendar, ChevronRight, Flame } from "lucide-react";
+import { Clock, Sparkles, Calendar, ChevronRight, Flame, BookOpen } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import StatsOverview from "@/components/StatsOverview";
 import WeeklyStats from "@/components/WeeklyStats";
@@ -57,6 +57,7 @@ export default function Home() {
   const navRows = [
     { label: "Sesión de Reiki", icon: Sparkles, to: "/configurar" },
     { label: "Recorrido 21 días", icon: Calendar, to: "/recorrido" },
+    { label: "Diario", icon: BookOpen, to: "/diario" },
     { label: "Historial", icon: Clock, to: "/historial" }
   ];
 
