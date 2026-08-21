@@ -1,23 +1,10 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { ArrowLeft, Pause, Play, Square, Volume2, VolumeX } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ambient } from "@/lib/audioEngine";
-import { RELEASE_SCRIPTS, CHAKRAS } from "@/lib/guidedScripts";
+import { RELEASE_SCRIPTS } from "@/lib/guidedScripts";
 import BreathingOrb from "@/components/BreathingOrb";
-import { speak, cancelSpeech, COUNTDOWN_WORDS, unlockSpeech } from "@/lib/speech";
 import { audioUrlFor } from "@/lib/audioSources";
 import { Slider } from "@/components/ui/slider";
-
-// Posición concisa de las manos por chakra para las instrucciones de voz
-const HAND_HINTS = {
-  root: "cerca de la pelvis",
-  sacral: "debajo del ombligo",
-  solar: "sobre el plexo solar, debajo de las costillas",
-  heart: "en el centro del pecho",
-  throat: "cerca de la garganta",
-  third_eye: "entre las cejas",
-  crown: "sobre la coronilla",
-};
 
 export default function MeditationRunner({ config, onFinish, onCancel }) {
   const totalSeconds = config.minutes * 60;
@@ -29,19 +16,13 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const [stepIndex, setStepIndex] = useState(0);
   const timerRef = useRef(null);
   const audioRef = useRef(null);
+  const finishedRef = useRef(false);
 
   const started = countdown === 0;
 
   const isGuided = config.mode === "guided";
   const isJourney = !!config.journeyDay;
-  // Sesiones no guiadas simples (sin chakras y fuera del recorrido): sin voz,
-  // únicamente el audio ambiental.
-  const silentUnguided = !isGuided && !isJourney && !(config.chakras && config.chakras.length);
-  // Voz extra (cuenta hablada, recordatorio de respiración y cierre) solo en
-  // sesiones no guiadas con chakras (Reiki) y en el recorrido de 21 días.
-  const voiceExtras = (!isGuided || isJourney) && !silentUnguided;
   const script = useMemo(() => {
-    if (config.chakras && config.chakras.length) return null; // Reiki: secuencia de cuencos, sin narración guiada
     if (config.customScript) return config.customScript;
     if (!isGuided) return null;
     const m = config.minutes;
@@ -50,24 +31,9 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       return { ...base, steps: [{ seconds: 8, text: "Realiza tres respiraciones lentas y profundas." }, ...base.steps] };
     }
     return base;
-  }, [config.customScript, config.minutes, isGuided, isJourney, config.chakras]);
+  }, [config.customScript, config.minutes, isGuided, isJourney]);
   const scriptTotalSec = script ? script.steps.reduce((a, s) => a + s.seconds, 0) : 0;
   const voiceActive = script ? elapsed < scriptTotalSec : false;
-
-  // Chakras a tratar y espaciado de cuencos: un cuenco por chakra repartido en la duración total
-  const bowlChakras = useMemo(
-    () => (config.chakras || []).map((id) => CHAKRAS.find((c) => c.id === id)).filter(Boolean),
-    [config.chakras]
-  );
-  // Mínimo 3 minutos (180 s) de canalización por chakra
-  const bowlIntervalSec = bowlChakras.length ? Math.max(180, (config.minutes * 60) / bowlChakras.length) : 0;
-  const closingSpokenRef = useRef(false);
-  const finishedRef = useRef(false);
-
-  // desbloquear la síntesis de voz lo antes posible
-  useEffect(() => {
-    unlockSpeech();
-  }, []);
 
   // cuenta regresiva de inicio (3 segundos)
   useEffect(() => {
@@ -75,12 +41,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     const t = setTimeout(() => setCountdown((c) => c - 1), 1000);
     return () => clearTimeout(t);
   }, [countdown]);
-
-  // cuenta regresiva hablada al inicio de toda sesión (no en sesiones no guiadas simples)
-  useEffect(() => {
-    if (countdown <= 0 || silentUnguided) return;
-    speak(COUNTDOWN_WORDS[countdown]);
-  }, [countdown, silentUnguided]);
 
   // desbloquear el audio ambiental al montar (gesto del usuario reciente) y mantenerlo silencioso durante la cuenta
   useEffect(() => {
@@ -90,7 +50,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     el.play().catch(() => {});
     return () => {
       try { el.pause(); } catch (e) {}
-      cancelSpeech();
     };
   }, []);
 
@@ -101,7 +60,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     el.volume = muted ? 0 : volume;
   }, [started, volume, muted]);
 
-  // calcular paso actual guiado
+  // calcular paso actual guiado (solo para texto visual en pantalla)
   useEffect(() => {
     if (!started || !script) return;
     let acc = 0;
@@ -124,79 +83,16 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     return () => clearInterval(timerRef.current);
   }, [started, paused]);
 
-  // pausa: detener audio ambiental y voz
+  // pausa: detener audio ambiental
   useEffect(() => {
     if (!started) return;
     const el = audioRef.current;
     if (paused) {
       if (el) el.pause();
-      cancelSpeech();
     } else {
       if (el) el.play().catch(() => {});
     }
   }, [paused, started]);
-
-  // voz guía + cuenco al cambiar de chakra
-  useEffect(() => {
-    if (!started || paused || !script) return;
-    const step = script.steps[stepIndex];
-    if (!step) return;
-    if (step.bowl) ambient.playBowl(step.bowlFreq || 440);
-    const delay = step.bowl ? 950 : 250;
-    const t = setTimeout(() => speak(step.text), delay);
-    return () => clearTimeout(t);
-  }, [stepIndex, paused, script, started]);
-
-  // Bienvenida tras la cuenta regresiva: Reiki (guiada o no) y sesiones no guiadas simples
-  useEffect(() => {
-    if (!started || silentUnguided) return;
-    let msg;
-    if (bowlChakras.length) {
-      msg = `Realiza tres respiraciones lentas y profundas. Bienvenida a la sesión de Reiki. Hoy trabajaremos con ${bowlChakras.length} chakras. Deja que el sonido del cuenco marque cada cambio de posición.`;
-    } else if (!isGuided) {
-      msg = "Realiza tres respiraciones lentas y profundas.";
-    } else {
-      return; // guiada sin chakras: la narración abre la sesión
-    }
-    const t = setTimeout(() => speak(msg), 400);
-    return () => clearTimeout(t);
-  }, [started, bowlChakras.length, isGuided, silentUnguided]);
-
-  // Secuencia de chakras (Reiki): cuenco + instrucción de voz según modo/nivel, luego
-  // mínimo 3 min de silencio antes del siguiente chakra.
-  useEffect(() => {
-    if (!started || !bowlChakras.length) return;
-    let cancelled = false;
-    const timers = [];
-    const welcomeMs = 12000;
-    const runChakra = (i) => {
-      if (cancelled || i >= bowlChakras.length) return;
-      const c = bowlChakras[i];
-      ambient.playBowl(c.freq, 0.7);
-      timers.push(setTimeout(() => ambient.playBowl(c.freq, 0.7), 650));
-      if (isGuided) {
-        const text = config.level === "beginner"
-          ? `Chakra ${c.name}. Posiciona tus manos ${HAND_HINTS[c.id]}, sin toque físico. Siente la energía que fluye.`
-          : `Chakra ${c.name}.`;
-        timers.push(setTimeout(() => { if (!cancelled) speak(text); }, 1400));
-      }
-      timers.push(setTimeout(() => runChakra(i + 1), bowlIntervalSec * 1000));
-    };
-    timers.push(setTimeout(() => runChakra(0), welcomeMs));
-    return () => {
-      cancelled = true;
-      timers.forEach(clearTimeout);
-    };
-  }, [started, bowlChakras, bowlIntervalSec, isGuided, config.level]);
-
-  // voz de cierre en los últimos segundos (solo no guiadas y recorrido de 21 días)
-  useEffect(() => {
-    if (!started || !voiceExtras) return;
-    if (elapsed >= totalSeconds - 10 && !closingSpokenRef.current) {
-      closingSpokenRef.current = true;
-      speak("Has terminado tu sesión del día de hoy. Éxito, amor y bendiciones para ti.");
-    }
-  }, [elapsed, totalSeconds, started, voiceExtras]);
 
   // fin de sesión
   useEffect(() => {
@@ -205,15 +101,9 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       finishedRef.current = true;
       const el = audioRef.current;
       if (el) el.pause();
-      if (!voiceExtras) {
-        cancelSpeech();
-        onFinish({ actualSeconds: totalSeconds, completed: true });
-      } else {
-        // dejar que la voz de cierre termine antes de salir
-        setTimeout(() => onFinish({ actualSeconds: totalSeconds, completed: true }), 4000);
-      }
+      onFinish({ actualSeconds: totalSeconds, completed: true });
     }
-  }, [elapsed, totalSeconds, started, voiceExtras, onFinish]);
+  }, [elapsed, totalSeconds, started, onFinish]);
 
   useEffect(() => {
     const el = audioRef.current;
@@ -230,7 +120,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const handleStop = () => {
     const el = audioRef.current;
     if (el) el.pause();
-    cancelSpeech();
     onFinish({ actualSeconds: elapsed, completed: elapsed >= totalSeconds * 0.5 });
   };
 
