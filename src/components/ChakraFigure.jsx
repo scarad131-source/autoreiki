@@ -19,7 +19,15 @@ export default function ChakraFigure({ selected = [], onToggle }) {
   return (
     <div className="max-w-[460px] mx-auto">
       {/* Imagen de la silueta con mandala */}
-      <div className="relative w-full rounded-3xl overflow-hidden border border-primary/30 neon-glow">
+      <div
+        className="relative w-full rounded-3xl overflow-hidden"
+        style={{
+          WebkitMaskImage:
+            "radial-gradient(ellipse 92% 92% at 50% 50%, #000 62%, transparent 100%)",
+          maskImage:
+            "radial-gradient(ellipse 92% 92% at 50% 50%, #000 62%, transparent 100%)",
+        }}
+      >
         <img
           src={FIGURE_URL}
           alt="Silueta en meditación con chakras"
@@ -58,7 +66,6 @@ export default function ChakraFigure({ selected = [], onToggle }) {
               >
                 {c.name}
               </span>
-              <span className="text-[9px] text-muted-foreground/60 leading-none">{c.sanskrit}</span>
             </button>
           );
         })}
@@ -81,7 +88,6 @@ export default function ChakraFigure({ selected = [], onToggle }) {
             <span className="text-xs text-muted-foreground italic">{active.sanskrit}</span>
           </div>
           <p className="text-sm text-foreground/80 leading-relaxed">{active.benefits}</p>
-          <p className="text-xs text-muted-foreground mt-2 leading-relaxed">{active.placement}</p>
         </div>
       )}
     </div>
