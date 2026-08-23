@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { Leaf } from "lucide-react";
+import { Leaf, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { computeStreak, JOURNEY } from "@/lib/journey";
 
@@ -79,17 +79,26 @@ export default function Recorrido() {
             return (
               <button
                 key={j.day}
-                onClick={() => navigate("/meditar")}
+                disabled={done || !isCurrent}
+                onClick={isCurrent ? () => navigate("/meditar") : undefined}
                 className={`aspect-square rounded-xl border flex flex-col items-center justify-center transition-all ${
                   done
-                    ? "bg-primary/15 border-primary text-primary"
+                    ? "bg-primary/15 border-primary text-primary cursor-default opacity-70"
                     : isCurrent
-                    ? "bg-accent border-primary/40 text-foreground neon-glow"
-                    : "bg-card border-white/5 text-muted-foreground hover:border-primary/30"
+                    ? "bg-accent border-primary/40 text-primary neon-glow active:scale-95"
+                    : "bg-card border-white/5 text-muted-foreground cursor-default opacity-60"
                 }`}
               >
-                <span className="text-[9px] uppercase tracking-wide opacity-70">Día</span>
-                <span className="text-sm font-semibold tabular-nums">{j.day}</span>
+                {done ? (
+                  <Check className="w-4 h-4" />
+                ) : isCurrent ? (
+                  <span className="text-[10px] font-semibold uppercase tracking-wide">Iniciar</span>
+                ) : (
+                  <>
+                    <span className="text-[9px] uppercase tracking-wide opacity-70">Día</span>
+                    <span className="text-sm font-semibold tabular-nums">{j.day}</span>
+                  </>
+                )}
               </button>
             );
           })}
