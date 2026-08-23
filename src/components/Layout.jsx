@@ -1,5 +1,5 @@
 import { Outlet, NavLink } from "react-router-dom";
-import { Star, SlidersHorizontal, CalendarDays, LayoutGrid, LogOut } from "lucide-react";
+import { Star, SlidersHorizontal, CalendarDays, LogOut } from "lucide-react";
 import LotusIcon from "@/components/LotusIcon";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
@@ -10,7 +10,6 @@ const navItems = [
   { to: "/configurar", label: "Mi sesión", icon: SlidersHorizontal },
   { to: "/meditar", label: "Meditar", icon: LotusIcon },
   { to: "/recorrido", label: "21 días", icon: CalendarDays },
-  { to: "/mas", label: "Más", icon: LayoutGrid },
 ];
 
 export default function Layout() {

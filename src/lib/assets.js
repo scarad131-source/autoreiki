@@ -5,4 +5,6 @@ export const IMAGES = {
   gridFeatures: "https://media.base44.com/images/public/6a7d30a899098694894dbd88/8eac5055f_infografia_social_cuadrada_autoreikiREDES.webp",
   howItWorks: "https://media.base44.com/images/public/6a7d30a899098694894dbd88/881d25840_QUEHACEPORTI02.webp",
   singingBowl: "https://media.base44.com/images/public/6a7d30a899098694894dbd88/d3f874734_temporizadorcuencos.webp",
+  diarioBtn: "https://media.base44.com/images/public/6a7d30a899098694894dbd88/b715dec87_DIARIOapp.webp",
+  ayudaBtn: "https://media.base44.com/images/public/6a7d30a899098694894dbd88/3383fc144_image.png",
 };

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Clock, Sparkles, Calendar, ChevronRight, Flame, BookOpen } from "lucide-react";
+import { Clock, Sparkles, Calendar, ChevronRight, Flame } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import StatsOverview from "@/components/StatsOverview";
 import WeeklyStats from "@/components/WeeklyStats";
@@ -8,6 +8,8 @@ import SessionCard from "@/components/SessionCard";
 import Badges from "@/components/Badges";
 import ReminderSettings from "@/components/ReminderSettings";
 import { computeStreak, computeBestStreak, computeUnifiedStreak, getStreakMessage, JOURNEY } from "@/lib/journey";
+import { Image } from "@/components/ui/image";
+import { IMAGES } from "@/lib/assets";
 
 const audioMeta = {
   beach: { name: "Mar tranquilo", icon: Sparkles },
@@ -74,8 +76,9 @@ export default function Home() {
 
   const startToday = () => navigate("/meditar");
 
-  const navRows = [
-    { label: "Diario", icon: BookOpen, to: "/diario" }
+  const quickActions = [
+    { label: "Diario", img: IMAGES.diarioBtn, to: "/diario" },
+    { label: "Ayuda", img: IMAGES.ayudaBtn, to: "/ayuda" }
   ];
 
   return (
@@ -154,18 +157,18 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Lista de navegación */}
-      <nav className="border-t border-white/5">
-        {navRows.map(({ label, icon: Icon, to }) => (
+      {/* Accesos rápidos */}
+      <nav className="grid grid-cols-2 gap-4">
+        {quickActions.map(({ label, img, to }) => (
           <button
             key={to}
             onClick={() => navigate(to)}
-            className="flex w-full items-center gap-4 py-4 border-b border-white/5 text-left hover:bg-white/[0.02] transition-colors">
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-card text-primary border border-white/5">
-              <Icon className="w-4 h-4" />
-            </span>
-            <span className="flex-1 text-sm font-medium">{label}</span>
-            <ChevronRight className="w-4 h-4 text-muted-foreground" />
+            className="flex flex-col items-center gap-2.5 rounded-2xl border border-white/8 bg-card/50 p-4 hover:border-primary/40 hover:bg-accent/40 transition-colors active:scale-[0.98]"
+          >
+            <div className="w-28 h-28 rounded-xl overflow-hidden border border-white/10">
+              <Image src={img} alt={label} className="w-full h-full" fittingType="fill" />
+            </div>
+            <span className="text-sm font-medium tracking-wide">{label}</span>
           </button>
         ))}
       </nav>
