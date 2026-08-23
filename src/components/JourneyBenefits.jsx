@@ -70,20 +70,20 @@ export default function JourneyBenefits() {
         </div>
       </div>
 
-      <div className="hidden">
-        <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-          Cambios cerebrales medibles
-        </h3>
-        <ul className="space-y-2.5">
-          {CEREBRALES.map((text, i) =>
-          <li key={i} className="flex items-start gap-3 rounded-2xl border border-white/5 bg-card/60 p-3.5">
-              <Brain className="w-4 h-4 mt-0.5 shrink-0 text-purple" />
-              <p className="text-sm text-foreground/90 leading-relaxed">{text}</p>
-            </li>
-          )}
-        </ul>
-      </div>
+      
+
+
+
+
+
+
+
+
+
+
+
+
+      
     </section>);
 
 }
