@@ -184,11 +184,18 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         </span>
       </div>
 
+      <div className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full border border-primary/30 bg-primary/5">
+        <Headphones className="w-4 h-4 text-primary shrink-0" />
+        <p className="text-[13px] text-foreground/85 font-light leading-snug max-w-xs text-left">
+          Ponte audífonos y deja que el sonido te abrace por completo ✦ tu viaje sonoro será más profundo.
+        </p>
+      </div>
+
       <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full">
         <BreathingOrb active={started && !paused} label={countdown > 0 ? "Comienza" : paused ? "Pausa" : phase} />
 
         {countdown > 0 ? (
-          <div className="text-center space-y-5">
+          <div className="text-center">
             <motion.p
               key={countdown}
               initial={{ opacity: 0, scale: 1.4 }}
@@ -200,17 +207,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
               {countdown}
             </motion.p>
             <p className="text-xs text-muted-foreground uppercase tracking-[0.18em]">Preparando tu espacio</p>
-            <motion.div
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full border border-primary/30 bg-primary/5"
-            >
-              <Headphones className="w-4 h-4 text-primary shrink-0" />
-              <p className="text-[13px] text-foreground/85 font-light leading-snug max-w-xs text-left">
-                Ponte audífonos y deja que el sonido te abrace por completo ✦ tu viaje sonoro será más profundo.
-              </p>
-            </motion.div>
           </div>
         ) : (
           <>
