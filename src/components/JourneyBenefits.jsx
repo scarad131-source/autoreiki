@@ -1,23 +1,23 @@
 import { Brain, HeartPulse, Sparkles, Moon, Shield, Wind } from "lucide-react";
 
 const PSICOLOGICOS = [
-  { icon: Sparkles, title: "Reducción del estrés y la ansiedad", desc: "Baja los niveles de cortisol (hormona del estrés)." },
-  { icon: Brain, title: "Mayor claridad mental", desc: "Ayuda a tomar decisiones con calma y menos reactividad." },
-  { icon: HeartPulse, title: "Mejor regulación emocional", desc: "Aprendes a observar tus pensamientos sin dejarte arrastrar por ellos." },
-  { icon: Sparkles, title: "Incremento de empatía y compasión", desc: "Hacia ti mismo y hacia los demás." }
-];
+{ icon: Sparkles, title: "Reducción del estrés y la ansiedad", desc: "Baja los niveles de cortisol (hormona del estrés)." },
+{ icon: Brain, title: "Mayor claridad mental", desc: "Ayuda a tomar decisiones con calma y menos reactividad." },
+{ icon: HeartPulse, title: "Mejor regulación emocional", desc: "Aprendes a observar tus pensamientos sin dejarte arrastrar por ellos." },
+{ icon: Sparkles, title: "Incremento de empatía y compasión", desc: "Hacia ti mismo y hacia los demás." }];
+
 
 const FISICOS = [
-  { icon: Moon, title: "Mejora del sueño", desc: "Disminuye el insomnio y favorece un descanso profundo." },
-  { icon: Shield, title: "Fortalecimiento del sistema inmunológico", desc: "La práctica constante apoya la salud general." },
-  { icon: Wind, title: "Relajación corporal", desc: "Reduce tensión muscular y mejora la respiración." }
-];
+{ icon: Moon, title: "Mejora del sueño", desc: "Disminuye el insomnio y favorece un descanso profundo." },
+{ icon: Shield, title: "Fortalecimiento del sistema inmunológico", desc: "La práctica constante apoya la salud general." },
+{ icon: Wind, title: "Relajación corporal", desc: "Reduce tensión muscular y mejora la respiración." }];
+
 
 const CEREBRALES = [
-  "Neuroplasticidad: el cerebro crea nuevas conexiones y hábitos.",
-  "Mayor densidad de materia gris en el hipocampo (memoria) y corteza prefrontal (atención y control emocional).",
-  "Reducción del volumen de la amígdala, lo que disminuye la respuesta de miedo."
-];
+"Neuroplasticidad: el cerebro crea nuevas conexiones y hábitos.",
+"Mayor densidad de materia gris en el hipocampo (memoria) y corteza prefrontal (atención y control emocional).",
+"Reducción del volumen de la amígdala, lo que disminuye la respuesta de miedo."];
+
 
 function Card({ item }) {
   const Icon = item.icon;
@@ -32,8 +32,8 @@ function Card({ item }) {
           <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{item.desc}</p>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
 export default function JourneyBenefits() {
@@ -52,9 +52,9 @@ export default function JourneyBenefits() {
           Beneficios psicológicos y emocionales
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {PSICOLOGICOS.map((item) => (
-            <Card key={item.title} item={item} />
-          ))}
+          {PSICOLOGICOS.map((item) =>
+          <Card key={item.title} item={item} />
+          )}
         </div>
       </div>
 
@@ -64,26 +64,26 @@ export default function JourneyBenefits() {
           Beneficios físicos
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {FISICOS.map((item) => (
-            <Card key={item.title} item={item} />
-          ))}
+          {FISICOS.map((item) =>
+          <Card key={item.title} item={item} />
+          )}
         </div>
       </div>
 
-      <div>
+      <div className="hidden">
         <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-primary" />
           Cambios cerebrales medibles
         </h3>
         <ul className="space-y-2.5">
-          {CEREBRALES.map((text, i) => (
-            <li key={i} className="flex items-start gap-3 rounded-2xl border border-white/5 bg-card/60 p-3.5">
+          {CEREBRALES.map((text, i) =>
+          <li key={i} className="flex items-start gap-3 rounded-2xl border border-white/5 bg-card/60 p-3.5">
               <Brain className="w-4 h-4 mt-0.5 shrink-0 text-purple" />
               <p className="text-sm text-foreground/90 leading-relaxed">{text}</p>
             </li>
-          ))}
+          )}
         </ul>
       </div>
-    </section>
-  );
+    </section>);
+
 }
