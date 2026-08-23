@@ -55,6 +55,8 @@ export default function Home() {
   const bestStreak = computeBestStreak(sessions, tz);
   const msg = getStreakMessage(streak);
   const firstName = user?.full_name?.split(" ")[0] || "presencia";
+  const journeyCompleted = new Set((journey || []).map((p) => p.day_number)).size;
+  const journeyProgress = Math.min(journeyCompleted, 21);
 
   const refreshUser = async () => {
     try {
@@ -88,9 +90,12 @@ export default function Home() {
             Bienvenido(a), {firstName}
           </h1>
         </div>
-        <div className="shrink-0 flex items-center gap-1.5 rounded-full border border-primary/40 bg-card px-3 py-1.5">
-          <Flame className="w-4 h-4 text-primary" />
-          <span className="text-sm font-semibold tabular-nums">{streak}/21</span>
+        <div
+          className="shrink-0 flex items-center gap-1.5 rounded-full border px-3 py-1.5"
+          style={{ borderColor: "#A68962", background: "#231A35" }}
+        >
+          <Flame className="w-4 h-4" style={{ color: "#A68962" }} />
+          <span className="text-sm font-semibold tabular-nums text-white">{journeyProgress}/21</span>
         </div>
       </header>
 
