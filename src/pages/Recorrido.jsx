@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { JOURNEY, computeActiveDays } from "@/lib/journey";
 import { Check } from "lucide-react";
+import JourneyBenefits from "@/components/JourneyBenefits";
 
 const WEEKDAYS = ["L", "M", "M", "J", "V", "S", "D"];
 
@@ -32,7 +33,58 @@ export default function Recorrido() {
     navigate("/meditar", { state: { preset: { ...day.config, journeyDay: day.day } } });
   };
 
-  return null;
+  return (
+    <div className="space-y-7">
+      <header className="text-center pt-2">
+        <h1 className="font-display text-2xl font-semibold tracking-tight">Recorrido de 21 días</h1>
+        <p className="text-sm text-muted-foreground mt-1">Un viaje guiado día a día hacia tu práctica constante.</p>
+      </header>
+
+      <JourneyBenefits />
+
+      <section>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-sm font-semibold">Tu progreso</h2>
+          <span className="text-primary font-medium">{progressCount}/21 días</span>
+        </div>
+        <div className="h-2 rounded-full bg-accent overflow-hidden">
+          <div
+            className="h-full bg-gradient-to-r from-primary to-glow-cyan transition-all"
+            style={{ width: `${(progressCount / 21) * 100}%` }}
+          />
+        </div>
+      </section>
+
+      <section>
+        <h2 className="text-sm font-semibold mb-3">Días del recorrido</h2>
+        <div className="grid grid-cols-7 gap-2">
+          {JOURNEY.map((day) => {
+            const isDone = day.day <= progressCount;
+            const isCurrent = day.day === progressCount + 1;
+            return (
+              <button
+                key={day.day}
+                onClick={() => startDay(day)}
+                className={`aspect-square rounded-2xl border flex flex-col items-center justify-center transition-all active:scale-95 ${
+                  isDone
+                    ? "border-primary bg-primary/15 text-primary"
+                    : isCurrent
+                    ? "border-primary bg-accent neon-glow text-foreground"
+                    : "border-white/10 bg-card/60 text-muted-foreground hover:border-primary/30"
+                }`}
+              >
+                {isDone ? (
+                  <Check className="w-4 h-4" />
+                ) : (
+                  <span className="text-sm font-semibold">{day.day}</span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </section>
+    </div>
+  );
 
 
 
