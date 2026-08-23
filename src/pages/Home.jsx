@@ -76,8 +76,7 @@ export default function Home() {
 
   const navRows = [
     { label: "Sesión de Reiki", icon: Sparkles, to: "/configurar" },
-    { label: "Diario", icon: BookOpen, to: "/diario" },
-    { label: "Recorrido 21 días", icon: Clock, to: "/historial" }
+    { label: "Diario", icon: BookOpen, to: "/diario" }
   ];
 
   return (
