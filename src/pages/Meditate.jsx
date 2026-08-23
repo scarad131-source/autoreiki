@@ -17,6 +17,7 @@ export default function Meditate() {
   const [result, setResult] = useState(null);
   const [meditarHoy, setMeditarHoy] = useState(false);
   const [showBenefits, setShowBenefits] = useState(false);
+  const [journeyDay, setJourneyDay] = useState(null);
 
   // Permite iniciar con un preset desde Recorrido o Configurar.
   useEffect(() => {
@@ -25,9 +26,12 @@ export default function Meditate() {
       setMeditarHoy(true);
       setShowBenefits(false);
     }
+    if (location.state?.journeyDay) {
+      setJourneyDay(location.state.journeyDay);
+    }
     if (preset) {
       unlockSpeech();
-      const cfg = { ...preset };
+      const cfg = { ...preset, journeyDay: location.state?.journeyDay ?? preset.journeyDay ?? null };
       if (cfg.mode === "guided" && cfg.chakras && cfg.chakras.length) {
         cfg.customScript = buildChakraScript(cfg.chakras);
       }
@@ -38,7 +42,7 @@ export default function Meditate() {
 
   const start = (cfg) => {
     unlockSpeech();
-    const finalCfg = { ...cfg };
+    const finalCfg = { ...cfg, journeyDay };
     if (finalCfg.mode === "guided" && finalCfg.chakras && finalCfg.chakras.length) {
       finalCfg.customScript = buildChakraScript(finalCfg.chakras);
     }
