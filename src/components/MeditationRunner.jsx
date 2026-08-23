@@ -150,6 +150,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const progress = (elapsed / totalSeconds) * 100;
   const currentStep = script ? script.steps[stepIndex] : null;
   const phase = elapsed % 10 < 4 ? "Inhala" : "Exhala";
+  const canStop = !started || paused;
 
   const handleStop = () => {
     const el = audioRef.current;
@@ -295,10 +296,14 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         </button>
         <button
           onClick={handleStop}
-          disabled={started && !paused}
-          className="w-11 h-11 rounded-full flex items-center justify-center bg-accent hover:bg-accent/70 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          disabled={!canStop}
+          className={`w-11 h-11 rounded-full flex items-center justify-center transition-colors ${
+            canStop
+              ? "bg-destructive/80 hover:bg-destructive text-white"
+              : "bg-accent/40 text-muted-foreground cursor-not-allowed opacity-40"
+          }`}
           aria-label="Terminar"
-          title={started && !paused ? "Pausa primero para terminar" : "Terminar"}
+          title={canStop ? "Terminar" : "Pausa primero para terminar"}
         >
           <Square className="w-4 h-4" />
         </button>
