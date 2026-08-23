@@ -20,6 +20,27 @@
     "reminder_timezone": {
       "type": "string",
       "description": "Zona horaria IANA del usuario para calcular el recordatorio"
+    },
+    "reiki_reminders": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "day": {
+            "type": "string",
+            "description": "D\u00eda de la semana (1=Lun ... 7=Dom)"
+          },
+          "time": {
+            "type": "string",
+            "description": "Hora en formato HH:MM"
+          }
+        },
+        "required": [
+          "day",
+          "time"
+        ]
+      },
+      "description": "Recordatorios de la Agenda Reiki del usuario"
     }
   },
   "required": [

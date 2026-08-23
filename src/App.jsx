@@ -19,6 +19,7 @@ import Configurar from '@/pages/Configurar';
 import Mas from '@/pages/Mas';
 import Diario from '@/pages/Diario';
 import Ayuda from '@/pages/Ayuda';
+import AgendaReiki from '@/pages/AgendaReiki';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -59,6 +60,7 @@ const AuthenticatedApp = () => {
           <Route path="/mas" element={<Mas />} />
           <Route path="/diario" element={<Diario />} />
           <Route path="/ayuda" element={<Ayuda />} />
+          <Route path="/agenda-reiki" element={<AgendaReiki />} />
         </Route>
       </Route>
       <Route path="*" element={<PageNotFound />} />
