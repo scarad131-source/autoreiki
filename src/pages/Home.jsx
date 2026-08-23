@@ -166,7 +166,7 @@ export default function Home() {
             className="flex flex-col items-center gap-2.5 rounded-2xl border border-white/8 bg-card/50 p-4 hover:border-primary/40 hover:bg-accent/40 transition-colors active:scale-[0.98]"
           >
             <div className="w-28 h-28 rounded-xl overflow-hidden border border-white/10">
-              <Image src={img} alt={label} className="w-full h-full" fittingType="fill" />
+              <Image src={img} alt={label} className="w-full h-full block" fittingType="fill" />
             </div>
             <span className="text-sm font-medium tracking-wide">{label}</span>
           </button>
