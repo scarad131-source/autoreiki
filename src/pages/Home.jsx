@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Clock, Sparkles, Calendar, ChevronRight, Flame } from "lucide-react";
+import { Clock, Sparkles, Calendar, Flame } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import StatsOverview from "@/components/StatsOverview";
 import WeeklyStats from "@/components/WeeklyStats";
@@ -10,6 +10,8 @@ import ReminderSettings from "@/components/ReminderSettings";
 import { computeStreak, computeBestStreak, computeUnifiedStreak, getStreakMessage, JOURNEY } from "@/lib/journey";
 import { Image } from "@/components/ui/image";
 import { IMAGES } from "@/lib/assets";
+import { format, parseISO } from "date-fns";
+import { es } from "date-fns/locale";
 
 const audioMeta = {
   beach: { name: "Mar tranquilo", icon: Sparkles },
@@ -74,7 +76,15 @@ export default function Home() {
   const audio = audioMeta[todayJourney.config.audio] || audioMeta.healing;
   const AudioIcon = audio.icon;
 
-  const startToday = () => navigate("/meditar");
+  // Próxima terapia: agenda Reiki con fecha próxima, o día actual del reto de 21 días
+  const todayStr = format(new Date(), "yyyy-MM-dd");
+  const schedule = user?.reiki_schedule || [];
+  const upcomingAgenda = schedule
+    .filter((e) => e.date >= todayStr && e.sessions?.length)
+    .sort((a, b) => a.date.localeCompare(b.date))[0];
+  const nextSession = upcomingAgenda?.sessions?.slice().sort((a, b) => a.time.localeCompare(b.time))[0];
+  const agendaDate = upcomingAgenda ? parseISO(upcomingAgenda.date + "T00:00:00") : null;
+  const showAgenda = !!upcomingAgenda;
 
   const quickActions = [
   { label: "Diario", img: IMAGES.diarioBtn, to: "/diario" },
@@ -134,26 +144,41 @@ export default function Home() {
       </section>
 
       {/* Práctica de hoy */}
-      <section
-        onClick={startToday}
-        className="cursor-pointer rounded-2xl border border-primary/20 bg-primary/5 p-4 hover:border-primary/40 transition-colors">
+      <section className="rounded-2xl border border-primary/20 bg-primary/5 p-4">
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
             <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">Tu práctica de hoy</p>
-            <p className="font-display text-lg font-semibold mt-0.5 truncate">{todayJourney.title}</p>
+            <p className="font-display text-lg font-semibold mt-0.5 truncate">
+              {showAgenda ? (nextSession?.label || "Terapia de Reiki") : todayJourney.title}
+            </p>
           </div>
-          <ChevronRight className="w-4 h-4 text-primary shrink-0" />
         </div>
         <div className="flex flex-wrap gap-2 mt-3">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
-            <Clock className="w-3.5 h-3.5 text-primary" /> {todayJourney.config.minutes} min
-          </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
-            <AudioIcon className="w-3.5 h-3.5 text-primary" /> {audio.name}
-          </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
-            <Calendar className="w-3.5 h-3.5 text-primary" /> Día {currentDay}
-          </span>
+          {showAgenda ? (
+            <>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
+                <Calendar className="w-3.5 h-3.5 text-primary" /> {format(agendaDate, "d MMM", { locale: es })}
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
+                <Clock className="w-3.5 h-3.5 text-primary" /> {nextSession?.time}
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
+                <Sparkles className="w-3.5 h-3.5 text-primary" /> Reiki
+              </span>
+            </>
+          ) : (
+            <>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
+                <Clock className="w-3.5 h-3.5 text-primary" /> {todayJourney.config.minutes} min
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
+                <AudioIcon className="w-3.5 h-3.5 text-primary" /> {audio.name}
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
+                <Calendar className="w-3.5 h-3.5 text-primary" /> Día {currentDay}
+              </span>
+            </>
+          )}
         </div>
       </section>
 
