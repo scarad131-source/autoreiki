@@ -66,7 +66,7 @@ export default function Meditate() {
 
 
       // ignore save errors
-    }navigate("/historial");};
+    }navigate("/");};
 
   if (stage === "running" && config) {
     return <MeditationRunner config={config} onFinish={finish} onCancel={() => setStage("setup")} />;
