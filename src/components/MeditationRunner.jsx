@@ -187,7 +187,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
 
       <div className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full border border-primary/30 bg-primary/5">
         <Headphones className="w-4 h-4 text-primary shrink-0" />
-        <p className="text-[13px] text-foreground/85 font-light leading-snug max-w-xs text-left">Sugerimos audífonos y deja que el sonido te abrace por completo ✦ tu viaje sonoro será más profundo.
+        <p className="text-[13px] text-foreground/85 font-light leading-snug max-w-xs text-left">Sugerimos el uso de audífonos y deja que el sonido te abrace por completo ✦ tu viaje sonoro será más profundo.
 
         </p>
       </div>
