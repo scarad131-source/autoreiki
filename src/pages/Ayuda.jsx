@@ -1,5 +1,4 @@
-import { useNavigate } from "react-router-dom";
-import { ChevronLeft, Clock, Pause, Brain, PersonStanding } from "lucide-react";
+import { Clock, Pause, Brain, PersonStanding } from "lucide-react";
 
 const TIPS = [
   {
@@ -25,19 +24,10 @@ const TIPS = [
 ];
 
 export default function Ayuda() {
-  const navigate = useNavigate();
   return (
     <div className="space-y-6">
-      <header className="flex items-center justify-between -ml-1">
-        <button
-          onClick={() => navigate("/mas")}
-          className="w-10 h-10 rounded-full bg-card border border-white/5 flex items-center justify-center hover:border-primary/30 transition-colors"
-          aria-label="Volver"
-        >
-          <ChevronLeft className="w-5 h-5" />
-        </button>
+      <header className="flex items-center justify-between">
         <h1 className="font-display text-xl font-semibold">Ayuda</h1>
-        <div className="w-10" />
       </header>
 
       <section>
