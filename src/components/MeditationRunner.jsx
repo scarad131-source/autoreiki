@@ -8,7 +8,9 @@ import { audioUrlFor } from "@/lib/audioSources";
 import { Slider } from "@/components/ui/slider";
 
 export default function MeditationRunner({ config, onFinish, onCancel }) {
-  const totalSeconds = config.minutes * 60;
+  const [audioDuration, setAudioDuration] = useState(null);
+  // En meditaciones guiadas el temporizador coincide con la duración real del audio
+  const totalSeconds = config.audio === "meditation21" && audioDuration ? Math.round(audioDuration) : config.minutes * 60;
   const [countdown, setCountdown] = useState(config.audio === "meditation21" ? 2 : 3);
   const [elapsed, setElapsed] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -157,7 +159,17 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
 
   return (
     <div className="flex flex-col items-center min-h-[70vh] justify-between py-6">
-      <audio ref={audioRef} src={audioUrlFor(config.audio)} loop preload="auto" className="hidden" />
+      <audio
+        ref={audioRef}
+        src={audioUrlFor(config.audio)}
+        loop={config.audio !== "meditation21"}
+        preload="auto"
+        className="hidden"
+        onLoadedMetadata={(e) => {
+          const d = e.currentTarget.duration;
+          if (config.audio === "meditation21" && d && isFinite(d)) setAudioDuration(d);
+        }}
+      />
 
       <div className="w-full flex items-center justify-between text-xs text-muted-foreground">
         <button
