@@ -157,7 +157,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
           <ArrowLeft className="w-4 h-4" /> Volver
         </button>
         <span className="uppercase tracking-[0.18em]">
-          {isGuided ? "Guiada" : "No guiada"} · {config.level === "beginner" ? "Principiante" : "Intermedio"}
+          {isGuided ? "Guiada" : "No guiada"}
         </span>
       </div>
 
