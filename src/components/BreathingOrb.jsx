@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Image } from "@/components/ui/image";
+import EnergyRing from "@/components/EnergyRing";
 
 const LOGO_URL = "https://media.base44.com/images/public/6a7d30a899098694894dbd88/5900e68b3_logomorado.webp";
 
@@ -17,22 +18,8 @@ export default function BreathingOrb({ active = true, label }) {
           transition={breath}
         />
 
-        {/* anillo neón giratorio */}
-        <motion.svg
-          className="absolute inset-0"
-          viewBox="0 0 240 240"
-          animate={active ? { rotate: 360 } : {}}
-          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-        >
-          <defs>
-            <linearGradient id="neon-ring" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="hsl(var(--glow))" />
-              <stop offset="50%" stopColor="hsl(var(--glow-cyan))" />
-              <stop offset="100%" stopColor="hsl(var(--gold))" />
-            </linearGradient>
-          </defs>
-          <circle cx="120" cy="120" r="114" fill="none" stroke="url(#neon-ring)" strokeWidth="1.5" strokeDasharray="5 9" opacity="0.85" />
-        </motion.svg>
+        {/* anillo de energía luminosa que fluye y respira */}
+        <EnergyRing active={active} />
 
         {/* halo dorado que se atenúa y resalta suavemente */}
         <motion.div
