@@ -9,7 +9,7 @@ const MOOD_AFTER = [
   { id: "neutral", label: "Neutral", emoji: "😐" },
 ];
 
-export default function ReflectionForm({ config, actualSeconds, onSave }) {
+export default function ReflectionForm({ config, actualSeconds, onSave, onRepeat }) {
   const [moodAfter, setMoodAfter] = useState(null);
   const [notes, setNotes] = useState("");
 
@@ -61,6 +61,13 @@ export default function ReflectionForm({ config, actualSeconds, onSave }) {
         className="w-full py-4 rounded-2xl bg-gradient-to-r from-primary to-glow-cyan text-primary-foreground font-medium neon-glow hover:scale-[1.01] transition-transform active:scale-[0.99]"
       >
         Guardar sesión
+      </button>
+
+      <button
+        onClick={onRepeat}
+        className="w-full py-3.5 rounded-2xl border border-primary/40 bg-card/60 text-foreground font-medium hover:bg-accent active:scale-[0.99] transition-colors"
+      >
+        Volver a la meditación
       </button>
     </div>
   );

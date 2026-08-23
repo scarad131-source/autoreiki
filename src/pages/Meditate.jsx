@@ -77,7 +77,14 @@ export default function Meditate() {
   }
 
   if (stage === "reflection" && config && result) {
-    return <ReflectionForm config={config} actualSeconds={result.actualSeconds} onSave={save} />;
+    return (
+      <ReflectionForm
+        config={config}
+        actualSeconds={result.actualSeconds}
+        onSave={save}
+        onRepeat={() => setStage("running")}
+      />
+    );
   }
 
   return (
