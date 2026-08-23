@@ -95,15 +95,15 @@ export default function Configurar() {
       {mode === "unguided" &&
       <section>
           <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Duración</h2>
-          <div className="grid grid-cols-3 gap-2.5">
+          <div className="flex flex-wrap justify-center gap-3">
             {[20, 30, 45, 60, 90].map((d) => (
               <button
                 key={d}
                 onClick={() => setMinutes(d)}
-                className={`py-3 rounded-2xl border text-sm font-medium transition-all ${
+                className={`w-14 h-14 rounded-full border text-xs font-medium transition-all flex items-center justify-center ${
                   minutes === d ? "border-primary bg-accent text-primary neon-glow" : "border-glow/20 bg-card/50 text-foreground hover:border-primary/50"
                 }`}>
-                {d} min
+                {d}
               </button>
             ))}
           </div>
