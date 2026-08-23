@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import SessionForm from "@/components/SessionForm";
+import JourneyBenefits from "@/components/JourneyBenefits";
 import MeditationRunner from "@/components/MeditationRunner";
 import ReflectionForm from "@/components/ReflectionForm";
 import { buildChakraScript } from "@/lib/guidedScripts";
@@ -14,6 +15,7 @@ export default function Meditate() {
   const [config, setConfig] = useState(null);
   const [result, setResult] = useState(null);
   const [meditarHoy, setMeditarHoy] = useState(false);
+  const [showBenefits, setShowBenefits] = useState(false);
 
   // Permite iniciar con un preset desde Recorrido o Configurar.
   useEffect(() => {
@@ -81,8 +83,10 @@ export default function Meditate() {
 
       <section className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <button
-          onClick={() => navigate("/recorrido")}
-          className="text-left p-4 rounded-2xl border border-primary/40 bg-primary/5 hover:bg-primary/10 transition-colors active:scale-[0.99]">
+          onClick={() => setShowBenefits((v) => !v)}
+          className={`text-left p-4 rounded-2xl border transition-colors active:scale-[0.99] ${
+            showBenefits ? "border-primary bg-accent neon-glow" : "border-primary/40 bg-primary/5 hover:bg-primary/10"
+          }`}>
           <p className="font-display text-lg font-semibold text-primary">Iniciar reto de 21 días</p>
           <p className="text-xs text-muted-foreground mt-1 leading-snug">Sigue el recorrido guiado día a día.</p>
         </button>
@@ -95,6 +99,17 @@ export default function Meditate() {
           <p className="text-xs text-muted-foreground mt-1 leading-snug">Configura una sesión a tu medida.</p>
         </button>
       </section>
+
+      {showBenefits && (
+        <>
+          <JourneyBenefits />
+          <button
+            onClick={() => navigate("/recorrido")}
+            className="w-full py-4 rounded-2xl bg-gradient-to-r from-primary to-glow-cyan text-primary-foreground font-medium neon-glow flex items-center justify-center gap-2 active:scale-[0.99]">
+            Comenzar mi recorrido
+          </button>
+        </>
+      )}
 
       {meditarHoy && <SessionForm onStart={start} />}
     </div>);
