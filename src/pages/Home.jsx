@@ -7,7 +7,7 @@ import WeeklyStats from "@/components/WeeklyStats";
 import SessionCard from "@/components/SessionCard";
 import Badges from "@/components/Badges";
 import ReminderSettings from "@/components/ReminderSettings";
-import { computeStreak, computeBestStreak, getStreakMessage, JOURNEY } from "@/lib/journey";
+import { computeStreak, computeBestStreak, computeUnifiedStreak, getStreakMessage, JOURNEY } from "@/lib/journey";
 
 const audioMeta = {
   beach: { name: "Mar tranquilo", icon: Sparkles },
@@ -26,6 +26,8 @@ export default function Home() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [sessions, setSessions] = useState([]);
+  const [diaryEntries, setDiaryEntries] = useState([]);
+  const [journey, setJourney] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -33,8 +35,14 @@ export default function Home() {
       try {
         const u = await base44.auth.me();
         setUser(u);
-        const list = await base44.entities.MeditationSession.list("-created_date", 100);
+        const [list, diary, prog] = await Promise.all([
+          base44.entities.MeditationSession.list("-created_date", 100),
+          base44.entities.DiaryEntry.list("-created_date", 100),
+          base44.entities.JourneyProgress.list("-created_date", 100)
+        ]);
         setSessions(list);
+        setDiaryEntries(diary);
+        setJourney(prog);
       } catch (e) {
       } finally {
         setLoading(false);
@@ -43,7 +51,7 @@ export default function Home() {
   }, []);
 
   const tz = user?.reminder_timezone;
-  const streak = computeStreak(sessions, tz);
+  const streak = computeUnifiedStreak(sessions, diaryEntries, journey, tz);
   const bestStreak = computeBestStreak(sessions, tz);
   const msg = getStreakMessage(streak);
   const firstName = user?.full_name?.split(" ")[0] || "presencia";

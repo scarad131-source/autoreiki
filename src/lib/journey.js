@@ -55,6 +55,34 @@ export function localDayKey(date, timezone) {
   return `${get("year")}-${get("month")}-${get("day")}`;
 }
 
+// Días únicos con actividad (meditación, diario o recorrido): progreso unificado
+// del usuario. Combina las tres fuentes para que el contador, el diario y la
+// página de 21 días reflejen exactamente el mismo avance.
+export function computeActiveDays(sessions, diaryEntries, journeyProgress, timezone) {
+  const days = new Set();
+  (sessions || []).forEach((s) => days.add(localDayKey(s.created_date, timezone)));
+  (diaryEntries || []).forEach((d) => days.add(localDayKey(d.created_date, timezone)));
+  (journeyProgress || []).forEach((j) => days.add(localDayKey(j.created_date, timezone)));
+  return days;
+}
+
+// Racha consecutiva calculada a partir de los días unificados (cualquier
+// actividad cuenta: meditar, escribir en el diario o completar un día del
+// recorrido). Así la racha coincide en todas las páginas.
+export function computeUnifiedStreak(sessions, diaryEntries, journeyProgress, timezone) {
+  const days = computeActiveDays(sessions, diaryEntries, journeyProgress, timezone);
+  let streak = 0;
+  const cursor = new Date();
+  if (!days.has(localDayKey(cursor, timezone))) {
+    cursor.setDate(cursor.getDate() - 1);
+  }
+  while (days.has(localDayKey(cursor, timezone))) {
+    streak++;
+    cursor.setDate(cursor.getDate() - 1);
+  }
+  return streak;
+}
+
 export function computeStreak(sessions, timezone) {
   const days = new Set((sessions || []).map((s) => localDayKey(s.created_date, timezone)));
   let streak = 0;

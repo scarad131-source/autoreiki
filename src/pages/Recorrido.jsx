@@ -1,21 +1,26 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
-import { JOURNEY } from "@/lib/journey";
+import { JOURNEY, computeActiveDays } from "@/lib/journey";
 import { Check } from "lucide-react";
 
 const WEEKDAYS = ["L", "M", "M", "J", "V", "S", "D"];
 
 export default function Recorrido() {
   const navigate = useNavigate();
-  const [completed, setCompleted] = useState(new Set());
+  const [progressCount, setProgressCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
       try {
-        const list = await base44.entities.JourneyProgress.list("-created_date", 100);
-        setCompleted(new Set(list.map((p) => p.day_number)));
+        const [sessions, diary, prog] = await Promise.all([
+          base44.entities.MeditationSession.list("-created_date", 100),
+          base44.entities.DiaryEntry.list("-created_date", 100),
+          base44.entities.JourneyProgress.list("-created_date", 100)
+        ]);
+        const days = computeActiveDays(sessions, diary, prog);
+        setProgressCount(Math.min(days.size, 21));
       } catch (e) {
       } finally {
         setLoading(false);
@@ -37,12 +42,12 @@ export default function Recorrido() {
       <div className="rounded-2xl border border-glow/20 bg-card/50 backdrop-blur-sm p-4">
         <div className="flex justify-between text-xs mb-2">
           <span className="text-muted-foreground">Progreso</span>
-          <span className="text-primary font-medium">{completed.size}/21 días</span>
+          <span className="text-primary font-medium">{progressCount}/21 días</span>
         </div>
         <div className="h-2 rounded-full bg-accent overflow-hidden">
           <div
             className="h-full bg-gradient-to-r from-primary to-glow-cyan transition-all"
-            style={{ width: `${(completed.size / 21) * 100}%` }}
+            style={{ width: `${(progressCount / 21) * 100}%` }}
           />
         </div>
       </div>
@@ -57,7 +62,7 @@ export default function Recorrido() {
         </div>
         <div className="grid grid-cols-7 gap-1.5">
           {JOURNEY.map((day) => {
-            const isDone = completed.has(day.day);
+            const isDone = day.day <= progressCount;
             return (
               <button
                 key={day.day}
