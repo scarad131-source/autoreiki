@@ -295,8 +295,10 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         </button>
         <button
           onClick={handleStop}
-          className="w-11 h-11 rounded-full flex items-center justify-center bg-accent hover:bg-accent/70 transition-colors"
+          disabled={started && !paused}
+          className="w-11 h-11 rounded-full flex items-center justify-center bg-accent hover:bg-accent/70 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           aria-label="Terminar"
+          title={started && !paused ? "Pausa primero para terminar" : "Terminar"}
         >
           <Square className="w-4 h-4" />
         </button>
