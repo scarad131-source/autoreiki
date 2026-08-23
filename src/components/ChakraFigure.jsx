@@ -2,7 +2,7 @@ import { useState } from "react";
 import { CHAKRAS } from "@/lib/guidedScripts";
 
 const FIGURE_URL =
-  "https://media.base44.com/images/public/6a7d30a899098694894dbd88/1e13ded10_image.png";
+  "https://media.base44.com/images/public/6a7d30a899098694894dbd88/a59eacd04_image.png";
 
 // Posición vertical (en % de la altura) de cada chakra sobre el eje central
 const POSITIONS = {
