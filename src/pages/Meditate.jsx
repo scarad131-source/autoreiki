@@ -8,6 +8,8 @@ import MeditationRunner from "@/components/MeditationRunner";
 import ReflectionForm from "@/components/ReflectionForm";
 import { buildChakraScript } from "@/lib/guidedScripts";
 import { unlockSpeech } from "@/lib/speech";
+import { Image } from "@/components/ui/image";
+import { IMAGES } from "@/lib/assets";
 
 export default function Meditate() {
   const navigate = useNavigate();
@@ -110,17 +112,27 @@ export default function Meditate() {
         <section className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
             onClick={() => setShowBenefits((v) => !v)}
-            className={`text-left p-4 rounded-2xl border transition-colors active:scale-[0.99] ${
-              showBenefits ? "border-primary bg-accent neon-glow" : "border-primary/40 bg-primary/5 hover:bg-primary/10"
+            className={`text-left rounded-2xl border overflow-hidden transition-all active:scale-[0.99] ${
+              showBenefits ? "border-primary neon-glow" : "border-primary/40 hover:border-primary/60"
             }`}>
-            <p className="font-display text-lg font-semibold text-primary">Iniciar reto de 21 días</p>
-            <p className="text-xs text-muted-foreground mt-1 leading-snug">Sigue el recorrido guiado día a día.</p>
+            <div className="h-32 w-full">
+              <Image src={IMAGES.meditar21Btn} alt="Reto 21 días" className="w-full h-full" fittingType="fill" />
+            </div>
+            <div className="p-4 bg-primary/5">
+              <p className="font-display text-lg font-semibold text-primary">Iniciar reto de 21 días</p>
+              <p className="text-xs text-muted-foreground mt-1 leading-snug">Sigue el recorrido guiado día a día.</p>
+            </div>
           </button>
           <button
             onClick={() => { setMeditarHoy(true); setShowBenefits(false); }}
-            className="text-left p-4 rounded-2xl border border-white/10 bg-card/60 hover:border-primary/30 transition-colors active:scale-[0.99]">
-            <p className="font-display text-lg font-semibold">Solo necesito meditar hoy</p>
-            <p className="text-xs text-muted-foreground mt-1 leading-snug">Configura una sesión a tu medida.</p>
+            className="text-left rounded-2xl border border-white/10 overflow-hidden hover:border-primary/30 transition-colors active:scale-[0.99]">
+            <div className="h-32 w-full">
+              <Image src={IMAGES.meditarHoyBtn} alt="Meditar hoy" className="w-full h-full" fittingType="fill" />
+            </div>
+            <div className="p-4 bg-card/60">
+              <p className="font-display text-lg font-semibold">Solo necesito meditar hoy</p>
+              <p className="text-xs text-muted-foreground mt-1 leading-snug">Configura una sesión a tu medida.</p>
+            </div>
           </button>
         </section>
       )}

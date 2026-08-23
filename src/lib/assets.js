@@ -7,4 +7,6 @@ export const IMAGES = {
   singingBowl: "https://media.base44.com/images/public/6a7d30a899098694894dbd88/d3f874734_temporizadorcuencos.webp",
   diarioBtn: "https://media.base44.com/images/public/6a7d30a899098694894dbd88/b715dec87_DIARIOapp.webp",
   ayudaBtn: "https://media.base44.com/images/public/6a7d30a899098694894dbd88/3383fc144_image.png",
+  meditar21Btn: "https://media.base44.com/images/public/6a7d30a899098694894dbd88/a1a044873_generated_image.png",
+  meditarHoyBtn: "https://media.base44.com/images/public/6a7d30a899098694894dbd88/138f6cee0_generated_image.png",
 };
