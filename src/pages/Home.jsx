@@ -8,6 +8,7 @@ import SessionCard from "@/components/SessionCard";
 import Badges from "@/components/Badges";
 import ReminderSettings from "@/components/ReminderSettings";
 import { computeStreak, computeBestStreak, computeUnifiedStreak, getStreakMessage, JOURNEY } from "@/lib/journey";
+import { getDailyPhrase } from "@/lib/dailyPhrases";
 import { Image } from "@/components/ui/image";
 import { IMAGES } from "@/lib/assets";
 import { format, parseISO } from "date-fns";
@@ -148,8 +149,8 @@ export default function Home() {
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
             <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">Tu práctica de hoy</p>
-            <p className="font-display text-lg font-semibold mt-0.5 truncate">
-              {showAgenda ? (nextSession?.label || "Terapia de Reiki") : todayJourney.title}
+            <p className="font-display text-lg font-semibold mt-0.5 leading-snug">
+              {getDailyPhrase()}
             </p>
           </div>
         </div>
