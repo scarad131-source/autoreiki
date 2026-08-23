@@ -38,10 +38,10 @@ export default function Home() {
         const u = await base44.auth.me();
         setUser(u);
         const [list, diary, prog] = await Promise.all([
-          base44.entities.MeditationSession.list("-created_date", 100),
-          base44.entities.DiaryEntry.list("-created_date", 100),
-          base44.entities.JourneyProgress.list("-created_date", 100)
-        ]);
+        base44.entities.MeditationSession.list("-created_date", 100),
+        base44.entities.DiaryEntry.list("-created_date", 100),
+        base44.entities.JourneyProgress.list("-created_date", 100)]
+        );
         setSessions(list);
         setDiaryEntries(diary);
         setJourney(prog);
@@ -77,9 +77,9 @@ export default function Home() {
   const startToday = () => navigate("/meditar");
 
   const quickActions = [
-    { label: "Diario", img: IMAGES.diarioBtn, to: "/diario" },
-    { label: "Ayuda", img: IMAGES.ayudaBtn, to: "/ayuda" }
-  ];
+  { label: "Diario", img: IMAGES.diarioBtn, to: "/diario" },
+  { label: "Ayuda", img: IMAGES.ayudaBtn, to: "/ayuda" }];
+
 
   return (
     <div className="space-y-10">
@@ -93,8 +93,8 @@ export default function Home() {
         </div>
         <div
           className="shrink-0 flex items-center gap-1.5 rounded-full border px-3 py-1.5"
-          style={{ borderColor: "#A68962", background: "#231A35" }}
-        >
+          style={{ borderColor: "#A68962", background: "#231A35" }}>
+          
           <Flame className="w-4 h-4" style={{ color: "#A68962" }} />
           <span className="text-sm font-semibold tabular-nums text-white">{journeyProgress}/21</span>
         </div>
@@ -106,10 +106,10 @@ export default function Home() {
           className="h-40 w-40 rounded-full mb-7"
           style={{
             background:
-              "radial-gradient(circle at 50% 45%, hsl(38 80% 66% / 0.55), hsl(255 92% 76% / 0.20) 42%, transparent 72%)",
+            "radial-gradient(circle at 50% 45%, hsl(38 80% 66% / 0.55), hsl(255 92% 76% / 0.20) 42%, transparent 72%)",
             filter: "blur(6px)"
-          }}
-        />
+          }} />
+        
         <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">Vuelve a ti</p>
         <h2 className="font-display text-3xl font-semibold leading-snug mt-3 max-w-md">
           Una pausa para escuchar lo que tu cuerpo ya sabe.
@@ -120,14 +120,14 @@ export default function Home() {
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
           <button
             onClick={() => navigate("/meditar")}
-            className="rounded-full bg-gradient-to-r from-amber-light to-primary text-primary-foreground font-semibold px-7 py-3 neon-glow active:scale-[0.99] transition-transform"
-          >
+            className="rounded-full bg-gradient-to-r from-amber-light to-primary text-primary-foreground font-semibold px-7 py-3 neon-glow active:scale-[0.99] transition-transform">
+            
             Comenzar a meditar
           </button>
           <button
             onClick={() => navigate("/configurar")}
-            className="rounded-full border border-primary/40 bg-card/60 text-foreground font-semibold px-7 py-3 hover:bg-accent active:scale-[0.99] transition-transform"
-          >
+            className="rounded-full border border-primary/40 bg-card/60 text-foreground font-semibold px-7 py-3 hover:bg-accent active:scale-[0.99] transition-transform">
+            
             Sesión de Reiki
           </button>
         </div>
@@ -159,28 +159,28 @@ export default function Home() {
 
       {/* Accesos rápidos */}
       <nav className="grid grid-cols-2 gap-4">
-        {quickActions.map(({ label, img, to }) => (
-          <button
-            key={to}
-            onClick={() => navigate(to)}
-            className="flex flex-col items-center gap-2.5 rounded-2xl border border-white/8 bg-card/50 p-4 hover:border-primary/40 hover:bg-accent/40 transition-colors active:scale-[0.98]"
-          >
+        {quickActions.map(({ label, img, to }) =>
+        <button
+          key={to}
+          onClick={() => navigate(to)}
+          className="flex flex-col items-center gap-2.5 rounded-2xl border border-white/8 bg-card/50 hover:border-primary/40 hover:bg-accent/40 transition-colors active:scale-[0.98] mx-24 px-5 py-4">
+          
             <div className="w-28 h-28 rounded-xl overflow-hidden border border-white/10">
               <Image src={img} alt={label} className="w-full h-full block" fittingType="fill" />
             </div>
             <span className="text-sm font-medium tracking-wide">{label}</span>
           </button>
-        ))}
+        )}
       </nav>
 
       {/* Datos */}
       <section className="space-y-3">
         <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Datos</h2>
-        {loading ? (
-          <div className="h-24 rounded-2xl bg-card/60 animate-pulse" />
-        ) : (
-          <StatsOverview sessions={sessions} timezone={tz} />
-        )}
+        {loading ?
+        <div className="h-24 rounded-2xl bg-card/60 animate-pulse" /> :
+
+        <StatsOverview sessions={sessions} timezone={tz} />
+        }
       </section>
 
       {/* Semana */}
@@ -208,28 +208,28 @@ export default function Home() {
 
         <div>
           <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Insignias</h3>
-          {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="h-44 rounded-2xl bg-accent/30 animate-pulse" />
-              ))}
-            </div>
-          ) : (
-            <Badges bestStreak={bestStreak} />
-          )}
+          {loading ?
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {[...Array(3)].map((_, i) =>
+            <div key={i} className="h-44 rounded-2xl bg-accent/30 animate-pulse" />
+            )}
+            </div> :
+
+          <Badges bestStreak={bestStreak} />
+          }
         </div>
 
-        {!loading && (
-          <p className="text-center text-sm text-muted-foreground">
-            {bestStreak >= 21
-              ? "Has completado el recorrido. Sigue cultivando tu hábito sagrado."
-              : `Mejor racha: ${bestStreak} días · sigue sumando para desbloquear tu próxima insignia.`}
+        {!loading &&
+        <p className="text-center text-sm text-muted-foreground">
+            {bestStreak >= 21 ?
+          "Has completado el recorrido. Sigue cultivando tu hábito sagrado." :
+          `Mejor racha: ${bestStreak} días · sigue sumando para desbloquear tu próxima insignia.`}
           </p>
-        )}
+        }
       </section>
 
-      {recent.length > 0 && (
-        <section>
+      {recent.length > 0 &&
+      <section>
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Sesiones recientes</h2>
             <button onClick={() => navigate("/historial")} className="text-xs text-primary font-medium">
@@ -237,14 +237,14 @@ export default function Home() {
             </button>
           </div>
           <div className="space-y-2.5">
-            {recent.map((s) => (
-              <SessionCard key={s.id} session={s} />
-            ))}
+            {recent.map((s) =>
+          <SessionCard key={s.id} session={s} />
+          )}
           </div>
         </section>
-      )}
+      }
 
       <p className="text-center text-[11px] text-muted-foreground/60 pt-2">Bienvenida de nuevo, {firstName} ✦</p>
-    </div>
-  );
+    </div>);
+
 }
