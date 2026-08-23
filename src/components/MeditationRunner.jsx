@@ -64,7 +64,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       el.play().catch(() => {});
     }
     return () => {
-      try { el.pause(); } catch (e) {}
+      try {el.pause();} catch (e) {}
     };
   }, []);
 
@@ -147,7 +147,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const remaining = Math.max(0, totalSeconds - elapsed);
   const mm = String(Math.floor(remaining / 60)).padStart(2, "0");
   const ss = String(remaining % 60).padStart(2, "0");
-  const progress = (elapsed / totalSeconds) * 100;
+  const progress = elapsed / totalSeconds * 100;
   const currentStep = script ? script.steps[stepIndex] : null;
   const phase = elapsed % 10 < 4 ? "Inhala" : "Exhala";
   const canStop = !started || paused;
@@ -169,15 +169,15 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         onLoadedMetadata={(e) => {
           const d = e.currentTarget.duration;
           if (config.audio === "meditation21" && d && isFinite(d)) setAudioDuration(d);
-        }}
-      />
+        }} />
+      
 
       <div className="w-full flex items-center justify-between text-xs text-muted-foreground">
         <button
           onClick={onCancel}
           className="flex items-center gap-1.5 hover:text-foreground transition-colors -ml-1"
-          aria-label="Volver"
-        >
+          aria-label="Volver">
+          
           <ArrowLeft className="w-4 h-4" /> Volver
         </button>
         <span className="uppercase tracking-[0.18em]">
@@ -187,30 +187,30 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
 
       <div className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full border border-primary/30 bg-primary/5">
         <Headphones className="w-4 h-4 text-primary shrink-0" />
-        <p className="text-[13px] text-foreground/85 font-light leading-snug max-w-xs text-left">
-          Ponte audífonos y deja que el sonido te abrace por completo ✦ tu viaje sonoro será más profundo.
+        <p className="text-[13px] text-foreground/85 font-light leading-snug max-w-xs text-left">Sugerimos audífonos y deja que el sonido te abrace por completo ✦ tu viaje sonoro será más profundo.
+
         </p>
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full">
         <BreathingOrb active={started && !paused} label={countdown > 0 ? "Comienza" : paused ? "Pausa" : phase} />
 
-        {countdown > 0 ? (
-          <div className="text-center">
+        {countdown > 0 ?
+        <div className="text-center">
             <motion.p
-              key={countdown}
-              initial={{ opacity: 0, scale: 1.4 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.4 }}
-              className="text-7xl font-display font-light tabular-nums neon-text"
-            >
+            key={countdown}
+            initial={{ opacity: 0, scale: 1.4 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.4 }}
+            className="text-7xl font-display font-light tabular-nums neon-text">
+            
               {countdown}
             </motion.p>
             <p className="text-xs text-muted-foreground uppercase tracking-[0.18em]">Preparando tu espacio</p>
-          </div>
-        ) : (
-          <>
+          </div> :
+
+        <>
             <div className="text-center">
               <p className="text-5xl font-display font-light tracking-tight tabular-nums">
                 {mm}:{ss}
@@ -221,21 +221,21 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
             </div>
 
             <AnimatePresence mode="wait">
-              {currentStep && !paused && voiceActive && (
-                <motion.div
-                  key={stepIndex}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 1.2 }}
-                  className="max-w-md text-center px-2"
-                >
+              {currentStep && !paused && voiceActive &&
+            <motion.div
+              key={stepIndex}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 1.2 }}
+              className="max-w-md text-center px-2">
+              
                   <p className="text-[15px] leading-relaxed text-foreground/90 font-light">{currentStep.text}</p>
                 </motion.div>
-              )}
+            }
             </AnimatePresence>
           </>
-        )}
+        }
       </div>
 
       {/* barra de progreso */}
@@ -243,8 +243,8 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         <motion.div
           className="h-full bg-gradient-to-r from-primary to-glow-cyan"
           style={{ width: `${progress}%` }}
-          transition={{ ease: "linear" }}
-        />
+          transition={{ ease: "linear" }} />
+        
       </div>
 
       {/* volumen */}
@@ -252,8 +252,8 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         <button
           onClick={() => setMuted((m) => !m)}
           className="text-muted-foreground hover:text-foreground transition-colors shrink-0"
-          aria-label="Silenciar"
-        >
+          aria-label="Silenciar">
+          
           {muted || volume === 0 ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
         </button>
         <Slider
@@ -261,28 +261,28 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
           min={0}
           max={1}
           step={0.05}
-          onValueChange={([v]) => { setVolume(v); setMuted(v === 0); }}
+          onValueChange={([v]) => {setVolume(v);setMuted(v === 0);}}
           className="flex-1"
-          aria-label="Volumen"
-        />
+          aria-label="Volumen" />
+        
       </div>
 
       {/* toggle de cuencos (solo Reiki) */}
-      {isReiki && (
-        <button
-          onClick={() => setBowlsOn((v) => !v)}
-          disabled={countdown > 0}
-          className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed ${
-            bowlsOn
-              ? "border-primary bg-primary/15 text-primary neon-glow"
-              : "border-white/10 bg-card/80 text-muted-foreground hover:text-foreground"
-          }`}
-          aria-label={bowlsOn ? "Desactivar cuencos" : "Activar cuencos"}
-        >
+      {isReiki &&
+      <button
+        onClick={() => setBowlsOn((v) => !v)}
+        disabled={countdown > 0}
+        className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed ${
+        bowlsOn ?
+        "border-primary bg-primary/15 text-primary neon-glow" :
+        "border-white/10 bg-card/80 text-muted-foreground hover:text-foreground"}`
+        }
+        aria-label={bowlsOn ? "Desactivar cuencos" : "Activar cuencos"}>
+        
           <BellRing className="w-4 h-4" />
           {bowlsOn ? "Desactivar cuencos" : "Activar cuencos"}
         </button>
-      )}
+      }
 
       {/* controles */}
       <div className="flex items-center gap-4">
@@ -290,24 +290,24 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
           onClick={() => setPaused((p) => !p)}
           disabled={countdown > 0}
           className="w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-primary to-glow-cyan text-primary-foreground neon-glow transition-transform active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
-          aria-label={paused ? "Reanudar" : "Pausar"}
-        >
+          aria-label={paused ? "Reanudar" : "Pausar"}>
+          
           {paused ? <Play className="w-6 h-6 ml-0.5" /> : <Pause className="w-6 h-6" />}
         </button>
         <button
           onClick={handleStop}
           disabled={!canStop}
           className={`w-11 h-11 rounded-full flex items-center justify-center transition-colors ${
-            canStop
-              ? "bg-destructive/80 hover:bg-destructive text-white"
-              : "bg-accent/40 text-muted-foreground cursor-not-allowed opacity-40"
-          }`}
+          canStop ?
+          "bg-destructive/80 hover:bg-destructive text-white" :
+          "bg-accent/40 text-muted-foreground cursor-not-allowed opacity-40"}`
+          }
           aria-label="Terminar"
-          title={canStop ? "Terminar" : "Pausa primero para terminar"}
-        >
+          title={canStop ? "Terminar" : "Pausa primero para terminar"}>
+          
           <Square className="w-4 h-4" />
         </button>
       </div>
-    </div>
-  );
+    </div>);
+
 }
