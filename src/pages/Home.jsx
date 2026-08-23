@@ -75,7 +75,6 @@ export default function Home() {
   const startToday = () => navigate("/meditar");
 
   const navRows = [
-    { label: "Sesión de Reiki", icon: Sparkles, to: "/configurar" },
     { label: "Diario", icon: BookOpen, to: "/diario" }
   ];
 
