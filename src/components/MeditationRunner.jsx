@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { ArrowLeft, Pause, Play, Square, Volume2, VolumeX, BellRing } from "lucide-react";
+import { ArrowLeft, Pause, Play, Square, Volume2, VolumeX, BellRing, Headphones } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { RELEASE_SCRIPTS, CHAKRAS } from "@/lib/guidedScripts";
 import { ambient } from "@/lib/audioEngine";
@@ -188,7 +188,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         <BreathingOrb active={started && !paused} label={countdown > 0 ? "Comienza" : paused ? "Pausa" : phase} />
 
         {countdown > 0 ? (
-          <div className="text-center">
+          <div className="text-center space-y-5">
             <motion.p
               key={countdown}
               initial={{ opacity: 0, scale: 1.4 }}
@@ -199,7 +199,18 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
             >
               {countdown}
             </motion.p>
-            <p className="text-xs text-muted-foreground mt-3 uppercase tracking-[0.18em]">Preparando tu espacio</p>
+            <p className="text-xs text-muted-foreground uppercase tracking-[0.18em]">Preparando tu espacio</p>
+            <motion.div
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full border border-primary/30 bg-primary/5"
+            >
+              <Headphones className="w-4 h-4 text-primary shrink-0" />
+              <p className="text-[13px] text-foreground/85 font-light leading-snug max-w-xs text-left">
+                Ponte audífonos y deja que el sonido te abrace por completo ✦ tu viaje sonoro será más profundo.
+              </p>
+            </motion.div>
           </div>
         ) : (
           <>
