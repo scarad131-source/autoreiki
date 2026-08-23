@@ -21,26 +21,42 @@
       "type": "string",
       "description": "Zona horaria IANA del usuario para calcular el recordatorio"
     },
-    "reiki_reminders": {
+    "reiki_schedule": {
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
-          "day": {
+          "date": {
             "type": "string",
-            "description": "D\u00eda de la semana (1=Lun ... 7=Dom)"
+            "description": "Fecha en formato YYYY-MM-DD"
           },
-          "time": {
-            "type": "string",
-            "description": "Hora en formato HH:MM"
+          "sessions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "time": {
+                  "type": "string",
+                  "description": "Hora en formato HH:MM"
+                },
+                "label": {
+                  "type": "string",
+                  "description": "Nombre/etiqueta de la sesi\u00f3n"
+                }
+              },
+              "required": [
+                "time",
+                "label"
+              ]
+            }
           }
         },
         "required": [
-          "day",
-          "time"
+          "date",
+          "sessions"
         ]
       },
-      "description": "Recordatorios de la Agenda Reiki del usuario"
+      "description": "Agenda Reiki del usuario por d\u00eda del mes"
     }
   },
   "required": [

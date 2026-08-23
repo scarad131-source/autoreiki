@@ -1,24 +1,24 @@
 import { useEffect, useState } from "react";
-import { CalendarClock, Plus, Trash2, Bell } from "lucide-react";
+import { CalendarDays, ChevronLeft, ChevronRight, Clock } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import AgendaDayDialog from "@/components/AgendaDayDialog";
+import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, addMonths, isSameMonth, isToday, parseISO } from "date-fns";
+import { es } from "date-fns/locale";
 
-const DAYS = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
-const FULL_DAYS = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+const WD = ["L", "M", "M", "J", "V", "S", "D"];
 
 export default function AgendaReiki() {
-  const [user, setUser] = useState(null);
-  const [reminders, setReminders] = useState([]);
-  const [selectedDay, setSelectedDay] = useState("");
-  const [selectedTime, setSelectedTime] = useState("07:00");
+  const [schedule, setSchedule] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [cursor, setCursor] = useState(new Date());
+  const [dialogDate, setDialogDate] = useState(null);
 
   useEffect(() => {
     (async () => {
       try {
         const u = await base44.auth.me();
-        setUser(u);
-        setReminders(u.reiki_reminders || []);
+        setSchedule(u.reiki_schedule || []);
       } catch (e) {
       } finally {
         setLoading(false);
@@ -26,137 +26,195 @@ export default function AgendaReiki() {
     })();
   }, []);
 
-  const addReminder = async () => {
-    if (!selectedDay || !selectedTime) return;
-    const entry = { day: selectedDay, time: selectedTime };
-    const updated = [...reminders, entry];
+  const persist = async (next) => {
     setSaving(true);
     try {
-      await base44.auth.updateMe({ reiki_reminders: updated });
-      setReminders(updated);
-      setSelectedDay("");
+      await base44.auth.updateMe({ reiki_schedule: next });
+      setSchedule(next);
     } catch (e) {
     } finally {
       setSaving(false);
     }
   };
 
-  const removeReminder = async (idx) => {
-    const updated = reminders.filter((_, i) => i !== idx);
-    setSaving(true);
-    try {
-      await base44.auth.updateMe({ reiki_reminders: updated });
-      setReminders(updated);
-    } catch (e) {
-    } finally {
-      setSaving(false);
+  const saveDay = (dateStr, sessions) => {
+    let next = schedule.filter((e) => e.date !== dateStr);
+    if (sessions && sessions.length) {
+      next = [...next, { date: dateStr, sessions }];
     }
+    persist(next);
   };
+
+  const sessionsFor = (dateStr) =>
+    schedule.find((e) => e.date === dateStr)?.sessions || [];
+
+  const monthStart = startOfMonth(cursor);
+  const monthEnd = endOfMonth(cursor);
+  const gridStart = startOfWeek(monthStart, { weekStartsOn: 1 });
+  const gridEnd = endOfWeek(monthEnd, { weekStartsOn: 1 });
+  const days = eachDayOfInterval({ start: gridStart, end: gridEnd });
+
+  const totalSessions = schedule.reduce((a, e) => a + (e.sessions?.length || 0), 0);
 
   return (
     <div className="space-y-7">
       <header className="text-center pt-2">
         <div className="w-14 h-14 mx-auto rounded-full bg-gradient-to-br from-primary to-glow-cyan flex items-center justify-center neon-glow mb-3">
-          <CalendarClock className="w-7 h-7 text-primary-foreground" />
+          <CalendarDays className="w-7 h-7 text-primary-foreground" />
         </div>
         <h1 className="font-display text-2xl font-semibold">Agenda Reiki</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Programa tus sesiones de Reiki y recibe recordatorios para mantener tu práctica sagrada.
+          Toca cualquier día para programar tus sesiones por hora y etiqueta.
         </p>
       </header>
 
-      {/* Crear recordatorio */}
-      <section className="rounded-2xl border border-primary/20 bg-card/50 p-5 space-y-4">
-        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Nuevo recordatorio</h2>
+      {/* Resumen */}
+      <div className="grid grid-cols-2 gap-3">
+        <div className="rounded-2xl border border-glow/15 bg-card/50 p-4 text-center">
+          <p className="text-2xl font-display font-semibold text-primary">{loading ? "–" : totalSessions}</p>
+          <p className="text-xs text-muted-foreground mt-0.5">Sesiones programadas</p>
+        </div>
+        <div className="rounded-2xl border border-glow/15 bg-card/50 p-4 text-center">
+          <p className="text-2xl font-display font-semibold text-primary">{loading ? "–" : schedule.length}</p>
+          <p className="text-xs text-muted-foreground mt-0.5">Días con práctica</p>
+        </div>
+      </div>
 
-        <div className="space-y-3">
-          <div>
-            <label className="text-xs text-muted-foreground mb-1.5 block">Día de la semana</label>
-            <div className="grid grid-cols-7 gap-1.5">
-              {DAYS.map((d, i) => (
-                <button
-                  key={d}
-                  onClick={() => setSelectedDay(String(i + 1))}
-                  className={`py-2 rounded-xl border text-xs font-medium transition-all ${
-                    selectedDay === String(i + 1)
-                      ? "border-primary bg-primary/15 text-primary neon-glow"
-                      : "border-white/10 bg-accent/30 text-muted-foreground hover:border-primary/30"
-                  }`}
-                >
-                  {d}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <label className="text-xs text-muted-foreground mb-1.5 block">Hora</label>
-            <input
-              type="time"
-              value={selectedTime}
-              onChange={(e) => setSelectedTime(e.target.value)}
-              className="w-full p-3 rounded-2xl border border-glow/20 bg-card/50 text-sm focus:outline-none focus:border-primary transition-colors"
-            />
-          </div>
-
+      {/* Calendario */}
+      <section className="rounded-3xl border border-glow/20 bg-card/50 p-4">
+        {/* Navegación de mes */}
+        <div className="flex items-center justify-between mb-4">
           <button
-            onClick={addReminder}
-            disabled={!selectedDay || saving}
-            className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-primary to-glow-cyan text-primary-foreground font-medium neon-glow flex items-center justify-center gap-2 active:scale-[0.99] transition-transform disabled:opacity-40 disabled:cursor-not-allowed"
+            onClick={() => setCursor((c) => addMonths(c, -1))}
+            className="w-9 h-9 rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+            aria-label="Mes anterior"
           >
-            <Plus className="w-4 h-4" />
-            Agregar a mi agenda
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <h2 className="font-display text-lg font-semibold capitalize">
+            {format(cursor, "MMMM yyyy", { locale: es })}
+          </h2>
+          <button
+            onClick={() => setCursor((c) => addMonths(c, 1))}
+            className="w-9 h-9 rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+            aria-label="Mes siguiente"
+          >
+            <ChevronRight className="w-5 h-5" />
           </button>
         </div>
-      </section>
 
-      {/* Lista de recordatorios */}
-      <section className="space-y-3">
-        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Mis recordatorios</h2>
+        {/* Encabezados de día */}
+        <div className="grid grid-cols-7 gap-1 mb-1.5">
+          {WD.map((d, i) => (
+            <div key={i} className="text-center text-[11px] font-medium text-muted-foreground/70 py-1">
+              {d}
+            </div>
+          ))}
+        </div>
 
+        {/* Cuadrícula de días */}
         {loading ? (
-          <div className="h-20 rounded-2xl bg-card/50 animate-pulse" />
-        ) : reminders.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-white/10 bg-card/30 p-8 text-center">
-            <Bell className="w-8 h-8 mx-auto text-muted-foreground/40 mb-2" />
-            <p className="text-sm text-muted-foreground">Aún no tienes recordatorios.</p>
-            <p className="text-xs text-muted-foreground/60 mt-1">Crea uno arriba para empezar a cuidar tu práctica.</p>
+          <div className="grid grid-cols-7 gap-1">
+            {[...Array(35)].map((_, i) => (
+              <div key={i} className="aspect-square rounded-xl bg-accent/20 animate-pulse" />
+            ))}
           </div>
         ) : (
-          <div className="space-y-2.5">
-            {reminders
-              .slice()
-              .sort((a, b) => Number(a.day) - Number(b.day) || a.time.localeCompare(b.time))
-              .map((r, idx) => {
-                const origIdx = reminders.indexOf(r);
-                return (
-                  <div
-                    key={idx}
-                    className="flex items-center justify-between rounded-2xl border border-glow/20 bg-card/50 p-4"
+          <div className="grid grid-cols-7 gap-1">
+            {days.map((day) => {
+              const dateStr = format(day, "yyyy-MM-dd");
+              const inMonth = isSameMonth(day, cursor);
+              const today = isToday(day);
+              const daySessions = sessionsFor(dateStr);
+              const hasSessions = daySessions.length > 0;
+              return (
+                <button
+                  key={dateStr}
+                  onClick={() => setDialogDate(dateStr)}
+                  className={`aspect-square rounded-xl border flex flex-col items-center justify-center gap-0.5 transition-all relative ${
+                    today
+                      ? "border-primary bg-primary/10"
+                      : hasSessions
+                      ? "border-glow/30 bg-accent/40 hover:border-primary/50"
+                      : "border-white/5 bg-background/30 hover:border-glow/30"
+                  } ${!inMonth ? "opacity-30" : ""}`}
+                >
+                  <span
+                    className={`text-xs font-medium tabular-nums ${
+                      today ? "text-primary" : hasSessions ? "text-foreground" : "text-muted-foreground"
+                    }`}
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
-                        <Bell className="w-4 h-4 text-primary" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium">{FULL_DAYS[Number(r.day) - 1]}</p>
-                        <p className="text-xs text-muted-foreground tabular-nums">{r.time}</p>
-                      </div>
+                    {format(day, "d")}
+                  </span>
+                  {hasSessions && (
+                    <div className="flex gap-0.5 flex-wrap justify-center max-w-[80%]">
+                      {daySessions.slice(0, 3).map((s, i) => (
+                        <span
+                          key={i}
+                          className="w-1 h-1 rounded-full bg-primary"
+                        />
+                      ))}
+                      {daySessions.length > 3 && (
+                        <span className="text-[8px] text-primary leading-none">+</span>
+                      )}
                     </div>
-                    <button
-                      onClick={() => removeReminder(origIdx)}
-                      disabled={saving}
-                      className="w-9 h-9 rounded-full flex items-center justify-center text-muted-foreground hover:bg-destructive/20 hover:text-destructive transition-colors disabled:opacity-40"
-                      aria-label="Eliminar"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                );
-              })}
+                  )}
+                </button>
+              );
+            })}
           </div>
         )}
+
+        <p className="text-[11px] text-muted-foreground/60 text-center mt-3">
+          {saving ? "Guardando..." : "Los puntos indican sesiones programadas ese día."}
+        </p>
       </section>
+
+      {/* Próximas sesiones */}
+      {!loading && totalSessions > 0 && (
+        <section className="space-y-3">
+          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Próximas sesiones</h2>
+          <div className="space-y-2.5">
+            {schedule
+              .filter((e) => e.date >= format(new Date(), "yyyy-MM-dd"))
+              .sort((a, b) => a.date.localeCompare(b.date))
+              .flatMap((e) =>
+                e.sessions.map((s, i) => ({ ...s, date: e.date, key: `${e.date}-${i}` }))
+              )
+              .slice(0, 5)
+              .map((s) => (
+                <div
+                  key={s.key}
+                  className="flex items-center gap-3 rounded-2xl border border-glow/15 bg-card/50 p-3.5"
+                >
+                  <div className="w-11 h-11 rounded-full bg-primary/15 flex flex-col items-center justify-center shrink-0">
+                    <span className="text-[10px] text-muted-foreground uppercase">
+                      {parseISO(s.date + "T00:00:00").toLocaleDateString("es-MX", { weekday: "short" })}
+                    </span>
+                    <span className="text-sm font-semibold text-primary leading-none">
+                      {parseISO(s.date + "T00:00:00").getDate()}
+                    </span>
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium truncate">{s.label}</p>
+                    <p className="text-xs text-muted-foreground tabular-nums flex items-center gap-1">
+                      <Clock className="w-3 h-3" /> {s.time}
+                    </p>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </section>
+      )}
+
+      {dialogDate && (
+        <AgendaDayDialog
+          dateStr={dialogDate}
+          sessions={sessionsFor(dialogDate)}
+          onClose={() => setDialogDate(null)}
+          onSave={(sessions) => saveDay(dialogDate, sessions)}
+        />
+      )}
     </div>
   );
 }
