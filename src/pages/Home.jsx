@@ -142,40 +142,40 @@ export default function Home() {
 
       {/* Práctica de hoy */}
       <section className="rounded-2xl border border-primary/20 bg-primary/5 p-4">
-        <div className="flex items-center justify-between gap-3">
-          <div className="min-w-0">
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0 flex-1">
             <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">Tu práctica de hoy</p>
             <p className="font-display text-lg font-semibold mt-0.5 leading-snug">
               {getDailyPhrase()}
             </p>
           </div>
-        </div>
-        <div className="mt-3 space-y-2.5">
-          {todaySessions.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {todaySessions.map((s, i) => (
-                <span
-                  key={i}
-                  className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs text-muted-foreground"
-                  style={{ borderColor: "rgba(45, 212, 191, 0.45)", background: "rgba(45, 212, 191, 0.08)" }}
-                >
-                  <Clock className="w-3.5 h-3.5" style={{ color: "rgb(94, 234, 212)" }} /> {s.time}
-                  <Sparkles className="w-3 h-3" style={{ color: "rgb(94, 234, 212)" }} /> {s.label || "Reiki"}
-                </span>
-              ))}
-            </div>
-          )}
-          <div className="flex flex-wrap gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
-              <Calendar className="w-3.5 h-3.5 text-primary" /> Día {currentDay} · 21 días
-            </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
-              <Clock className="w-3.5 h-3.5 text-primary" /> {todayJourney.config.minutes} min
-            </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
-              <AudioIcon className="w-3.5 h-3.5 text-primary" /> {audio.name}
-            </span>
+          <div className="shrink-0 border-l border-white/10 pl-4 text-right max-w-[45%]">
+            <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/80 font-body">Agenda hoy</p>
+            {todaySessions.length > 0 ? (
+              <div className="mt-1 space-y-1">
+                {todaySessions.map((s, i) => (
+                  <div key={i} className="font-body text-xs leading-snug" style={{ color: "rgb(94, 234, 212)" }}>
+                    <span className="tabular-nums font-semibold">{s.time}</span>
+                    <span className="text-muted-foreground/70"> · </span>
+                    {s.label || "Reiki"}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="font-body text-xs text-muted-foreground/60 mt-1">Sin sesiones</p>
+            )}
           </div>
+        </div>
+        <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-white/5">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
+            <Calendar className="w-3.5 h-3.5 text-primary" /> Día {currentDay} · 21 días
+          </span>
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
+            <Clock className="w-3.5 h-3.5 text-primary" /> {todayJourney.config.minutes} min
+          </span>
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
+            <AudioIcon className="w-3.5 h-3.5 text-primary" /> {audio.name}
+          </span>
         </div>
       </section>
 
