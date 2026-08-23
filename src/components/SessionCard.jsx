@@ -14,14 +14,9 @@ export default function SessionCard({ session }) {
         <Icon className="w-5 h-5 text-primary" />
       </div>
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          <p className="text-sm font-medium capitalize">
-            {session.mode === "guided" ? "Guiada" : "No guiada"}
-          </p>
-          <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-accent text-muted-foreground capitalize">
-            {session.level === "beginner" ? "Principiante" : "Intermedio"}
-          </span>
-        </div>
+        <p className="text-sm font-medium capitalize">
+          {session.mode === "guided" ? "Guiada" : "No guiada"}
+        </p>
         <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1.5">
           <Calendar className="w-3 h-3" />
           {moment(session.created_date).format("DD MMM, HH:mm")} · {audioNames[session.audio]} · {mins} min
