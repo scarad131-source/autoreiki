@@ -103,12 +103,20 @@ export default function Home() {
         <p className="text-sm text-muted-foreground mt-3 leading-relaxed max-w-sm">
           Auto-Reiki guiado, a tu ritmo y con una señal clara en cada paso.
         </p>
-        <button
-          onClick={() => navigate("/meditar")}
-          className="mt-6 rounded-full bg-gradient-to-r from-amber-light to-primary text-primary-foreground font-semibold px-7 py-3 neon-glow active:scale-[0.99] transition-transform"
-        >
-          Comenzar a meditar
-        </button>
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+          <button
+            onClick={() => navigate("/meditar")}
+            className="rounded-full bg-gradient-to-r from-amber-light to-primary text-primary-foreground font-semibold px-7 py-3 neon-glow active:scale-[0.99] transition-transform"
+          >
+            Comenzar a meditar
+          </button>
+          <button
+            onClick={() => navigate("/configurar")}
+            className="rounded-full border border-primary/40 bg-card/60 text-foreground font-semibold px-7 py-3 hover:bg-accent active:scale-[0.99] transition-transform"
+          >
+            Sesión de Reiki
+          </button>
+        </div>
       </section>
 
       {/* Práctica de hoy */}
