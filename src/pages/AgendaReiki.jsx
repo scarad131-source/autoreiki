@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { CalendarDays, ChevronLeft, ChevronRight, Clock } from "lucide-react";
+import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import AgendaDayDialog from "@/components/AgendaDayDialog";
-import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, addMonths, isSameMonth, isToday, parseISO } from "date-fns";
+import AgendaHistory from "@/components/AgendaHistory";
+import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, addMonths, isSameMonth, isToday } from "date-fns";
 import { es } from "date-fns/locale";
 
 const WD = ["L", "M", "M", "J", "V", "S", "D"];
@@ -178,42 +179,8 @@ export default function AgendaReiki() {
         </p>
       </section>
 
-      {/* Próximas sesiones */}
-      {!loading && totalSessions > 0 && (
-        <section className="space-y-3">
-          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Próximas sesiones</h2>
-          <div className="space-y-2.5">
-            {schedule
-              .filter((e) => e.date >= format(new Date(), "yyyy-MM-dd"))
-              .sort((a, b) => a.date.localeCompare(b.date))
-              .flatMap((e) =>
-                e.sessions.map((s, i) => ({ ...s, date: e.date, key: `${e.date}-${i}` }))
-              )
-              .slice(0, 5)
-              .map((s) => (
-                <div
-                  key={s.key}
-                  className="flex items-center gap-3 rounded-2xl border border-glow/15 bg-card/50 p-3.5"
-                >
-                  <div className="w-11 h-11 rounded-full bg-primary/15 flex flex-col items-center justify-center shrink-0">
-                    <span className="text-[10px] text-muted-foreground uppercase">
-                      {parseISO(s.date + "T00:00:00").toLocaleDateString("es-MX", { weekday: "short" })}
-                    </span>
-                    <span className="text-sm font-semibold text-primary leading-none">
-                      {parseISO(s.date + "T00:00:00").getDate()}
-                    </span>
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium truncate">{s.label}</p>
-                    <p className="text-xs text-muted-foreground tabular-nums flex items-center gap-1">
-                      <Clock className="w-3 h-3" /> {s.time}
-                    </p>
-                  </div>
-                </div>
-              ))}
-          </div>
-        </section>
-      )}
+      {/* Historial de agenda */}
+      {!loading && <AgendaHistory schedule={schedule} />}
 
       {dialogDate && (
         <AgendaDayDialog
