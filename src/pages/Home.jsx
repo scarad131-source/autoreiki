@@ -196,8 +196,8 @@ export default function Home() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-3xl font-display font-semibold leading-none">
-              {loading ? "–" : streak}
-              <span className="text-sm font-body font-normal text-muted-foreground ml-2">días consecutivos</span>
+              {loading ? "–" : journeyProgress}
+              <span className="text-sm font-body font-normal text-muted-foreground ml-2">/ 21 días del recorrido</span>
             </p>
             <p className="text-sm text-foreground/80 mt-1.5 leading-snug">{loading ? "" : msg.title}</p>
             <p className="text-xs text-muted-foreground leading-snug">{loading ? "" : msg.body}</p>
