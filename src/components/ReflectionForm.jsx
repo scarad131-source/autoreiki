@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check, RotateCcw } from "lucide-react";
+import { Check, RotateCcw, BookOpen } from "lucide-react";
 
 const MOOD_AFTER = [
   { id: "relaxed", label: "Relajado", emoji: "🌿" },
@@ -66,12 +66,21 @@ export default function ReflectionForm({ config, actualSeconds, onSave, onRepeat
         />
       </section>
 
-      <button
-        onClick={() => onSave({ moodAfter, notes })}
-        className="w-full py-4 rounded-2xl bg-gradient-to-r from-primary to-glow-cyan text-primary-foreground font-medium neon-glow hover:scale-[1.01] transition-transform active:scale-[0.99]"
-      >
-        Guardar sesión
-      </button>
+      <div className="space-y-3">
+        <button
+          onClick={() => onSave({ moodAfter, notes })}
+          className="w-full py-4 rounded-2xl bg-gradient-to-r from-primary to-glow-cyan text-primary-foreground font-medium neon-glow hover:scale-[1.01] transition-transform active:scale-[0.99]"
+        >
+          Guardar sesión
+        </button>
+        <button
+          onClick={() => onSave({ moodAfter, notes }, "/diario")}
+          className="w-full py-3.5 rounded-2xl border border-primary/40 bg-card/60 text-foreground font-medium hover:bg-accent active:scale-[0.99] transition-colors flex items-center justify-center gap-2"
+        >
+          <BookOpen className="w-4 h-4" />
+          Guardar y ir a mi diario
+        </button>
+      </div>
     </div>
   );
 }

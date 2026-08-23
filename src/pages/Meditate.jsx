@@ -55,7 +55,7 @@ export default function Meditate() {
     setStage("reflection");
   };
 
-  const save = async ({ moodAfter, notes }) => {
+  const save = async ({ moodAfter, notes }, to = "/") => {
     try {
       await base44.entities.MeditationSession.create({
         mode: config.mode,
@@ -74,7 +74,7 @@ export default function Meditate() {
 
 
       // ignore save errors
-    }navigate("/");};
+    }navigate(to);};
 
   if (stage === "running" && config) {
     return <MeditationRunner config={config} onFinish={finish} onCancel={() => setStage("setup")} />;
