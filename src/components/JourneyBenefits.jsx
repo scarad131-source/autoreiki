@@ -38,7 +38,7 @@ function Card({ item }) {
 
 export default function JourneyBenefits() {
   return (
-    <section className="space-y-6 rounded-3xl border border-primary/30 bg-gradient-to-b from-primary/5 to-transparent p-5 neon-glow">
+    <section className="space-y-6 rounded-3xl border border-primary/30 bg-gradient-to-b from-primary/5 to-transparent p-5 neon-glow hidden">
       <div className="text-center">
         <p className="text-[11px] tracking-[0.28em] uppercase text-primary font-medium">Reto de 21 días</p>
         <h2 className="font-display text-2xl font-semibold tracking-tight mt-1.5">
