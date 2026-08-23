@@ -184,7 +184,7 @@ export default function Home() {
       </section>
 
       {/* Semana */}
-      {!loading && sessions.length > 0 && <WeeklyStats sessions={sessions} timezone={tz} />}
+      {!loading && sessions.length > 0 && <WeeklyStats sessions={sessions} diaryEntries={diaryEntries} journeyProgress={journey} timezone={tz} />}
 
       {/* Tu perfil */}
       <section className="space-y-5">

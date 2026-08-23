@@ -1,11 +1,12 @@
 import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { Clock, Activity } from "lucide-react";
-import { localDayKey } from "@/lib/journey";
+import { localDayKey, computeActiveDays } from "@/lib/journey";
 
 const DAYS = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
 
-function buildWeek(sessions, timezone) {
+function buildWeek(sessions, diaryEntries, journeyProgress, timezone) {
   const today = new Date();
+  const activeDays = computeActiveDays(sessions, diaryEntries, journeyProgress, timezone);
   const data = [];
   for (let i = 6; i >= 0; i--) {
     const d = new Date(today);
@@ -14,7 +15,7 @@ function buildWeek(sessions, timezone) {
     const mins = (sessions || [])
       .filter((s) => localDayKey(s.created_date, timezone) === key)
       .reduce((sum, s) => sum + Math.round((s.actual_seconds || 0) / 60), 0);
-    data.push({ day: DAYS[d.getDay()], mins, active: mins > 0 });
+    data.push({ day: DAYS[d.getDay()], mins, active: activeDays.has(key) });
   }
   return data;
 }
@@ -48,8 +49,8 @@ function ConsistencyRing({ percent, days }) {
   );
 }
 
-export default function WeeklyStats({ sessions, timezone }) {
-  const data = buildWeek(sessions, timezone);
+export default function WeeklyStats({ sessions, diaryEntries, journeyProgress, timezone }) {
+  const data = buildWeek(sessions, diaryEntries, journeyProgress, timezone);
   const totalMin = data.reduce((sum, d) => sum + d.mins, 0);
   const activeDays = data.filter((d) => d.active).length;
   const consistency = Math.round((activeDays / 7) * 100);
