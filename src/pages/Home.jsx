@@ -85,7 +85,7 @@ export default function Home() {
         <div className="min-w-0">
           <p className="text-[11px] tracking-[0.28em] uppercase text-primary/80 font-medium">AutoReiki</p>
           <h1 className="font-display text-[26px] font-semibold tracking-tight leading-tight mt-1.5">
-            {greeting()}, {firstName}
+            Bienvenido(a), {firstName}
           </h1>
         </div>
         <div className="shrink-0 flex items-center gap-1.5 rounded-full border border-primary/40 bg-card px-3 py-1.5">
