@@ -33,7 +33,7 @@ export default function Recorrido() {
   const streak = computeStreak(sessions, tz);
   const completedDays = new Set((progress || []).map((p) => p.day_number));
   const completedCount = completedDays.size;
-  const currentDay = Math.min(streak + 1, 21);
+  const currentDay = Math.min(completedCount + 1, 21);
   const percent = Math.round((completedCount / 21) * 100);
 
   const progressText =
