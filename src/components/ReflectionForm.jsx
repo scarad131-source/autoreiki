@@ -78,7 +78,7 @@ export default function ReflectionForm({ config, actualSeconds, onSave, onRepeat
           className="w-full py-3.5 rounded-2xl border border-primary/40 bg-card/60 text-foreground font-medium hover:bg-accent active:scale-[0.99] transition-colors flex items-center justify-center gap-2"
         >
           <BookOpen className="w-4 h-4" />
-          Guardar y ir a mi diario
+          Guardar / Ir a mi diario
         </button>
       </div>
     </div>
