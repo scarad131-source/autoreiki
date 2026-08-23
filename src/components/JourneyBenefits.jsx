@@ -37,40 +37,7 @@ function Card({ item }) {
 }
 
 export default function JourneyBenefits() {
-  return (
-    <section className="space-y-6 rounded-3xl border border-primary/30 bg-gradient-to-b from-primary/5 to-transparent p-5 neon-glow hidden">
-      <div className="text-center">
-        <p className="text-[11px] tracking-[0.28em] uppercase text-primary font-medium">Reto de 21 días</p>
-        <h2 className="font-display text-2xl font-semibold tracking-tight mt-1.5">
-          Beneficios principales de meditar 21 días seguidos
-        </h2>
-      </div>
-
-      <div>
-        <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-          Beneficios psicológicos y emocionales
-        </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {PSICOLOGICOS.map((item) =>
-          <Card key={item.title} item={item} />
-          )}
-        </div>
-      </div>
-
-      <div>
-        <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-          Beneficios físicos
-        </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {FISICOS.map((item) =>
-          <Card key={item.title} item={item} />
-          )}
-        </div>
-      </div>
-
-      
+  return null;
 
 
 
@@ -83,7 +50,40 @@ export default function JourneyBenefits() {
 
 
 
-      
-    </section>);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
