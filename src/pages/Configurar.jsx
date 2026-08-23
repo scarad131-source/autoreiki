@@ -66,7 +66,7 @@ export default function Configurar() {
       </header>
 
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold">2 · Zonas a tratar</h2>
+        <h2 className="text-sm font-semibold">Zonas a tratar</h2>
         <button
           onClick={selectAll}
           className="text-sm text-purple font-medium hover:underline">
