@@ -7,9 +7,9 @@ import { IMAGES } from "@/lib/assets";
 
 const navItems = [
   { to: "/", label: "Inicio", icon: Star, end: true },
-  { to: "/configurar", label: "Mi sesión", icon: SlidersHorizontal },
   { to: "/meditar", label: "Meditar", icon: LotusIcon },
   { to: "/recorrido", label: "21 días", icon: CalendarDays },
+  { to: "/configurar", label: "Mi sesión", icon: SlidersHorizontal },
   { to: "/agenda-reiki", label: "Agenda", icon: CalendarClock },
 ];
 
