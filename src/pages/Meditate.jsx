@@ -81,26 +81,26 @@ export default function Meditate() {
         <p className="text-muted-foreground mt-1 [font-family:'Bodoni_Moda',_serif] text-xl">Configura tu espacio sagrado</p>
       </header>
 
-      <section className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <button
-          onClick={() => setShowBenefits((v) => !v)}
-          className={`text-left p-4 rounded-2xl border transition-colors active:scale-[0.99] ${
-            showBenefits ? "border-primary bg-accent neon-glow" : "border-primary/40 bg-primary/5 hover:bg-primary/10"
-          }`}>
-          <p className="font-display text-lg font-semibold text-primary">Iniciar reto de 21 días</p>
-          <p className="text-xs text-muted-foreground mt-1 leading-snug">Sigue el recorrido guiado día a día.</p>
-        </button>
-        <button
-          onClick={() => setMeditarHoy(true)}
-          className={`text-left p-4 rounded-2xl border transition-colors active:scale-[0.99] ${
-            meditarHoy ? "border-primary bg-accent neon-glow" : "border-white/10 bg-card/60 hover:border-primary/30"
-          }`}>
-          <p className="font-display text-lg font-semibold">Solo necesito meditar hoy</p>
-          <p className="text-xs text-muted-foreground mt-1 leading-snug">Configura una sesión a tu medida.</p>
-        </button>
-      </section>
+      {!meditarHoy && (
+        <section className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <button
+            onClick={() => setShowBenefits((v) => !v)}
+            className={`text-left p-4 rounded-2xl border transition-colors active:scale-[0.99] ${
+              showBenefits ? "border-primary bg-accent neon-glow" : "border-primary/40 bg-primary/5 hover:bg-primary/10"
+            }`}>
+            <p className="font-display text-lg font-semibold text-primary">Iniciar reto de 21 días</p>
+            <p className="text-xs text-muted-foreground mt-1 leading-snug">Sigue el recorrido guiado día a día.</p>
+          </button>
+          <button
+            onClick={() => { setMeditarHoy(true); setShowBenefits(false); }}
+            className="text-left p-4 rounded-2xl border border-white/10 bg-card/60 hover:border-primary/30 transition-colors active:scale-[0.99]">
+            <p className="font-display text-lg font-semibold">Solo necesito meditar hoy</p>
+            <p className="text-xs text-muted-foreground mt-1 leading-snug">Configura una sesión a tu medida.</p>
+          </button>
+        </section>
+      )}
 
-      {showBenefits && (
+      {showBenefits && !meditarHoy && (
         <>
           <JourneyBenefits />
           <button
