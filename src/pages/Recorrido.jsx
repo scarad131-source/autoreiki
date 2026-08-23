@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { JOURNEY, computeActiveDays } from "@/lib/journey";
-import { Check } from "lucide-react";
+import { Check, ChevronLeft } from "lucide-react";
 import JourneyBenefits from "@/components/JourneyBenefits";
 
 const WEEKDAYS = ["L", "M", "M", "J", "V", "S", "D"];
@@ -35,7 +35,16 @@ export default function Recorrido() {
 
   return (
     <div className="space-y-7">
-      <header className="text-center pt-2">
+      <div className="flex items-center -ml-1">
+        <button
+          onClick={() => navigate(-1)}
+          className="w-10 h-10 rounded-full bg-card border border-white/5 flex items-center justify-center hover:border-primary/30 transition-colors"
+          aria-label="Atrás"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+      </div>
+      <header className="text-center pt-0">
         <h1 className="font-display text-2xl font-semibold tracking-tight">Recorrido de 21 días</h1>
         <p className="text-sm text-muted-foreground mt-1">Un viaje guiado día a día hacia tu práctica constante.</p>
       </header>

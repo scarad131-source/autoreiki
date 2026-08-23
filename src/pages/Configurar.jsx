@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ChevronLeft } from "lucide-react";
 import ChakraFigure from "@/components/ChakraFigure";
 import { AUDIO_SOURCES } from "@/lib/audioSources";
 import { CHAKRAS } from "@/lib/guidedScripts";
@@ -51,7 +51,16 @@ export default function Configurar() {
 
   return (
     <div className="space-y-7">
-      <header className="text-center pt-2">
+      <div className="flex items-center -ml-1">
+        <button
+          onClick={() => navigate(-1)}
+          className="w-10 h-10 rounded-full bg-card border border-white/5 flex items-center justify-center hover:border-primary/30 transition-colors"
+          aria-label="Atrás"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+      </div>
+      <header className="text-center pt-0">
         <h1 className="font-display text-[33px] font-semibold tracking-tight">Sesión de Reiki</h1>
         <p className="text-sm text-muted-foreground mt-1">Toca los chakras que quieras trabajar</p>
       </header>

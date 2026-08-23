@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { ChevronLeft } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import SessionForm from "@/components/SessionForm";
 import JourneyBenefits from "@/components/JourneyBenefits";
@@ -77,7 +78,16 @@ export default function Meditate() {
 
   return (
     <div className="space-y-7">
-      <header className="text-center pt-2">
+      <div className="flex items-center -ml-1">
+        <button
+          onClick={() => navigate(-1)}
+          className="w-10 h-10 rounded-full bg-card border border-white/5 flex items-center justify-center hover:border-primary/30 transition-colors"
+          aria-label="Atrás"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+      </div>
+      <header className="text-center pt-0">
         <p className="text-muted-foreground mt-1 [font-family:'Bodoni_Moda',_serif] text-xl">Configura tu espacio sagrado</p>
       </header>
 
