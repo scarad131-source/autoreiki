@@ -56,15 +56,16 @@ export default function Configurar() {
         <p className="text-sm text-muted-foreground mt-1">Toca los chakras que quieras trabajar</p>
       </header>
 
-      <ChakraFigure selected={selected} onToggle={toggle} />
-
-      <div className="flex justify-center">
+      <div className="flex items-center justify-between">
+        <h2 className="text-sm font-semibold">2 · Zonas a tratar</h2>
         <button
           onClick={selectAll}
-          className="inline-flex py-2 px-4 rounded-full border border-primary/40 bg-card text-primary font-semibold text-xs uppercase tracking-[0.14em] hover:bg-accent transition-colors active:scale-[0.99]">
-          Seleccionar todos
+          className="text-sm text-purple font-medium hover:underline">
+          Todas
         </button>
       </div>
+
+      <ChakraFigure selected={selected} onToggle={toggle} />
 
       <section>
         <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Modo</h2>
