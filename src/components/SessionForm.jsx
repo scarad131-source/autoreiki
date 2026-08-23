@@ -22,7 +22,7 @@ export default function SessionForm({ onStart }) {
     onStart({
       mode,
       level: "intermediate",
-      audio: mode === "unguided" ? audio : "beach",
+      audio: mode === "unguided" ? audio : "meditation21",
       minutes: mode === "unguided" ? minutes : 20
     });
   };
