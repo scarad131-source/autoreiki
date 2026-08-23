@@ -21,6 +21,10 @@ export default function Meditate() {
   // Permite iniciar con un preset desde Recorrido o Configurar.
   useEffect(() => {
     const preset = location.state?.preset;
+    if (location.state?.meditarHoy) {
+      setMeditarHoy(true);
+      setShowBenefits(false);
+    }
     if (preset) {
       unlockSpeech();
       const cfg = { ...preset };

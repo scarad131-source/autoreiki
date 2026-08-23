@@ -80,7 +80,7 @@ export default function Recorrido() {
               <button
                 key={j.day}
                 disabled={done || !isCurrent}
-                onClick={isCurrent ? () => navigate("/meditar") : undefined}
+                onClick={isCurrent ? () => navigate("/meditar", { state: { meditarHoy: true } }) : undefined}
                 className={`aspect-square rounded-xl border flex flex-col items-center justify-center transition-all ${
                   done
                     ? "bg-primary/15 border-primary text-primary cursor-default opacity-70"
