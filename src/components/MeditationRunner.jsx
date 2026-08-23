@@ -9,7 +9,7 @@ import { Slider } from "@/components/ui/slider";
 
 export default function MeditationRunner({ config, onFinish, onCancel }) {
   const totalSeconds = config.minutes * 60;
-  const [countdown, setCountdown] = useState(config.audio === "meditation21" ? 0 : 3);
+  const [countdown, setCountdown] = useState(config.audio === "meditation21" ? 2 : 3);
   const [elapsed, setElapsed] = useState(0);
   const [paused, setPaused] = useState(false);
   const [volume, setVolume] = useState(0.5);
@@ -53,8 +53,14 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   useEffect(() => {
     const el = audioRef.current;
     if (!el) return;
-    el.volume = config.audio === "meditation21" ? (muted ? 0 : volume) : 0;
-    el.play().catch(() => {});
+    if (config.audio === "meditation21") {
+      // pre-roll: el audio se precarga sin reproducirse para no cortar la voz inicial
+      el.volume = muted ? 0 : volume;
+      el.load();
+    } else {
+      el.volume = 0;
+      el.play().catch(() => {});
+    }
     return () => {
       try { el.pause(); } catch (e) {}
     };
@@ -65,6 +71,11 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     const el = audioRef.current;
     if (!el || !started) return;
     el.volume = muted ? 0 : volume;
+    // Arranca el track de voz (21 días) tras el pre-roll, desde el inicio, sin cortar palabras
+    if (config.audio === "meditation21" && el.paused) {
+      el.currentTime = 0;
+      el.play().catch(() => {});
+    }
   }, [started, volume, muted]);
 
   // calcular paso actual guiado (solo para texto visual en pantalla)
