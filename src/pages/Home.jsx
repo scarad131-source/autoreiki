@@ -158,7 +158,7 @@ export default function Home() {
       </section>
 
       {/* Accesos rápidos */}
-      <nav className="grid grid-cols-2 gap-4">
+      <nav className="grid grid-cols-2 gap-4 mx-5">
         {quickActions.map(({ label, img, to }) =>
         <button
           key={to}
