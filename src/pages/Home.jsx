@@ -11,8 +11,7 @@ import { computeStreak, computeBestStreak, computeUnifiedStreak, getStreakMessag
 import { getDailyPhrase } from "@/lib/dailyPhrases";
 import { Image } from "@/components/ui/image";
 import { IMAGES } from "@/lib/assets";
-import { format, parseISO } from "date-fns";
-import { es } from "date-fns/locale";
+import { format } from "date-fns";
 
 const audioMeta = {
   beach: { name: "Mar tranquilo", icon: Sparkles },
@@ -77,15 +76,12 @@ export default function Home() {
   const audio = audioMeta[todayJourney.config.audio] || audioMeta.healing;
   const AudioIcon = audio.icon;
 
-  // Próxima terapia: agenda Reiki con fecha próxima, o día actual del reto de 21 días
+  // Terapias agendadas para hoy (agenda Reiki)
   const todayStr = format(new Date(), "yyyy-MM-dd");
   const schedule = user?.reiki_schedule || [];
-  const upcomingAgenda = schedule
-    .filter((e) => e.date >= todayStr && e.sessions?.length)
-    .sort((a, b) => a.date.localeCompare(b.date))[0];
-  const nextSession = upcomingAgenda?.sessions?.slice().sort((a, b) => a.time.localeCompare(b.time))[0];
-  const agendaDate = upcomingAgenda ? parseISO(upcomingAgenda.date + "T00:00:00") : null;
-  const showAgenda = !!upcomingAgenda;
+  const todaySessions = (schedule.find((e) => e.date === todayStr)?.sessions || [])
+    .slice()
+    .sort((a, b) => a.time.localeCompare(b.time));
 
   const quickActions = [
   { label: "Diario", img: IMAGES.diarioBtn, to: "/diario" },
@@ -154,32 +150,32 @@ export default function Home() {
             </p>
           </div>
         </div>
-        <div className="flex flex-wrap gap-2 mt-3">
-          {showAgenda ? (
-            <>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
-                <Calendar className="w-3.5 h-3.5 text-primary" /> {format(agendaDate, "d MMM", { locale: es })}
-              </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
-                <Clock className="w-3.5 h-3.5 text-primary" /> {nextSession?.time}
-              </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
-                <Sparkles className="w-3.5 h-3.5 text-primary" /> Reiki
-              </span>
-            </>
-          ) : (
-            <>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
-                <Clock className="w-3.5 h-3.5 text-primary" /> {todayJourney.config.minutes} min
-              </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
-                <AudioIcon className="w-3.5 h-3.5 text-primary" /> {audio.name}
-              </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
-                <Calendar className="w-3.5 h-3.5 text-primary" /> Día {currentDay}
-              </span>
-            </>
+        <div className="mt-3 space-y-2.5">
+          {todaySessions.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {todaySessions.map((s, i) => (
+                <span
+                  key={i}
+                  className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs text-muted-foreground"
+                  style={{ borderColor: "rgba(45, 212, 191, 0.45)", background: "rgba(45, 212, 191, 0.08)" }}
+                >
+                  <Clock className="w-3.5 h-3.5" style={{ color: "rgb(94, 234, 212)" }} /> {s.time}
+                  <Sparkles className="w-3 h-3" style={{ color: "rgb(94, 234, 212)" }} /> {s.label || "Reiki"}
+                </span>
+              ))}
+            </div>
           )}
+          <div className="flex flex-wrap gap-2">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
+              <Calendar className="w-3.5 h-3.5 text-primary" /> Día {currentDay} · 21 días
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
+              <Clock className="w-3.5 h-3.5 text-primary" /> {todayJourney.config.minutes} min
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
+              <AudioIcon className="w-3.5 h-3.5 text-primary" /> {audio.name}
+            </span>
+          </div>
         </div>
       </section>
 
