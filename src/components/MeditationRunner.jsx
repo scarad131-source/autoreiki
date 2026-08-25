@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { ArrowLeft, Pause, Play, Square, Volume2, VolumeX, BellRing, Headphones } from "lucide-react";
+import { ArrowLeft, Pause, Play, Square, Volume2, VolumeX, BellRing, Headphones, Rewind, RotateCcw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { RELEASE_SCRIPTS, CHAKRAS } from "@/lib/guidedScripts";
 import { ambient } from "@/lib/audioEngine";
@@ -161,6 +161,24 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     onFinish({ actualSeconds: elapsed, completed: elapsed >= totalSeconds * 0.5 });
   };
 
+  // Retroceder 10s (solo guiada): regresa el audio y el temporizador, sin adelantar
+  const handleRewind = () => {
+    const el = audioRef.current;
+    setElapsed((e) => Math.max(0, e - 10));
+    if (el) {
+      try { el.currentTime = Math.max(0, (el.currentTime || 0) - 10); } catch (err) {}
+    }
+  };
+
+  // Reiniciar (solo guiada): vuelve al inicio del audio y del temporizador
+  const handleRestart = () => {
+    const el = audioRef.current;
+    setElapsed(0);
+    if (el) {
+      try { el.currentTime = 0; } catch (err) {}
+    }
+  };
+
   return (
     <div className="flex flex-col items-center min-h-[70vh] justify-between py-6">
       <audio
@@ -240,6 +258,30 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
           </>
         }
       </div>
+
+      {/* controles de retroceso / reinicio (solo sesiones guiadas) */}
+      {isGuided && started && (
+        <div className="flex items-center justify-center gap-3 mb-3">
+          <button
+            onClick={handleRewind}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/10 bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors text-xs"
+            aria-label="Retroceder 10 segundos"
+            title="Retroceder 10s"
+          >
+            <Rewind className="w-3.5 h-3.5" />
+            <span>10s</span>
+          </button>
+          <button
+            onClick={handleRestart}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/10 bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors text-xs"
+            aria-label="Reiniciar meditación"
+            title="Reiniciar"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>Reiniciar</span>
+          </button>
+        </div>
+      )}
 
       {/* barra de progreso */}
       <div className="w-full h-1 bg-accent rounded-full overflow-hidden mb-6">
