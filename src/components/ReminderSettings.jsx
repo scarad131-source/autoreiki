@@ -1,12 +1,34 @@
 import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { Bell, BellOff, Clock } from "lucide-react";
+import { Bell, BellOff, Clock, Trash2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 
 export default function ReminderSettings({ user, onSaved }) {
   const [enabled, setEnabled] = useState(!!user?.reminder_enabled);
   const [time, setTime] = useState(user?.reminder_time || "09:00");
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState(null); // null | "saved"
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    setDeleting(true);
+    try {
+      await base44.functions.invoke("deleteMyAccount", {});
+    } catch (e) {
+    } finally {
+      await base44.auth.logout("/login");
+    }
+  };
 
   useEffect(() => {
     setEnabled(!!user?.reminder_enabled);
@@ -95,6 +117,39 @@ export default function ReminderSettings({ user, onSaved }) {
           ? "Guardado ✓"
           : "Guardar recordatorio"}
       </button>
+
+      <div className="pt-4 mt-2 border-t border-white/5">
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <button
+              type="button"
+              className="w-full py-3 rounded-2xl border border-destructive/40 bg-destructive/10 text-destructive font-medium flex items-center justify-center gap-2 hover:bg-destructive/20 transition-colors active:scale-[0.99]"
+            >
+              <Trash2 className="w-4 h-4" />
+              Eliminar cuenta
+            </button>
+          </AlertDialogTrigger>
+          <AlertDialogContent className="max-w-sm rounded-3xl border-destructive/30">
+            <AlertDialogHeader>
+              <AlertDialogTitle>¿Eliminar tu cuenta?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Esta acción es permanente y borrará todo tu progreso, sesiones y
+                datos de AutoReiki. No podrás recuperarlo.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter className="flex-row gap-2">
+              <AlertDialogCancel className="mt-0">Cancelar</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleDelete}
+                disabled={deleting}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                {deleting ? "Eliminando…" : "Eliminar"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
     </section>
   );
 }

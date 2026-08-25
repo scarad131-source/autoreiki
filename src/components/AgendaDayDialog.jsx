@@ -41,10 +41,10 @@ export default function AgendaDayDialog({ dateStr, sessions, onClose, onSave }) 
           </div>
           <button
             onClick={onClose}
-            className="w-9 h-9 rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent transition-colors"
+            className="w-11 h-11 rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent transition-colors"
             aria-label="Cerrar"
           >
-            <X className="w-4 h-4" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 

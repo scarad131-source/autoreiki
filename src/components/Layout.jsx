@@ -21,7 +21,7 @@ export default function Layout() {
 
   return (
     <div className="min-h-svh flex flex-col">
-      <header className="sticky top-0 z-30 backdrop-blur-xl bg-background/70">
+      <header className="sticky top-0 z-30 backdrop-blur-xl bg-background/70 pt-[env(safe-area-inset-top)]">
         <div className="max-w-3xl mx-auto px-5 h-14 flex items-center justify-between">
           <div className="w-7 h-7 rounded-full overflow-hidden shrink-0">
             <Image src={IMAGES.logo} alt="AutoReiki" className="w-full h-full" fittingType="fill" />
@@ -40,7 +40,7 @@ export default function Layout() {
         <Outlet />
       </main>
 
-      <nav className="fixed bottom-0 inset-x-0 z-30 px-4 pb-4 pointer-events-none">
+      <nav className="fixed bottom-0 inset-x-0 z-30 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pointer-events-none">
         <div className="max-w-md mx-auto pointer-events-auto rounded-full border border-white/10 bg-card/80 backdrop-blur-xl px-2 py-2 flex items-center justify-around shadow-lg shadow-black/40">
           {navItems.map(({ to, label, icon: Icon, end }) => (
             <NavLink
