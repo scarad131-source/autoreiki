@@ -26,7 +26,7 @@ export default function AgendaHistory({ schedule }) {
   }
 
   const past = all.filter((e) => e.date < todayStr);
-  const upcoming = all.filter((e) => e.date >= todayStr);
+  const upcoming = all.filter((e) => e.date >= todayStr).sort((a, b) => a.date.localeCompare(b.date));
 
   const DayBlock = ({ entry, isPast }) => {
     const date = parseISO(entry.date + "T00:00:00");
