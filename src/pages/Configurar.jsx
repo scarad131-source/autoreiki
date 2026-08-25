@@ -117,7 +117,7 @@ export default function Configurar() {
       <section>
           <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Sonido ambiente</h2>
           <div className="grid grid-cols-2 gap-3">
-            {Object.values(AUDIO_SOURCES).filter((a) => a.id !== "meditation21").map((a) =>
+            {Object.values(AUDIO_SOURCES).filter((a) => a.id !== "meditation21" && a.id !== "reikiGuided").map((a) =>
           <button
             key={a.id}
             onClick={() => setAudio(a.id)}
