@@ -4,14 +4,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { RELEASE_SCRIPTS, CHAKRAS } from "@/lib/guidedScripts";
 import { ambient } from "@/lib/audioEngine";
 import BreathingOrb from "@/components/BreathingOrb";
-import { audioUrlFor } from "@/lib/audioSources";
+import { audioUrlFor, isVoiceTrack } from "@/lib/audioSources";
 import { Slider } from "@/components/ui/slider";
 
 export default function MeditationRunner({ config, onFinish, onCancel }) {
   const [audioDuration, setAudioDuration] = useState(null);
   // En meditaciones guiadas el temporizador coincide con la duración real del audio
-  const totalSeconds = config.audio === "meditation21" && audioDuration ? Math.round(audioDuration) : config.minutes * 60;
-  const [countdown, setCountdown] = useState(config.audio === "meditation21" ? 2 : 3);
+  const totalSeconds = isVoiceTrack(config.audio) && audioDuration ? Math.round(audioDuration) : config.minutes * 60;
+  const [countdown, setCountdown] = useState(isVoiceTrack(config.audio) ? 2 : 3);
   const [elapsed, setElapsed] = useState(0);
   const [paused, setPaused] = useState(false);
   const [volume, setVolume] = useState(0.5);
@@ -56,7 +56,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   useEffect(() => {
     const el = audioRef.current;
     if (!el) return;
-    if (config.audio === "meditation21") {
+    if (isVoiceTrack(config.audio)) {
       // pre-roll: el audio se precarga sin reproducirse para no cortar la voz inicial
       el.volume = muted ? 0 : volume;
       el.load();
@@ -75,7 +75,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     if (!el || !started) return;
     el.volume = muted ? 0 : volume;
     // Arranca el track de voz (21 días) tras el pre-roll, desde el inicio, sin cortar palabras
-    if (config.audio === "meditation21" && el.paused) {
+    if (isVoiceTrack(config.audio) && el.paused) {
       el.currentTime = 0;
       el.play().catch(() => {});
     }
@@ -184,12 +184,12 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       <audio
         ref={audioRef}
         src={audioUrlFor(config.audio)}
-        loop={config.audio !== "meditation21"}
+        loop={!isVoiceTrack(config.audio)}
         preload="auto"
         className="hidden"
         onLoadedMetadata={(e) => {
           const d = e.currentTarget.duration;
-          if (config.audio === "meditation21" && d && isFinite(d)) setAudioDuration(d);
+          if (isVoiceTrack(config.audio) && d && isFinite(d)) setAudioDuration(d);
         }} />
       
 

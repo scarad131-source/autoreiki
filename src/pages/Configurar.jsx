@@ -41,7 +41,7 @@ export default function Configurar() {
         preset: {
           mode,
           level,
-          audio: mode === "unguided" ? audio : "healing",
+          audio: mode === "unguided" ? audio : "reikiGuided",
           minutes,
           chakras: selected
         }
