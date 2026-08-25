@@ -32,6 +32,8 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     [config.chakras]
   );
   const isReiki = bowlChakras.length > 0;
+  // Reiki guiada: la voz del audio guía la sesión; sin indicaciones visuales ni cuencos.
+  const hideVisualCues = isGuided && isReiki;
   const script = useMemo(() => {
     if (config.customScript) return config.customScript;
     if (!isGuided) return null;
@@ -242,7 +244,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
             </div>
 
             <AnimatePresence mode="wait">
-              {currentStep && !paused && voiceActive &&
+              {currentStep && !paused && voiceActive && !hideVisualCues &&
             <motion.div
               key={stepIndex}
               initial={{ opacity: 0, y: 8 }}
@@ -313,7 +315,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       </div>
 
       {/* toggle de cuencos (solo Reiki) */}
-      {isReiki &&
+      {isReiki && !hideVisualCues &&
       <button
         onClick={() => setBowlsOn((v) => !v)}
         disabled={countdown > 0}
