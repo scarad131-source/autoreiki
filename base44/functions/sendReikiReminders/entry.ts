@@ -1,10 +1,24 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.40';
 
+// Token compartido que autoriza la invocación de esta función programada.
+// El workflow lo envía en el cuerpo; las llamadas HTTP directas sin él se rechazan.
+const EXPECTED_TOKEN = "rk_r3m1nd3r_7f9c2e1a8b";
+
 // Envía una notificación push a cada usuario con recordatorio activo cuya
 // hora local (en su zona horaria) coincide con la ventana de 15 min actual.
 // Pensado para ejecutarse desde un workflow programado cada 15 minutos.
 export default async function(req) {
   try {
+    let token;
+    try {
+      const body = await req.json();
+      token = body && body.token;
+    } catch (e) {}
+    if (!token) token = req.headers.get("x-reminder-token");
+    if (token !== EXPECTED_TOKEN) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const base44 = createClientFromRequest(req);
     const users = await base44.asServiceRole.entities.User.list("-created_date", 500);
     const now = new Date();
