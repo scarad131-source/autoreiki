@@ -87,7 +87,8 @@ export default function Home() {
 
   const quickActions = [
   { label: "Diario", img: IMAGES.diarioBtn, to: "/diario" },
-  { label: "Ayuda", img: IMAGES.ayudaBtn, to: "/ayuda" }];
+  { label: "Ayuda", img: IMAGES.ayudaBtn, to: "/ayuda" },
+  { label: "Historial", img: IMAGES.historialBtn, to: "/historial" }];
 
 
   return (
@@ -182,14 +183,13 @@ export default function Home() {
       </section>
 
       {/* Accesos rápidos */}
-      <nav className="grid grid-cols-2 gap-4 mx-5">
+      <nav className="grid grid-cols-3 gap-3 mx-5">
         {quickActions.map(({ label, img, to }) =>
         <button
           key={to}
           onClick={() => navigate(to)}
-          className="flex flex-col items-center gap-2.5 rounded-2xl border border-white/8 bg-card/50 hover:border-primary/40 hover:bg-accent/40 transition-colors active:scale-[0.98] mx-24 px-5 py-4">
-          
-            <div className="w-28 h-28 rounded-xl overflow-hidden border border-white/10">
+          className="flex flex-col items-center gap-2.5 rounded-2xl border border-white/8 bg-card/50 hover:border-primary/40 hover:bg-accent/40 transition-colors active:scale-[0.98] px-3 py-4">
+            <div className="w-24 h-24 rounded-xl overflow-hidden border border-white/10">
               <Image src={img} alt={label} className="w-full h-full block" fittingType="fill" />
             </div>
             <span className="text-sm font-medium tracking-wide">{label}</span>
