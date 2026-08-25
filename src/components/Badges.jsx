@@ -9,7 +9,7 @@ const BADGES = [
 export default function Badges({ bestStreak = 0 }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-      {BADGES.map((b) => {
+      {BADGES.map((b, i) => {
         const unlocked = bestStreak >= b.target;
         const progress = Math.min(bestStreak / b.target, 1);
         const pct = Math.round(progress * 100);
@@ -65,9 +65,11 @@ export default function Badges({ bestStreak = 0 }) {
                 }}
               />
             </div>
-            <p className="text-[11px] font-medium mt-2" style={{ color: unlocked ? b.color : "hsl(var(--muted-foreground))" }}>
-              {unlocked ? "Desbloqueada" : `${Math.min(bestStreak, b.target)} / ${b.target} días`}
-            </p>
+            {(unlocked || i === 0) && (
+              <p className="text-[11px] font-medium mt-2" style={{ color: unlocked ? b.color : "hsl(var(--muted-foreground))" }}>
+                {unlocked ? "Desbloqueada" : `${Math.min(bestStreak, b.target)} / ${b.target} días`}
+              </p>
+            )}
           </div>
         );
       })}
