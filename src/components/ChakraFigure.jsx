@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Plus } from "lucide-react";
 import { CHAKRAS } from "@/lib/guidedScripts";
 
 const FIGURE_URL =
@@ -6,7 +7,7 @@ const FIGURE_URL =
 
 const ALL_COLOR = "#8A82B6";
 
-export default function ChakraFigure({ selected = [], onToggle, onSelectAll }) {
+export default function ChakraFigure({ selected = [], onToggle, onSelectAll, selectAllEnabled }) {
   const [described, setDescribed] = useState(null);
 
   const handleToggle = (c) => {
@@ -73,34 +74,29 @@ export default function ChakraFigure({ selected = [], onToggle, onSelectAll }) {
             </button>
           );
         })}
-        {onSelectAll && (
+      </div>
+
+      {/* Botón Todas — píldora lavanda, solo disponible en modo no guiada */}
+      {onSelectAll && selectAllEnabled && (
+        <div className="mt-4 flex justify-center">
           <button
             onClick={onSelectAll}
-            className="flex flex-col items-center gap-1 w-[64px]"
+            className="inline-flex items-center gap-1.5 rounded-full px-5 py-2 transition-all duration-300 active:scale-[0.98]"
+            style={{
+              background: ALL_COLOR,
+              boxShadow: allSelected
+                ? `0 0 16px ${ALL_COLOR}, 0 0 28px ${ALL_COLOR}99`
+                : `0 0 10px ${ALL_COLOR}55`,
+              opacity: allSelected ? 1 : 0.9,
+            }}
           >
-            <span
-              className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300"
-              style={{
-                background: allSelected ? `${ALL_COLOR}33` : "transparent",
-                border: `2px ${allSelected ? "solid" : "dashed"} ${ALL_COLOR}`,
-                boxShadow: allSelected ? `0 0 14px ${ALL_COLOR}, 0 0 24px ${ALL_COLOR}88` : "none",
-                opacity: allSelected ? 1 : 0.45,
-              }}
-            >
-              <span
-                className="w-2 h-2 rounded-full"
-                style={{ background: ALL_COLOR, boxShadow: allSelected ? `0 0 8px ${ALL_COLOR}` : "none" }}
-              />
-            </span>
-            <span
-              className="text-[10px] font-semibold uppercase tracking-wide leading-none"
-              style={{ color: allSelected ? ALL_COLOR : "hsl(var(--muted-foreground))" }}
-            >
+            <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white leading-none">
               Todas
             </span>
+            <Plus className="w-3.5 h-3.5 text-white" />
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Descripción breve, solo cuando se selecciona */}
       {active && (

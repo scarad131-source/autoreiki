@@ -67,7 +67,7 @@ export default function Configurar() {
 
       <h2 className="text-sm font-semibold">Zonas a tratar</h2>
 
-      <ChakraFigure selected={selected} onToggle={toggle} onSelectAll={selectAll} />
+      <ChakraFigure selected={selected} onToggle={toggle} onSelectAll={selectAll} selectAllEnabled={mode === "unguided"} />
 
       <section>
         <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Modo</h2>
