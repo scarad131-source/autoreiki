@@ -7,7 +7,7 @@ import WeeklyStats from "@/components/WeeklyStats";
 import SessionCard from "@/components/SessionCard";
 import Badges from "@/components/Badges";
 import ReminderSettings from "@/components/ReminderSettings";
-import { computeUnifiedStreak, computeBestUnifiedStreak, getStreakMessage, JOURNEY } from "@/lib/journey";
+import { computeActiveDays, getStreakMessage, JOURNEY } from "@/lib/journey";
 import { getDailyPhrase } from "@/lib/dailyPhrases";
 import { Image } from "@/components/ui/image";
 import { IMAGES } from "@/lib/assets";
@@ -55,12 +55,14 @@ export default function Home() {
   }, []);
 
   const tz = user?.reminder_timezone;
-  const streak = computeUnifiedStreak(sessions, diaryEntries, journey, tz);
-  const bestStreak = computeBestUnifiedStreak(sessions, diaryEntries, journey, tz);
-  const msg = getStreakMessage(streak);
+  // Fuente única de verdad: días activos totales (cualquier práctica). No se
+  // reinicia al faltar un día, así refleja siempre el avance real del usuario
+  // y coincide en todos los módulos (Tu semana, Tu perfil, Insignias, Tu práctica).
+  const activeDaysTotal = computeActiveDays(sessions, diaryEntries, journey, tz).size;
+  const bestStreak = activeDaysTotal;
+  const msg = getStreakMessage(activeDaysTotal);
   const firstName = user?.full_name?.split(" ")[0] || "presencia";
-  // Progreso del recorrido: misma racha unificada que el resto de la app.
-  const journeyProgress = Math.min(streak, 21);
+  const journeyProgress = Math.min(activeDaysTotal, 21);
 
   const refreshUser = async () => {
     try {
@@ -71,7 +73,7 @@ export default function Home() {
   const recent = sessions.slice(0, 3);
 
   // Práctica de hoy según el recorrido de 21 días
-  const currentDay = Math.min(streak + 1, 21);
+  const currentDay = Math.min(activeDaysTotal + 1, 21);
   const todayJourney = JOURNEY[currentDay - 1];
   const audio = audioMeta[todayJourney.config.audio] || audioMeta.healing;
   const AudioIcon = audio.icon;
@@ -206,7 +208,7 @@ export default function Home() {
       </section>
 
       {/* Semana */}
-      {!loading && sessions.length > 0 && <WeeklyStats sessions={sessions} diaryEntries={diaryEntries} journeyProgress={journey} timezone={tz} streak={streak} />}
+      {!loading && sessions.length > 0 && <WeeklyStats sessions={sessions} diaryEntries={diaryEntries} journeyProgress={journey} timezone={tz} />}
 
       {/* Tu perfil */}
       <section className="space-y-5">

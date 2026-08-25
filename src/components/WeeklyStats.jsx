@@ -49,14 +49,11 @@ function ConsistencyRing({ percent, days }) {
   );
 }
 
-export default function WeeklyStats({ sessions, diaryEntries, journeyProgress, timezone, streak = 0 }) {
+export default function WeeklyStats({ sessions, diaryEntries, journeyProgress, timezone }) {
   const data = buildWeek(sessions, diaryEntries, journeyProgress, timezone);
   const totalMin = data.reduce((sum, d) => sum + d.mins, 0);
   const activeDays = data.filter((d) => d.active).length;
-  // El anillo refleja la racha unificada (mismo contador que Tu Perfil e Insignias),
-  // no solo los días activos de esta semana.
-  const ringDays = Math.min(streak, 7);
-  const consistency = Math.round((ringDays / 7) * 100);
+  const consistency = Math.round((activeDays / 7) * 100);
   const avg = activeDays ? Math.round(totalMin / activeDays) : 0;
 
   return (
@@ -67,7 +64,7 @@ export default function WeeklyStats({ sessions, diaryEntries, journeyProgress, t
       </div>
 
       <div className="flex items-center gap-5">
-        <ConsistencyRing percent={consistency} days={ringDays} />
+        <ConsistencyRing percent={consistency} days={activeDays} />
         <div className="flex-1 grid grid-cols-2 gap-2.5">
           <div className="rounded-2xl bg-accent/50 p-3">
             <Clock className="w-4 h-4 text-glow-cyan mb-1" />

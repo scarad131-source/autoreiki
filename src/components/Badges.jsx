@@ -1,7 +1,7 @@
 import { Sprout, Flame, Trophy, Lock } from "lucide-react";
 
 const BADGES = [
-  { target: 7, title: "Semana sagrada", desc: "7 días consecutivos de práctica", Icon: Sprout, color: "#22C55E" },
+  { target: 7, title: "Semana sagrada", desc: "7 días de práctica", Icon: Sprout, color: "#22C55E" },
   { target: 14, title: "Quincena de presencia", desc: "14 días de constancia plena", Icon: Flame, color: "#C9821A" },
   { target: 21, title: "Recorrido completo", desc: "21 días de transformación", Icon: Trophy, color: "#A78BFA" },
 ];
