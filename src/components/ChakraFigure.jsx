@@ -4,7 +4,9 @@ import { CHAKRAS } from "@/lib/guidedScripts";
 const FIGURE_URL =
   "https://media.base44.com/images/public/6a7d30a899098694894dbd88/dbb94a092_image.png";
 
-export default function ChakraFigure({ selected = [], onToggle }) {
+const ALL_COLOR = "#8A82B6";
+
+export default function ChakraFigure({ selected = [], onToggle, onSelectAll }) {
   const [described, setDescribed] = useState(null);
 
   const handleToggle = (c) => {
@@ -15,6 +17,8 @@ export default function ChakraFigure({ selected = [], onToggle }) {
   const active = described && selected.includes(described)
     ? CHAKRAS.find((c) => c.id === described)
     : null;
+
+  const allSelected = selected.length === CHAKRAS.length;
 
   return (
     <div className="max-w-[460px] mx-auto">
@@ -69,6 +73,33 @@ export default function ChakraFigure({ selected = [], onToggle }) {
             </button>
           );
         })}
+        {onSelectAll && (
+          <button
+            onClick={onSelectAll}
+            className="flex flex-col items-center gap-1 w-[64px]"
+          >
+            <span
+              className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300"
+              style={{
+                background: allSelected ? `${ALL_COLOR}33` : "transparent",
+                border: `2px ${allSelected ? "solid" : "dashed"} ${ALL_COLOR}`,
+                boxShadow: allSelected ? `0 0 14px ${ALL_COLOR}, 0 0 24px ${ALL_COLOR}88` : "none",
+                opacity: allSelected ? 1 : 0.45,
+              }}
+            >
+              <span
+                className="w-2 h-2 rounded-full"
+                style={{ background: ALL_COLOR, boxShadow: allSelected ? `0 0 8px ${ALL_COLOR}` : "none" }}
+              />
+            </span>
+            <span
+              className="text-[10px] font-semibold uppercase tracking-wide leading-none"
+              style={{ color: allSelected ? ALL_COLOR : "hsl(var(--muted-foreground))" }}
+            >
+              Todas
+            </span>
+          </button>
+        )}
       </div>
 
       {/* Descripción breve, solo cuando se selecciona */}
