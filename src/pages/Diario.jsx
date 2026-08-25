@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { Save, Sparkles } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Save, Sparkles, ChevronLeft } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { toast } from "@/components/ui/use-toast";
 import { SENSATIONS, sensationMap } from "@/lib/diarySensations";
 import DiaryHistory from "@/components/DiaryHistory";
 
 export default function Diario() {
+  const navigate = useNavigate();
   const [view, setView] = useState("nueva");
   const [selected, setSelected] = useState([]);
   const [note, setNote] = useState("");
@@ -31,7 +33,14 @@ export default function Diario() {
 
   return (
     <div className="space-y-7">
-      <header className="flex items-center justify-between">
+      <header className="flex items-center gap-3">
+        <button
+          onClick={() => navigate("/")}
+          className="w-9 h-9 rounded-full flex items-center justify-center text-muted-foreground hover:bg-card hover:text-foreground transition-colors"
+          aria-label="Volver"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
         <h1 className="font-display text-xl font-semibold">Diario</h1>
       </header>
 
