@@ -116,7 +116,7 @@ export default function Meditate() {
               showBenefits ? "border-primary neon-glow" : "border-primary/40 hover:border-primary/60"
             }`}>
             <div className="h-32 w-full">
-              <Image src={IMAGES.meditar21Btn} alt="Reto 21 días" className="w-full h-full block" fittingType="fill" />
+              <Image src={IMAGES.meditar21Btn} alt="Reto 21 días" className="w-full h-full block" fittingType="fill" quality={68} />
             </div>
             <div className="p-4 bg-primary/5">
               <p className="font-display text-lg font-semibold text-primary">Iniciar reto de 21 días</p>
@@ -127,7 +127,7 @@ export default function Meditate() {
             onClick={() => { setMeditarHoy(true); setShowBenefits(false); }}
             className="text-left rounded-2xl border border-white/10 overflow-hidden hover:border-primary/30 transition-colors active:scale-[0.99]">
             <div className="h-32 w-full">
-              <Image src={IMAGES.meditarHoyBtn} alt="Meditar hoy" className="w-full h-full block" fittingType="fill" />
+              <Image src={IMAGES.meditarHoyBtn} alt="Meditar hoy" className="w-full h-full block" fittingType="fill" quality={68} />
             </div>
             <div className="p-4 bg-card/60">
               <p className="font-display text-lg font-semibold">Solo necesito meditar hoy</p>
