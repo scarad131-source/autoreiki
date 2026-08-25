@@ -21,6 +21,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const timerRef = useRef(null);
   const audioRef = useRef(null);
   const finishedRef = useRef(false);
+  const lastBowlStepRef = useRef(-1);
 
   const started = countdown === 0;
 
@@ -114,19 +115,21 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     }
   }, [paused, started]);
 
-  // cuencos: cada 3 minutos en bucle cuando están activados (solo Reiki)
+  // cuencos: suenan cada 3 minutos de sesión cuando están activados (solo Reiki).
+  // Basado en el tiempo transcurrido para mantener la cadencia aun al pausar/reanudar.
   useEffect(() => {
     if (!started || !bowlsOn || paused || !bowlChakras.length) return;
-    let i = 0;
-    const play = () => {
-      const c = bowlChakras[i % bowlChakras.length];
-      ambient.playBowl(c.freq, 0.7);
-      i++;
-    };
-    play();
-    const id = setInterval(play, 180000);
-    return () => clearInterval(id);
-  }, [started, bowlsOn, paused, bowlChakras]);
+    const step = Math.floor(elapsed / 180);
+    if (step <= lastBowlStepRef.current) return;
+    lastBowlStepRef.current = step;
+    const c = bowlChakras[step % bowlChakras.length];
+    ambient.playBowl(c.freq, 0.7);
+  }, [elapsed, started, bowlsOn, paused, bowlChakras]);
+
+  // reinicia el conteo de cuencos al desactivarlos
+  useEffect(() => {
+    if (!bowlsOn) lastBowlStepRef.current = -1;
+  }, [bowlsOn]);
 
   // fin de sesión
   useEffect(() => {
