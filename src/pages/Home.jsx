@@ -101,13 +101,6 @@ export default function Home() {
             Bienvenido(a), {firstName}
           </h1>
         </div>
-        <div
-          className="shrink-0 flex items-center gap-1.5 rounded-full border px-3 py-1.5"
-          style={{ borderColor: "#A68962", background: "#231A35" }}>
-          
-          <Flame className="w-4 h-4" style={{ color: "#A68962" }} />
-          <span className="text-sm font-semibold tabular-nums text-white">{journeyProgress}/21</span>
-        </div>
       </header>
 
       {/* Hero */}
