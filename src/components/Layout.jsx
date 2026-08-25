@@ -1,6 +1,7 @@
 import { Outlet, NavLink } from "react-router-dom";
-import { Star, SlidersHorizontal, CalendarDays, CalendarClock, LogOut } from "lucide-react";
+import { Star, CalendarDays, CalendarClock, LogOut } from "lucide-react";
 import LotusIcon from "@/components/LotusIcon";
+import ChakraCircleIcon from "@/components/ChakraCircleIcon";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
 import { IMAGES } from "@/lib/assets";
@@ -9,7 +10,7 @@ const navItems = [
   { to: "/", label: "Inicio", icon: Star, end: true },
   { to: "/meditar", label: "Meditar", icon: LotusIcon },
   { to: "/recorrido", label: "21 días", icon: CalendarDays },
-  { to: "/configurar", label: "Mi sesión", icon: SlidersHorizontal },
+  { to: "/configurar", label: "Mi sesión", icon: ChakraCircleIcon },
   { to: "/agenda-reiki", label: "Agenda", icon: CalendarClock },
 ];
 
