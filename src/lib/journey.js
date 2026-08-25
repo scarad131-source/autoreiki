@@ -99,10 +99,12 @@ export function computeStreak(sessions, timezone) {
   return streak;
 }
 
-// La racha más larga (días consecutivos) alcanzada alguna vez.
-export function computeBestStreak(sessions, timezone) {
+// La racha más larga (días consecutivos) alcanzada alguna vez, contando cualquier
+// actividad (meditación, diario o recorrido). Así las insignias coinciden con
+// el mismo contador unificado que usa el resto de la app.
+export function computeBestUnifiedStreak(sessions, diaryEntries, journeyProgress, timezone) {
   const days = Array.from(
-    new Set((sessions || []).map((s) => localDayKey(s.created_date, timezone)))
+    computeActiveDays(sessions, diaryEntries, journeyProgress, timezone)
   ).sort();
   if (!days.length) return 0;
   let best = 1;

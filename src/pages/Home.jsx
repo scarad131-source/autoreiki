@@ -7,7 +7,7 @@ import WeeklyStats from "@/components/WeeklyStats";
 import SessionCard from "@/components/SessionCard";
 import Badges from "@/components/Badges";
 import ReminderSettings from "@/components/ReminderSettings";
-import { computeStreak, computeBestStreak, computeUnifiedStreak, getStreakMessage, JOURNEY } from "@/lib/journey";
+import { computeUnifiedStreak, computeBestUnifiedStreak, getStreakMessage, JOURNEY } from "@/lib/journey";
 import { getDailyPhrase } from "@/lib/dailyPhrases";
 import { Image } from "@/components/ui/image";
 import { IMAGES } from "@/lib/assets";
@@ -56,11 +56,11 @@ export default function Home() {
 
   const tz = user?.reminder_timezone;
   const streak = computeUnifiedStreak(sessions, diaryEntries, journey, tz);
-  const bestStreak = computeBestStreak(sessions, tz);
+  const bestStreak = computeBestUnifiedStreak(sessions, diaryEntries, journey, tz);
   const msg = getStreakMessage(streak);
   const firstName = user?.full_name?.split(" ")[0] || "presencia";
-  const journeyCompleted = new Set((journey || []).map((p) => p.day_number)).size;
-  const journeyProgress = Math.min(journeyCompleted, 21);
+  // Progreso del recorrido: misma racha unificada que el resto de la app.
+  const journeyProgress = Math.min(streak, 21);
 
   const refreshUser = async () => {
     try {
@@ -206,7 +206,7 @@ export default function Home() {
       </section>
 
       {/* Semana */}
-      {!loading && sessions.length > 0 && <WeeklyStats sessions={sessions} diaryEntries={diaryEntries} journeyProgress={journey} timezone={tz} />}
+      {!loading && sessions.length > 0 && <WeeklyStats sessions={sessions} diaryEntries={diaryEntries} journeyProgress={journey} timezone={tz} streak={streak} />}
 
       {/* Tu perfil */}
       <section className="space-y-5">
