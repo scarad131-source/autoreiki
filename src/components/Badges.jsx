@@ -13,6 +13,8 @@ export default function Badges({ bestStreak = 0 }) {
         const unlocked = bestStreak >= b.target;
         const progress = Math.min(bestStreak / b.target, 1);
         const pct = Math.round(progress * 100);
+        const prevTarget = i === 0 ? 0 : BADGES[i - 1].target;
+        const inRange = !unlocked && bestStreak > prevTarget;
         return (
           <div
             key={b.target}
@@ -65,7 +67,7 @@ export default function Badges({ bestStreak = 0 }) {
                 }}
               />
             </div>
-            {(unlocked || i === 0) && (
+            {(unlocked || inRange) && (
               <p className="text-[11px] font-medium mt-2" style={{ color: unlocked ? b.color : "hsl(var(--muted-foreground))" }}>
                 {unlocked ? "Desbloqueada" : `${Math.min(bestStreak, b.target)} / ${b.target} días`}
               </p>
