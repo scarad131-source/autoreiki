@@ -42,6 +42,10 @@ export default function AgendaReiki() {
     let next = schedule.filter((e) => e.date !== dateStr);
     if (sessions && sessions.length) {
       next = [...next, { date: dateStr, sessions }];
+      // Registra las sesiones programadas en la hoja centralizada de Google Sheets
+      base44.functions
+        .invoke("logAgendaToSheet", { date: dateStr, sessions })
+        .catch(() => {});
     }
     persist(next);
   };
