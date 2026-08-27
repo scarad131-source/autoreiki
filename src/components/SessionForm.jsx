@@ -11,7 +11,8 @@ const DURATIONS = [5, 10, 20, 30, 45];
 const SOUNDS = [
   { id: "beach", name: "Playa calmada con aves" },
   { id: "bowls", name: "Frecuencias sanadoras" },
-  { id: "rain", name: "Lluvia relajante" }
+  { id: "rain", name: "Lluvia relajante" },
+  { id: "forest", name: "Bosque nocturno" }
 ];
 
 export default function SessionForm({ onStart }) {

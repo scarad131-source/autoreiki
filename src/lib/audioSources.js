@@ -26,6 +26,11 @@ export const AUDIO_SOURCES = {
     name: "Lluvia relajante",
     url: "https://media.base44.com/files/public/6a7d30a899098694894dbd88/5c8cb3241_soundreality-rain-sound-550289.mp3",
   },
+  forest: {
+    id: "forest",
+    name: "Bosque nocturno",
+    url: "https://media.base44.com/files/public/6a7d30a899098694894dbd88/6119d03a8_eryliaa-forest-wind-with-crickets-and-cuckoo-355613_Bosquenocturno.mp3",
+  },
 };
 
 export const AMBIENT_URL_DEFAULT = AUDIO_SOURCES.beach.url;
