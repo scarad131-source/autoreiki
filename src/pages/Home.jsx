@@ -109,7 +109,7 @@ export default function Home() {
           <Image
             src="https://media.base44.com/images/public/6a7d30a899098694894dbd88/5e7e162ba_siluetameditacionconchackras.webp"
             alt="Silueta de meditación con chakras"
-            className="w-full h-full rounded-[2rem] opacity-80 block overflow-hidden"
+            className="w-full h-full rounded-[2rem] opacity-80 block"
             fittingType="fill"
           />
         </div>
