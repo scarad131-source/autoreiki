@@ -155,6 +155,26 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     }
   }, [volume, muted, started]);
 
+  // Fade in suave en los primeros 3 segundos (solo sesiones no guiadas)
+  useEffect(() => {
+    if (!started || isVoiceTrack(config.audio) || muted) return;
+    const el = audioRef.current;
+    if (!el) return;
+    el.volume = 0;
+    const target = volume;
+    const duration = 3000;
+    let startTs = null;
+    let rafId;
+    const step = (ts) => {
+      if (!startTs) startTs = ts;
+      const p = Math.min((ts - startTs) / duration, 1);
+      el.volume = target * p;
+      if (p < 1) rafId = requestAnimationFrame(step);
+    };
+    rafId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(rafId);
+  }, [started, config.audio, volume, muted]);
+
   // Fade out suave en los últimos 3 segundos (solo sesiones no guiadas)
   useEffect(() => {
     if (!started || isVoiceTrack(config.audio) || muted) return;
