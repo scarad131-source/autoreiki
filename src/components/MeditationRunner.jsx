@@ -72,10 +72,9 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     if (!el || !started) return;
     el.muted = muted;
     el.volume = muted ? 0 : volume;
-    if (isVoiceTrack(config.audio)) {
-      try { el.currentTime = 0; } catch (e) {}
-      if (el.paused) el.play().catch(() => {});
-    }
+    // Reiniciar desde el inicio para no saltarse los primeros segundos
+    try { el.currentTime = 0; } catch (e) {}
+    if (el.paused) el.play().catch(() => {});
   }, [started, volume, muted]);
 
   // calcular paso actual guiado (solo para texto visual en pantalla)
@@ -155,6 +154,17 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       el.volume = muted ? 0 : volume;
     }
   }, [volume, muted, started]);
+
+  // Fade out suave en los últimos 3 segundos (solo sesiones no guiadas)
+  useEffect(() => {
+    if (!started || isVoiceTrack(config.audio) || muted) return;
+    const el = audioRef.current;
+    if (!el) return;
+    const remaining = totalSeconds - elapsed;
+    if (remaining <= 3 && remaining > 0) {
+      el.volume = volume * (remaining / 3);
+    }
+  }, [elapsed, totalSeconds, started, config.audio, volume, muted]);
 
   const remaining = Math.max(0, totalSeconds - elapsed);
   const mm = String(Math.floor(remaining / 60)).padStart(2, "0");
