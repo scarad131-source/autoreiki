@@ -17,61 +17,76 @@ export default function BrunoChat({ open, onClose }) {
   useEffect(() => {
     if (!open) return;
     let cancelled = false;
-    (async () => {
-      try {
-        const convs = await base44.agents.listConversations({ agent_name: "meditation_guide" });
-        let conv;
-        if (convs && convs.length) {
-          conv = convs[0];
-        } else {
-          conv = await base44.agents.createConversation({
-            agent_name: "meditation_guide",
-            metadata: { name: "Bruno" }
-          });
-        }
-        if (cancelled) return;
-        setConversation(conv);
-        setMessages(conv.messages || []);
-        // Si la conversación está vacía, dispara el saludo inicial de Bruno
-        if (!conv.messages || conv.messages.length === 0) {
-          setSending(true);
-          try {
-            const updated = await base44.agents.addMessage(conv, { role: "user", content: INIT_TOKEN });
-            if (!cancelled) setConversation(updated);
-          } catch (e) {
-            if (!cancelled) setSending(false);
-          }
-        }
-      } catch (e) {
+    let unsubscribe = null;
+
+    const createFresh = async () => {
+      const conv = await base44.agents.createConversation({
+        agent_name: "meditation_guide",
+        metadata: { name: "Bruno" }
+      });
+      setConversation(conv);
+      setMessages(conv.messages || []);
+      return conv;
+    };
+
+    const triggerGreeting = async (conv) => {
+      if (!conv.messages || conv.messages.length === 0) {
+        setSending(true);
         try {
-          const conv = await base44.agents.createConversation({
-            agent_name: "meditation_guide",
-            metadata: { name: "Bruno" }
-          });
-          if (cancelled) return;
-          setConversation(conv);
-          setMessages(conv.messages || []);
-          setSending(true);
           const updated = await base44.agents.addMessage(conv, { role: "user", content: INIT_TOKEN });
           if (!cancelled) setConversation(updated);
+        } catch (e) {
+          if (!cancelled) setSending(false);
+        }
+      }
+    };
+
+    (async () => {
+      let conv = null;
+      try {
+        const convs = await base44.agents.listConversations({ agent_name: "meditation_guide" });
+        // Valida que la conversación siga existiendo antes de usarla
+        if (convs && convs.length) {
+          try {
+            conv = await base44.agents.getConversation(convs[0].id);
+          } catch {
+            conv = null;
+          }
+        }
+        if (!conv) conv = await createFresh();
+      } catch (e) {
+        try {
+          conv = await createFresh();
         } catch (e2) {
           if (!cancelled) setSending(false);
         }
-      } finally {
-        if (!cancelled) setLoading(false);
       }
-    })();
-    return () => { cancelled = true; };
-  }, [open]);
 
-  useEffect(() => {
-    if (!conversation) return;
-    const unsubscribe = base44.agents.subscribeToConversation(conversation.id, (data) => {
-      setMessages(data.messages || []);
-      setSending(false);
-    });
-    return () => unsubscribe();
-  }, [conversation]);
+      if (cancelled || !conv) {
+        if (!cancelled) setLoading(false);
+        return;
+      }
+
+      // Suscripción segura: si falla el id, no rompe la app
+      try {
+        unsubscribe = base44.agents.subscribeToConversation(conv.id, (data) => {
+          if (cancelled) return;
+          setMessages(data.messages || []);
+          setSending(false);
+        });
+      } catch (e) {}
+
+      await triggerGreeting(conv);
+      if (!cancelled) setLoading(false);
+    })();
+
+    return () => {
+      cancelled = true;
+      if (unsubscribe) {
+        try { unsubscribe(); } catch {}
+      }
+    };
+  }, [open]);
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
