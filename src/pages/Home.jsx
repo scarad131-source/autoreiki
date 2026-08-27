@@ -95,7 +95,7 @@ export default function Home() {
     <div className="space-y-10">
       {/* Encabezado */}
       <header className="pt-2 text-center">
-        <h1 className="font-display text-5xl font-semibold tracking-[0.18em] text-primary neon-text uppercase">AutoReiki</h1>
+        <h1 className="font-display text-5xl font-semibold tracking-[0.18em] text-primary neon-text uppercase">Auto-Reiki</h1>
         <p className="text-[22px] tracking-tight leading-tight mt-2 text-foreground/90 font-light [font-family:'Cabin',_sans-serif]">
           Bienvenido(a), {firstName}
         </p>
