@@ -146,16 +146,17 @@ export default function AgendaReiki() {
                 style={
                 hasSessions ?
                 {
-                  borderColor: "rgba(45, 212, 191, 0.55)",
-                  boxShadow: "0 0 12px rgba(45, 212, 191, 0.45), inset 0 0 8px rgba(45, 212, 191, 0.12)"
+                  borderColor: "rgba(77, 127, 255, 0.65)",
+                  boxShadow: "0 0 12px rgba(77, 127, 255, 0.55), inset 0 0 8px rgba(77, 127, 255, 0.18)"
                 } :
                 undefined
                 }>
                 
                   <span
                   className={`text-xs font-medium tabular-nums ${
-                  today ? "text-primary" : hasSessions ? "text-teal-200" : "text-muted-foreground"}`
-                  }>
+                  today ? "text-primary" : hasSessions ? "" : "text-muted-foreground"}`
+                  }
+                  style={hasSessions && !today ? { color: "rgb(130, 160, 255)" } : undefined}>
                   
                     {format(day, "d")}
                   </span>
@@ -164,11 +165,12 @@ export default function AgendaReiki() {
                       {daySessions.slice(0, 3).map((s, i) =>
                   <span
                     key={i}
-                    className="w-1 h-1 rounded-full bg-teal-300" />
+                    className="w-1 h-1 rounded-full"
+                    style={{ background: "rgb(77, 127, 255)" }} />
 
                   )}
                       {daySessions.length > 3 &&
-                  <span className="text-[8px] text-teal-300 leading-none">+</span>
+                  <span className="text-[8px] leading-none" style={{ color: "rgb(77, 127, 255)" }}>+</span>
                   }
                     </div>
                 }
