@@ -142,7 +142,7 @@ export default function Home() {
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0 flex-1">
             <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">Tu práctica de hoy</p>
-            <p className="font-display text-lg font-semibold mt-0.5 leading-snug">
+            <p className="text-lg font-semibold mt-0.5 leading-snug [font-family:'Cabin',_sans-serif]">
               {getDailyPhrase()}
             </p>
           </div>
