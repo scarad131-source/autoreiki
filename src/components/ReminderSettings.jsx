@@ -123,9 +123,9 @@ export default function ReminderSettings({ user, onSaved }) {
           <AlertDialogTrigger asChild>
             <button
               type="button"
-              className="w-full py-3 rounded-2xl border border-destructive/40 bg-destructive/10 text-destructive font-medium flex items-center justify-center gap-2 hover:bg-destructive/20 transition-colors active:scale-[0.99]"
+              className="mx-auto py-1.5 px-3 text-xs rounded-full border border-destructive/30 bg-destructive/5 text-destructive/80 font-medium flex items-center justify-center gap-1.5 hover:bg-destructive/15 transition-colors active:scale-[0.99]"
             >
-              <Trash2 className="w-4 h-4" />
+              <Trash2 className="w-3 h-3" />
               Eliminar cuenta
             </button>
           </AlertDialogTrigger>

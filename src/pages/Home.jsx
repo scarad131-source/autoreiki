@@ -223,8 +223,6 @@ export default function Home() {
           </div>
         </div>
 
-        {!loading && <ReminderSettings user={user} onSaved={refreshUser} />}
-
         <div>
           <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Insignias</h3>
           {loading ?
@@ -264,6 +262,8 @@ export default function Home() {
       }
 
       <p className="text-center text-[11px] text-muted-foreground/60 pt-2">Bienvenida de nuevo, {firstName} ✦</p>
+
+      {!loading && <ReminderSettings user={user} onSaved={refreshUser} />}
     </div>);
 
 }
