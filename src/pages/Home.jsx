@@ -109,7 +109,7 @@ export default function Home() {
           <Image
             src="https://media.base44.com/images/public/6a7d30a899098694894dbd88/d20ed8e1f_mandala.webp"
             alt="Mandala"
-            className="w-full h-full rounded-full opacity-40"
+            className="w-full h-full rounded-full opacity-40 block"
             fittingType="fill"
           />
         </div>
