@@ -19,9 +19,9 @@ export default function Configurar() {
   const [audio, setAudio] = useState("bowls");
 
   const toggle = (id) => {
-  if (mode === "guided") return;
-  setSelected((s) => s.includes(id) ? s.filter((x) => x !== id) : [...s, id]);
-};
+    if (mode === "guided") return;
+    setSelected((s) => s.includes(id) ? s.filter((x) => x !== id) : [...s, id]);
+  };
 
   const selectAll = () => setSelected(CHAKRAS.map((c) => c.id));
 
@@ -55,8 +55,8 @@ export default function Configurar() {
         <button
           onClick={() => navigate(-1)}
           className="w-10 h-10 rounded-full bg-card border border-white/5 flex items-center justify-center hover:border-primary/30 transition-colors"
-          aria-label="Atrás"
-        >
+          aria-label="Atrás">
+          
           <ChevronLeft className="w-5 h-5" />
         </button>
       </div>
@@ -88,7 +88,7 @@ export default function Configurar() {
                 active ? "scale-[1.01]" : "hover:opacity-80"}`
                 }>
               <p className="font-semibold tracking-tight text-base [font-family:'DM_Serif_Display',_serif]" style={{ color: m.color }}>{m.name}</p>
-              <p className="text-[11px] text-muted-foreground mt-1 leading-snug max-w-[140px]">{m.desc}</p>
+              <p className="text-muted-foreground mt-1 leading-snug max-w-[140px] text-base">{m.desc}</p>
             </button>);
 
           })}
@@ -99,16 +99,16 @@ export default function Configurar() {
       <section>
           <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Duración</h2>
           <div className="flex flex-wrap justify-center gap-3">
-            {[20, 30, 45, 60, 90].map((d) => (
-              <button
-                key={d}
-                onClick={() => setMinutes(d)}
-                className={`w-14 h-14 rounded-full border text-xs font-medium transition-all flex items-center justify-center ${
-                  minutes === d ? "border-primary bg-accent text-primary neon-glow" : "border-glow/20 bg-card/50 text-foreground hover:border-primary/50"
-                }`}>
+            {[20, 30, 45, 60, 90].map((d) =>
+          <button
+            key={d}
+            onClick={() => setMinutes(d)}
+            className={`w-14 h-14 rounded-full border text-xs font-medium transition-all flex items-center justify-center ${
+            minutes === d ? "border-primary bg-accent text-primary neon-glow" : "border-glow/20 bg-card/50 text-foreground hover:border-primary/50"}`
+            }>
                 {d}
               </button>
-            ))}
+          )}
           </div>
         </section>
       }
