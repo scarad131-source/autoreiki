@@ -54,32 +54,26 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     return () => clearTimeout(t);
   }, [countdown]);
 
-  // desbloquear el audio ambiental al montar (gesto del usuario reciente) y mantenerlo silencioso durante la cuenta
+  // desbloquear el audio al montar (gesto del usuario reciente): se reproduce
+  // silencioso durante la cuenta regresiva para que el navegador no bloquee el play()
   useEffect(() => {
     const el = audioRef.current;
     if (!el) return;
-    if (isVoiceTrack(config.audio)) {
-      // pre-roll: el audio se precarga sin reproducirse para no cortar la voz inicial
-      el.volume = muted ? 0 : volume;
-      el.load();
-    } else {
-      el.volume = 0;
-      el.play().catch(() => {});
-    }
+    el.volume = 0;
+    el.play().catch(() => {});
     return () => {
       try {el.pause();} catch (e) {}
     };
   }, []);
 
-  // al terminar la cuenta, subir el volumen del ambiental
+  // al terminar la cuenta, subir el volumen y reiniciar el track de voz desde el inicio
   useEffect(() => {
     const el = audioRef.current;
     if (!el || !started) return;
     el.volume = muted ? 0 : volume;
-    // Arranca el track de voz (21 días) tras el pre-roll, desde el inicio, sin cortar palabras
-    if (isVoiceTrack(config.audio) && el.paused) {
-      el.currentTime = 0;
-      el.play().catch(() => {});
+    if (isVoiceTrack(config.audio)) {
+      try { el.currentTime = 0; } catch (e) {}
+      if (el.paused) el.play().catch(() => {});
     }
   }, [started, volume, muted]);
 
