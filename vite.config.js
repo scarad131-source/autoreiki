@@ -15,5 +15,11 @@ export default defineConfig({
       visualEditAgent: true
     }),
     react(),
-  ]
+  ],
+  resolve: {
+    // Ensure a single React instance is used across the app and all
+    // dependencies. Without this, a nested react copy can resolve to null
+    // and break hooks ("Cannot read properties of null (reading 'useState')").
+    dedupe: ['react', 'react-dom']
+  }
 });
