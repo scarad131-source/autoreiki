@@ -109,29 +109,29 @@ export default function Meditate() {
       </header>
 
       {!meditarHoy && (
-        <section className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <section className="grid grid-cols-1 gap-3">
+          <button
+            onClick={() => { setMeditarHoy(true); setShowBenefits(false); }}
+            className="text-left rounded-2xl border border-white/10 overflow-hidden hover:border-primary/30 transition-colors active:scale-[0.99]">
+            <div className="h-20 w-full">
+              <Image src={IMAGES.meditarHoyBtn} alt="Meditar hoy" className="w-full h-full block" fittingType="fill" quality={68} />
+            </div>
+            <div className="p-3 bg-card/60">
+              <p className="font-display text-lg font-semibold">Solo necesito meditar hoy</p>
+              <p className="text-xs text-muted-foreground mt-1 leading-snug">Configura una sesión a tu medida.</p>
+            </div>
+          </button>
           <button
             onClick={() => setShowBenefits((v) => !v)}
             className={`text-left rounded-2xl border overflow-hidden transition-all active:scale-[0.99] ${
               showBenefits ? "border-primary neon-glow" : "border-primary/40 hover:border-primary/60"
             }`}>
-            <div className="h-32 w-full">
+            <div className="h-20 w-full">
               <Image src={IMAGES.meditar21Btn} alt="Reto 21 días" className="w-full h-full block" fittingType="fill" quality={68} />
             </div>
-            <div className="p-4 bg-primary/5">
+            <div className="p-3 bg-primary/5">
               <p className="font-display text-lg font-semibold text-primary">Iniciar reto de 21 días</p>
               <p className="text-xs text-muted-foreground mt-1 leading-snug">Sigue el recorrido guiado día a día.</p>
-            </div>
-          </button>
-          <button
-            onClick={() => { setMeditarHoy(true); setShowBenefits(false); }}
-            className="text-left rounded-2xl border border-white/10 overflow-hidden hover:border-primary/30 transition-colors active:scale-[0.99]">
-            <div className="h-32 w-full">
-              <Image src={IMAGES.meditarHoyBtn} alt="Meditar hoy" className="w-full h-full block" fittingType="fill" quality={68} />
-            </div>
-            <div className="p-4 bg-card/60">
-              <p className="font-display text-lg font-semibold">Solo necesito meditar hoy</p>
-              <p className="text-xs text-muted-foreground mt-1 leading-snug">Configura una sesión a tu medida.</p>
             </div>
           </button>
         </section>
