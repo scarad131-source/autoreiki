@@ -66,16 +66,10 @@ export default function ReflectionForm({ config, actualSeconds, onSave, onRepeat
         />
       </section>
 
-      <div className="space-y-3">
-        <button
-          onClick={() => onSave({ moodAfter, notes })}
-          className="w-full py-4 rounded-2xl bg-gradient-to-r from-primary to-glow-cyan text-primary-foreground font-medium neon-glow hover:scale-[1.01] transition-transform active:scale-[0.99]"
-        >
-          Guardar sesión
-        </button>
+      <div>
         <button
           onClick={() => onSave({ moodAfter, notes }, "/diario")}
-          className="w-full py-3.5 rounded-2xl border border-primary/40 bg-card/60 text-foreground font-medium hover:bg-accent active:scale-[0.99] transition-colors flex items-center justify-center gap-2"
+          className="w-full py-4 rounded-2xl bg-gradient-to-r from-primary to-glow-cyan text-primary-foreground font-medium neon-glow hover:scale-[1.01] transition-transform active:scale-[0.99] flex items-center justify-center gap-2"
         >
           <BookOpen className="w-4 h-4" />
           Guardar / Ir a mi diario
