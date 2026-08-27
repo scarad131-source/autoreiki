@@ -116,8 +116,8 @@ export default function Home() {
         <h2 className="font-display text-3xl font-semibold leading-snug mt-3 max-w-md">
           Una pausa para escuchar lo que tu cuerpo ya sabe.
         </h2>
-        <p className="text-sm text-muted-foreground mt-3 leading-relaxed max-w-sm">
-          Auto-Reiki guiado, a tu ritmo y con una señal clara en cada paso.
+        <p className="text-sm text-muted-foreground mt-3 leading-relaxed max-w-sm">Auto-Reiki guiado, a tu ritmo en cada paso.
+
         </p>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
           <button
