@@ -105,11 +105,11 @@ export default function Home() {
 
       {/* Hero */}
       <section className="flex flex-col items-center text-center pt-2">
-        <div className="h-88 w-88 mb-7 relative" style={{ height: "22rem", width: "22rem" }}>
+        <div className="h-88 w-88 mb-7 relative rounded-[2.5rem] overflow-hidden" style={{ height: "22rem", width: "22rem" }}>
           <Image
             src="https://media.base44.com/images/public/6a7d30a899098694894dbd88/5e7e162ba_siluetameditacionconchackras.webp"
             alt="Silueta de meditación con chakras"
-            className="w-full h-full rounded-[2rem] opacity-80 block"
+            className="w-full h-full opacity-80 block"
             fittingType="fill"
           />
         </div>
