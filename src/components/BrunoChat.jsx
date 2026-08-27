@@ -17,15 +17,16 @@ export default function BrunoChat({ open, onClose }) {
   useEffect(() => {
     if (!open) return;
     let cancelled = false;
-    let unsubscribe = null;
 
     const createFresh = async () => {
       const conv = await base44.agents.createConversation({
         agent_name: "meditation_guide",
         metadata: { name: "Bruno" }
       });
-      setConversation(conv);
-      setMessages(conv.messages || []);
+      if (!cancelled) {
+        setConversation(conv);
+        setMessages(conv.messages || []);
+      }
       return conv;
     };
 
@@ -33,9 +34,11 @@ export default function BrunoChat({ open, onClose }) {
       if (!conv.messages || conv.messages.length === 0) {
         setSending(true);
         try {
-          const updated = await base44.agents.addMessage(conv, { role: "user", content: INIT_TOKEN });
-          if (!cancelled) setConversation(updated);
+          // addMessage devuelve el mensaje final del asistente
+          const assistantMsg = await base44.agents.addMessage(conv, { role: "user", content: INIT_TOKEN });
+          if (!cancelled) setMessages((prev) => [...prev, assistantMsg]);
         } catch (e) {
+        } finally {
           if (!cancelled) setSending(false);
         }
       }
@@ -49,6 +52,10 @@ export default function BrunoChat({ open, onClose }) {
         if (convs && convs.length) {
           try {
             conv = await base44.agents.getConversation(convs[0].id);
+            if (!cancelled) {
+              setConversation(conv);
+              setMessages(conv.messages || []);
+            }
           } catch {
             conv = null;
           }
@@ -58,7 +65,11 @@ export default function BrunoChat({ open, onClose }) {
         try {
           conv = await createFresh();
         } catch (e2) {
-          if (!cancelled) setSending(false);
+          if (!cancelled) {
+            setSending(false);
+            setLoading(false);
+          }
+          return;
         }
       }
 
@@ -67,25 +78,11 @@ export default function BrunoChat({ open, onClose }) {
         return;
       }
 
-      // Suscripción segura: si falla el id, no rompe la app
-      try {
-        unsubscribe = base44.agents.subscribeToConversation(conv.id, (data) => {
-          if (cancelled) return;
-          setMessages(data.messages || []);
-          setSending(false);
-        });
-      } catch (e) {}
-
       await triggerGreeting(conv);
       if (!cancelled) setLoading(false);
     })();
 
-    return () => {
-      cancelled = true;
-      if (unsubscribe) {
-        try { unsubscribe(); } catch {}
-      }
-    };
+    return () => { cancelled = true; };
   }, [open]);
 
   useEffect(() => {
@@ -99,10 +96,13 @@ export default function BrunoChat({ open, onClose }) {
     if (!text || !conversation || sending) return;
     setInput("");
     setSending(true);
+    // Mensaje del usuario optimista
+    setMessages((prev) => [...prev, { role: "user", content: text }]);
     try {
-      const updated = await base44.agents.addMessage(conversation, { role: "user", content: text });
-      setConversation(updated);
+      const assistantMsg = await base44.agents.addMessage(conversation, { role: "user", content: text });
+      setMessages((prev) => [...prev, assistantMsg]);
     } catch (e) {
+    } finally {
       setSending(false);
     }
   };

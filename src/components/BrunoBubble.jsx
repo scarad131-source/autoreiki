@@ -24,7 +24,7 @@ export default function BrunoBubble() {
       <button
         onClick={() => setOpen(true)}
         aria-label="Abrir Bruno, guía de meditación"
-        className="fixed top-[calc(0.75rem+env(safe-area-inset-top))] right-4 z-40 w-14 h-14 rounded-full flex items-center justify-center transition-transform active:scale-95"
+        className="fixed bottom-[calc(5.5rem+env(safe-area-inset-bottom))] right-4 z-40 w-14 h-14 rounded-full flex items-center justify-center transition-transform active:scale-95"
         style={{
           background:
             "radial-gradient(circle at 32% 28%, hsl(276 86% 36%), hsl(268 100% 24%) 70%, hsl(268 100% 18%))",
