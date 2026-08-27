@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { ArrowLeft, Pause, Play, Square, Volume2, VolumeX, BellRing, Headphones, Rewind, RotateCcw } from "lucide-react";
+import { ArrowLeft, Pause, Play, Volume2, VolumeX, BellRing, Headphones, Rewind, RotateCcw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { RELEASE_SCRIPTS, CHAKRAS } from "@/lib/guidedScripts";
 import { ambient } from "@/lib/audioEngine";
@@ -155,13 +155,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const progress = elapsed / totalSeconds * 100;
   const currentStep = script ? script.steps[stepIndex] : null;
   const phase = elapsed % 10 < 4 ? "Inhala" : "Exhala";
-  const canStop = !started || paused;
-
-  const handleStop = () => {
-    const el = audioRef.current;
-    if (el) el.pause();
-    onFinish({ actualSeconds: elapsed, completed: elapsed >= totalSeconds * 0.5 });
-  };
 
   // Retroceder 10s (solo guiada): regresa el audio y el temporizador, sin adelantar
   const handleRewind = () => {
@@ -320,19 +313,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
           aria-label={paused ? "Reanudar" : "Pausar"}>
           
           {paused ? <Play className="w-6 h-6 ml-0.5" /> : <Pause className="w-6 h-6" />}
-        </button>
-        <button
-          onClick={handleStop}
-          disabled={!canStop}
-          className={`w-11 h-11 rounded-full flex items-center justify-center transition-colors ${
-          canStop ?
-          "bg-destructive/80 hover:bg-destructive text-white" :
-          "bg-accent/40 text-muted-foreground cursor-not-allowed opacity-40"}`
-          }
-          aria-label="Terminar"
-          title={canStop ? "Terminar" : "Pausa primero para terminar"}>
-          
-          <Square className="w-4 h-4" />
         </button>
       </div>
     </div>);
