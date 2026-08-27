@@ -260,7 +260,7 @@ export default function Home() {
 
       
 
-      <p className="text-center text-[11px] text-muted-foreground/60 pt-2">Bienvenida de nuevo, {firstName} ✦</p>
+      <p className="text-center text-[11px] text-muted-foreground/60 pt-2">Bienvenida de nuevo, {firstName}</p>
 
       {!loading && <ReminderSettings user={user} onSaved={refreshUser} />}
 
