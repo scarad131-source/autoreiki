@@ -49,16 +49,15 @@ export default function SessionForm({ onStart }) {
       {mode === "unguided" && (
         <section>
           <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Duración</h2>
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="grid grid-cols-3 gap-2.5">
             {DURATIONS.map((d) => (
               <button
                 key={d}
                 onClick={() => setMinutes(d)}
-                className={`w-14 h-14 rounded-full border flex flex-col items-center justify-center transition-all ${
+                className={`py-3 rounded-2xl border text-sm font-medium transition-all ${
                   minutes === d ? "border-primary bg-accent text-primary neon-glow" : "border-glow/20 bg-card/50 text-foreground hover:border-primary/50"
                 }`}>
-                <span className="text-sm font-semibold leading-none">{d}</span>
-                <span className="text-[9px] text-muted-foreground leading-none mt-0.5">min</span>
+                {d} min
               </button>
             ))}
           </div>
