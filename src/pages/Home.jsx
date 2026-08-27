@@ -81,9 +81,9 @@ export default function Home() {
   // Terapias agendadas para hoy (agenda Reiki)
   const todayStr = format(new Date(), "yyyy-MM-dd");
   const schedule = user?.reiki_schedule || [];
-  const todaySessions = (schedule.find((e) => e.date === todayStr)?.sessions || [])
-    .slice()
-    .sort((a, b) => a.time.localeCompare(b.time));
+  const todaySessions = (schedule.find((e) => e.date === todayStr)?.sessions || []).
+  slice().
+  sort((a, b) => a.time.localeCompare(b.time));
 
   const quickActions = [
   { label: "Diario", img: IMAGES.diarioBtn, to: "/diario" },
@@ -96,7 +96,7 @@ export default function Home() {
       {/* Encabezado */}
       <header className="pt-2 text-center">
         <h1 className="font-display text-5xl font-semibold tracking-[0.18em] text-primary neon-text uppercase">AutoReiki</h1>
-        <p className="font-display text-[22px] font-medium tracking-tight leading-tight mt-2 text-foreground/90">
+        <p className="text-[22px] tracking-tight leading-tight mt-2 text-foreground/90 font-light [font-family:'Cabin',_sans-serif]">
           Bienvenido(a), {firstName}
         </p>
       </header>
@@ -108,8 +108,8 @@ export default function Home() {
             src="https://media.base44.com/images/public/6a7d30a899098694894dbd88/5e7e162ba_siluetameditacionconchackras.webp"
             alt="Silueta de meditación con chakras"
             className="w-full h-full opacity-80 block"
-            fittingType="fill"
-          />
+            fittingType="fill" />
+          
         </div>
         
         <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">Vuelve a ti</p>
@@ -147,19 +147,19 @@ export default function Home() {
           </div>
           <div className="shrink-0 border-l border-white/10 pl-4 text-right max-w-[45%]">
             <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/80 font-body">Agenda hoy</p>
-            {todaySessions.length > 0 ? (
-              <div className="mt-1 space-y-1">
-                {todaySessions.map((s, i) => (
-                  <div key={i} className="font-body text-xs leading-snug" style={{ color: "rgb(94, 234, 212)" }}>
+            {todaySessions.length > 0 ?
+            <div className="mt-1 space-y-1">
+                {todaySessions.map((s, i) =>
+              <div key={i} className="font-body text-xs leading-snug" style={{ color: "rgb(94, 234, 212)" }}>
                     <span className="tabular-nums font-semibold">{s.time}</span>
                     <span className="text-muted-foreground/70"> · </span>
                     {s.label || "Reiki"}
                   </div>
-                ))}
-              </div>
-            ) : (
-              <p className="font-body text-xs text-muted-foreground/60 mt-1">Sin sesiones</p>
-            )}
+              )}
+              </div> :
+
+            <p className="font-body text-xs text-muted-foreground/60 mt-1">Sin sesiones</p>
+            }
           </div>
         </div>
         <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-white/5">
