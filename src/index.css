@@ -5,24 +5,24 @@
 
 @layer base {
   :root {
-    --background: 256 47% 11%;
-    --foreground: 266 73% 96%;
-    --card: 256 46% 18%;
-    --card-foreground: 266 73% 96%;
-    --popover: 256 46% 18%;
-    --popover-foreground: 266 73% 96%;
+    --background: 280 56% 97%;
+    --foreground: 275 32% 28%;
+    --card: 0 0% 100%;
+    --card-foreground: 275 32% 28%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 275 32% 28%;
     --primary: 36 77% 45%;
-    --primary-foreground: 257 58% 9%;
-    --secondary: 256 46% 18%;
-    --secondary-foreground: 266 73% 96%;
-    --muted: 256 45% 21%;
-    --muted-foreground: 259 38% 75%;
-    --accent: 258 40% 29%;
-    --accent-foreground: 266 73% 96%;
+    --primary-foreground: 275 32% 28%;
+    --secondary: 279 100% 92%;
+    --secondary-foreground: 275 32% 28%;
+    --muted: 279 100% 92%;
+    --muted-foreground: 276 40% 50%;
+    --accent: 277 80% 88%;
+    --accent-foreground: 275 32% 28%;
     --destructive: 0 72% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 258 30% 22%;
-    --input: 256 45% 21%;
+    --border: 277 60% 85%;
+    --input: 279 100% 92%;
     --ring: 36 77% 45%;
     --glow: 36 77% 45%;
     --glow-cyan: 255 92% 76%;
@@ -35,41 +35,41 @@
     --chart-2: 38 76% 63%;
     --chart-3: 255 92% 76%;
     --chart-4: 260 87% 85%;
-    --chart-5: 258 40% 29%;
+    --chart-5: 276 40% 63%;
     --radius: 1.25rem;
     --font-heading: "Cormorant Garamond", ui-serif, Georgia, serif;
     --font-body: "Mulish", ui-sans-serif, system-ui, sans-serif;
     --font-display: "Cormorant Garamond", ui-serif, Georgia, serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    --sidebar-background: 256 46% 18%;
-    --sidebar-foreground: 266 73% 96%;
+    --sidebar-background: 279 100% 92%;
+    --sidebar-foreground: 275 32% 28%;
     --sidebar-primary: 36 77% 45%;
-    --sidebar-primary-foreground: 257 58% 9%;
-    --sidebar-accent: 258 40% 29%;
-    --sidebar-accent-foreground: 266 73% 96%;
-    --sidebar-border: 258 30% 22%;
+    --sidebar-primary-foreground: 275 32% 28%;
+    --sidebar-accent: 277 80% 88%;
+    --sidebar-accent-foreground: 275 32% 28%;
+    --sidebar-border: 277 60% 85%;
     --sidebar-ring: 36 77% 45%;
   }
 
   .dark {
-    --background: 256 47% 11%;
-    --foreground: 266 73% 96%;
-    --card: 256 46% 18%;
-    --card-foreground: 266 73% 96%;
-    --popover: 256 46% 18%;
-    --popover-foreground: 266 73% 96%;
+    --background: 280 56% 97%;
+    --foreground: 275 32% 28%;
+    --card: 0 0% 100%;
+    --card-foreground: 275 32% 28%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 275 32% 28%;
     --primary: 36 77% 45%;
-    --primary-foreground: 257 58% 9%;
-    --secondary: 256 46% 18%;
-    --secondary-foreground: 266 73% 96%;
-    --muted: 256 45% 21%;
-    --muted-foreground: 259 38% 75%;
-    --accent: 258 40% 29%;
-    --accent-foreground: 266 73% 96%;
+    --primary-foreground: 275 32% 28%;
+    --secondary: 279 100% 92%;
+    --secondary-foreground: 275 32% 28%;
+    --muted: 279 100% 92%;
+    --muted-foreground: 276 40% 50%;
+    --accent: 277 80% 88%;
+    --accent-foreground: 275 32% 28%;
     --destructive: 0 72% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 258 30% 22%;
-    --input: 256 45% 21%;
+    --border: 277 60% 85%;
+    --input: 279 100% 92%;
     --ring: 36 77% 45%;
     --glow: 36 77% 45%;
     --glow-cyan: 255 92% 76%;
@@ -82,14 +82,14 @@
     --chart-2: 38 76% 63%;
     --chart-3: 255 92% 76%;
     --chart-4: 260 87% 85%;
-    --chart-5: 258 40% 29%;
-    --sidebar-background: 256 46% 18%;
-    --sidebar-foreground: 266 73% 96%;
+    --chart-5: 276 40% 63%;
+    --sidebar-background: 279 100% 92%;
+    --sidebar-foreground: 275 32% 28%;
     --sidebar-primary: 36 77% 45%;
-    --sidebar-primary-foreground: 257 58% 9%;
-    --sidebar-accent: 258 40% 29%;
-    --sidebar-accent-foreground: 266 73% 96%;
-    --sidebar-border: 258 30% 22%;
+    --sidebar-primary-foreground: 275 32% 28%;
+    --sidebar-accent: 277 80% 88%;
+    --sidebar-accent-foreground: 275 32% 28%;
+    --sidebar-border: 277 60% 85%;
     --sidebar-ring: 36 77% 45%;
   }
 }
@@ -101,7 +101,7 @@
 
   body {
     @apply text-foreground font-body;
-    background: radial-gradient(ellipse 80% 50% at 50% 0%, hsl(256 46% 15%), hsl(256 47% 11%));
+    background: radial-gradient(ellipse 80% 50% at 50% 0%, hsl(279 100% 92%), hsl(280 56% 97%));
     min-height: 100vh;
     overscroll-behavior-y: none;
   }
