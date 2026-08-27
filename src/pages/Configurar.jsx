@@ -19,9 +19,9 @@ export default function Configurar() {
   const [audio, setAudio] = useState("bowls");
 
   const toggle = (id) => {
-  if (mode === "guided") return;
-  setSelected((s) => s.includes(id) ? s.filter((x) => x !== id) : [...s, id]);
-};
+    if (mode === "guided") return;
+    setSelected((s) => s.includes(id) ? s.filter((x) => x !== id) : [...s, id]);
+  };
 
   const selectAll = () => setSelected(CHAKRAS.map((c) => c.id));
 
@@ -55,17 +55,17 @@ export default function Configurar() {
         <button
           onClick={() => navigate(-1)}
           className="w-10 h-10 rounded-full bg-card border border-white/5 flex items-center justify-center hover:border-primary/30 transition-colors"
-          aria-label="Atrás"
-        >
+          aria-label="Atrás">
+          
           <ChevronLeft className="w-5 h-5" />
         </button>
       </div>
       <header className="text-center pt-0">
-        <h1 className="font-display text-[33px] font-semibold tracking-tight">Sesión de Reiki</h1>
-        <p className="text-sm text-muted-foreground mt-1">Toca los chakras que quieras trabajar</p>
+        <h1 className="font-semibold tracking-tight text-4xl [font-family:'Cabin',_sans-serif]">Sesión de Reiki</h1>
+        <p className="text-sm text-muted-foreground mt-1 hidden">Toca los chakras que quieras trabajar</p>
       </header>
 
-      <h2 className="text-sm font-semibold">Zonas a tratar</h2>
+      <h2 className="text-sm font-semibold hidden">Zonas a tratar</h2>
 
       <ChakraFigure selected={selected} onToggle={toggle} onSelectAll={selectAll} selectAllEnabled={mode === "unguided"} />
 
@@ -99,16 +99,16 @@ export default function Configurar() {
       <section>
           <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Duración</h2>
           <div className="flex flex-wrap justify-center gap-3">
-            {[20, 30, 45, 60, 90].map((d) => (
-              <button
-                key={d}
-                onClick={() => setMinutes(d)}
-                className={`w-14 h-14 rounded-full border text-xs font-medium transition-all flex items-center justify-center ${
-                  minutes === d ? "border-primary bg-accent text-primary neon-glow" : "border-glow/20 bg-card/50 text-foreground hover:border-primary/50"
-                }`}>
+            {[20, 30, 45, 60, 90].map((d) =>
+          <button
+            key={d}
+            onClick={() => setMinutes(d)}
+            className={`w-14 h-14 rounded-full border text-xs font-medium transition-all flex items-center justify-center ${
+            minutes === d ? "border-primary bg-accent text-primary neon-glow" : "border-glow/20 bg-card/50 text-foreground hover:border-primary/50"}`
+            }>
                 {d}
               </button>
-            ))}
+          )}
           </div>
         </section>
       }
