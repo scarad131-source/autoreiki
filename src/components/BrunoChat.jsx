@@ -107,10 +107,7 @@ export default function BrunoChat({ open, onClose }) {
     }
   };
 
-  const assistantBusy = sending || messages.some(
-    (m) => m.role === "assistant" && m.tool_calls?.some((tc) =>
-      ["pending", "running", "in_progress"].includes(tc.status))
-  );
+  const assistantBusy = sending;
 
   const visibleMessages = messages.filter(
     (m) => !(m.role === "user" && m.content === INIT_TOKEN)
