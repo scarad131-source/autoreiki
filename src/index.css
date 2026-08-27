@@ -5,7 +5,7 @@
 
 @layer base {
   :root {
-    --background: 276 40% 63%;
+    --background: 276 52% 50%;
     --foreground: 275 35% 22%;
     --card: 0 0% 100%;
     --card-foreground: 275 35% 22%;
@@ -52,7 +52,7 @@
   }
 
   .dark {
-    --background: 276 40% 63%;
+    --background: 276 52% 50%;
     --foreground: 275 35% 22%;
     --card: 0 0% 100%;
     --card-foreground: 275 35% 22%;
@@ -101,15 +101,15 @@
 
   body {
     @apply text-foreground font-body;
-    background-color: hsl(276 40% 63%);
+    background-color: hsl(276 52% 50%);
     background-image:
       radial-gradient(circle at 18% 22%, hsl(0 0% 100%) 0%, transparent 38%),
       radial-gradient(circle at 82% 12%, hsl(0 0% 100%) 0%, transparent 32%),
       radial-gradient(circle at 68% 78%, hsl(0 0% 100%) 0%, transparent 42%),
       radial-gradient(circle at 28% 88%, hsl(0 0% 100%) 0%, transparent 36%),
-      radial-gradient(circle at 50% 50%, hsl(276 40% 70%) 0%, transparent 60%),
-      radial-gradient(circle at 12% 60%, hsl(276 35% 55%) 0%, transparent 45%),
-      radial-gradient(circle at 88% 55%, hsl(276 35% 55%) 0%, transparent 45%);
+      radial-gradient(circle at 50% 50%, hsl(276 52% 58%) 0%, transparent 60%),
+      radial-gradient(circle at 12% 60%, hsl(276 48% 42%) 0%, transparent 45%),
+      radial-gradient(circle at 88% 55%, hsl(276 48% 42%) 0%, transparent 45%);
     background-size: 140% 140%, 130% 130%, 150% 150%, 135% 135%, 160% 160%, 120% 120%, 125% 125%;
     background-blend-mode: soft-light, soft-light, soft-light, soft-light, normal, soft-light, soft-light;
     min-height: 100vh;
