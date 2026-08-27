@@ -1,11 +1,9 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { X, Send, Sparkles, Play } from "lucide-react";
+import { X, Send, Sparkles } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import AgentMessageBubble from "@/components/AgentMessageBubble";
 
 export default function BrunoChat({ open, onClose }) {
-  const navigate = useNavigate();
   const [conversation, setConversation] = useState(null);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -131,17 +129,6 @@ export default function BrunoChat({ open, onClose }) {
             </div>
           )}
           <div ref={scrollRef} />
-        </div>
-
-        {/* Acción iniciar sesión */}
-        <div className="px-3 pb-1">
-          <button
-            onClick={() => { onClose(); navigate("/configurar"); }}
-            className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl border border-primary/40 bg-primary/10 text-primary text-xs font-medium hover:bg-primary/20 transition-colors"
-          >
-            <Play className="w-3.5 h-3.5" />
-            Iniciar sesión
-          </button>
         </div>
 
         {/* Entrada */}
