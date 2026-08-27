@@ -101,7 +101,7 @@
 
   body {
     @apply text-foreground font-body;
-    background: radial-gradient(ellipse 80% 50% at 50% 0%, hsl(276 40% 63%), hsl(277 100% 85%));
+    background: radial-gradient(ellipse 80% 50% at 50% 0%, hsl(200 80% 78%), hsl(277 100% 85%));
     min-height: 100vh;
     overscroll-behavior-y: none;
   }
