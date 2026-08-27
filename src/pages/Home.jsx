@@ -105,7 +105,7 @@ export default function Home() {
 
       {/* Hero */}
       <section className="flex flex-col items-center text-center pt-2">
-        <div className="h-44 w-44 mb-7 relative">
+        <div className="h-88 w-88 mb-7 relative" style={{ height: "22rem", width: "22rem" }}>
           <Image
             src="https://media.base44.com/images/public/6a7d30a899098694894dbd88/d20ed8e1f_mandala.webp"
             alt="Mandala"
