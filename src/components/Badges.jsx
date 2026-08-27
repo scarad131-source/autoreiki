@@ -32,8 +32,18 @@ export default function Badges({ bestStreak = 0 }) {
           >
             {/* medalla */}
             <div className="relative mb-2">
+              {/* luz de fondo detrás de la insignia */}
               <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
+                className="absolute inset-0 -z-0 rounded-full blur-xl transition-opacity"
+                style={{
+                  background: unlocked
+                    ? "radial-gradient(circle, hsl(var(--amber-light) / 0.55), transparent 70%)"
+                    : `radial-gradient(circle, ${b.color}55, transparent 70%)`,
+                  transform: "scale(2.2)",
+                }}
+              />
+              <div
+                className={`relative w-8 h-8 rounded-full flex items-center justify-center transition-all ${
                   unlocked ? "" : "opacity-50 grayscale"
                 }`}
                 style={{
