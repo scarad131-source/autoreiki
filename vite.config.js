@@ -21,5 +21,10 @@ export default defineConfig({
     // dependencies. Without this, a nested react copy can resolve to null
     // and break hooks ("Cannot read properties of null (reading 'useState')").
     dedupe: ['react', 'react-dom']
+  },
+  optimizeDeps: {
+    // Force react and react-dom into the same optimization pass so react-dom's
+    // internal React reference matches the app's import (fixes "useState of null").
+    include: ['react', 'react-dom']
   }
 });
