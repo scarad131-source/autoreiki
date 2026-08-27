@@ -70,7 +70,7 @@ export default function Configurar() {
       <ChakraFigure selected={selected} onToggle={toggle} onSelectAll={selectAll} selectAllEnabled={mode === "unguided"} />
 
       <section>
-        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Modo</h2>
+        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Elige tipo de terapia</h2>
         <div className="grid grid-cols-2 gap-4">
           {MODES.map((m) => {
             const active = mode === m.id;
