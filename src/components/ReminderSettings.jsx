@@ -91,13 +91,26 @@ export default function ReminderSettings({ user, onSaved }) {
           <label className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground flex items-center gap-1.5">
             <Clock className="w-3.5 h-3.5" /> Hora del recordatorio
           </label>
-          <input
-            type="time"
-            step={900}
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-            className="w-full px-4 py-3 rounded-2xl bg-accent/40 border border-glow/20 text-foreground font-medium outline-none focus:border-primary/60"
-          />
+          <div className="flex items-center gap-2">
+            <input
+              type="time"
+              step={900}
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+              className="flex-1 px-3 py-2 rounded-xl bg-accent/40 border border-glow/20 text-foreground text-sm font-medium outline-none focus:border-primary/60"
+            />
+            <button
+              onClick={save}
+              disabled={saving}
+              className="shrink-0 px-4 py-2 rounded-xl bg-gradient-to-r from-primary to-glow-cyan text-primary-foreground text-sm font-medium neon-glow disabled:opacity-40 flex items-center justify-center gap-1.5 active:scale-[0.99]"
+            >
+              {saving
+                ? "Guardando…"
+                : status === "saved"
+                ? "Guardado ✓"
+                : "Guardar"}
+            </button>
+          </div>
           <p className="text-[11px] text-muted-foreground leading-snug">
             Las notificaciones push se entregan en la app móvil nativa. Configura
             tu hora igual: el recordatorio comenzará a funcionar al publicar la
@@ -105,18 +118,6 @@ export default function ReminderSettings({ user, onSaved }) {
           </p>
         </div>
       )}
-
-      <button
-        onClick={save}
-        disabled={saving}
-        className="w-full py-3 rounded-2xl bg-gradient-to-r from-primary to-glow-cyan text-primary-foreground font-medium neon-glow disabled:opacity-40 flex items-center justify-center gap-2 active:scale-[0.99]"
-      >
-        {saving
-          ? "Guardando…"
-          : status === "saved"
-          ? "Guardado ✓"
-          : "Guardar recordatorio"}
-      </button>
 
       <div className="pt-4 mt-2 border-t border-white/5">
         <AlertDialog>
