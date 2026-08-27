@@ -43,15 +43,15 @@ export default function AgendaReiki() {
     if (sessions && sessions.length) {
       next = [...next, { date: dateStr, sessions }];
       // Registra las sesiones programadas en la hoja centralizada de Google Sheets
-      base44.functions
-        .invoke("logAgendaToSheet", { date: dateStr, sessions })
-        .catch(() => {});
+      base44.functions.
+      invoke("logAgendaToSheet", { date: dateStr, sessions }).
+      catch(() => {});
     }
     persist(next);
   };
 
   const sessionsFor = (dateStr) =>
-    schedule.find((e) => e.date === dateStr)?.sessions || [];
+  schedule.find((e) => e.date === dateStr)?.sessions || [];
 
   const monthStart = startOfMonth(cursor);
   const monthEnd = endOfMonth(cursor);
@@ -67,7 +67,7 @@ export default function AgendaReiki() {
         <div className="w-14 h-14 mx-auto rounded-full bg-gradient-to-br from-primary to-glow-cyan flex items-center justify-center neon-glow mb-3">
           <CalendarDays className="w-7 h-7 text-primary-foreground" />
         </div>
-        <h1 className="font-display text-2xl font-semibold">Agenda Reiki</h1>
+        <h1 className="font-display font-semibold text-4xl">Agenda Reiki</h1>
         <p className="text-sm text-muted-foreground mt-1">
           Toca cualquier día para programar tus sesiones por hora y etiqueta.
         </p>
@@ -76,11 +76,11 @@ export default function AgendaReiki() {
       {/* Resumen */}
       <div className="grid grid-cols-2 gap-3">
         <div className="rounded-2xl border border-glow/15 bg-card/50 p-4 text-center">
-          <p className="text-2xl font-display font-semibold text-primary">{loading ? "–" : totalSessions}</p>
+          <p className="font-display font-semibold text-primary text-3xl">{loading ? "–" : totalSessions}</p>
           <p className="text-xs text-muted-foreground mt-0.5">Sesiones programadas</p>
         </div>
         <div className="rounded-2xl border border-glow/15 bg-card/50 p-4 text-center">
-          <p className="text-2xl font-display font-semibold text-primary">{loading ? "–" : schedule.length}</p>
+          <p className="font-display font-semibold text-primary text-3xl">{loading ? "–" : schedule.length}</p>
           <p className="text-xs text-muted-foreground mt-0.5">Días con práctica</p>
         </div>
       </div>
@@ -92,91 +92,91 @@ export default function AgendaReiki() {
           <button
             onClick={() => setCursor((c) => addMonths(c, -1))}
             className="w-9 h-9 rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
-            aria-label="Mes anterior"
-          >
+            aria-label="Mes anterior">
+            
             <ChevronLeft className="w-5 h-5" />
           </button>
-          <h2 className="font-display text-lg font-semibold capitalize">
+          <h2 className="font-display font-semibold capitalize text-2xl">
             {format(cursor, "MMMM yyyy", { locale: es })}
           </h2>
           <button
             onClick={() => setCursor((c) => addMonths(c, 1))}
             className="w-9 h-9 rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
-            aria-label="Mes siguiente"
-          >
+            aria-label="Mes siguiente">
+            
             <ChevronRight className="w-5 h-5" />
           </button>
         </div>
 
         {/* Encabezados de día */}
         <div className="grid grid-cols-7 gap-1 mb-1.5">
-          {WD.map((d, i) => (
-            <div key={i} className="text-center text-[11px] font-medium text-muted-foreground/70 py-1">
+          {WD.map((d, i) =>
+          <div key={i} className="text-center text-[11px] font-medium text-muted-foreground/70 py-1">
               {d}
             </div>
-          ))}
+          )}
         </div>
 
         {/* Cuadrícula de días */}
-        {loading ? (
-          <div className="grid grid-cols-7 gap-1">
-            {[...Array(35)].map((_, i) => (
-              <div key={i} className="aspect-square rounded-xl bg-accent/20 animate-pulse" />
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-7 gap-1">
+        {loading ?
+        <div className="grid grid-cols-7 gap-1">
+            {[...Array(35)].map((_, i) =>
+          <div key={i} className="aspect-square rounded-xl bg-accent/20 animate-pulse" />
+          )}
+          </div> :
+
+        <div className="grid grid-cols-7 gap-1">
             {days.map((day) => {
-              const dateStr = format(day, "yyyy-MM-dd");
-              const inMonth = isSameMonth(day, cursor);
-              const today = isToday(day);
-              const daySessions = sessionsFor(dateStr);
-              const hasSessions = daySessions.length > 0;
-              return (
-                <button
-                  key={dateStr}
-                  onClick={() => setDialogDate(dateStr)}
-                  className={`aspect-square rounded-xl border flex flex-col items-center justify-center gap-0.5 transition-all relative ${
-                    today
-                      ? "border-primary bg-primary/10"
-                      : hasSessions
-                      ? "bg-accent/40 hover:bg-accent/60"
-                      : "border-white/5 bg-background/30 hover:border-glow/30"
-                  } ${!inMonth ? "opacity-30" : ""}`}
-                  style={
-                    hasSessions
-                      ? {
-                          borderColor: "rgba(45, 212, 191, 0.55)",
-                          boxShadow: "0 0 12px rgba(45, 212, 191, 0.45), inset 0 0 8px rgba(45, 212, 191, 0.12)",
-                        }
-                      : undefined
-                  }
-                >
+            const dateStr = format(day, "yyyy-MM-dd");
+            const inMonth = isSameMonth(day, cursor);
+            const today = isToday(day);
+            const daySessions = sessionsFor(dateStr);
+            const hasSessions = daySessions.length > 0;
+            return (
+              <button
+                key={dateStr}
+                onClick={() => setDialogDate(dateStr)}
+                className={`aspect-square rounded-xl border flex flex-col items-center justify-center gap-0.5 transition-all relative ${
+                today ?
+                "border-primary bg-primary/10" :
+                hasSessions ?
+                "bg-accent/40 hover:bg-accent/60" :
+                "border-white/5 bg-background/30 hover:border-glow/30"} ${
+                !inMonth ? "opacity-30" : ""}`}
+                style={
+                hasSessions ?
+                {
+                  borderColor: "rgba(45, 212, 191, 0.55)",
+                  boxShadow: "0 0 12px rgba(45, 212, 191, 0.45), inset 0 0 8px rgba(45, 212, 191, 0.12)"
+                } :
+                undefined
+                }>
+                
                   <span
-                    className={`text-xs font-medium tabular-nums ${
-                      today ? "text-primary" : hasSessions ? "text-teal-200" : "text-muted-foreground"
-                    }`}
-                  >
+                  className={`text-xs font-medium tabular-nums ${
+                  today ? "text-primary" : hasSessions ? "text-teal-200" : "text-muted-foreground"}`
+                  }>
+                  
                     {format(day, "d")}
                   </span>
-                  {hasSessions && (
-                    <div className="flex gap-0.5 flex-wrap justify-center max-w-[80%]">
-                      {daySessions.slice(0, 3).map((s, i) => (
-                        <span
-                          key={i}
-                          className="w-1 h-1 rounded-full bg-teal-300"
-                        />
-                      ))}
-                      {daySessions.length > 3 && (
-                        <span className="text-[8px] text-teal-300 leading-none">+</span>
-                      )}
-                    </div>
+                  {hasSessions &&
+                <div className="flex gap-0.5 flex-wrap justify-center max-w-[80%]">
+                      {daySessions.slice(0, 3).map((s, i) =>
+                  <span
+                    key={i}
+                    className="w-1 h-1 rounded-full bg-teal-300" />
+
                   )}
-                </button>
-              );
-            })}
+                      {daySessions.length > 3 &&
+                  <span className="text-[8px] text-teal-300 leading-none">+</span>
+                  }
+                    </div>
+                }
+                </button>);
+
+          })}
           </div>
-        )}
+        }
 
         <p className="text-[11px] text-muted-foreground/60 text-center mt-3">
           {saving ? "Guardando..." : "Los puntos indican sesiones programadas ese día."}
@@ -186,14 +186,14 @@ export default function AgendaReiki() {
       {/* Historial de agenda */}
       {!loading && <AgendaHistory schedule={schedule} />}
 
-      {dialogDate && (
-        <AgendaDayDialog
-          dateStr={dialogDate}
-          sessions={sessionsFor(dialogDate)}
-          onClose={() => setDialogDate(null)}
-          onSave={(sessions) => saveDay(dialogDate, sessions)}
-        />
-      )}
-    </div>
-  );
+      {dialogDate &&
+      <AgendaDayDialog
+        dateStr={dialogDate}
+        sessions={sessionsFor(dialogDate)}
+        onClose={() => setDialogDate(null)}
+        onSave={(sessions) => saveDay(dialogDate, sessions)} />
+
+      }
+    </div>);
+
 }
