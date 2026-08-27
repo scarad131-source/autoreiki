@@ -97,7 +97,7 @@ export default function Configurar() {
 
       {mode === "unguided" &&
       <section>
-          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Elige tu tiempo de sesión</h2>
+          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Duración</h2>
           <div className="flex flex-wrap justify-center gap-3">
             {[20, 30, 45, 60, 90].map((d) =>
           <button
@@ -115,7 +115,7 @@ export default function Configurar() {
 
       {mode === "unguided" &&
       <section>
-          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Sonido ambiente</h2>
+          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Sonido ambientAL</h2>
           <div className="grid grid-cols-2 gap-3">
             {Object.values(AUDIO_SOURCES).filter((a) => a.id !== "meditation21" && a.id !== "reikiGuided").map((a) =>
           <button
