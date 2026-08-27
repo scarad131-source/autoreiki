@@ -14,12 +14,12 @@ export const AUDIO_SOURCES = {
   meditation21: {
     id: "meditation21",
     name: "Meditación 21 días",
-    url: "https://media.base44.com/files/public/6a7d30a899098694dbd88/0ecfe2583_MEDITACION21DIAS_02.mp3",
+    url: "https://media.base44.com/files/public/6a7d30a899098694894dbd88/c504ee3dd_meditacionguiadaAUTOREIKI_final27_ago.mp3",
   },
   reikiGuided: {
     id: "reikiGuided",
     name: "Reiki Guiada",
-    url: "https://media.base44.com/files/public/6a7d30a899098694dbd88/94bac99b9_AUTOREIKI26minEDICIONFINAL_mp3.mp3",
+    url: "https://media.base44.com/files/public/6a7d30a899098694894dbd88/c504ee3dd_meditacionguiadaAUTOREIKI_final27_ago.mp3",
   },
   rain: {
     id: "rain",
