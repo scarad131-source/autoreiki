@@ -8,7 +8,7 @@ const BADGES = [
 
 export default function Badges({ bestStreak = 0 }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <div className="flex flex-wrap justify-center gap-3">
       {BADGES.map((b, i) => {
         const unlocked = bestStreak >= b.target;
         const progress = Math.min(bestStreak / b.target, 1);
@@ -21,7 +21,7 @@ export default function Badges({ bestStreak = 0 }) {
         return (
           <div
             key={b.target}
-            className={`relative rounded-2xl border p-4 flex flex-col items-center text-center transition-all ${
+            className={`relative rounded-2xl border p-2 w-36 flex flex-col items-center text-center transition-all ${
               unlocked
                 ? "border-amber-light/50 bg-accent/40"
                 : "border-glow/10 bg-card/40"
@@ -31,9 +31,9 @@ export default function Badges({ bestStreak = 0 }) {
             } : undefined}
           >
             {/* medalla */}
-            <div className="relative mb-3">
+            <div className="relative mb-2">
               <div
-                className={`w-16 h-16 rounded-full flex items-center justify-center transition-all ${
+                className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
                   unlocked ? "" : "opacity-50 grayscale"
                 }`}
                 style={{
@@ -45,25 +45,25 @@ export default function Badges({ bestStreak = 0 }) {
                 }}
               >
                 <b.Icon
-                  className="w-7 h-7"
+                  className="w-4 h-4"
                   style={{ color: unlocked ? "hsl(var(--amber-light))" : "hsl(var(--muted-foreground))" }}
                   strokeWidth={2.2}
                 />
               </div>
               {!unlocked && (
-                <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-card border border-border flex items-center justify-center">
-                  <Lock className="w-3 h-3 text-muted-foreground" />
+                <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-card border border-border flex items-center justify-center">
+                  <Lock className="w-2 h-2 text-muted-foreground" />
                 </div>
               )}
             </div>
 
-            <p className="font-display text-base font-semibold" style={{ color: unlocked ? "hsl(var(--amber-light))" : "hsl(var(--foreground))" }}>
+            <p className="font-display text-sm font-semibold" style={{ color: unlocked ? "hsl(var(--amber-light))" : "hsl(var(--foreground))" }}>
               {b.title}
             </p>
-            <p className="text-[11px] text-muted-foreground leading-snug mt-1 mb-3 min-h-[28px]">{b.desc}</p>
+            <p className="text-[10px] text-muted-foreground leading-snug mt-1 mb-2 min-h-[24px]">{b.desc}</p>
 
             {/* barra de progreso */}
-            <div className="w-full h-2 rounded-full bg-muted overflow-hidden">
+            <div className="w-full h-1.5 rounded-full bg-muted overflow-hidden">
               <div
                 className="h-full rounded-full transition-all duration-700"
                 style={{
@@ -74,7 +74,7 @@ export default function Badges({ bestStreak = 0 }) {
               />
             </div>
             {(unlocked || inRange) && (
-              <p className="text-[11px] font-medium mt-2" style={{ color: unlocked ? "hsl(var(--amber-light))" : "hsl(var(--muted-foreground))" }}>
+              <p className="text-[10px] font-medium mt-1.5" style={{ color: unlocked ? "hsl(var(--amber-light))" : "hsl(var(--muted-foreground))" }}>
                 {unlocked ? "Desbloqueada" : `${Math.min(bestStreak, b.target)} / ${b.target} días`}
               </p>
             )}

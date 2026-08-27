@@ -226,9 +226,9 @@ export default function Home() {
         <div>
           <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Insignias</h3>
           {loading ?
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="flex flex-wrap justify-center gap-3">
               {[...Array(3)].map((_, i) =>
-            <div key={i} className="h-44 rounded-2xl bg-accent/30 animate-pulse" />
+            <div key={i} className="w-36 h-28 rounded-2xl bg-accent/30 animate-pulse" />
             )}
             </div> :
 
