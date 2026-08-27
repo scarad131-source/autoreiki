@@ -2,7 +2,6 @@ import { Outlet, NavLink } from "react-router-dom";
 import { Star, CalendarDays, CalendarClock, LogOut } from "lucide-react";
 import LotusIcon from "@/components/LotusIcon";
 import ChakraCircleIcon from "@/components/ChakraCircleIcon";
-import BrunoBubble from "@/components/BrunoBubble";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
 import { IMAGES } from "@/lib/assets";
@@ -40,8 +39,6 @@ export default function Layout() {
       <main className="flex-1 max-w-3xl w-full mx-auto px-5 pb-32 pt-4">
         <Outlet />
       </main>
-
-      <BrunoBubble />
 
       <nav className="fixed bottom-0 inset-x-0 z-30 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pointer-events-none">
         <div className="max-w-md mx-auto pointer-events-auto rounded-full border border-white/10 bg-card/80 backdrop-blur-xl px-2 py-2 flex items-center justify-around shadow-lg shadow-black/40">
