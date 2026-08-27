@@ -14,7 +14,7 @@ export const AUDIO_SOURCES = {
   meditation21: {
     id: "meditation21",
     name: "Meditación 21 días",
-    url: "https://media.base44.com/files/public/6a7d30a899098694dbd88/3bb166317_MEDITACION21DIAS_02.mp3",
+    url: "https://media.base44.com/files/public/6a7d30a899098694dbd88/0ecfe2583_MEDITACION21DIAS_02.mp3",
   },
   reikiGuided: {
     id: "reikiGuided",
