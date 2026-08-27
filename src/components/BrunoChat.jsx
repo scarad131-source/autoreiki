@@ -3,6 +3,9 @@ import { X, Send, Sparkles } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import AgentMessageBubble from "@/components/AgentMessageBubble";
 
+// Token oculto que dispara el saludo inicial de Bruno; se filtra de la vista.
+const INIT_TOKEN = "__AUTOREIKI_BRUNO_INIT__";
+
 export default function BrunoChat({ open, onClose }) {
   const [conversation, setConversation] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -13,6 +16,7 @@ export default function BrunoChat({ open, onClose }) {
 
   useEffect(() => {
     if (!open) return;
+    let cancelled = false;
     (async () => {
       try {
         const convs = await base44.agents.listConversations({ agent_name: "meditation_guide" });
@@ -25,21 +29,39 @@ export default function BrunoChat({ open, onClose }) {
             metadata: { name: "Bruno" }
           });
         }
+        if (cancelled) return;
         setConversation(conv);
         setMessages(conv.messages || []);
+        // Si la conversación está vacía, dispara el saludo inicial de Bruno
+        if (!conv.messages || conv.messages.length === 0) {
+          setSending(true);
+          try {
+            const updated = await base44.agents.addMessage(conv, { role: "user", content: INIT_TOKEN });
+            if (!cancelled) setConversation(updated);
+          } catch (e) {
+            if (!cancelled) setSending(false);
+          }
+        }
       } catch (e) {
         try {
           const conv = await base44.agents.createConversation({
             agent_name: "meditation_guide",
             metadata: { name: "Bruno" }
           });
+          if (cancelled) return;
           setConversation(conv);
           setMessages(conv.messages || []);
-        } catch (e2) {}
+          setSending(true);
+          const updated = await base44.agents.addMessage(conv, { role: "user", content: INIT_TOKEN });
+          if (!cancelled) setConversation(updated);
+        } catch (e2) {
+          if (!cancelled) setSending(false);
+        }
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     })();
+    return () => { cancelled = true; };
   }, [open]);
 
   useEffect(() => {
@@ -73,6 +95,10 @@ export default function BrunoChat({ open, onClose }) {
   const assistantBusy = sending || messages.some(
     (m) => m.role === "assistant" && m.tool_calls?.some((tc) =>
       ["pending", "running", "in_progress"].includes(tc.status))
+  );
+
+  const visibleMessages = messages.filter(
+    (m) => !(m.role === "user" && m.content === INIT_TOKEN)
   );
 
   return (
@@ -111,13 +137,13 @@ export default function BrunoChat({ open, onClose }) {
             <div className="flex items-center justify-center h-full">
               <div className="w-7 h-7 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
             </div>
-          ) : messages.length === 0 ? (
+          ) : visibleMessages.length === 0 && !assistantBusy ? (
             <div className="text-center text-sm text-muted-foreground mt-8 px-4">
               <Sparkles className="w-6 h-6 text-primary mx-auto mb-3" />
               Toca para empezar a chatear con Bruno.
             </div>
           ) : (
-            messages.map((m, idx) => <AgentMessageBubble key={idx} message={m} />)
+            visibleMessages.map((m, idx) => <AgentMessageBubble key={idx} message={m} />)
           )}
           {assistantBusy && (
             <div className="flex justify-start">
