@@ -94,13 +94,11 @@ export default function Home() {
   return (
     <div className="space-y-10">
       {/* Encabezado */}
-      <header className="pt-2 flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <p className="text-[11px] tracking-[0.28em] uppercase text-primary/80 font-medium">AutoReiki</p>
-          <h1 className="font-display text-[26px] font-semibold tracking-tight leading-tight mt-1.5">
-            Bienvenido(a), {firstName}
-          </h1>
-        </div>
+      <header className="pt-2 text-center">
+        <h1 className="font-display text-5xl font-semibold tracking-[0.18em] text-primary neon-text uppercase">AutoReiki</h1>
+        <p className="font-display text-[22px] font-medium tracking-tight leading-tight mt-2 text-foreground/90">
+          Bienvenido(a), {firstName}
+        </p>
       </header>
 
       {/* Hero */}
