@@ -88,7 +88,7 @@ export default function Configurar() {
                 active ? "scale-[1.01]" : "hover:opacity-80"}`
                 }>
               <p className="font-semibold tracking-tight text-base [font-family:'DM_Serif_Display',_serif]" style={{ color: m.color }}>{m.name}</p>
-              <p className="text-muted-foreground mt-1 leading-snug max-w-[140px] text-base">{m.desc}</p>
+              <p className="text-muted-foreground mt-1 leading-snug max-w-[140px] text-sm">{m.desc}</p>
             </button>);
 
           })}
