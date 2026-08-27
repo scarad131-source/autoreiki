@@ -97,7 +97,7 @@ export default function Configurar() {
 
       {mode === "unguided" &&
       <section>
-          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Duración</h2>
+          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Elige tu tiempo de sesión</h2>
           <div className="flex flex-wrap justify-center gap-3">
             {[20, 30, 45, 60, 90].map((d) =>
           <button
