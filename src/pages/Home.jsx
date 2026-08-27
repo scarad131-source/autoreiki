@@ -151,7 +151,7 @@ export default function Home() {
             {todaySessions.length > 0 ?
             <div className="mt-1 space-y-1">
                 {todaySessions.map((s, i) =>
-              <div key={i} className="font-body text-xs leading-snug" style={{ color: "rgb(77, 127, 255)" }}>
+              <div key={i} className="font-body text-xs leading-snug" style={{ color: "rgb(94, 234, 212)" }}>
                     <span className="tabular-nums font-semibold">{s.time}</span>
                     <span className="text-muted-foreground/70"> · </span>
                     {s.label || "Reiki"}
