@@ -4,22 +4,27 @@ export const AUDIO_SOURCES = {
   beach: {
     id: "beach",
     name: "Playa tranquila",
-    url: "https://media.base44.com/videos/public/6a7d30a899098694894dbd88/af73fce44_sonidodeplayatranqullaalamanecer.mp4",
+    url: "https://media.base44.com/videos/public/6a7d30a899098694dbd88/af73fce44_sonidodeplayatranqullaalamanecer.mp4",
   },
   bowls: {
     id: "bowls",
     name: "Frecuencias Sanadoras",
-    url: "https://media.base44.com/files/public/6a7d30a899098694894dbd88/fccced0cf_completerebalancing7chakrasSingingBowls.mp3",
+    url: "https://media.base44.com/files/public/6a7d30a899098694dbd88/fccced0cf_completerebalancing7chakrasSingingBowls.mp3",
   },
   meditation21: {
     id: "meditation21",
     name: "Meditación 21 días",
-    url: "https://media.base44.com/files/public/6a7d30a899098694894dbd88/3bb166317_MEDITACION21DIAS_02.mp3",
+    url: "https://media.base44.com/files/public/6a7d30a899098694dbd88/3bb166317_MEDITACION21DIAS_02.mp3",
   },
   reikiGuided: {
     id: "reikiGuided",
     name: "Reiki Guiada",
-    url: "https://media.base44.com/files/public/6a7d30a899098694894dbd88/94bac99b9_AUTOREIKI26minEDICIONFINAL_mp3.mp3",
+    url: "https://media.base44.com/files/public/6a7d30a899098694dbd88/94bac99b9_AUTOREIKI26minEDICIONFINAL_mp3.mp3",
+  },
+  rain: {
+    id: "rain",
+    name: "Lluvia relajante",
+    url: "https://media.base44.com/files/public/6a7d30a899098694894dbd88/5c8cb3241_soundreality-rain-sound-550289.mp3",
   },
 };
 
