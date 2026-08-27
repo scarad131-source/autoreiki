@@ -3,6 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { Leaf, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { computeStreak, JOURNEY } from "@/lib/journey";
+import JourneyBenefits from "@/components/JourneyBenefits";
 
 export default function Recorrido() {
   const navigate = useNavigate();
@@ -61,6 +62,8 @@ export default function Recorrido() {
           No busques hacerlo perfecto. Solo regresar, una vez más, a tu centro.
         </p>
       </header>
+
+      <JourneyBenefits />
 
       <section className="rounded-3xl bg-card border border-white/5 p-5 flex items-center gap-5">
         <ProgressRing percent={percent} value={completedCount} />

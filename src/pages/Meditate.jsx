@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import SessionForm from "@/components/SessionForm";
-import JourneyBenefits from "@/components/JourneyBenefits";
 import MeditationRunner from "@/components/MeditationRunner";
 import ReflectionForm from "@/components/ReflectionForm";
 import { buildChakraScript } from "@/lib/guidedScripts";
@@ -18,7 +17,6 @@ export default function Meditate() {
   const [config, setConfig] = useState(null);
   const [result, setResult] = useState(null);
   const [meditarHoy, setMeditarHoy] = useState(false);
-  const [showBenefits, setShowBenefits] = useState(false);
   const [journeyDay, setJourneyDay] = useState(null);
 
   // Permite iniciar con un preset desde Recorrido o Configurar.
@@ -26,7 +24,6 @@ export default function Meditate() {
     const preset = location.state?.preset;
     if (location.state?.meditarHoy) {
       setMeditarHoy(true);
-      setShowBenefits(false);
     }
     if (location.state?.journeyDay) {
       setJourneyDay(location.state.journeyDay);
@@ -111,7 +108,7 @@ export default function Meditate() {
       {!meditarHoy && (
         <section className="grid grid-cols-1 gap-3">
           <button
-            onClick={() => { setMeditarHoy(true); setShowBenefits(false); }}
+            onClick={() => setMeditarHoy(true)}
             className="text-left rounded-2xl border border-white/10 overflow-hidden hover:border-primary/30 transition-colors active:scale-[0.99]">
             <div className="h-20 w-full">
               <Image src={IMAGES.meditarHoyBtn} alt="Meditar hoy" className="w-full h-full block" fittingType="fill" quality={68} />
@@ -122,10 +119,8 @@ export default function Meditate() {
             </div>
           </button>
           <button
-            onClick={() => setShowBenefits((v) => !v)}
-            className={`text-left rounded-2xl border overflow-hidden transition-all active:scale-[0.99] ${
-              showBenefits ? "border-primary neon-glow" : "border-primary/40 hover:border-primary/60"
-            }`}>
+            onClick={() => navigate("/recorrido")}
+            className="text-left rounded-2xl border border-primary/40 overflow-hidden transition-all active:scale-[0.99] hover:border-primary/60">
             <div className="h-20 w-full">
               <Image src={IMAGES.meditar21Btn} alt="Reto 21 días" className="w-full h-full block" fittingType="fill" quality={68} />
             </div>
@@ -135,17 +130,6 @@ export default function Meditate() {
             </div>
           </button>
         </section>
-      )}
-
-      {showBenefits && !meditarHoy && (
-        <>
-          <JourneyBenefits />
-          <button
-            onClick={() => navigate("/recorrido")}
-            className="w-full py-4 rounded-2xl bg-gradient-to-r from-primary to-glow-cyan text-primary-foreground font-medium neon-glow flex items-center justify-center gap-2 active:scale-[0.99]">
-            Comenzar mi recorrido
-          </button>
-        </>
       )}
 
       {meditarHoy && <SessionForm onStart={start} />}
