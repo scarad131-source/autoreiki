@@ -243,21 +243,21 @@ export default function Home() {
         }
       </section>
 
-      {recent.length > 0 &&
-      <section className="hidden">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Sesiones recientes</h2>
-            <button onClick={() => navigate("/historial")} className="text-xs text-primary font-medium">
-              Ver todas
-            </button>
-          </div>
-          <div className="space-y-2.5">
-            {recent.map((s) =>
-          <SessionCard key={s.id} session={s} />
-          )}
-          </div>
-        </section>
-      }
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
 
       <p className="text-center text-[11px] text-muted-foreground/60 pt-2">Bienvenida de nuevo, {firstName} ✦</p>
 
