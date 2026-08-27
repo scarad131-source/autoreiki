@@ -15,6 +15,9 @@ export default function Badges({ bestStreak = 0 }) {
         const pct = Math.round(progress * 100);
         const prevTarget = i === 0 ? 0 : BADGES[i - 1].target;
         const inRange = !unlocked && bestStreak > prevTarget;
+        // Mostrar gradualmente: la insignia aparece cuando el usuario entra
+        // en su rango de días (1-7, 8-14, 15-21)
+        if (bestStreak <= prevTarget) return null;
         return (
           <div
             key={b.target}
