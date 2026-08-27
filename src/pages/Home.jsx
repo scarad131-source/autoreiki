@@ -134,7 +134,7 @@ export default function Home() {
             Sesión de Reiki
           </button>
           <button
-            onClick={() => navigate("/guia-meditacion")}
+            onClick={() => window.dispatchEvent(new CustomEvent("open-bruno"))}
             className="rounded-full border border-glow-cyan/40 bg-glow-cyan/10 text-foreground font-semibold px-7 py-3 hover:bg-glow-cyan/20 active:scale-[0.99] transition-transform flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-glow-cyan" />
             Guía IA

@@ -21,7 +21,6 @@ import Diario from '@/pages/Diario';
 import Ayuda from '@/pages/Ayuda';
 import AgendaReiki from '@/pages/AgendaReiki';
 import Historial from '@/pages/Historial';
-import GuiaMeditacion from '@/pages/GuiaMeditacion';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -64,7 +63,6 @@ const AuthenticatedApp = () => {
           <Route path="/ayuda" element={<Ayuda />} />
           <Route path="/agenda-reiki" element={<AgendaReiki />} />
           <Route path="/historial" element={<Historial />} />
-          <Route path="/guia-meditacion" element={<GuiaMeditacion />} />
         </Route>
       </Route>
       <Route path="*" element={<PageNotFound />} />
