@@ -87,7 +87,7 @@ export default function Configurar() {
                 className={`flex flex-col items-center justify-center text-center min-h-[80px] px-3 py-3 rounded-2xl border-2 transition-all duration-300 active:scale-[0.98] ${
                 active ? "scale-[1.01]" : "hover:opacity-80"}`
                 }>
-              <p className="font-semibold tracking-tight text-base [font-family:'DM_Serif_Display',_serif]" style={{ color: m.color }}>{m.name}</p>
+              <p className="tracking-tight font-normal [font-family:'Aether',_sans-serif] text-lg" style={{ color: m.color }}>{m.name}</p>
               <p className="text-muted-foreground mt-1 leading-snug max-w-[140px] text-sm">{m.desc}</p>
             </button>);
 
