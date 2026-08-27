@@ -294,26 +294,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         
       </div>
 
-      {/* volumen */}
-      <div className="w-full max-w-[240px] flex items-center gap-3 mb-3">
-        <button
-          onClick={() => setMuted((m) => !m)}
-          className="text-muted-foreground hover:text-foreground transition-colors shrink-0"
-          aria-label="Silenciar">
-          
-          {muted || volume === 0 ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-        </button>
-        <Slider
-          value={[muted ? 0 : volume]}
-          min={0}
-          max={1}
-          step={0.05}
-          onValueChange={([v]) => {setVolume(v);setMuted(v === 0);}}
-          className="flex-1"
-          aria-label="Volumen" />
-        
-      </div>
-
       {/* toggle de cuencos (solo Reiki) */}
       {isReiki && !hideVisualCues &&
       <button
