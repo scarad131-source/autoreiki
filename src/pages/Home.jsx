@@ -114,7 +114,7 @@ export default function Home() {
         </div>
         
         <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">Vuelve a ti</p>
-        <h2 className="font-display text-3xl font-semibold leading-snug mt-3 max-w-md">Un tiempo para escuchar lo que tu cuerpo ya sabe.
+        <h2 className="font-display text-3xl font-semibold leading-snug mt-3 max-w-md">Equilibra tu cuerpo, despierta tu luz.
 
         </h2>
         <p className="text-sm text-muted-foreground mt-3 leading-relaxed max-w-sm">Auto-Reiki guiado, a tu ritmo en cada paso.
