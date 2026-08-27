@@ -107,9 +107,9 @@ export default function Home() {
       <section className="flex flex-col items-center text-center pt-2">
         <div className="h-88 w-88 mb-7 relative" style={{ height: "22rem", width: "22rem" }}>
           <Image
-            src="https://media.base44.com/images/public/6a7d30a899098694894dbd88/d20ed8e1f_mandala.webp"
-            alt="Mandala"
-            className="w-full h-full rounded-full opacity-40 block"
+            src="https://media.base44.com/images/public/6a7d30a899098694894dbd88/5e7e162ba_siluetameditacionconchackras.webp"
+            alt="Silueta de meditación con chakras"
+            className="w-full h-full rounded-full opacity-50 block"
             fittingType="fill"
           />
         </div>
