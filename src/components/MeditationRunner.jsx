@@ -10,7 +10,7 @@ import { Slider } from "@/components/ui/slider";
 export default function MeditationRunner({ config, onFinish, onCancel }) {
   const [audioDuration, setAudioDuration] = useState(null);
   // En meditaciones guiadas el temporizador coincide con la duración real del audio
-  const totalSeconds = isVoiceTrack(config.audio) && audioDuration ? Math.round(audioDuration) : config.minutes * 60;
+  const totalSeconds = isVoiceTrack(config.audio) && audioDuration ? Math.ceil(audioDuration) : config.minutes * 60;
   const [countdown, setCountdown] = useState(isVoiceTrack(config.audio) ? 2 : 3);
   const [elapsed, setElapsed] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -59,7 +59,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   useEffect(() => {
     const el = audioRef.current;
     if (!el) return;
-    el.volume = 0;
+    el.muted = true;
     el.play().catch(() => {});
     return () => {
       try {el.pause();} catch (e) {}
@@ -70,6 +70,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   useEffect(() => {
     const el = audioRef.current;
     if (!el || !started) return;
+    el.muted = muted;
     el.volume = muted ? 0 : volume;
     if (isVoiceTrack(config.audio)) {
       try { el.currentTime = 0; } catch (e) {}
@@ -91,14 +92,15 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     setStepIndex(script.steps.length - 1);
   }, [elapsed, script, started]);
 
-  // timer
+  // timer (solo sesiones no guiadas; las guiadas se sincronizan con timeupdate)
   useEffect(() => {
     if (!started || paused) return;
+    if (isVoiceTrack(config.audio)) return;
     timerRef.current = setInterval(() => {
       setElapsed((e) => e + 1);
     }, 1000);
     return () => clearInterval(timerRef.current);
-  }, [started, paused]);
+  }, [started, paused, config.audio]);
 
   // pausa: detener audio ambiental
   useEffect(() => {
@@ -130,17 +132,28 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   // fin de sesión
   useEffect(() => {
     if (!started || finishedRef.current) return;
+    if (isVoiceTrack(config.audio)) {
+      // Las guiadas terminan cuando el audio termina (onEnded). Fallback por si falla.
+      if (elapsed >= totalSeconds + 5) {
+        finishedRef.current = true;
+        onFinish({ actualSeconds: Math.round(audioDuration || totalSeconds), completed: true });
+      }
+      return;
+    }
     if (elapsed >= totalSeconds) {
       finishedRef.current = true;
       const el = audioRef.current;
       if (el) el.pause();
       onFinish({ actualSeconds: totalSeconds, completed: true });
     }
-  }, [elapsed, totalSeconds, started, onFinish]);
+  }, [elapsed, totalSeconds, started, onFinish, config.audio, audioDuration]);
 
   useEffect(() => {
     const el = audioRef.current;
-    if (el && started) el.volume = muted ? 0 : volume;
+    if (el && started) {
+      el.muted = muted;
+      el.volume = muted ? 0 : volume;
+    }
   }, [volume, muted, started]);
 
   const remaining = Math.max(0, totalSeconds - elapsed);
@@ -179,6 +192,18 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         onLoadedMetadata={(e) => {
           const d = e.currentTarget.duration;
           if (isVoiceTrack(config.audio) && d && isFinite(d)) setAudioDuration(d);
+        }}
+        onTimeUpdate={(e) => {
+          if (isVoiceTrack(config.audio) && started && !paused && !finishedRef.current) {
+            const t = Math.floor(e.currentTarget.currentTime);
+            if (t !== elapsed) setElapsed(t);
+          }
+        }}
+        onEnded={() => {
+          if (isVoiceTrack(config.audio) && !finishedRef.current) {
+            finishedRef.current = true;
+            onFinish({ actualSeconds: Math.round(audioDuration || elapsed), completed: true });
+          }
         }} />
       
 
