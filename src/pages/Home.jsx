@@ -105,13 +105,14 @@ export default function Home() {
 
       {/* Hero */}
       <section className="flex flex-col items-center text-center pt-2">
-        <div
-          className="h-40 w-40 rounded-full mb-7"
-          style={{
-            background:
-            "radial-gradient(circle at 50% 45%, hsl(38 80% 66% / 0.55), hsl(255 92% 76% / 0.20) 42%, transparent 72%)",
-            filter: "blur(6px)"
-          }} />
+        <div className="h-44 w-44 mb-7 relative">
+          <Image
+            src="https://media.base44.com/images/public/6a7d30a899098694894dbd88/d20ed8e1f_mandala.webp"
+            alt="Mandala"
+            className="w-full h-full rounded-full opacity-40"
+            fittingType="fill"
+          />
+        </div>
         
         <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">Vuelve a ti</p>
         <h2 className="font-display text-3xl font-semibold leading-snug mt-3 max-w-md">
