@@ -26,20 +26,22 @@ export default function Badges({ bestStreak = 0 }) {
                 ? "border-amber-light/50 bg-accent/40"
                 : "border-glow/10 bg-card/40"
             }`}
-            style={unlocked ? {
-              boxShadow: "0 0 24px hsl(var(--amber-light) / 0.5), 0 0 48px hsl(var(--gold) / 0.3), inset 0 0 18px hsl(var(--gold) / 0.12)"
-            } : undefined}
+            style={{
+              boxShadow: unlocked
+                ? "0 0 40px 8px hsl(36 77% 45% / 0.45), 0 0 80px 20px hsl(255 92% 76% / 0.25), inset 0 0 18px hsl(var(--gold) / 0.12)"
+                : `0 0 30px 6px ${b.color}40, 0 0 60px 16px ${b.color}20`,
+            }}
           >
             {/* medalla */}
             <div className="relative mb-2">
               {/* luz de fondo detrás de la insignia */}
               <div
-                className="absolute inset-0 -z-0 rounded-full blur-xl transition-opacity"
+                className="absolute inset-0 rounded-full blur-2xl transition-opacity"
                 style={{
                   background: unlocked
-                    ? "radial-gradient(circle, hsl(var(--amber-light) / 0.55), transparent 70%)"
-                    : `radial-gradient(circle, ${b.color}55, transparent 70%)`,
-                  transform: "scale(2.2)",
+                    ? "radial-gradient(circle, hsl(var(--amber-light) / 0.7), transparent 70%)"
+                    : `radial-gradient(circle, ${b.color}66, transparent 70%)`,
+                  transform: "scale(2.6)",
                 }}
               />
               <div
