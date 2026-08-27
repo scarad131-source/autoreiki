@@ -62,10 +62,10 @@ export default function Configurar() {
       </div>
       <header className="text-center pt-0">
         <h1 className="font-semibold tracking-tight text-4xl [font-family:'Gazpacho',_sans-serif]">Sesión de Reiki</h1>
-        <p className="text-sm text-muted-foreground mt-1 hidden">Toca los chakras que quieras trabajar</p>
+        
       </header>
 
-      <h2 className="text-sm font-semibold hidden">Zonas a tratar</h2>
+      
 
       <ChakraFigure selected={selected} onToggle={toggle} onSelectAll={selectAll} selectAllEnabled={mode === "unguided"} />
 
