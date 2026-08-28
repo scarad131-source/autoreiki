@@ -57,7 +57,7 @@ export default function Recorrido() {
     <div className="space-y-7">
       <header>
         <p className="text-[11px] tracking-[0.28em] uppercase text-muted-foreground font-medium">Constancia</p>
-        <h1 className="text-3xl font-semibold tracking-tight mt-1.5 [font-family:'Bodoni_Moda',_serif]">Reto de 21 días</h1>
+        <h1 className="font-semibold tracking-tight mt-1.5 [font-family:'Bodoni_Moda',_serif] text-4xl">Reto de 21 días</h1>
         <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
           No busques hacerlo perfecto. Solo regresar, una vez más, a tu centro.
         </p>
