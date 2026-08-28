@@ -9,6 +9,8 @@ import Badges from "@/components/Badges";
 import ReminderSettings from "@/components/ReminderSettings";
 import DeleteAccountButton from "@/components/DeleteAccountButton";
 import PersonalizationCard from "@/components/PersonalizationCard";
+import HomeGreetingCard from "@/components/HomeGreetingCard";
+import HomeQuickSelector from "@/components/HomeQuickSelector";
 import { computeActiveDays, getStreakMessage, JOURNEY } from "@/lib/journey";
 import { getDailyPhrase } from "@/lib/dailyPhrases";
 import { Image } from "@/components/ui/image";
@@ -63,7 +65,8 @@ export default function Home() {
   const activeDaysTotal = computeActiveDays(sessions, diaryEntries, journey, tz).size;
   const bestStreak = activeDaysTotal;
   const msg = getStreakMessage(activeDaysTotal);
-  const firstName = user?.full_name?.split(" ")[0] || "presencia";
+  const firstName = user?.preferred_name || user?.full_name?.split(" ")[0] || "presencia";
+  const personalized = !!user?.practice_level;
   const journeyProgress = Math.min(activeDaysTotal, 21);
 
   const refreshUser = async () => {
@@ -123,8 +126,15 @@ export default function Home() {
         </p>
       </section>
 
-      {/* Personalización breve */}
-      <PersonalizationCard user={user} onSaved={refreshUser} />
+      {/* Personalización breve / Selector rápido */}
+      {personalized ? (
+        <div className="space-y-3">
+          <HomeGreetingCard name={firstName} />
+          <HomeQuickSelector level={user?.practice_level} />
+        </div>
+      ) : (
+        <PersonalizationCard user={user} onSaved={refreshUser} />
+      )}
 
       {/* Práctica de hoy */}
       <section className="rounded-2xl border border-primary/20 bg-primary/5 p-4">

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -9,7 +8,6 @@ const LEVELS = [
 
 
 export default function PersonalizationCard({ user, onSaved }) {
-  const navigate = useNavigate();
   const { toast } = useToast();
   const [name, setName] = useState(user?.preferred_name || "");
   const [level, setLevel] = useState(user?.practice_level || "beginner");
@@ -23,7 +21,6 @@ export default function PersonalizationCard({ user, onSaved }) {
         practice_level: level
       });
       onSaved?.();
-      navigate("/meditar");
     } catch (e) {
       toast({
         title: "No se pudo guardar",
