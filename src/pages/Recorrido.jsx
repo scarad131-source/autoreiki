@@ -16,10 +16,10 @@ export default function Recorrido() {
     (async () => {
       try {
         const [u, list, prog] = await Promise.all([
-          base44.auth.me(),
-          base44.entities.MeditationSession.list("-created_date", 100),
-          base44.entities.JourneyProgress.list("-created_date", 100),
-        ]);
+        base44.auth.me(),
+        base44.entities.MeditationSession.list("-created_date", 100),
+        base44.entities.JourneyProgress.list("-created_date", 100)]
+        );
         setUser(u);
         setSessions(list);
         setProgress(prog);
@@ -35,29 +35,29 @@ export default function Recorrido() {
   const completedDays = new Set((progress || []).map((p) => p.day_number));
   const completedCount = completedDays.size;
   const currentDay = Math.min(completedCount + 1, 21);
-  const percent = Math.round((completedCount / 21) * 100);
+  const percent = Math.round(completedCount / 21 * 100);
 
   const progressText =
-    completedCount === 0
-      ? { title: "Tu primer paso te espera", body: "Cada entrada que guardas ilumina el siguiente día del recorrido." }
-      : completedCount >= 21
-      ? { title: "Recorrido completo", body: "Has cultivado un hábito sagrado. Celebra tu evolución y sigue adelante." }
-      : { title: `Vas por el día ${currentDay}`, body: "Cada vez que regresas, tu práctica se vuelve más tuya." };
+  completedCount === 0 ?
+  { title: "Tu primer paso te espera", body: "Cada entrada que guardas ilumina el siguiente día del recorrido." } :
+  completedCount >= 21 ?
+  { title: "Recorrido completo", body: "Has cultivado un hábito sagrado. Celebra tu evolución y sigue adelante." } :
+  { title: `Vas por el día ${currentDay}`, body: "Cada vez que regresas, tu práctica se vuelve más tuya." };
 
   if (loading) {
     return (
       <div className="space-y-4">
         <div className="h-24 rounded-2xl bg-accent/40 animate-pulse" />
         <div className="h-40 rounded-2xl bg-accent/40 animate-pulse" />
-      </div>
-    );
+      </div>);
+
   }
 
   return (
     <div className="space-y-7">
       <header>
         <p className="text-[11px] tracking-[0.28em] uppercase text-muted-foreground font-medium">Constancia</p>
-        <h1 className="font-display text-3xl font-semibold tracking-tight mt-1.5">21 días para volver a ti</h1>
+        <h1 className="font-display text-3xl font-semibold tracking-tight mt-1.5">Reto de 21 días</h1>
         <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
           No busques hacerlo perfecto. Solo regresar, una vez más, a tu centro.
         </p>
@@ -85,25 +85,25 @@ export default function Recorrido() {
                 disabled={done || !isCurrent}
                 onClick={isCurrent ? () => navigate("/meditar", { state: { meditarHoy: true, journeyDay: j.day } }) : undefined}
                 className={`aspect-square rounded-xl border flex flex-col items-center justify-center transition-all ${
-                  done
-                    ? "bg-primary/15 border-primary text-primary cursor-default opacity-70"
-                    : isCurrent
-                    ? "bg-accent border-primary/40 text-primary neon-glow active:scale-95"
-                    : "bg-card border-white/5 text-muted-foreground cursor-default opacity-60"
-                }`}
-              >
-                {done ? (
-                  <Check className="w-4 h-4" />
-                ) : isCurrent ? (
-                  <span className="text-[10px] font-semibold uppercase tracking-wide">Iniciar</span>
-                ) : (
-                  <>
+                done ?
+                "bg-primary/15 border-primary text-primary cursor-default opacity-70" :
+                isCurrent ?
+                "bg-accent border-primary/40 text-primary neon-glow active:scale-95" :
+                "bg-card border-white/5 text-muted-foreground cursor-default opacity-60"}`
+                }>
+                
+                {done ?
+                <Check className="w-4 h-4" /> :
+                isCurrent ?
+                <span className="text-[10px] font-semibold uppercase tracking-wide">Iniciar</span> :
+
+                <>
                     <span className="text-[9px] uppercase tracking-wide opacity-70">Día</span>
                     <span className="text-sm font-semibold tabular-nums">{j.day}</span>
                   </>
-                )}
-              </button>
-            );
+                }
+              </button>);
+
           })}
         </div>
       </section>
@@ -114,14 +114,14 @@ export default function Recorrido() {
           Si un día se interrumpe, no has perdido nada. Retoma cuando puedas y deja que la práctica vuelva a encontrarte.
         </p>
       </section>
-    </div>
-  );
+    </div>);
+
 }
 
 function ProgressRing({ percent, value }) {
   const r = 34;
   const c = 2 * Math.PI * r;
-  const offset = c - (percent / 100) * c;
+  const offset = c - percent / 100 * c;
   return (
     <div className="relative w-24 h-24 shrink-0">
       <svg viewBox="0 0 80 80" className="w-full h-full -rotate-90">
@@ -136,13 +136,13 @@ function ProgressRing({ percent, value }) {
           strokeLinecap="round"
           strokeDasharray={c}
           strokeDashoffset={offset}
-          style={{ filter: "drop-shadow(0 0 6px hsl(var(--glow) / 0.6))" }}
-        />
+          style={{ filter: "drop-shadow(0 0 6px hsl(var(--glow) / 0.6))" }} />
+        
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <p className="text-2xl font-display font-semibold tabular-nums">{value}</p>
         <p className="text-[10px] text-muted-foreground -mt-0.5">días</p>
       </div>
-    </div>
-  );
+    </div>);
+
 }
