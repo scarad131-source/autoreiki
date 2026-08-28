@@ -5,7 +5,6 @@ import { base44 } from "@/api/base44Client";
 import { toast } from "@/components/ui/use-toast";
 import { SENSATIONS, sensationMap } from "@/lib/diarySensations";
 import DiaryHistory from "@/components/DiaryHistory";
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 
 export default function Diario() {
   const navigate = useNavigate();
@@ -45,32 +44,30 @@ export default function Diario() {
         <h1 className="font-display text-xl font-semibold">Diario</h1>
       </header>
 
-      <TooltipProvider delayDuration={200}>
-        <div className="flex p-1 rounded-full bg-card border border-white/5">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                disabled
-                className="flex-1 py-2 rounded-full text-sm font-medium text-muted-foreground/50 cursor-not-allowed flex items-center justify-center gap-1.5"
-              >
-                <Lock className="w-3.5 h-3.5" />
-                Nueva entrada
-              </button>
-            </TooltipTrigger>
-            <TooltipContent side="bottom" className="max-w-[16rem] text-center leading-snug">
-              Podrás ingresar tu experiencia ya que termines tu meditación o tu sesión de Reiki
-            </TooltipContent>
-          </Tooltip>
-          <button
-            onClick={() => setView("historial")}
-            className={`flex-1 py-2 rounded-full text-sm font-medium transition-colors ${
-              view === "historial" ? "bg-primary text-primary-foreground" : "text-muted-foreground"
-            }`}
-          >
-            Mis entradas
-          </button>
-        </div>
-      </TooltipProvider>
+      <div className="flex p-1 rounded-full bg-card border border-white/5">
+        <button
+          disabled
+          className="flex-1 py-2 rounded-full text-sm font-medium text-muted-foreground/50 cursor-not-allowed flex items-center justify-center gap-1.5"
+        >
+          <Lock className="w-3.5 h-3.5" />
+          Nueva entrada
+        </button>
+        <button
+          onClick={() => setView("historial")}
+          className={`flex-1 py-2 rounded-full text-sm font-medium transition-colors ${
+            view === "historial" ? "bg-primary text-primary-foreground" : "text-muted-foreground"
+          }`}
+        >
+          Mis entradas
+        </button>
+      </div>
+
+      <div className="rounded-2xl bg-card border border-white/5 p-4 flex gap-3">
+        <Lock className="w-4 h-4 shrink-0 text-muted-foreground mt-0.5" />
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          Podrás ingresar tu experiencia ya que termines tu meditación o tu sesión de Reiki
+        </p>
+      </div>
 
       {view === "historial" ? (
         <DiaryHistory />
