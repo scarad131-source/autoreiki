@@ -36,20 +36,20 @@ export default function PersonalizationCard({ user, onSaved }) {
   };
 
   return (
-    <section className="max-w-md mx-auto rounded-2xl border border-white/10 bg-card/80 p-4">
-      <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+    <section className="rounded-2xl border border-white/10 bg-card/80 p-5">
+      <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
         Personalización breve
       </p>
-      <h3 className="font-display text-base font-semibold leading-snug mt-1.5">
+      <h3 className="font-display text-lg font-semibold leading-snug mt-2">
         Antes de guiarte, cuéntame cómo practicas.
       </h3>
-      <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+      <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
         Dos respuestas permiten ajustar el lenguaje y el nivel de ayuda. Podrás cambiarlas después.
       </p>
 
-      <div className="mt-3.5 space-y-3">
+      <div className="mt-5 space-y-4">
         <div>
-          <label className="text-[11px] font-medium text-foreground/80 mb-1.5 block">
+          <label className="text-xs font-medium text-foreground/80 mb-2 block">
             ¿Cómo quieres que te llamemos?
           </label>
           <input
@@ -57,12 +57,12 @@ export default function PersonalizationCard({ user, onSaved }) {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Nombre opcional"
-            className="w-full rounded-lg border border-white/10 bg-background/60 px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary/50"
+            className="w-full rounded-xl border border-white/10 bg-background/60 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary/50"
           />
         </div>
 
         <div>
-          <label className="text-[11px] font-medium text-foreground/80 mb-1.5 block">
+          <label className="text-xs font-medium text-foreground/80 mb-2 block">
             Tu nivel actual
           </label>
           <div className="grid grid-cols-2 gap-2">
@@ -70,7 +70,7 @@ export default function PersonalizationCard({ user, onSaved }) {
               <button
                 key={l.id}
                 onClick={() => setLevel(l.id)}
-                className={`rounded-lg px-3 py-2 text-xs font-medium transition-all ${
+                className={`rounded-xl px-4 py-3 text-sm font-medium transition-all ${
                   level === l.id
                     ? "bg-gradient-to-r from-amber-light to-primary text-primary-foreground neon-glow"
                     : "border border-white/10 bg-background/60 text-foreground hover:border-primary/40"
@@ -86,7 +86,7 @@ export default function PersonalizationCard({ user, onSaved }) {
       <button
         onClick={handleSave}
         disabled={saving}
-        className="w-full mt-3.5 rounded-lg bg-gradient-to-r from-amber-light to-primary text-primary-foreground font-semibold py-2.5 text-sm neon-glow active:scale-[0.99] transition-transform disabled:opacity-60 disabled:cursor-not-allowed"
+        className="w-full mt-5 rounded-xl bg-gradient-to-r from-amber-light to-primary text-primary-foreground font-semibold py-3.5 neon-glow active:scale-[0.99] transition-transform disabled:opacity-60 disabled:cursor-not-allowed"
       >
         {saving ? "Guardando…" : "Guardar y continuar"}
       </button>
