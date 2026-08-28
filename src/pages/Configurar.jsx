@@ -8,8 +8,12 @@ import { sessionAudio } from "@/lib/sessionAudio";
 import { Image } from "@/components/ui/image";
 
 const PRACTICE_TYPES = [
-{ id: "unguided", name: "Autotratamiento Reiki", desc: "Siete posiciones corporales" },
-{ id: "guided", name: "Meditaci\xF3n", desc: "Respiración y atención corporal" }];
+{ id: "reiki", name: "Autotratamiento Reiki", desc: "Siete posiciones corporales" },
+{ id: "meditation", name: "Meditación", desc: "Respiración y atención corporal" }];
+
+const GUIDANCE_OPTIONS = [
+{ id: "guided", name: "Guiada" },
+{ id: "unguided", name: "No guiada" }];
 
 
 const DURATIONS = [15, 30, 45, 60, 75, 90];
@@ -44,6 +48,7 @@ export default function Configurar() {
   const navigate = useNavigate();
   const [selected, setSelected] = useState([]);
   const [mode, setMode] = useState("unguided");
+  const [practiceType, setPracticeType] = useState("reiki");
   const [level, setLevel] = useState("intermediate");
   const [minutes, setMinutes] = useState(30);
   const [audio, setAudio] = useState("beach");
@@ -54,21 +59,24 @@ export default function Configurar() {
   const [previewEl, setPreviewEl] = useState(null);
 
   const toggle = (id) => {
-    if (mode === "guided") return;
+    if (practiceType !== "reiki" || mode === "guided") return;
     setSelected((s) => s.includes(id) ? s.filter((x) => x !== id) : [...s, id]);
   };
 
   const selectAll = () => setSelected(CHAKRAS.map((c) => c.id));
 
   useEffect(() => {
-    if (mode === "guided") {
+    if (practiceType === "reiki" && mode === "guided") {
       setSelected(CHAKRAS.map((c) => c.id));
       setSpokenInstructions(true);
-    } else {
+    } else if (practiceType === "reiki" && mode === "unguided") {
       setSelected([]);
       setSpokenInstructions(false);
+    } else {
+      setSelected([]);
+      setSpokenInstructions(mode === "guided");
     }
-  }, [mode]);
+  }, [mode, practiceType]);
 
   // Limpia preview al desmontar
   useEffect(() => {
@@ -118,7 +126,9 @@ export default function Configurar() {
 
   const perChakra = selected.length ? Math.max(1, Math.round(minutes / selected.length)) : 0;
   const ambientName = AMBIENT.find((a) => a.id === audio)?.name || "—";
-  const sessionTitle = mode === "guided" ? "Meditación guiada" : "Autotratamiento Reiki";
+  const sessionTitle = practiceType === "reiki"
+    ? (mode === "guided" ? "Reiki guiado" : "Autotratamiento Reiki")
+    : (mode === "guided" ? "Meditación guiada" : "Meditación");
 
   return (
     <div className="space-y-8">
@@ -170,11 +180,11 @@ export default function Configurar() {
             <p className="text-xs text-muted-foreground mb-3">El recorrido visual se adapta al objetivo elegido.</p>
             <div className="grid sm:grid-cols-2 gap-3">
               {PRACTICE_TYPES.map((t) => {
-                const active = mode === t.id;
+                const active = practiceType === t.id;
                 return (
                   <button
                     key={t.id}
-                    onClick={() => setMode(t.id)}
+                    onClick={() => setPracticeType(t.id)}
                     className={`text-left p-4 rounded-xl border-2 transition-all active:scale-[0.98] ${
                     active ?
                     "border-primary bg-accent" :
@@ -183,6 +193,24 @@ export default function Configurar() {
                     
                     <p className="font-medium text-sm text-foreground">{t.name}</p>
                     <p className="text-xs text-muted-foreground mt-1 leading-snug">{t.desc}</p>
+                  </button>);
+
+              })}
+            </div>
+            <div className="mt-3 flex gap-3">
+              {GUIDANCE_OPTIONS.map((g) => {
+                const active = mode === g.id;
+                return (
+                  <button
+                    key={g.id}
+                    onClick={() => setMode(g.id)}
+                    className={`flex-1 py-2.5 rounded-lg border text-sm font-medium transition-all ${
+                    active ?
+                    "border-primary bg-primary/10 text-primary" :
+                    "border-border bg-card text-muted-foreground hover:border-primary/40"}`
+                    }>
+                    
+                    {g.name}
                   </button>);
 
               })}
@@ -310,11 +338,11 @@ export default function Configurar() {
           </SectionCard>
 
           {/* Chakra selection (Autotratamiento) */}
-          {mode === "unguided" &&
+          {practiceType === "reiki" &&
           <section className="rounded-2xl border border-border bg-card p-5">
               <h3 className="text-base font-display font-semibold text-foreground mb-1">Zonas a tratar</h3>
               <p className="text-xs text-muted-foreground mb-4">Toca los chakras que quieras trabajar.</p>
-              <ChakraFigure selected={selected} onToggle={toggle} onSelectAll={selectAll} selectAllEnabled={mode === "unguided"} />
+              <ChakraFigure selected={selected} onToggle={toggle} onSelectAll={selectAll} selectAllEnabled={practiceType === "reiki" && mode === "unguided"} />
             </section>
           }
         </div>
@@ -335,7 +363,7 @@ export default function Configurar() {
             <div className="flex justify-between gap-2">
               <span className="text-muted-foreground">Ambiente</span>
               <span className="text-foreground font-medium text-right">
-                {mode === "guided" ? "Reiki guiado" : ambientName}
+                {mode === "guided" ? "Voz guía" : ambientName}
               </span>
             </div>
             <div className="flex justify-between gap-2">
