@@ -54,17 +54,17 @@ export default function Configurar() {
   };
 
   return (
-    <div className="space-y-7">
+    <div className="space-y-4">
       <div className="flex items-center -ml-1">
         <button
           onClick={() => navigate(-1)}
-          className="w-10 h-10 rounded-full bg-card border border-white/5 flex items-center justify-center hover:border-primary/30 transition-colors"
+          className="w-9 h-9 rounded-full bg-card border border-white/5 flex items-center justify-center hover:border-primary/30 transition-colors"
           aria-label="Atrás">
           
-          <ChevronLeft className="w-5 h-5" />
+          <ChevronLeft className="w-4 h-4" />
         </button>
       </div>
-      <header className="text-center pt-0">
+      <header className="text-center -mt-1">
         <h1 className="font-display text-[33px] font-semibold tracking-tight">Sesión de Reiki</h1>
         <p className="text-sm text-muted-foreground mt-1">Toca los chakras que quieras trabajar</p>
       </header>
