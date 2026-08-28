@@ -308,7 +308,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         <div className="flex items-center justify-center gap-3 mb-3">
           <button
             onClick={handleRewind}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/10 bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors text-xs"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors text-xs"
             aria-label="Retroceder 10 segundos"
             title="Retroceder 10s"
           >
@@ -317,7 +317,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
           </button>
           <button
             onClick={handleRestart}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/10 bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors text-xs"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors text-xs"
             aria-label="Reiniciar meditación"
             title="Reiniciar"
           >
@@ -341,7 +341,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed ${
         bowlsOn ?
         "border-primary bg-primary/15 text-primary neon-glow" :
-        "border-white/10 bg-card/80 text-muted-foreground hover:text-foreground"}`
+        "border-border bg-card/80 text-muted-foreground hover:text-foreground"}`
         }
         aria-label={bowlsOn ? "Desactivar cuencos" : "Activar cuencos"}>
           <BellRing className="w-4 h-4" />

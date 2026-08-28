@@ -146,12 +146,12 @@ export default function Home() {
               {getDailyPhrase()}
             </p>
           </div>
-          <div className="shrink-0 border-l border-white/10 pl-4 text-right max-w-[45%]">
+          <div className="shrink-0 border-l border-border pl-4 text-right max-w-[45%]">
             <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/80 font-body">Agenda hoy</p>
             {todaySessions.length > 0 ?
             <div className="mt-1 space-y-1">
                 {todaySessions.map((s, i) =>
-              <div key={i} className="font-body text-xs leading-snug" style={{ color: "rgb(94, 234, 212)" }}>
+              <div key={i} className="font-body text-xs leading-snug text-primary">
                     <span className="tabular-nums font-semibold">{s.time}</span>
                     <span className="text-muted-foreground/70"> · </span>
                     {s.label || "Reiki"}
@@ -163,14 +163,14 @@ export default function Home() {
             }
           </div>
         </div>
-        <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-white/5">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
+        <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-border">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs text-muted-foreground">
             <Calendar className="w-3.5 h-3.5 text-primary" /> Día {currentDay} · 21 días
           </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs text-muted-foreground">
             <Clock className="w-3.5 h-3.5 text-primary" /> {todayJourney.config.minutes} min
           </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs text-muted-foreground">
             <AudioIcon className="w-3.5 h-3.5 text-primary" /> {audio.name}
           </span>
         </div>
@@ -182,8 +182,8 @@ export default function Home() {
         <button
           key={to}
           onClick={() => navigate(to)}
-          className="flex flex-col items-center gap-2.5 rounded-2xl border border-white/8 bg-card/50 hover:border-primary/40 hover:bg-accent/40 transition-colors active:scale-[0.98] px-3 py-4">
-            <div className="w-24 h-24 rounded-xl overflow-hidden border border-white/10">
+          className="flex flex-col items-center gap-2.5 rounded-2xl border border-border bg-card/50 hover:border-primary/40 hover:bg-accent/40 transition-colors active:scale-[0.98] px-3 py-4">
+            <div className="w-24 h-24 rounded-xl overflow-hidden border border-border">
               <Image src={img} alt={label} className="w-full h-full block" fittingType="fill" />
             </div>
             <span className="text-sm font-medium tracking-wide">{label}</span>

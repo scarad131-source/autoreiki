@@ -113,7 +113,7 @@ export default function Meditate() {
         <section className="flex flex-col items-center gap-3">
           <button
             onClick={() => setMeditarHoy(true)}
-            className="text-left rounded-2xl border border-white/10 hover:border-primary/30 transition-colors active:scale-[0.99] inline-flex items-center gap-2.5 px-2.5 py-2 w-fit max-w-full">
+            className="text-left rounded-2xl border border-border hover:border-primary/30 transition-colors active:scale-[0.99] inline-flex items-center gap-2.5 px-2.5 py-2 w-fit max-w-full">
             <div className="w-16 h-16 shrink-0 rounded-full overflow-hidden">
               <Image src={IMAGES.meditarHoyBtn} alt="Meditar hoy" className="w-full h-full block" fittingType="fill" quality={68} />
             </div>

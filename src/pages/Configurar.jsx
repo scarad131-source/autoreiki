@@ -58,7 +58,7 @@ export default function Configurar() {
       <div className="flex items-center -ml-1">
         <button
           onClick={() => navigate(-1)}
-          className="w-10 h-10 rounded-full bg-card border border-white/5 flex items-center justify-center hover:border-primary/30 transition-colors"
+          className="w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center hover:border-primary/30 transition-colors"
           aria-label="Atrás">
           
           <ChevronLeft className="w-5 h-5" />
@@ -84,9 +84,9 @@ export default function Configurar() {
                 onClick={() => setMode(m.id)}
                 style={{
                   borderColor: m.color,
-                  background: "#1A1426",
+                  background: "hsl(var(--card))",
                   boxShadow: active ? `0 0 22px ${m.color}66, inset 0 0 14px ${m.color}22` : "none",
-                  opacity: active ? 1 : 0.55
+                  opacity: active ? 1 : 0.6
                 }}
                 className={`flex flex-col items-center justify-center text-center min-h-[80px] px-3 py-3 rounded-2xl border-2 transition-all duration-300 active:scale-[0.98] ${
                 active ? "scale-[1.01]" : "hover:opacity-80"}`

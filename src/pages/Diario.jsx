@@ -44,7 +44,7 @@ export default function Diario() {
         <h1 className="font-display text-xl font-semibold">Diario</h1>
       </header>
 
-      <div className="flex p-1 rounded-full bg-card border border-white/5">
+      <div className="flex p-1 rounded-full bg-card border border-border">
         <button
           disabled
           className="flex-1 py-2 rounded-full text-sm font-medium text-muted-foreground/50 cursor-not-allowed flex items-center justify-center gap-1.5"
@@ -94,7 +94,7 @@ export default function Diario() {
                     className={`flex flex-col items-center gap-2 py-3 px-2 rounded-2xl border transition-all ${
                       active
                         ? "border-primary bg-accent neon-glow"
-                        : "border-white/5 bg-card hover:border-primary/30"
+                        : "border-border bg-card hover:border-primary/30"
                     }`}
                   >
                     <Icon className={`w-5 h-5 ${s.color}`} />
@@ -130,7 +130,7 @@ export default function Diario() {
               onChange={(e) => setNote(e.target.value)}
               placeholder="¿Cómo llegaste y cómo te vas?"
               rows={4}
-              className="w-full rounded-2xl bg-card border border-white/5 p-4 text-sm resize-none focus:outline-none focus:border-primary/40"
+              className="w-full rounded-2xl bg-card border border-border p-4 text-sm resize-none focus:outline-none focus:border-primary/40"
             />
           </section>
 
