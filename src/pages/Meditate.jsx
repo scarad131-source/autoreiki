@@ -11,6 +11,7 @@ import { Image } from "@/components/ui/image";
 import { IMAGES } from "@/lib/assets";
 import { audioUrlFor, isVoiceTrack } from "@/lib/audioSources";
 import { sessionAudio } from "@/lib/sessionAudio";
+import PrepChecklist from "@/components/PrepChecklist";
 
 export default function Meditate() {
   const navigate = useNavigate();
@@ -108,6 +109,10 @@ export default function Meditate() {
       <header className="text-center pt-0">
         <p className="text-muted-foreground mt-1 [font-family:'Bodoni_Moda',_serif] text-xl">Configura tu espacio sagrado</p>
       </header>
+
+      {!meditarHoy && (
+        <PrepChecklist />
+      )}
 
       {!meditarHoy && (
         <section className="flex flex-col items-center gap-3">
