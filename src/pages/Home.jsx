@@ -121,15 +121,6 @@ export default function Home() {
         <p className="text-sm text-muted-foreground mt-3 leading-relaxed max-w-sm">Auto-Reiki guiado, a tu ritmo en cada paso.
 
         </p>
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-          <button
-            onClick={() => navigate("/meditar")}
-            className="rounded-full bg-gradient-to-r from-amber-light to-primary text-primary-foreground font-semibold px-7 py-3 neon-glow active:scale-[0.99] transition-transform">
-            
-            Comenzar a meditar
-          </button>
-
-        </div>
       </section>
 
       {/* Personalización breve */}
