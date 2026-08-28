@@ -2,13 +2,10 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import SessionForm from "@/components/SessionForm";
 import MeditationRunner from "@/components/MeditationRunner";
 import ReflectionForm from "@/components/ReflectionForm";
-import { buildChakraScript } from "@/lib/guidedScripts";
+import { buildChakraScript, CHAKRAS } from "@/lib/guidedScripts";
 import { unlockSpeech } from "@/lib/speech";
-import { Image } from "@/components/ui/image";
-import { IMAGES } from "@/lib/assets";
 import { audioUrlFor, isVoiceTrack } from "@/lib/audioSources";
 import { sessionAudio } from "@/lib/sessionAudio";
 
@@ -18,15 +15,19 @@ export default function Meditate() {
   const [stage, setStage] = useState("setup"); // setup | running | reflection
   const [config, setConfig] = useState(null);
   const [result, setResult] = useState(null);
-  const [meditarHoy, setMeditarHoy] = useState(false);
   const [journeyDay, setJourneyDay] = useState(null);
+  const [mode, setMode] = useState("guided");
+  const [userLevel, setUserLevel] = useState("beginner");
+
+  useEffect(() => {
+    base44.auth.me()
+      .then((u) => setUserLevel(u?.practice_level || "beginner"))
+      .catch(() => {});
+  }, []);
 
   // Permite iniciar con un preset desde Recorrido o Configurar.
   useEffect(() => {
     const preset = location.state?.preset;
-    if (location.state?.meditarHoy) {
-      setMeditarHoy(true);
-    }
     if (location.state?.journeyDay) {
       setJourneyDay(location.state.journeyDay);
     }
@@ -94,8 +95,19 @@ export default function Meditate() {
     );
   }
 
+  const MODES = [
+    { id: "guided", name: "Guiada", desc: "Asistente que te guía paso a paso" },
+    { id: "unguided", name: "No guiada", desc: "Solo tú y el sonido ambiente" }
+  ];
+
+  const handleStart = () => {
+    const chakras = CHAKRAS.map((c) => c.id);
+    const audio = mode === "guided" ? "reikiGuided" : "bowls";
+    start({ mode, level: userLevel, audio, minutes: 30, chakras });
+  };
+
   return (
-    <div className="space-y-7">
+    <div className="space-y-8">
       <div className="flex items-center -ml-1">
         <button
           onClick={() => navigate(-1)}
@@ -105,27 +117,35 @@ export default function Meditate() {
           <ChevronLeft className="w-5 h-5" />
         </button>
       </div>
-      <header className="text-center pt-0">
-        <p className="text-muted-foreground mt-1 [font-family:'Bodoni_Moda',_serif] text-xl">Configura tu espacio sagrado</p>
+
+      <header>
+        <h1 className="uppercase tracking-[0.14em] text-2xl font-display font-semibold">Hoy quiero mi meditación...</h1>
       </header>
 
-      {!meditarHoy && (
-        <section className="flex flex-col items-center gap-3">
-          <button
-            onClick={() => setMeditarHoy(true)}
-            className="text-left rounded-2xl border border-white/10 hover:border-primary/30 transition-colors active:scale-[0.99] inline-flex items-center gap-2.5 px-2.5 py-2 w-fit max-w-full">
-            <div className="w-16 h-16 shrink-0 rounded-full overflow-hidden">
-              <Image src={IMAGES.meditarHoyBtn} alt="Meditar hoy" className="w-full h-full block" fittingType="fill" quality={68} />
-            </div>
-            <div>
-              <p className="font-display text-base font-semibold leading-tight whitespace-nowrap">Solo necesito meditar hoy</p>
-              <p className="text-xs text-muted-foreground mt-0.5 leading-snug whitespace-nowrap">Configura una sesión a tu medida.</p>
-            </div>
-          </button>
-        </section>
-      )}
+      <section className="grid grid-cols-2 gap-4">
+        {MODES.map((m) => {
+          const active = mode === m.id;
+          return (
+            <button
+              key={m.id}
+              onClick={() => setMode(m.id)}
+              className={`flex flex-col items-center justify-center text-center min-h-[110px] px-3 py-4 rounded-2xl border-2 transition-all duration-300 active:scale-[0.98] ${
+                active ? "border-primary neon-glow scale-[1.01]" : "border-white/10 bg-card/60 hover:border-primary/40"
+              }`}>
+              <p className="font-semibold text-lg" style={{ color: active ? "hsl(var(--primary))" : undefined }}>{m.name}</p>
+              <p className="text-muted-foreground mt-1.5 leading-snug text-sm max-w-[150px]">{m.desc}</p>
+            </button>
+          );
+        })}
+      </section>
 
-      {meditarHoy && <SessionForm onStart={start} />}
-    </div>);
+      <button
+        onClick={handleStart}
+        className="w-full py-4 rounded-2xl bg-gradient-to-r from-primary to-purple text-primary-foreground font-semibold text-lg flex items-center justify-center gap-2 neon-glow active:scale-[0.99] transition-transform">
+        Comenzar sesión
+        <span aria-hidden="true">→</span>
+      </button>
+    </div>
+  );
 
 }
