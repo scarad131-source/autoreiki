@@ -8,6 +8,18 @@
         "user"
       ]
     },
+    "preferred_name": {
+      "type": "string",
+      "description": "Nombre con el que el usuario prefiere ser llamado en la app"
+    },
+    "practice_level": {
+      "type": "string",
+      "enum": [
+        "beginner",
+        "intermediate"
+      ],
+      "description": "Nivel de pr\u00e1ctica actual del usuario"
+    },
     "reminder_enabled": {
       "type": "boolean",
       "default": false,

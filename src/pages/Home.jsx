@@ -8,6 +8,7 @@ import SessionCard from "@/components/SessionCard";
 import Badges from "@/components/Badges";
 import ReminderSettings from "@/components/ReminderSettings";
 import DeleteAccountButton from "@/components/DeleteAccountButton";
+import PersonalizationCard from "@/components/PersonalizationCard";
 import { computeActiveDays, getStreakMessage, JOURNEY } from "@/lib/journey";
 import { getDailyPhrase } from "@/lib/dailyPhrases";
 import { Image } from "@/components/ui/image";
@@ -136,6 +137,9 @@ export default function Home() {
 
         </div>
       </section>
+
+      {/* Personalización breve */}
+      <PersonalizationCard user={user} onSaved={refreshUser} />
 
       {/* Práctica de hoy */}
       <section className="rounded-2xl border border-primary/20 bg-primary/5 p-4">
