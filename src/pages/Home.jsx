@@ -108,7 +108,8 @@ export default function Home() {
           <Image
             src="https://media.base44.com/images/public/6a7d30a899098694894dbd88/5e7e162ba_siluetameditacionconchackras.webp"
             alt="Silueta de meditación con chakras"
-            className="w-full h-full opacity-80 block"
+            className="w-full h-full block"
+            style={{ filter: "saturate(1.35) contrast(1.12) brightness(1.05)" }}
             fittingType="fill" />
           
         </div>
