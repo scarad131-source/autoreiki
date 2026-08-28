@@ -17,7 +17,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const [volume, setVolume] = useState(0.5);
   const [muted, setMuted] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
-  const [bowlsOn, setBowlsOn] = useState(false);
+  const [bowlsOn, setBowlsOn] = useState(!!config.changeBell);
   const timerRef = useRef(null);
   const audioRef = useRef(sessionAudio.element());
   const finishedRef = useRef(false);
