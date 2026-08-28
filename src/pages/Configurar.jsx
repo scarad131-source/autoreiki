@@ -143,6 +143,12 @@ export default function Configurar() {
         </section>
       }
 
+      {mode === "unguided" &&
+        <p className="text-center text-xs text-muted-foreground leading-relaxed px-4">
+          El sonido de <span className="text-primary font-medium">CUENCOS</span> te ayudará a dividir el tiempo de manera uniforme para tu terapia, según el número de chakras a tratar hoy.
+        </p>
+      }
+
       <p className="text-center text-sm text-muted-foreground mb-3">
         <span className="text-primary font-semibold">{selected.length}</span> de 7 zonas elegidas
       </p>
