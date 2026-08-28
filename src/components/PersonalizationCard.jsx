@@ -43,8 +43,8 @@ export default function PersonalizationCard({ user, onSaved }) {
       <h3 className="text-lg leading-snug mt-2 [font-family:'Cabin',_sans-serif] font-medium">
         Antes de guiarte, cuéntame cómo practicas.
       </h3>
-      <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
-        Dos respuestas permiten ajustar el lenguaje y el nivel de ayuda. Podrás cambiarlas después.
+      <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">Dos respuestas permiten ajustar el lenguaje y el nivel de ayuda.
+
       </p>
 
       <div className="mt-5 space-y-4">
