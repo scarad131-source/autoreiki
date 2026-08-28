@@ -104,7 +104,7 @@ export default function Home() {
 
       {/* Hero */}
       <section className="flex flex-col items-center text-center pt-2">
-        <div className="h-88 w-88 mb-7 relative rounded-[2.5rem] overflow-hidden" style={{ height: "22rem", width: "22rem", boxShadow: "0 0 70px 18px hsl(280 100% 50% / 0.45), 0 0 130px 50px hsl(275 100% 55% / 0.30), 0 10px 40px 8px hsl(270 80% 25% / 0.28)" }}>
+        <div className="mb-6 relative rounded-[2rem] overflow-hidden mx-auto" style={{ height: "16.25rem", width: "16.25rem", boxShadow: "0 0 50px 14px hsl(280 100% 50% / 0.40), 0 0 90px 36px hsl(275 100% 55% / 0.24), 0 8px 28px 6px hsl(270 80% 25% / 0.26)" }}>
           <Image
             src="https://media.base44.com/images/public/6a7d30a899098694894dbd88/5e7e162ba_siluetameditacionconchackras.webp"
             alt="Silueta de meditación con chakras"

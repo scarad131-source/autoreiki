@@ -47,7 +47,7 @@ export default function Layout() {
       {/* Horizontal bottom nav */}
       <nav className="fixed bottom-0 inset-x-0 z-30 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pointer-events-none">
         <div
-          className="max-w-3xl mx-auto pointer-events-auto rounded-full border border-primary/30 backdrop-blur-xl px-2 py-2 flex items-center justify-around shadow-lg shadow-black/40 neon-glow"
+          className="max-w-3xl mx-auto pointer-events-auto rounded-full border border-primary/30 backdrop-blur-xl px-1.5 py-1.5 flex items-center justify-around shadow-lg shadow-black/40 neon-glow"
           style={{ backgroundColor: "hsl(270 50% 10%)" }}
         >
           {navItems.map(({ to, label, icon: Icon, end }) => (
@@ -56,7 +56,7 @@ export default function Layout() {
               to={to}
               end={end}
               className={({ isActive }) =>
-                `flex flex-col items-center gap-1 px-2 py-1 transition-all ${
+                `flex flex-col items-center gap-0.5 px-1 py-0.5 transition-all ${
                   isActive ? "text-primary" : "text-muted-foreground hover:text-primary"
                 }`
               }
@@ -64,13 +64,13 @@ export default function Layout() {
               {({ isActive }) => (
                 <>
                   <span
-                    className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
-                      isActive ? "bg-primary/20 shadow-[0_0_16px_hsl(var(--glow)/0.6)]" : "bg-transparent"
+                    className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${
+                      isActive ? "bg-primary/20 shadow-[0_0_12px_hsl(var(--glow)/0.6)]" : "bg-transparent"
                     }`}
                   >
-                    <Icon className={`w-[18px] h-[18px] ${isActive ? "scale-110" : ""} transition-transform`} strokeWidth={isActive ? 2.4 : 2} />
+                    <Icon className={`w-[15px] h-[15px] ${isActive ? "scale-110" : ""} transition-transform`} strokeWidth={isActive ? 2.4 : 2} />
                   </span>
-                  <span className="text-[10px] font-medium">{label}</span>
+                  <span className="text-[9px] font-medium leading-none">{label}</span>
                 </>
               )}
             </NavLink>
