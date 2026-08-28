@@ -40,7 +40,7 @@ export default function MonthlyMinutes({ sessions }) {
   const total = data.reduce((a, b) => a + b.minutes, 0);
 
   return (
-    <section className="rounded-3xl bg-card border border-border p-5">
+    <section className="rounded-3xl bg-card border border-white/5 p-5">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <CalendarRange className="w-4 h-4 text-primary" />

@@ -104,13 +104,13 @@ export default function Home() {
 
       {/* Hero */}
       <section className="flex flex-col items-center text-center pt-2">
-        <div className="mb-6 relative rounded-[2rem] overflow-hidden mx-auto" style={{ height: "16.25rem", width: "16.25rem", boxShadow: "0 0 50px 14px hsl(280 100% 50% / 0.40), 0 0 90px 36px hsl(275 100% 55% / 0.24), 0 8px 28px 6px hsl(270 80% 25% / 0.26)" }}>
+        <div className="h-88 w-88 mb-7 relative rounded-[2.5rem] overflow-hidden neon-glow gold-glow" style={{ height: "22rem", width: "22rem", boxShadow: "0 0 60px 12px hsl(36 77% 45% / 0.35), 0 0 100px 30px hsl(255 92% 76% / 0.25)" }}>
           <Image
             src="https://media.base44.com/images/public/6a7d30a899098694894dbd88/5e7e162ba_siluetameditacionconchackras.webp"
             alt="Silueta de meditación con chakras"
-            className="w-full h-full block"
-            style={{ filter: "saturate(1.35) contrast(1.12) brightness(1.05)" }}
+            className="w-full h-full opacity-80 block"
             fittingType="fill" />
+          
         </div>
         
         <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">Vuelve a ti</p>
@@ -146,12 +146,12 @@ export default function Home() {
               {getDailyPhrase()}
             </p>
           </div>
-          <div className="shrink-0 border-l border-border pl-4 text-right max-w-[45%]">
+          <div className="shrink-0 border-l border-white/10 pl-4 text-right max-w-[45%]">
             <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/80 font-body">Agenda hoy</p>
             {todaySessions.length > 0 ?
             <div className="mt-1 space-y-1">
                 {todaySessions.map((s, i) =>
-              <div key={i} className="font-body text-xs leading-snug text-primary">
+              <div key={i} className="font-body text-xs leading-snug" style={{ color: "rgb(94, 234, 212)" }}>
                     <span className="tabular-nums font-semibold">{s.time}</span>
                     <span className="text-muted-foreground/70"> · </span>
                     {s.label || "Reiki"}
@@ -163,32 +163,31 @@ export default function Home() {
             }
           </div>
         </div>
-        <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-border">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs text-muted-foreground">
+        <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-white/5">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
             <Calendar className="w-3.5 h-3.5 text-primary" /> Día {currentDay} · 21 días
           </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs text-muted-foreground">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
             <Clock className="w-3.5 h-3.5 text-primary" /> {todayJourney.config.minutes} min
           </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs text-muted-foreground">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs text-muted-foreground">
             <AudioIcon className="w-3.5 h-3.5 text-primary" /> {audio.name}
           </span>
         </div>
       </section>
 
       {/* Accesos rápidos */}
-      <nav className="grid grid-cols-3 gap-4">
+      <nav className="grid grid-cols-3 gap-3 mx-5">
         {quickActions.map(({ label, img, to }) =>
         <button
           key={to}
           onClick={() => navigate(to)}
-          className="flex flex-col items-center gap-1 rounded-xl border border-primary/20 bg-card hover:border-primary/40 transition-all active:scale-[0.98] px-1.5 py-2"
-          style={{ boxShadow: "0 0 20px 6px hsl(270 80% 55% / 0.30), 0 0 44px 14px hsl(275 80% 55% / 0.18)" }}>
-          <div className="w-full aspect-square overflow-hidden">
-            <Image src={img} alt={label} className="w-full h-full block" fittingType="fill" />
-          </div>
-          <span className="text-xs font-medium tracking-wide text-primary">{label}</span>
-        </button>
+          className="flex flex-col items-center gap-2.5 rounded-2xl border border-white/8 bg-card/50 hover:border-primary/40 hover:bg-accent/40 transition-colors active:scale-[0.98] px-3 py-4">
+            <div className="w-24 h-24 rounded-xl overflow-hidden border border-white/10">
+              <Image src={img} alt={label} className="w-full h-full block" fittingType="fill" />
+            </div>
+            <span className="text-sm font-medium tracking-wide">{label}</span>
+          </button>
         )}
       </nav>
 

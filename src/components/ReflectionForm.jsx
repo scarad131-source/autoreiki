@@ -20,7 +20,7 @@ export default function ReflectionForm({ config, actualSeconds, onSave, onRepeat
       <div className="flex items-center -ml-1">
         <button
           onClick={onRepeat}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-card border border-border text-xs font-medium hover:border-primary/30 transition-colors"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-card border border-white/5 text-xs font-medium hover:border-primary/30 transition-colors"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           Volver a la meditación

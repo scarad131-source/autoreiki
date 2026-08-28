@@ -11,7 +11,6 @@ import { Image } from "@/components/ui/image";
 import { IMAGES } from "@/lib/assets";
 import { audioUrlFor, isVoiceTrack } from "@/lib/audioSources";
 import { sessionAudio } from "@/lib/sessionAudio";
-import PrepChecklist from "@/components/PrepChecklist";
 
 export default function Meditate() {
   const navigate = useNavigate();
@@ -77,11 +76,11 @@ export default function Meditate() {
     } catch (e) {
 
 
-
-
-
       // ignore save errors
-    }navigate(to);};if (stage === "running" && config) {return <MeditationRunner config={config} onFinish={finish} onCancel={() => navigate("/configurar")} />;
+    }navigate(to);};
+
+  if (stage === "running" && config) {
+    return <MeditationRunner config={config} onFinish={finish} onCancel={() => navigate("/configurar")} />;
   }
 
   if (stage === "reflection" && config && result) {
@@ -90,9 +89,9 @@ export default function Meditate() {
         config={config}
         actualSeconds={result.actualSeconds}
         onSave={save}
-        onRepeat={() => setStage("running")} />);
-
-
+        onRepeat={() => setStage("running")}
+      />
+    );
   }
 
   return (
@@ -101,51 +100,41 @@ export default function Meditate() {
         <button
           onClick={() => navigate(-1)}
           className="w-10 h-10 rounded-full bg-card border border-white/5 flex items-center justify-center hover:border-primary/30 transition-colors"
-          aria-label="Atrás">
-          
+          aria-label="Atrás"
+        >
           <ChevronLeft className="w-5 h-5" />
         </button>
       </div>
       <header className="text-center pt-0">
-        <p className="mt-1 [font-family:'Mulish',_ui-sans-serif,_system-ui,_sans-serif] font-medium text-2xl text-[hsl(var(--gold))]">Configura tu espacio sagrado</p>
+        <p className="text-muted-foreground mt-1 [font-family:'Bodoni_Moda',_serif] text-xl">Configura tu espacio sagrado</p>
       </header>
 
-      {!meditarHoy &&
-      <PrepChecklist />
-      }
-
-      {!meditarHoy &&
-      <p className="text-center text-sm text-muted-foreground italic">
-          Recuerda tener tu checklist listo antes de iniciar tu terapia
-        </p>
-      }
-
-      {!meditarHoy &&
-      <section className="flex flex-row justify-center items-stretch gap-3 flex-wrap">
+      {!meditarHoy && (
+        <section className="flex flex-col items-center gap-3">
           <button
-            onDoubleClick={() => setMeditarHoy(true)}
-            className="group flex-1 min-w-[150px] text-left rounded-2xl border border-border bg-card hover:border-primary hover:bg-accent/50 hover:shadow-[0_0_20px_6px_hsl(270_80%_55%/0.20)] transition-all active:scale-[0.99] inline-flex items-center gap-2.5 px-2.5 py-2">
-            <div className="w-16 h-16 shrink-0 rounded-full overflow-hidden ring-2 ring-transparent group-hover:ring-primary/40 transition-all">
+            onClick={() => setMeditarHoy(true)}
+            className="text-left rounded-2xl border border-white/10 hover:border-primary/30 transition-colors active:scale-[0.99] inline-flex items-center gap-2.5 px-2.5 py-2 w-fit max-w-full">
+            <div className="w-16 h-16 shrink-0 rounded-full overflow-hidden">
               <Image src={IMAGES.meditarHoyBtn} alt="Meditar hoy" className="w-full h-full block" fittingType="fill" quality={68} />
             </div>
             <div>
-              <p className="font-display text-base font-semibold leading-tight group-hover:text-primary transition-colors">Solo necesito meditar hoy</p>
-              <p className="text-xs text-muted-foreground mt-0.5 leading-snug">Configura una sesión a tu medida.</p>
+              <p className="font-display text-base font-semibold leading-tight whitespace-nowrap">Solo necesito meditar hoy</p>
+              <p className="text-xs text-muted-foreground mt-0.5 leading-snug whitespace-nowrap">Configura una sesión a tu medida.</p>
             </div>
           </button>
           <button
-            onDoubleClick={() => navigate("/recorrido")}
-            className="group flex-1 min-w-[150px] text-left rounded-2xl border border-primary/40 bg-card hover:border-primary hover:bg-accent/50 hover:shadow-[0_0_22px_6px_hsl(270_80%_55%/0.28)] transition-all active:scale-[0.99] inline-flex items-center gap-2.5 px-2.5 py-2">
-            <div className="w-16 h-16 shrink-0 rounded-full overflow-hidden ring-2 ring-primary/30 group-hover:ring-primary/60 transition-all">
+            onClick={() => navigate("/recorrido")}
+            className="text-left rounded-2xl border border-primary/40 transition-all active:scale-[0.99] hover:border-primary/60 inline-flex items-center gap-2.5 px-2.5 py-2 w-fit max-w-full">
+            <div className="w-16 h-16 shrink-0 rounded-full overflow-hidden">
               <Image src={IMAGES.meditar21Btn} alt="Reto 21 días" className="w-full h-full block" fittingType="fill" quality={68} />
             </div>
             <div>
-              <p className="font-display text-base font-semibold text-primary leading-tight transition-colors">Iniciar reto de 21 días</p>
-              <p className="text-xs text-muted-foreground mt-0.5 leading-snug">Sigue el recorrido guiado día a día.</p>
+              <p className="font-display text-base font-semibold text-primary leading-tight whitespace-nowrap">Iniciar reto de 21 días</p>
+              <p className="text-xs text-muted-foreground mt-0.5 leading-snug whitespace-nowrap">Sigue el recorrido guiado día a día.</p>
             </div>
           </button>
         </section>
-      }
+      )}
 
       {meditarHoy && <SessionForm onStart={start} />}
     </div>);

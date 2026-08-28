@@ -65,7 +65,7 @@ export default function Recorrido() {
 
       <JourneyBenefits />
 
-      <section className="rounded-3xl bg-card border border-border p-5 flex items-center gap-5">
+      <section className="rounded-3xl bg-card border border-white/5 p-5 flex items-center gap-5">
         <ProgressRing percent={percent} value={completedCount} />
         <div>
           <p className="font-medium">{progressText.title}</p>
@@ -89,7 +89,7 @@ export default function Recorrido() {
                 "bg-primary/15 border-primary text-primary cursor-default opacity-70" :
                 isCurrent ?
                 "bg-accent border-primary/40 text-primary neon-glow active:scale-95" :
-                "bg-card border-border text-muted-foreground cursor-default opacity-60"}`
+                "bg-card border-white/5 text-muted-foreground cursor-default opacity-60"}`
                 }>
                 
                 {done ?
@@ -108,7 +108,7 @@ export default function Recorrido() {
         </div>
       </section>
 
-      <section className="rounded-3xl bg-card border border-border p-4 flex gap-3">
+      <section className="rounded-3xl bg-card border border-white/5 p-4 flex gap-3">
         <Leaf className="w-5 h-5 shrink-0 text-primary mt-0.5" />
         <p className="text-sm leading-relaxed">
           Si un día se interrumpe, no has perdido nada. Retoma cuando puedas y deja que la práctica vuelva a encontrarte.

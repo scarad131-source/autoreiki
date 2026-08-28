@@ -68,7 +68,7 @@ export default function DiaryHistory() {
                   <div
                     key={w.key}
                     className={`rounded-2xl border bg-card/50 overflow-hidden transition-all ${
-                      open ? "border-primary/40 neon-glow" : "border-border"
+                      open ? "border-primary/40 neon-glow" : "border-white/5"
                     }`}
                   >
                     <button

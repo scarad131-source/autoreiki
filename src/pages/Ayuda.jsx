@@ -41,7 +41,7 @@ export default function Ayuda() {
         {TIPS.map((t) => {
           const Icon = t.icon;
           return (
-            <div key={t.title} className="rounded-2xl bg-card border border-border p-4 flex gap-3">
+            <div key={t.title} className="rounded-2xl bg-card border border-white/5 p-4 flex gap-3">
               <Icon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
               <div>
                 <p className="font-medium text-sm">{t.title}</p>

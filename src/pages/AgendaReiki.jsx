@@ -141,20 +141,20 @@ export default function AgendaReiki() {
                       ? "border-primary bg-primary/10"
                       : hasSessions
                       ? "bg-accent/40 hover:bg-accent/60"
-                      : "border-border bg-background/30 hover:border-glow/30"
+                      : "border-white/5 bg-background/30 hover:border-glow/30"
                   } ${!inMonth ? "opacity-30" : ""}`}
                   style={
                     hasSessions
                       ? {
-                          borderColor: "hsl(var(--primary) / 0.55)",
-                          boxShadow: "0 0 12px hsl(var(--primary) / 0.35), inset 0 0 8px hsl(var(--primary) / 0.12)",
+                          borderColor: "rgba(45, 212, 191, 0.55)",
+                          boxShadow: "0 0 12px rgba(45, 212, 191, 0.45), inset 0 0 8px rgba(45, 212, 191, 0.12)",
                         }
                       : undefined
                   }
                 >
                   <span
                     className={`text-xs font-medium tabular-nums ${
-                      today ? "text-primary" : hasSessions ? "text-primary" : "text-muted-foreground"
+                      today ? "text-primary" : hasSessions ? "text-teal-200" : "text-muted-foreground"
                     }`}
                   >
                     {format(day, "d")}
@@ -164,11 +164,11 @@ export default function AgendaReiki() {
                       {daySessions.slice(0, 3).map((s, i) => (
                         <span
                           key={i}
-                          className="w-1 h-1 rounded-full bg-primary"
+                          className="w-1 h-1 rounded-full bg-teal-300"
                         />
                       ))}
                       {daySessions.length > 3 && (
-                        <span className="text-[8px] text-primary leading-none">+</span>
+                        <span className="text-[8px] text-teal-300 leading-none">+</span>
                       )}
                     </div>
                   )}

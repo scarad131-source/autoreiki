@@ -16,7 +16,7 @@ export default function AgendaHistory({ schedule }) {
         <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground flex items-center gap-2">
           <History className="w-3.5 h-3.5" /> Historial de agenda
         </h2>
-        <div className="rounded-2xl border border-dashed border-border bg-card/30 p-8 text-center">
+        <div className="rounded-2xl border border-dashed border-white/10 bg-card/30 p-8 text-center">
           <History className="w-8 h-8 mx-auto text-muted-foreground/40 mb-2" />
           <p className="text-sm text-muted-foreground">Aún no hay sesiones en tu historial.</p>
           <p className="text-xs text-muted-foreground/60 mt-1">Programa sesiones en el calendario para verlas aquí.</p>

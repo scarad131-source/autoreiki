@@ -23,7 +23,7 @@ const CEREBRALES = [
 function Card({ item }) {
   const Icon = item.icon;
   return (
-    <div className="rounded-2xl border border-border bg-card/60 p-4 hover:border-primary/30 transition-colors">
+    <div className="rounded-2xl border border-white/5 bg-card/60 p-4 hover:border-primary/30 transition-colors">
       <div className="flex items-start gap-3">
         <span className="w-9 h-9 rounded-full flex items-center justify-center bg-primary/10 text-primary shrink-0">
           <Icon className="w-4 h-4" />

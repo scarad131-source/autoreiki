@@ -1,4 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Mulish:wght@300;400;500;600;700&family=Bodoni+Moda:wght@400;500;600;700&family=Cabin:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Mulish:wght@300;400;500;600;700&family=Abril+Fatface:wght@400&family=Architects+Daughter:wght@400&family=Bodoni+Moda:wght@400;500;600;700&family=DM+Serif+Display:wght@400&family=Fascinate+Inline:wght@400&family=Literata:wght@300;400;500;600;700&family=Pacifico:wght@400&family=Cabin:wght@400;500;600;700&family=Bebas+Neue:wght@400&family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Brygada+1918:wght@400;500;600;700&display=swap');
+/* base44-workspace-fonts:start */
+@font-face {
+  font-family: 'Aether';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('https://media.base44.com/files/public/builder-assets/wix-fonts/aether-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Aether';
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('https://media.base44.com/files/public/builder-assets/wix-fonts/aether-700-normal.woff2') format('woff2');
+}
+/* base44-workspace-fonts:end */
 
 @tailwind base;
 @tailwind components;
@@ -6,92 +22,92 @@
 
 @layer base {
   :root {
-    --background: 257 91% 18%;
-    --foreground: 280 30% 92%;
-    --card: 261 56% 65%;
-    --card-foreground: 280 30% 92%;
-    --popover: 261 41% 28%;
-    --popover-foreground: 280 30% 92%;
-    --primary: 280 80% 60%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 270 55% 35%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 260 30% 16%;
-    --muted-foreground: 270 25% 70%;
-    --accent: 270 45% 22%;
-    --accent-foreground: 280 80% 85%;
+    --background: 256 47% 11%;
+    --foreground: 266 73% 96%;
+    --card: 256 46% 18%;
+    --card-foreground: 266 73% 96%;
+    --popover: 256 46% 18%;
+    --popover-foreground: 266 73% 96%;
+    --primary: 36 77% 45%;
+    --primary-foreground: 257 58% 9%;
+    --secondary: 256 46% 18%;
+    --secondary-foreground: 266 73% 96%;
+    --muted: 256 45% 21%;
+    --muted-foreground: 259 38% 75%;
+    --accent: 258 40% 29%;
+    --accent-foreground: 266 73% 96%;
     --destructive: 0 72% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 270 35% 22%;
-    --input: 260 30% 16%;
-    --ring: 280 80% 60%;
-    --glow: 280 80% 60%;
-    --glow-cyan: 190 90% 65%;
-    --gold: 43 80% 58%;
-    --amber-light: 38 80% 65%;
-    --purple: 280 90% 70%;
-    --lilac: 270 70% 80%;
-    --success: 151 58% 50%;
-    --chart-1: 280 80% 60%;
-    --chart-2: 190 90% 65%;
-    --chart-3: 43 80% 58%;
-    --chart-4: 270 70% 80%;
-    --chart-5: 270 55% 35%;
+    --border: 258 30% 22%;
+    --input: 256 45% 21%;
+    --ring: 36 77% 45%;
+    --glow: 36 77% 45%;
+    --glow-cyan: 255 92% 76%;
+    --gold: 36 77% 45%;
+    --amber-light: 38 76% 63%;
+    --purple: 255 92% 76%;
+    --lilac: 260 87% 85%;
+    --success: 151 58% 60%;
+    --chart-1: 36 77% 45%;
+    --chart-2: 38 76% 63%;
+    --chart-3: 255 92% 76%;
+    --chart-4: 260 87% 85%;
+    --chart-5: 258 40% 29%;
     --radius: 1.25rem;
     --font-heading: "Cormorant Garamond", ui-serif, Georgia, serif;
     --font-body: "Mulish", ui-sans-serif, system-ui, sans-serif;
     --font-display: "Cormorant Garamond", ui-serif, Georgia, serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    --sidebar-background: 260 40% 7%;
-    --sidebar-foreground: 280 30% 92%;
-    --sidebar-primary: 280 80% 60%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 270 45% 22%;
-    --sidebar-accent-foreground: 280 80% 85%;
-    --sidebar-border: 270 35% 22%;
-    --sidebar-ring: 280 80% 60%;
+    --sidebar-background: 256 46% 18%;
+    --sidebar-foreground: 266 73% 96%;
+    --sidebar-primary: 36 77% 45%;
+    --sidebar-primary-foreground: 257 58% 9%;
+    --sidebar-accent: 258 40% 29%;
+    --sidebar-accent-foreground: 266 73% 96%;
+    --sidebar-border: 258 30% 22%;
+    --sidebar-ring: 36 77% 45%;
   }
 
   .dark {
-    --background: 260 40% 7%;
-    --foreground: 280 30% 92%;
-    --card: 260 35% 11%;
-    --card-foreground: 280 30% 92%;
-    --popover: 260 35% 11%;
-    --popover-foreground: 280 30% 92%;
-    --primary: 280 80% 60%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 270 55% 35%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 260 30% 16%;
-    --muted-foreground: 270 25% 70%;
-    --accent: 270 45% 22%;
-    --accent-foreground: 280 80% 85%;
+    --background: 256 47% 11%;
+    --foreground: 266 73% 96%;
+    --card: 256 46% 18%;
+    --card-foreground: 266 73% 96%;
+    --popover: 256 46% 18%;
+    --popover-foreground: 266 73% 96%;
+    --primary: 36 77% 45%;
+    --primary-foreground: 257 58% 9%;
+    --secondary: 256 46% 18%;
+    --secondary-foreground: 266 73% 96%;
+    --muted: 256 45% 21%;
+    --muted-foreground: 259 38% 75%;
+    --accent: 258 40% 29%;
+    --accent-foreground: 266 73% 96%;
     --destructive: 0 72% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 270 35% 22%;
-    --input: 260 30% 16%;
-    --ring: 280 80% 60%;
-    --glow: 280 80% 60%;
-    --glow-cyan: 190 90% 65%;
-    --gold: 43 80% 58%;
-    --amber-light: 38 80% 65%;
-    --purple: 280 90% 70%;
-    --lilac: 270 70% 80%;
-    --success: 151 58% 50%;
-    --chart-1: 280 80% 60%;
-    --chart-2: 190 90% 65%;
-    --chart-3: 43 80% 58%;
-    --chart-4: 270 70% 80%;
-    --chart-5: 270 55% 35%;
-    --sidebar-background: 260 40% 7%;
-    --sidebar-foreground: 280 30% 92%;
-    --sidebar-primary: 280 80% 60%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 270 45% 22%;
-    --sidebar-accent-foreground: 280 80% 85%;
-    --sidebar-border: 270 35% 22%;
-    --sidebar-ring: 280 80% 60%;
+    --border: 258 30% 22%;
+    --input: 256 45% 21%;
+    --ring: 36 77% 45%;
+    --glow: 36 77% 45%;
+    --glow-cyan: 255 92% 76%;
+    --gold: 36 77% 45%;
+    --amber-light: 38 76% 63%;
+    --purple: 255 92% 76%;
+    --lilac: 260 87% 85%;
+    --success: 151 58% 60%;
+    --chart-1: 36 77% 45%;
+    --chart-2: 38 76% 63%;
+    --chart-3: 255 92% 76%;
+    --chart-4: 260 87% 85%;
+    --chart-5: 258 40% 29%;
+    --sidebar-background: 256 46% 18%;
+    --sidebar-foreground: 266 73% 96%;
+    --sidebar-primary: 36 77% 45%;
+    --sidebar-primary-foreground: 257 58% 9%;
+    --sidebar-accent: 258 40% 29%;
+    --sidebar-accent-foreground: 266 73% 96%;
+    --sidebar-border: 258 30% 22%;
+    --sidebar-ring: 36 77% 45%;
   }
 }
 
@@ -102,7 +118,7 @@
 
   body {
     @apply text-foreground font-body;
-    background: radial-gradient(ellipse 80% 50% at 50% 0%, hsl(var(--background)), hsl(257 91% 12%));
+    background: radial-gradient(ellipse 80% 50% at 50% 0%, hsl(256 46% 15%), hsl(256 47% 11%));
     min-height: 100vh;
     overscroll-behavior-y: none;
   }

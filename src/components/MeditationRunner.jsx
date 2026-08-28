@@ -17,7 +17,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const [volume, setVolume] = useState(0.5);
   const [muted, setMuted] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
-  const [bowlsOn, setBowlsOn] = useState(!!config.changeBell);
+  const [bowlsOn, setBowlsOn] = useState(false);
   const timerRef = useRef(null);
   const audioRef = useRef(sessionAudio.element());
   const finishedRef = useRef(false);
@@ -98,9 +98,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   // al terminar la cuenta, reproducir el audio (ya desbloqueado en el gesto)
   useEffect(() => {
     if (!started) return;
-    // Toma el control del elemento: cualquier pauseBack tardío del unlock
-    // (archivos grandes que bufferizan lento) ya no silenciará la sesión.
-    sessionAudio.claim();
     el.muted = muted;
     el.volume = muted ? 0 : volume;
     try { el.currentTime = 0; } catch (e) {}
@@ -203,9 +200,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       if (p < 1) rafId = requestAnimationFrame(step);
     };
     rafId = requestAnimationFrame(step);
-    // Respaldo: si rAF se pausa (pantalla bloqueada), fuerza el volumen final.
-    const safety = setTimeout(() => { el.volume = target; }, duration + 400);
-    return () => { cancelAnimationFrame(rafId); clearTimeout(safety); };
+    return () => cancelAnimationFrame(rafId);
   }, [started, config.audio, volume, muted]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Fade out suave en los últimos 3 segundos (solo sesiones no guiadas)
@@ -308,7 +303,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         <div className="flex items-center justify-center gap-3 mb-3">
           <button
             onClick={handleRewind}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors text-xs"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/10 bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors text-xs"
             aria-label="Retroceder 10 segundos"
             title="Retroceder 10s"
           >
@@ -317,7 +312,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
           </button>
           <button
             onClick={handleRestart}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors text-xs"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/10 bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors text-xs"
             aria-label="Reiniciar meditación"
             title="Reiniciar"
           >
@@ -341,7 +336,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed ${
         bowlsOn ?
         "border-primary bg-primary/15 text-primary neon-glow" :
-        "border-border bg-card/80 text-muted-foreground hover:text-foreground"}`
+        "border-white/10 bg-card/80 text-muted-foreground hover:text-foreground"}`
         }
         aria-label={bowlsOn ? "Desactivar cuencos" : "Activar cuencos"}>
           <BellRing className="w-4 h-4" />
