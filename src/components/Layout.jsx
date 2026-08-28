@@ -48,17 +48,25 @@ export default function Layout() {
               to={to}
               end={end}
               className={({ isActive }) =>
-                `flex flex-col items-center gap-1 px-3 py-1.5 rounded-full transition-all ${
-                  isActive ? "bg-primary/15 text-primary shadow-[0_0_14px_hsl(var(--primary)/0.35)]" : "text-muted-foreground hover:text-foreground"
+                `flex flex-col items-center gap-1.5 px-1.5 py-1 transition-all ${
+                  isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
                 }`
               }
             >
               {({ isActive }) => (
                 <>
-                  <Icon
-                    className={`w-5 h-5 ${isActive ? "scale-110" : ""} transition-transform`}
-                    strokeWidth={isActive ? 2.4 : 2}
-                  />
+                  <span
+                    className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+                      isActive
+                        ? "bg-primary/15 shadow-[0_0_16px_hsl(var(--primary)/0.45)]"
+                        : "bg-card/60"
+                    }`}
+                  >
+                    <Icon
+                      className={`w-5 h-5 ${isActive ? "scale-110" : ""} transition-transform`}
+                      strokeWidth={isActive ? 2.4 : 2}
+                    />
+                  </span>
                   <span className="text-[10px] font-medium">{label}</span>
                 </>
               )}
