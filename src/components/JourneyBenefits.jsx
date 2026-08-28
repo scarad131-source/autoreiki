@@ -1,4 +1,5 @@
-import { Brain, HeartPulse, Sparkles, Moon, Shield, Wind } from "lucide-react";
+import { useState } from "react";
+import { Brain, HeartPulse, Sparkles, Moon, Shield, Wind, ChevronRight } from "lucide-react";
 
 const PSICOLOGICOS = [
 { icon: Sparkles, title: "Reducción del estrés y la ansiedad", desc: "Baja los niveles de cortisol (hormona del estrés)." },
@@ -36,6 +37,27 @@ function Card({ item }) {
 
 }
 
+function Section({ title, items, defaultOpen }) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="w-full text-sm font-semibold mb-1 flex items-center gap-2 py-1 group"
+      >
+        <ChevronRight className={`w-4 h-4 text-primary transition-transform duration-200 ${open ? "rotate-90" : ""}`} />
+        <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+        {title}
+      </button>
+      {open && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+          {items.map((item) => <Card key={item.title} item={item} />)}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function JourneyBenefits() {
   return (
     <section className="space-y-6 rounded-3xl border border-primary/30 bg-gradient-to-b from-primary/5 to-transparent p-5 neon-glow">
@@ -46,29 +68,8 @@ export default function JourneyBenefits() {
         </h2>
       </div>
 
-      <div>
-        <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-          Beneficios psicológicos y emocionales
-        </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {PSICOLOGICOS.map((item) =>
-          <Card key={item.title} item={item} />
-          )}
-        </div>
-      </div>
-
-      <div>
-        <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-          Beneficios físicos
-        </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {FISICOS.map((item) =>
-          <Card key={item.title} item={item} />
-          )}
-        </div>
-      </div>
+      <Section title="Beneficios psicológicos y emocionales" items={PSICOLOGICOS} defaultOpen={false} />
+      <Section title="Beneficios físicos" items={FISICOS} defaultOpen={false} />
 
       
 
