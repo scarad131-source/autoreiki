@@ -7,7 +7,7 @@ import { sessionAudio } from "@/lib/sessionAudio";
 
 const CARDS = [
   { id: "calma", Icon: MoonStar, title: "Calma rápida", minutes: 5, mode: "unguided", audio: "beach", chakras: [] },
-  { id: "dormir", image: "https://media.base44.com/images/public/6a7d30a899098694894dbd88/75700294f_generated_image.png", title: "Antes de dormir", minutes: 10, mode: "unguided", audio: "rain", chakras: [] },
+  { id: "dormir", image: "https://media.base44.com/images/public/6a7d30a899098694894dbd88/9076803fa_botonantesdedormir.png", title: "Antes de dormir", minutes: 10, mode: "unguided", audio: "rain", chakras: [] },
   { id: "manos", Icon: Hand, title: "Solo manos", minutes: 7, mode: "guided", audio: "reikiGuided", chakras: CHAKRAS.map((c) => c.id) },
 ];
 
