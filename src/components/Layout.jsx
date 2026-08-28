@@ -41,7 +41,7 @@ export default function Layout() {
       </main>
 
       <nav className="fixed bottom-0 inset-x-0 z-30 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pointer-events-none">
-        <div className="max-w-md mx-auto pointer-events-auto rounded-full border border-primary/30 bg-secondary/90 backdrop-blur-xl px-2 py-2 flex items-center justify-around shadow-lg shadow-black/40">
+        <div className="max-w-md mx-auto pointer-events-auto rounded-full border border-white/10 backdrop-blur-xl px-2 py-2 flex items-center justify-around shadow-lg shadow-black/40" style={{ backgroundColor: "#8B008B" }}>
           {navItems.map(({ to, label, icon: Icon, end }) => (
             <NavLink
               key={to}
