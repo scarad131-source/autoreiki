@@ -122,17 +122,6 @@ export default function Meditate() {
               <p className="text-xs text-muted-foreground mt-0.5 leading-snug whitespace-nowrap">Configura una sesión a tu medida.</p>
             </div>
           </button>
-          <button
-            onClick={() => navigate("/recorrido")}
-            className="text-left rounded-2xl border border-primary/40 transition-all active:scale-[0.99] hover:border-primary/60 inline-flex items-center gap-2.5 px-2.5 py-2 w-fit max-w-full">
-            <div className="w-16 h-16 shrink-0 rounded-full overflow-hidden">
-              <Image src={IMAGES.meditar21Btn} alt="Reto 21 días" className="w-full h-full block" fittingType="fill" quality={68} />
-            </div>
-            <div>
-              <p className="font-display text-base font-semibold text-primary leading-tight whitespace-nowrap">Iniciar reto de 21 días</p>
-              <p className="text-xs text-muted-foreground mt-0.5 leading-snug whitespace-nowrap">Sigue el recorrido guiado día a día.</p>
-            </div>
-          </button>
         </section>
       )}
 
