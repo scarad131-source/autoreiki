@@ -121,27 +121,27 @@ export default function Meditate() {
       }
 
       {!meditarHoy &&
-      <section className="flex flex-col items-center gap-3">
+      <section className="flex flex-row justify-center items-stretch gap-3 flex-wrap">
           <button
-          onDoubleClick={() => setMeditarHoy(true)}
-          className="group text-left rounded-2xl border border-border bg-card hover:border-primary hover:bg-accent/50 hover:shadow-[0_0_20px_6px_hsl(270_80%_55%/0.20)] transition-all active:scale-[0.99] inline-flex items-center gap-2.5 px-2.5 py-2 w-fit max-w-full">
+            onDoubleClick={() => setMeditarHoy(true)}
+            className="group flex-1 min-w-[150px] flex flex-col items-center text-center rounded-2xl border border-border bg-card hover:border-primary hover:bg-accent/50 hover:shadow-[0_0_20px_6px_hsl(270_80%_55%/0.20)] transition-all active:scale-[0.99] px-3 py-4">
             <div className="w-16 h-16 shrink-0 rounded-full overflow-hidden ring-2 ring-transparent group-hover:ring-primary/40 transition-all">
               <Image src={IMAGES.meditarHoyBtn} alt="Meditar hoy" className="w-full h-full block" fittingType="fill" quality={68} />
             </div>
-            <div>
-              <p className="font-display text-base font-semibold leading-tight whitespace-nowrap group-hover:text-primary transition-colors">Solo necesito meditar hoy</p>
-              <p className="text-xs text-muted-foreground mt-0.5 leading-snug whitespace-nowrap">Configura una sesión a tu medida.</p>
+            <div className="mt-2">
+              <p className="font-display text-sm font-semibold leading-tight group-hover:text-primary transition-colors">Solo necesito meditar hoy</p>
+              <p className="text-[11px] text-muted-foreground mt-0.5 leading-snug">Configura una sesión a tu medida.</p>
             </div>
           </button>
           <button
-          onDoubleClick={() => navigate("/recorrido")}
-          className="group text-left rounded-2xl border border-primary/40 bg-card hover:border-primary hover:bg-accent/50 hover:shadow-[0_0_22px_6px_hsl(270_80%_55%/0.28)] transition-all active:scale-[0.99] inline-flex items-center gap-2.5 px-2.5 py-2 w-fit max-w-full">
+            onDoubleClick={() => navigate("/recorrido")}
+            className="group flex-1 min-w-[150px] flex flex-col items-center text-center rounded-2xl border border-primary/40 bg-card hover:border-primary hover:bg-accent/50 hover:shadow-[0_0_22px_6px_hsl(270_80%_55%/0.28)] transition-all active:scale-[0.99] px-3 py-4">
             <div className="w-16 h-16 shrink-0 rounded-full overflow-hidden ring-2 ring-primary/30 group-hover:ring-primary/60 transition-all">
               <Image src={IMAGES.meditar21Btn} alt="Reto 21 días" className="w-full h-full block" fittingType="fill" quality={68} />
             </div>
-            <div>
-              <p className="font-display text-base font-semibold text-primary leading-tight whitespace-nowrap group-hover:text-primary-hover transition-colors">Iniciar reto de 21 días</p>
-              <p className="text-xs text-muted-foreground mt-0.5 leading-snug whitespace-nowrap">Sigue el recorrido guiado día a día.</p>
+            <div className="mt-2">
+              <p className="font-display text-sm font-semibold text-primary leading-tight transition-colors">Iniciar reto de 21 días</p>
+              <p className="text-[11px] text-muted-foreground mt-0.5 leading-snug">Sigue el recorrido guiado día a día.</p>
             </div>
           </button>
         </section>
