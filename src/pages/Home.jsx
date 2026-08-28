@@ -128,12 +128,6 @@ export default function Home() {
             
             Comenzar a meditar
           </button>
-          <button
-            onClick={() => navigate("/configurar")}
-            className="rounded-full border border-primary/40 bg-card/60 text-foreground font-semibold px-7 py-3 hover:bg-accent active:scale-[0.99] transition-transform">
-            
-            Sesión de Reiki
-          </button>
 
         </div>
       </section>
