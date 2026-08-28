@@ -55,7 +55,7 @@ export default function Recorrido() {
 
   return (
     <div className="space-y-7">
-      <header>
+      <header className="text-center">
         <p className="text-[11px] tracking-[0.28em] uppercase text-muted-foreground font-medium">Constancia</p>
         <h1 className="font-semibold tracking-tight mt-1.5 [font-family:'Bodoni_Moda',_serif] text-4xl">Reto de 21 días</h1>
         <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
