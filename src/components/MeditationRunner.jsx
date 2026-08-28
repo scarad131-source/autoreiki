@@ -98,6 +98,9 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   // al terminar la cuenta, reproducir el audio (ya desbloqueado en el gesto)
   useEffect(() => {
     if (!started) return;
+    // Toma el control del elemento: cualquier pauseBack tardío del unlock
+    // (archivos grandes que bufferizan lento) ya no silenciará la sesión.
+    sessionAudio.claim();
     el.muted = muted;
     el.volume = muted ? 0 : volume;
     try { el.currentTime = 0; } catch (e) {}
@@ -200,7 +203,9 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       if (p < 1) rafId = requestAnimationFrame(step);
     };
     rafId = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(rafId);
+    // Respaldo: si rAF se pausa (pantalla bloqueada), fuerza el volumen final.
+    const safety = setTimeout(() => { el.volume = target; }, duration + 400);
+    return () => { cancelAnimationFrame(rafId); clearTimeout(safety); };
   }, [started, config.audio, volume, muted]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Fade out suave en los últimos 3 segundos (solo sesiones no guiadas)
