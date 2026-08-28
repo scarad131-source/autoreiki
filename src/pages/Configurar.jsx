@@ -88,11 +88,11 @@ export default function Configurar() {
                   boxShadow: active ? `0 0 22px ${m.color}66, inset 0 0 14px ${m.color}22` : "none",
                   opacity: active ? 1 : 0.55
                 }}
-                className={`flex flex-col items-center justify-center text-center min-h-[80px] px-3 py-3 rounded-2xl border-2 transition-all duration-300 active:scale-[0.98] ${
+                className={`flex flex-col items-center justify-center text-center min-h-[56px] px-2.5 py-2 rounded-xl border-2 transition-all duration-300 active:scale-[0.98] ${
                 active ? "scale-[1.01]" : "hover:opacity-80"}`
                 }>
-              <p className="tracking-tight font-normal [font-family:'Aether',_sans-serif] text-lg" style={{ color: m.color }}>{m.name}</p>
-              <p className="text-muted-foreground mt-1 leading-snug max-w-[140px] text-sm">{m.desc}</p>
+              <p className="tracking-tight font-normal [font-family:'Aether',_sans-serif] text-sm" style={{ color: m.color }}>{m.name}</p>
+              <p className="text-muted-foreground mt-0.5 leading-tight max-w-[120px] text-[11px]">{m.desc}</p>
             </button>);
 
           })}
