@@ -7,7 +7,7 @@ import { CHAKRAS } from "@/lib/guidedScripts";
 import { sessionAudio } from "@/lib/sessionAudio";
 
 const MODES = [
-{ id: "guided", name: "GUIADA - Principiante", desc: "Audio con voz que te guía durante tu meditación", color: "#00C698" },
+{ id: "guided", name: "GUIADA - Principiante", desc: "Audio con voz que te guía durante tu meditación", color: "#00C698", duration: 13 },
 { id: "unguided", name: "NO GUIADA - Avanzado", desc: "Solo tú, tu respiración y el sonido", color: "#FF7A00" }];
 
 
@@ -54,18 +54,18 @@ export default function Configurar() {
   };
 
   return (
-    <div className="space-y-7">
+    <div className="space-y-4">
       <div className="flex items-center -ml-1">
         <button
           onClick={() => navigate(-1)}
-          className="w-10 h-10 rounded-full bg-card border border-white/5 flex items-center justify-center hover:border-primary/30 transition-colors"
+          className="w-9 h-9 rounded-full bg-card border border-white/5 flex items-center justify-center hover:border-primary/30 transition-colors"
           aria-label="Atrás">
           
-          <ChevronLeft className="w-5 h-5" />
+          <ChevronLeft className="w-4 h-4" />
         </button>
       </div>
-      <header className="text-center pt-0">
-        <h1 className="font-display text-[33px] font-semibold tracking-tight">Sesión de Reiki</h1>
+      <header className="text-center -mt-1">
+        <h1 className="font-display font-semibold tracking-tight text-[hsl(var(--primary))] text-4xl">Sesión de Reiki</h1>
         <p className="text-sm text-muted-foreground mt-1">Toca los chakras que quieras trabajar</p>
       </header>
 
@@ -88,11 +88,16 @@ export default function Configurar() {
                   boxShadow: active ? `0 0 22px ${m.color}66, inset 0 0 14px ${m.color}22` : "none",
                   opacity: active ? 1 : 0.55
                 }}
-                className={`flex flex-col items-center justify-center text-center min-h-[56px] px-2.5 py-2 rounded-xl border-2 transition-all duration-300 active:scale-[0.98] ${
+                className={`flex items-center justify-between text-left min-h-[56px] px-3 py-2 rounded-xl border-2 transition-all duration-300 active:scale-[0.98] ${
                 active ? "scale-[1.01]" : "hover:opacity-80"}`
                 }>
-              <p className="tracking-tight font-normal [font-family:'Aether',_sans-serif] text-sm" style={{ color: m.color }}>{m.name}</p>
-              <p className="text-muted-foreground mt-0.5 leading-tight max-w-[120px] text-[11px]">{m.desc}</p>
+              <div className="min-w-0 flex-1">
+                <p className="tracking-tight font-normal [font-family:'Aether',_sans-serif] text-sm" style={{ color: m.color }}>{m.name}</p>
+                <p className="text-muted-foreground mt-0.5 leading-tight text-[11px]">{m.desc}</p>
+              </div>
+              <span className="shrink-0 ml-2 pl-2 border-l border-white/10 text-xs font-semibold tabular-nums" style={{ color: m.color }}>
+                {m.id === "guided" ? `${m.duration} Min` : `${minutes} Min`}
+              </span>
             </button>);
 
           })}
@@ -136,6 +141,12 @@ export default function Configurar() {
           )}
           </div>
         </section>
+      }
+
+      {mode === "unguided" &&
+        <p className="text-center text-xs text-muted-foreground leading-relaxed px-4">
+          El sonido de <span className="text-primary font-medium">CUENCOS</span> te ayudará a dividir el tiempo de manera uniforme para tu terapia, según el número de chakras a tratar hoy.
+        </p>
       }
 
       <p className="text-center text-sm text-muted-foreground mb-3">
