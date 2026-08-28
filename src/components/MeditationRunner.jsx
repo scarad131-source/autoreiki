@@ -50,21 +50,31 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
 
   // Listeners del elemento de audio singleton (metadata, timeupdate, ended)
   useEffect(() => {
+    const finishGuided = () => {
+      if (finishedRef.current) return;
+      finishedRef.current = true;
+      const d = el.duration;
+      onFinish({ actualSeconds: Math.round((d && isFinite(d)) ? d : (el.currentTime || 0)), completed: true });
+    };
     const onLoaded = () => {
       const d = el.duration;
       if (isVoiceTrack(config.audio) && d && isFinite(d)) setAudioDuration(d);
     };
     const onTime = (e) => {
-      if (isVoiceTrack(config.audio) && started && !paused && !finishedRef.current) {
-        const t = Math.floor(e.currentTarget.currentTime);
-        setElapsed((prev) => (t !== prev ? t : prev));
+      const cur = e.currentTarget.currentTime;
+      const d = e.currentTarget.duration;
+      if (isVoiceTrack(config.audio)) {
+        if (d && isFinite(d)) setAudioDuration(d);
+        if (started && !paused && !finishedRef.current) {
+          const t = Math.floor(cur);
+          setElapsed((prev) => (t !== prev ? t : prev));
+          // Detección de fin: cuando el audio llega casi al final
+          if (d && isFinite(d) && cur >= d - 0.4) finishGuided();
+        }
       }
     };
     const onEnded = () => {
-      if (isVoiceTrack(config.audio) && !finishedRef.current) {
-        finishedRef.current = true;
-        onFinish({ actualSeconds: Math.round(audioDuration || 0), completed: true });
-      }
+      if (isVoiceTrack(config.audio)) finishGuided();
     };
     el.addEventListener("loadedmetadata", onLoaded);
     el.addEventListener("timeupdate", onTime);
@@ -76,7 +86,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       el.removeEventListener("timeupdate", onTime);
       el.removeEventListener("ended", onEnded);
     };
-  }, [el, config.audio, started, paused, audioDuration, onFinish]);
+  }, [el, config.audio, started, paused, onFinish]);
 
   // cuenta regresiva de inicio
   useEffect(() => {
@@ -142,23 +152,31 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     if (!bowlsOn) lastBowlStepRef.current = -1;
   }, [bowlsOn]);
 
-  // fin de sesión
+  // fin de sesión (no guiadas): por temporizador
   useEffect(() => {
     if (!started || finishedRef.current) return;
-    if (isVoiceTrack(config.audio)) {
-      // Las guiadas terminan cuando el audio termina (onEnded). Fallback por si falla.
-      if (elapsed >= totalSeconds + 5) {
-        finishedRef.current = true;
-        onFinish({ actualSeconds: Math.round(audioDuration || totalSeconds), completed: true });
-      }
-      return;
-    }
+    if (isVoiceTrack(config.audio)) return;
     if (elapsed >= totalSeconds) {
       finishedRef.current = true;
       try { el.pause(); } catch (e) {}
       onFinish({ actualSeconds: totalSeconds, completed: true });
     }
-  }, [elapsed, totalSeconds, started, onFinish, config.audio, audioDuration]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [elapsed, totalSeconds, started, onFinish, config.audio]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // fin de sesión (guiadas): watchdog de respaldo por si onTime/onEnded fallan
+  useEffect(() => {
+    if (!started || !isVoiceTrack(config.audio)) return;
+    const id = setInterval(() => {
+      if (finishedRef.current) return;
+      const d = el.duration;
+      if (el.ended || (d && isFinite(d) && el.currentTime >= d - 0.4)) {
+        finishedRef.current = true;
+        clearInterval(id);
+        onFinish({ actualSeconds: Math.round((d && isFinite(d)) ? d : (el.currentTime || 0)), completed: true });
+      }
+    }, 500);
+    return () => clearInterval(id);
+  }, [started, config.audio, onFinish, el]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (started) {
