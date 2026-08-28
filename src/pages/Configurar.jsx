@@ -65,7 +65,7 @@ export default function Configurar() {
         </button>
       </div>
       <header className="text-center -mt-1">
-        <h1 className="font-display text-[33px] font-semibold tracking-tight">Sesión de Reiki</h1>
+        <h1 className="font-display font-semibold tracking-tight text-[hsl(var(--primary))] text-4xl">Sesión de Reiki</h1>
         <p className="text-sm text-muted-foreground mt-1">Toca los chakras que quieras trabajar</p>
       </header>
 
