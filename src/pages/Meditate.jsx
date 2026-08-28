@@ -119,7 +119,7 @@ export default function Meditate() {
       </div>
 
       <header>
-        <h1 className="uppercase tracking-[0.14em] text-2xl font-display font-semibold">Hoy quiero mi meditación...</h1>
+        <h1 className="uppercase tracking-[0.14em] text-2xl font-display font-semibold">Configura tu espacio sagrado</h1>
       </header>
 
       <section className="grid grid-cols-2 gap-4">
