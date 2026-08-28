@@ -78,9 +78,9 @@ export default function Meditate() {
 
 
 
+
       // ignore save errors
-    }navigate(to);};
-  if (stage === "running" && config) {
+    }navigate(to);};if (stage === "running" && config) {
     return <MeditationRunner config={config} onFinish={finish} onCancel={() => navigate("/configurar")} />;
   }
 
@@ -107,7 +107,7 @@ export default function Meditate() {
         </button>
       </div>
       <header className="text-center pt-0">
-        <p className="text-muted-foreground mt-1 text-xl [font-family:'Mulish',_ui-sans-serif,_system-ui,_sans-serif] font-medium">Configura tu espacio sagrado</p>
+        <p className="text-muted-foreground mt-1 [font-family:'Mulish',_ui-sans-serif,_system-ui,_sans-serif] font-medium text-2xl">Configura tu espacio sagrado</p>
       </header>
 
       {!meditarHoy &&
