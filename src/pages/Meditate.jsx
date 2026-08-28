@@ -110,7 +110,7 @@ export default function Meditate() {
           <button
             onClick={() => setMeditarHoy(true)}
             className="text-left rounded-2xl border border-white/10 hover:border-primary/30 transition-colors active:scale-[0.99] inline-flex items-center gap-2.5 px-2.5 py-2 w-fit max-w-full">
-            <div className="w-12 h-12 shrink-0 rounded-full overflow-hidden">
+            <div className="w-16 h-16 shrink-0 rounded-full overflow-hidden">
               <Image src={IMAGES.meditarHoyBtn} alt="Meditar hoy" className="w-full h-full block" fittingType="fill" quality={68} />
             </div>
             <div>
@@ -121,7 +121,7 @@ export default function Meditate() {
           <button
             onClick={() => navigate("/recorrido")}
             className="text-left rounded-2xl border border-primary/40 transition-all active:scale-[0.99] hover:border-primary/60 inline-flex items-center gap-2.5 px-2.5 py-2 w-fit max-w-full">
-            <div className="w-12 h-12 shrink-0 rounded-full overflow-hidden">
+            <div className="w-16 h-16 shrink-0 rounded-full overflow-hidden">
               <Image src={IMAGES.meditar21Btn} alt="Reto 21 días" className="w-full h-full block" fittingType="fill" quality={68} />
             </div>
             <div>
