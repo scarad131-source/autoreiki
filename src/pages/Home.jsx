@@ -178,18 +178,18 @@ export default function Home() {
       </section>
 
       {/* Accesos rápidos */}
-      <nav className="grid grid-cols-3 gap-3 mx-5">
+      <nav className="grid grid-cols-3 gap-4">
         {quickActions.map(({ label, img, to }) =>
         <button
           key={to}
           onClick={() => navigate(to)}
-          className="flex flex-col items-center gap-2.5 rounded-2xl border border-border bg-card/50 hover:border-primary/40 hover:bg-accent/40 transition-all active:scale-[0.98] px-3 py-4"
-          style={{ boxShadow: "0 0 18px 4px hsl(305 100% 45% / 0.25), 0 0 40px 12px hsl(310 100% 50% / 0.15)" }}>
-            <div className="w-24 h-24 rounded-xl overflow-hidden border border-border">
-              <Image src={img} alt={label} className="w-full h-full block" fittingType="fill" />
-            </div>
-            <span className="text-sm font-medium tracking-wide">{label}</span>
-          </button>
+          className="flex flex-col items-center gap-2 rounded-2xl border border-primary/20 bg-card hover:border-primary/40 transition-all active:scale-[0.98] px-2 py-3"
+          style={{ boxShadow: "0 0 20px 6px hsl(270 80% 55% / 0.30), 0 0 44px 14px hsl(275 80% 55% / 0.18)" }}>
+          <div className="w-full aspect-square rounded-full overflow-hidden border border-primary/15">
+            <Image src={img} alt={label} className="w-full h-full block" fittingType="fill" />
+          </div>
+          <span className="text-sm font-medium tracking-wide text-primary">{label}</span>
+        </button>
         )}
       </nav>
 
