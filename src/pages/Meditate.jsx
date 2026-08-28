@@ -77,9 +77,9 @@ export default function Meditate() {
     } catch (e) {
 
 
+
       // ignore save errors
     }navigate(to);};
-
   if (stage === "running" && config) {
     return <MeditationRunner config={config} onFinish={finish} onCancel={() => navigate("/configurar")} />;
   }
@@ -90,9 +90,9 @@ export default function Meditate() {
         config={config}
         actualSeconds={result.actualSeconds}
         onSave={save}
-        onRepeat={() => setStage("running")}
-      />
-    );
+        onRepeat={() => setStage("running")} />);
+
+
   }
 
   return (
@@ -101,30 +101,30 @@ export default function Meditate() {
         <button
           onClick={() => navigate(-1)}
           className="w-10 h-10 rounded-full bg-card border border-white/5 flex items-center justify-center hover:border-primary/30 transition-colors"
-          aria-label="Atrás"
-        >
+          aria-label="Atrás">
+          
           <ChevronLeft className="w-5 h-5" />
         </button>
       </div>
       <header className="text-center pt-0">
-        <p className="text-muted-foreground mt-1 [font-family:'Bodoni_Moda',_serif] text-xl">Configura tu espacio sagrado</p>
+        <p className="text-muted-foreground mt-1 text-xl [font-family:'Mulish',_ui-sans-serif,_system-ui,_sans-serif] font-medium">Configura tu espacio sagrado</p>
       </header>
 
-      {!meditarHoy && (
-        <PrepChecklist />
-      )}
+      {!meditarHoy &&
+      <PrepChecklist />
+      }
 
-      {!meditarHoy && (
-        <p className="text-center text-sm text-muted-foreground italic">
+      {!meditarHoy &&
+      <p className="text-center text-sm text-muted-foreground italic">
           Recuerda tener tu checklist listo antes de iniciar tu terapia
         </p>
-      )}
+      }
 
-      {!meditarHoy && (
-        <section className="flex flex-col items-center gap-3">
+      {!meditarHoy &&
+      <section className="flex flex-col items-center gap-3">
           <button
-            onDoubleClick={() => setMeditarHoy(true)}
-            className="group text-left rounded-2xl border border-border bg-card hover:border-primary hover:bg-accent/50 hover:shadow-[0_0_20px_6px_hsl(270_80%_55%/0.20)] transition-all active:scale-[0.99] inline-flex items-center gap-2.5 px-2.5 py-2 w-fit max-w-full">
+          onDoubleClick={() => setMeditarHoy(true)}
+          className="group text-left rounded-2xl border border-border bg-card hover:border-primary hover:bg-accent/50 hover:shadow-[0_0_20px_6px_hsl(270_80%_55%/0.20)] transition-all active:scale-[0.99] inline-flex items-center gap-2.5 px-2.5 py-2 w-fit max-w-full">
             <div className="w-16 h-16 shrink-0 rounded-full overflow-hidden ring-2 ring-transparent group-hover:ring-primary/40 transition-all">
               <Image src={IMAGES.meditarHoyBtn} alt="Meditar hoy" className="w-full h-full block" fittingType="fill" quality={68} />
             </div>
@@ -134,8 +134,8 @@ export default function Meditate() {
             </div>
           </button>
           <button
-            onDoubleClick={() => navigate("/recorrido")}
-            className="group text-left rounded-2xl border border-primary/40 bg-card hover:border-primary hover:bg-accent/50 hover:shadow-[0_0_22px_6px_hsl(270_80%_55%/0.28)] transition-all active:scale-[0.99] inline-flex items-center gap-2.5 px-2.5 py-2 w-fit max-w-full">
+          onDoubleClick={() => navigate("/recorrido")}
+          className="group text-left rounded-2xl border border-primary/40 bg-card hover:border-primary hover:bg-accent/50 hover:shadow-[0_0_22px_6px_hsl(270_80%_55%/0.28)] transition-all active:scale-[0.99] inline-flex items-center gap-2.5 px-2.5 py-2 w-fit max-w-full">
             <div className="w-16 h-16 shrink-0 rounded-full overflow-hidden ring-2 ring-primary/30 group-hover:ring-primary/60 transition-all">
               <Image src={IMAGES.meditar21Btn} alt="Reto 21 días" className="w-full h-full block" fittingType="fill" quality={68} />
             </div>
@@ -145,7 +145,7 @@ export default function Meditate() {
             </div>
           </button>
         </section>
-      )}
+      }
 
       {meditarHoy && <SessionForm onStart={start} />}
     </div>);
