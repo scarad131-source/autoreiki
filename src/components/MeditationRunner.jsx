@@ -328,7 +328,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       }
 
       <div className="flex items-center justify-center gap-4">
-        {isGuided && started && (
+        {started && (
           <button
             onClick={handleRewind}
             className="flex items-center gap-1.5 px-4 py-2.5 rounded-full border border-white/10 bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors text-xs"
@@ -346,7 +346,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
           aria-label={paused ? "Reanudar" : "Pausar"}>
           {paused ? <Play className="w-6 h-6 ml-0.5" /> : <Pause className="w-6 h-6" />}
         </button>
-        {isGuided && started && (
+        {started && (
           <button
             onClick={handleRestart}
             className="flex items-center gap-1.5 px-4 py-2.5 rounded-full border border-white/10 bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors text-xs"
