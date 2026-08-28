@@ -22,10 +22,10 @@ export default function ChakraFigure({ selected = [], onToggle, onSelectAll, sel
   const allSelected = selected.length === CHAKRAS.length;
 
   return (
-    <div className="max-w-[300px] mx-auto">
+    <div className="w-full">
       {/* Imagen de la silueta con mandala */}
       <div
-        className="relative w-full rounded-3xl overflow-hidden"
+        className="relative max-w-[300px] mx-auto rounded-3xl overflow-hidden"
         style={{
           WebkitMaskImage:
             "radial-gradient(ellipse 92% 92% at 50% 50%, #000 62%, transparent 100%)",
@@ -42,7 +42,7 @@ export default function ChakraFigure({ selected = [], onToggle, onSelectAll, sel
       </div>
 
       {/* Círculos de selección debajo de la imagen */}
-      <div className="mt-5 flex flex-nowrap justify-center gap-x-4 overflow-x-auto pb-2">
+      <div className="mt-5 flex flex-nowrap justify-center gap-x-3">
         {CHAKRAS.map((c) => {
           const isSel = selected.includes(c.id);
           return (
