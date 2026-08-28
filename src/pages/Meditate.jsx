@@ -80,7 +80,7 @@ export default function Meditate() {
     }navigate(to);};
 
   if (stage === "running" && config) {
-    return <MeditationRunner config={config} onFinish={finish} onCancel={() => setStage("setup")} />;
+    return <MeditationRunner config={config} onFinish={finish} onCancel={() => navigate("/configurar")} />;
   }
 
   if (stage === "reflection" && config && result) {
