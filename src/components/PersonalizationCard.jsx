@@ -36,7 +36,7 @@ export default function PersonalizationCard({ user, onSaved }) {
   };
 
   return (
-    <section className="rounded-2xl border border-white/10 bg-card/80 p-5">
+    <section className="rounded-2xl border border-white/10 bg-card/80 p-5 text-center">
       <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
         Personalización breve
       </p>
