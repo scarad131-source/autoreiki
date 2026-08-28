@@ -109,22 +109,22 @@ export default function Meditate() {
         <section className="grid grid-cols-1 gap-3">
           <button
             onClick={() => setMeditarHoy(true)}
-            className="text-left rounded-2xl border border-white/10 overflow-hidden hover:border-primary/30 transition-colors active:scale-[0.99]">
-            <div className="h-20 w-full">
+            className="text-left rounded-2xl border border-white/10 overflow-hidden hover:border-primary/30 transition-colors active:scale-[0.99] flex items-center gap-3 p-3">
+            <div className="w-16 h-16 shrink-0 rounded-xl overflow-hidden">
               <Image src={IMAGES.meditarHoyBtn} alt="Meditar hoy" className="w-full h-full block" fittingType="fill" quality={68} />
             </div>
-            <div className="p-3 bg-card/60">
+            <div className="bg-card/60">
               <p className="font-display text-lg font-semibold">Solo necesito meditar hoy</p>
               <p className="text-xs text-muted-foreground mt-1 leading-snug">Configura una sesión a tu medida.</p>
             </div>
           </button>
           <button
             onClick={() => navigate("/recorrido")}
-            className="text-left rounded-2xl border border-primary/40 overflow-hidden transition-all active:scale-[0.99] hover:border-primary/60">
-            <div className="h-20 w-full">
+            className="text-left rounded-2xl border border-primary/40 overflow-hidden transition-all active:scale-[0.99] hover:border-primary/60 flex items-center gap-3 p-3">
+            <div className="w-16 h-16 shrink-0 rounded-xl overflow-hidden">
               <Image src={IMAGES.meditar21Btn} alt="Reto 21 días" className="w-full h-full block" fittingType="fill" quality={68} />
             </div>
-            <div className="p-3 bg-primary/5">
+            <div className="bg-primary/5">
               <p className="font-display text-lg font-semibold text-primary">Iniciar reto de 21 días</p>
               <p className="text-xs text-muted-foreground mt-1 leading-snug">Sigue el recorrido guiado día a día.</p>
             </div>
