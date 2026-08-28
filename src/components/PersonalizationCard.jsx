@@ -4,9 +4,9 @@ import { base44 } from "@/api/base44Client";
 import { useToast } from "@/components/ui/use-toast";
 
 const LEVELS = [
-  { id: "beginner", label: "Estoy empezando" },
-  { id: "intermediate", label: "Ya practico" }
-];
+{ id: "beginner", label: "Estoy empezando" },
+{ id: "intermediate", label: "Ya practico" }];
+
 
 export default function PersonalizationCard({ user, onSaved }) {
   const navigate = useNavigate();
@@ -40,7 +40,7 @@ export default function PersonalizationCard({ user, onSaved }) {
       <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
         Personalización breve
       </p>
-      <h3 className="font-display text-lg font-semibold leading-snug mt-2">
+      <h3 className="text-lg leading-snug mt-2 [font-family:'Cabin',_sans-serif] font-medium">
         Antes de guiarte, cuéntame cómo practicas.
       </h3>
       <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
@@ -57,8 +57,8 @@ export default function PersonalizationCard({ user, onSaved }) {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Nombre opcional"
-            className="w-full rounded-xl border border-white/10 bg-background/60 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary/50"
-          />
+            className="w-full rounded-xl border border-white/10 bg-background/60 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary/50" />
+          
         </div>
 
         <div>
@@ -66,19 +66,19 @@ export default function PersonalizationCard({ user, onSaved }) {
             Tu nivel actual
           </label>
           <div className="grid grid-cols-2 gap-2">
-            {LEVELS.map((l) => (
-              <button
-                key={l.id}
-                onClick={() => setLevel(l.id)}
-                className={`rounded-xl px-4 py-3 text-sm font-medium transition-all ${
-                  level === l.id
-                    ? "bg-gradient-to-r from-amber-light to-primary text-primary-foreground neon-glow"
-                    : "border border-white/10 bg-background/60 text-foreground hover:border-primary/40"
-                }`}
-              >
+            {LEVELS.map((l) =>
+            <button
+              key={l.id}
+              onClick={() => setLevel(l.id)}
+              className={`rounded-xl px-4 py-3 text-sm font-medium transition-all ${
+              level === l.id ?
+              "bg-gradient-to-r from-amber-light to-primary text-primary-foreground neon-glow" :
+              "border border-white/10 bg-background/60 text-foreground hover:border-primary/40"}`
+              }>
+              
                 {l.label}
               </button>
-            ))}
+            )}
           </div>
         </div>
       </div>
@@ -86,10 +86,10 @@ export default function PersonalizationCard({ user, onSaved }) {
       <button
         onClick={handleSave}
         disabled={saving}
-        className="w-full mt-5 rounded-xl bg-gradient-to-r from-amber-light to-primary text-primary-foreground font-semibold py-3.5 neon-glow active:scale-[0.99] transition-transform disabled:opacity-60 disabled:cursor-not-allowed"
-      >
+        className="w-full mt-5 rounded-xl bg-gradient-to-r from-amber-light to-primary text-primary-foreground font-semibold py-3.5 neon-glow active:scale-[0.99] transition-transform disabled:opacity-60 disabled:cursor-not-allowed">
+        
         {saving ? "Guardando…" : "Guardar y continuar"}
       </button>
-    </section>
-  );
+    </section>);
+
 }
