@@ -10,7 +10,6 @@ import ReminderSettings from "@/components/ReminderSettings";
 import DeleteAccountButton from "@/components/DeleteAccountButton";
 import PersonalizationCard from "@/components/PersonalizationCard";
 import HomeGreetingCard from "@/components/HomeGreetingCard";
-import HomeQuickSelector from "@/components/HomeQuickSelector";
 import { computeActiveDays, getStreakMessage, JOURNEY } from "@/lib/journey";
 import { getDailyPhrase } from "@/lib/dailyPhrases";
 import { Image } from "@/components/ui/image";
@@ -128,10 +127,7 @@ export default function Home() {
 
       {/* Personalización breve / Selector rápido */}
       {personalized ? (
-        <div className="space-y-3">
-          <HomeGreetingCard name={firstName} />
-          <HomeQuickSelector level={user?.practice_level} />
-        </div>
+        <HomeGreetingCard name={firstName} />
       ) : (
         <PersonalizationCard user={user} onSaved={refreshUser} />
       )}
