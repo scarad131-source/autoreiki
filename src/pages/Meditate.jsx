@@ -118,7 +118,7 @@ export default function Meditate() {
         </button>
       </div>
 
-      <header>
+      <header className="text-center">
         <h1 className="uppercase tracking-[0.14em] text-2xl font-display font-semibold">Configura tu espacio sagrado</h1>
       </header>
 
