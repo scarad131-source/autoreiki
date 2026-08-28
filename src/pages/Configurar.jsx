@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, ChevronLeft, Mic, Bell, Volume2, Pause } from "lucide-react";
+import { ArrowRight, ChevronLeft, Bell, Volume2, Pause } from "lucide-react";
 import ChakraFigure from "@/components/ChakraFigure";
 import { AUDIO_SOURCES, audioUrlFor, isVoiceTrack } from "@/lib/audioSources";
 import { CHAKRAS } from "@/lib/guidedScripts";
@@ -304,22 +304,6 @@ export default function Configurar() {
           <SectionCard index={5} title="Acompañamiento">
             <p className="text-xs text-muted-foreground mb-3">Activa solo lo que te ayude a no mirar continuamente la pantalla.</p>
             <div className="space-y-3">
-              <button
-                onClick={() => mode === "unguided" && setSpokenInstructions((v) => !v)}
-                className={`w-full flex items-start gap-3 p-4 rounded-xl border-2 transition-all text-left ${
-                spokenInstructions ?
-                "border-primary bg-accent" :
-                "border-border bg-card hover:border-primary/40"} ${
-                mode === "guided" ? "opacity-70 cursor-default" : "active:scale-[0.99]"}`}>
-                
-                <Mic className={`w-5 h-5 shrink-0 mt-0.5 ${spokenInstructions ? "text-primary" : "text-muted-foreground"}`} />
-                <div>
-                  <p className="font-medium text-sm text-foreground">Instrucciones habladas</p>
-                  <p className="text-xs text-muted-foreground mt-1 leading-snug">
-                    {mode === "guided" ? "Incluidas en la meditación guiada" : "Indicaciones breves antes de cada zona"}
-                  </p>
-                </div>
-              </button>
               <button
                 onClick={() => setChangeBell((v) => !v)}
                 className={`w-full flex items-start gap-3 p-4 rounded-xl border-2 transition-all text-left active:scale-[0.99] ${
