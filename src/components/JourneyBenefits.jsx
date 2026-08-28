@@ -63,7 +63,7 @@ export default function JourneyBenefits() {
     <section className="space-y-6 rounded-3xl border border-primary/30 bg-gradient-to-b from-primary/5 to-transparent p-5 neon-glow">
       <div className="text-center">
         <p className="text-[11px] tracking-[0.28em] uppercase text-primary font-medium hidden">Reto de 21 días</p>
-        <h2 className="font-display text-2xl font-semibold tracking-tight mt-1.5">
+        <h2 className="font-display text-2xl font-semibold tracking-tight mt-1.5 text-[hsl(var(--primary))]">
           Beneficios principales de meditar 21 días seguidos
         </h2>
       </div>
