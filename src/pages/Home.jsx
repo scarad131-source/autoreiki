@@ -104,14 +104,14 @@ export default function Home() {
 
       {/* Hero */}
       <section className="flex flex-col items-center text-center pt-2">
-        <div className="h-88 w-88 mb-7 relative rounded-[2.5rem] overflow-hidden" style={{ height: "22rem", width: "22rem", boxShadow: "0 0 70px 18px hsl(305 100% 40% / 0.38), 0 0 130px 50px hsl(310 100% 45% / 0.26), 0 10px 40px 8px hsl(280 80% 20% / 0.22)" }}>
+        <div className="h-88 w-88 mb-7 relative rounded-[2.5rem] overflow-hidden" style={{ height: "22rem", width: "22rem", boxShadow: "0 0 70px 18px hsl(280 100% 45% / 0.45), 0 0 130px 50px hsl(275 100% 50% / 0.30), 0 10px 40px 8px hsl(270 80% 25% / 0.28)" }}>
           <Image
             src="https://media.base44.com/images/public/6a7d30a899098694894dbd88/5e7e162ba_siluetameditacionconchackras.webp"
             alt="Silueta de meditación con chakras"
             className="w-full h-full block"
-            style={{ filter: "saturate(1.35) contrast(1.12) brightness(1.05)" }}
+            style={{ filter: "saturate(1.5) hue-rotate(255deg) brightness(0.92) contrast(1.1)" }}
             fittingType="fill" />
-          
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(135deg, hsl(270 80% 30% / 0.35), hsl(290 70% 40% / 0.18))", mixBlendMode: "overlay" }} />
         </div>
         
         <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">Vuelve a ti</p>
