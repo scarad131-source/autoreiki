@@ -1,20 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Mulish:wght@300;400;500;600;700&family=Abril+Fatface:wght@400&family=Architects+Daughter:wght@400&family=Bodoni+Moda:wght@400;500;600;700&family=DM+Serif+Display:wght@400&family=Fascinate+Inline:wght@400&family=Literata:wght@300;400;500;600;700&family=Pacifico:wght@400&family=Cabin:wght@400;500;600;700&family=Bebas+Neue:wght@400&family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Brygada+1918:wght@400;500;600;700&display=swap');
-/* base44-workspace-fonts:start */
-@font-face {
-  font-family: 'Aether';
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-  src: url('https://media.base44.com/files/public/builder-assets/wix-fonts/aether-400-normal.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Aether';
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-  src: url('https://media.base44.com/files/public/builder-assets/wix-fonts/aether-700-normal.woff2') format('woff2');
-}
-/* base44-workspace-fonts:end */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Mulish:wght@300;400;500;600;700&family=Bodoni+Moda:wght@400;500;600;700&family=Cabin:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -22,11 +6,11 @@
 
 @layer base {
   :root {
-    --background: 260 40% 7%;
+    --background: 257 91% 18%;
     --foreground: 280 30% 92%;
-    --card: 260 35% 11%;
+    --card: 261 56% 65%;
     --card-foreground: 280 30% 92%;
-    --popover: 260 35% 11%;
+    --popover: 261 41% 28%;
     --popover-foreground: 280 30% 92%;
     --primary: 280 80% 60%;
     --primary-foreground: 0 0% 100%;
