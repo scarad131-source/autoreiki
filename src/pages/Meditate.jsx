@@ -115,6 +115,12 @@ export default function Meditate() {
       )}
 
       {!meditarHoy && (
+        <p className="text-center text-sm text-muted-foreground italic">
+          Recuerda tener tu checklist listo antes de iniciar tu terapia
+        </p>
+      )}
+
+      {!meditarHoy && (
         <section className="flex flex-col items-center gap-3">
           <button
             onClick={() => setMeditarHoy(true)}
