@@ -37,7 +37,7 @@ export default function Mas() {
             <button
               key={it.to}
               onClick={() => navigate(it.to)}
-              className="w-full text-left rounded-3xl bg-card border border-white/5 p-5 flex items-center gap-4 hover:border-primary/30 transition-colors active:scale-[0.99]"
+              className="w-full text-left rounded-3xl bg-card border border-border p-5 flex items-center gap-4 hover:border-primary/30 transition-colors active:scale-[0.99]"
             >
               <div
                 className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${
@@ -63,7 +63,7 @@ export default function Mas() {
       <div className="pt-2">
         <button
           onClick={() => navigate("/historial")}
-          className="w-full rounded-2xl bg-card border border-white/5 p-4 flex flex-col items-center gap-2 hover:border-primary/30 transition-colors"
+          className="w-full rounded-2xl bg-card border border-border p-4 flex flex-col items-center gap-2 hover:border-primary/30 transition-colors"
         >
           <History className="w-5 h-5 text-primary" />
           <span className="text-sm font-medium">Historial</span>
