@@ -183,7 +183,8 @@ export default function Home() {
         <button
           key={to}
           onClick={() => navigate(to)}
-          className="flex flex-col items-center gap-2.5 rounded-2xl border border-border bg-card/50 hover:border-primary/40 hover:bg-accent/40 transition-colors active:scale-[0.98] px-3 py-4">
+          className="flex flex-col items-center gap-2.5 rounded-2xl border border-border bg-card/50 hover:border-primary/40 hover:bg-accent/40 transition-all active:scale-[0.98] px-3 py-4"
+          style={{ boxShadow: "0 0 18px 4px hsl(305 100% 45% / 0.25), 0 0 40px 12px hsl(310 100% 50% / 0.15)" }}>
             <div className="w-24 h-24 rounded-xl overflow-hidden border border-border">
               <Image src={img} alt={label} className="w-full h-full block" fittingType="fill" />
             </div>
