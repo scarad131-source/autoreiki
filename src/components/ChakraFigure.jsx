@@ -22,7 +22,7 @@ export default function ChakraFigure({ selected = [], onToggle, onSelectAll, sel
   const allSelected = selected.length === CHAKRAS.length;
 
   return (
-    <div className="max-w-[460px] mx-auto">
+    <div className="max-w-[300px] mx-auto">
       {/* Imagen de la silueta con mandala */}
       <div
         className="relative w-full rounded-3xl overflow-hidden"
