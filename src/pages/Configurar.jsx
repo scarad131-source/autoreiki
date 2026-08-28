@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, ChevronLeft } from "lucide-react";
 import ChakraFigure from "@/components/ChakraFigure";
-import { AUDIO_SOURCES } from "@/lib/audioSources";
+import { AUDIO_SOURCES, audioUrlFor, isVoiceTrack } from "@/lib/audioSources";
 import { CHAKRAS } from "@/lib/guidedScripts";
+import { sessionAudio } from "@/lib/sessionAudio";
 
 const MODES = [
 { id: "guided", name: "GUIADA - Principiante", desc: "Audio con voz que te guía durante tu meditación", color: "#00C698" },
@@ -36,12 +37,15 @@ export default function Configurar() {
 
   const start = () => {
     if (!selected.length) return;
+    const trackId = mode === "unguided" ? audio : "reikiGuided";
+    // Desbloquea el audio dentro del gesto para que iOS permita reproducirlo.
+    sessionAudio.unlock(audioUrlFor(trackId), { loop: !isVoiceTrack(trackId) });
     navigate("/meditar", {
       state: {
         preset: {
           mode,
           level,
-          audio: mode === "unguided" ? audio : "reikiGuided",
+          audio: trackId,
           minutes,
           chakras: selected
         }

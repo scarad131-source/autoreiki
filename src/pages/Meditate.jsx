@@ -9,6 +9,8 @@ import { buildChakraScript } from "@/lib/guidedScripts";
 import { unlockSpeech } from "@/lib/speech";
 import { Image } from "@/components/ui/image";
 import { IMAGES } from "@/lib/assets";
+import { audioUrlFor, isVoiceTrack } from "@/lib/audioSources";
+import { sessionAudio } from "@/lib/sessionAudio";
 
 export default function Meditate() {
   const navigate = useNavigate();
@@ -45,6 +47,8 @@ export default function Meditate() {
     if (finalCfg.mode === "guided" && finalCfg.chakras && finalCfg.chakras.length) {
       finalCfg.customScript = buildChakraScript(finalCfg.chakras);
     }
+    // Desbloquea el audio dentro del gesto para que iOS permita reproducirlo.
+    sessionAudio.unlock(audioUrlFor(finalCfg.audio), { loop: !isVoiceTrack(finalCfg.audio) });
     setConfig(finalCfg);
     setStage("running");
   };

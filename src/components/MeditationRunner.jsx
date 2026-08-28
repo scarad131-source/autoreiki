@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { ArrowLeft, Pause, Play, Volume2, VolumeX, BellRing, Headphones, Rewind, RotateCcw } from "lucide-react";
+import { ArrowLeft, Pause, Play, BellRing, Headphones, Rewind, RotateCcw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { RELEASE_SCRIPTS, CHAKRAS } from "@/lib/guidedScripts";
 import { ambient } from "@/lib/audioEngine";
 import BreathingOrb from "@/components/BreathingOrb";
-import { audioUrlFor, isVoiceTrack } from "@/lib/audioSources";
-import { Slider } from "@/components/ui/slider";
+import { isVoiceTrack } from "@/lib/audioSources";
+import { sessionAudio } from "@/lib/sessionAudio";
 
 export default function MeditationRunner({ config, onFinish, onCancel }) {
   const [audioDuration, setAudioDuration] = useState(null);
@@ -19,11 +19,12 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const [stepIndex, setStepIndex] = useState(0);
   const [bowlsOn, setBowlsOn] = useState(false);
   const timerRef = useRef(null);
-  const audioRef = useRef(null);
+  const audioRef = useRef(sessionAudio.element());
   const finishedRef = useRef(false);
   const lastBowlStepRef = useRef(-1);
 
   const started = countdown === 0;
+  const el = audioRef.current;
 
   const isGuided = config.mode === "guided";
   const isJourney = !!config.journeyDay;
@@ -47,35 +48,51 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const scriptTotalSec = script ? script.steps.reduce((a, s) => a + s.seconds, 0) : 0;
   const voiceActive = script ? elapsed < scriptTotalSec : false;
 
-  // cuenta regresiva de inicio (3 segundos)
+  // Listeners del elemento de audio singleton (metadata, timeupdate, ended)
+  useEffect(() => {
+    const onLoaded = () => {
+      const d = el.duration;
+      if (isVoiceTrack(config.audio) && d && isFinite(d)) setAudioDuration(d);
+    };
+    const onTime = (e) => {
+      if (isVoiceTrack(config.audio) && started && !paused && !finishedRef.current) {
+        const t = Math.floor(e.currentTarget.currentTime);
+        setElapsed((prev) => (t !== prev ? t : prev));
+      }
+    };
+    const onEnded = () => {
+      if (isVoiceTrack(config.audio) && !finishedRef.current) {
+        finishedRef.current = true;
+        onFinish({ actualSeconds: Math.round(audioDuration || 0), completed: true });
+      }
+    };
+    el.addEventListener("loadedmetadata", onLoaded);
+    el.addEventListener("timeupdate", onTime);
+    el.addEventListener("ended", onEnded);
+    // Si la metadata ya cargó antes de montar, léela ahora.
+    if (el.duration && isFinite(el.duration)) onLoaded();
+    return () => {
+      el.removeEventListener("loadedmetadata", onLoaded);
+      el.removeEventListener("timeupdate", onTime);
+      el.removeEventListener("ended", onEnded);
+    };
+  }, [el, config.audio, started, paused, audioDuration, onFinish]);
+
+  // cuenta regresiva de inicio
   useEffect(() => {
     if (countdown <= 0) return;
     const t = setTimeout(() => setCountdown((c) => c - 1), 1000);
     return () => clearTimeout(t);
   }, [countdown]);
 
-  // desbloquear el audio al montar (gesto del usuario reciente): se reproduce
-  // silencioso durante la cuenta regresiva para que el navegador no bloquee el play()
+  // al terminar la cuenta, reproducir el audio (ya desbloqueado en el gesto)
   useEffect(() => {
-    const el = audioRef.current;
-    if (!el) return;
-    el.muted = true;
-    el.play().catch(() => {});
-    return () => {
-      try {el.pause();} catch (e) {}
-    };
-  }, []);
-
-  // al terminar la cuenta, subir el volumen y reiniciar el track de voz desde el inicio
-  useEffect(() => {
-    const el = audioRef.current;
-    if (!el || !started) return;
+    if (!started) return;
     el.muted = muted;
     el.volume = muted ? 0 : volume;
-    // Reiniciar desde el inicio para no saltarse los primeros segundos
     try { el.currentTime = 0; } catch (e) {}
     if (el.paused) el.play().catch(() => {});
-  }, [started, volume, muted]);
+  }, [started]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // calcular paso actual guiado (solo para texto visual en pantalla)
   useEffect(() => {
@@ -101,19 +118,17 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     return () => clearInterval(timerRef.current);
   }, [started, paused, config.audio]);
 
-  // pausa: detener audio ambiental
+  // pausa: detener audio
   useEffect(() => {
     if (!started) return;
-    const el = audioRef.current;
     if (paused) {
-      if (el) el.pause();
+      try { el.pause(); } catch (e) {}
     } else {
-      if (el) el.play().catch(() => {});
+      el.play().catch(() => {});
     }
-  }, [paused, started]);
+  }, [paused, started]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // cuencos: suenan cada 3 minutos de sesión cuando están activados (solo Reiki).
-  // Basado en el tiempo transcurrido para mantener la cadencia aun al pausar/reanudar.
   useEffect(() => {
     if (!started || !bowlsOn || paused || !bowlChakras.length) return;
     const step = Math.floor(elapsed / 180);
@@ -123,7 +138,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     ambient.playBowl(c.freq, 0.7);
   }, [elapsed, started, bowlsOn, paused, bowlChakras]);
 
-  // reinicia el conteo de cuencos al desactivarlos
   useEffect(() => {
     if (!bowlsOn) lastBowlStepRef.current = -1;
   }, [bowlsOn]);
@@ -141,25 +155,21 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     }
     if (elapsed >= totalSeconds) {
       finishedRef.current = true;
-      const el = audioRef.current;
-      if (el) el.pause();
+      try { el.pause(); } catch (e) {}
       onFinish({ actualSeconds: totalSeconds, completed: true });
     }
-  }, [elapsed, totalSeconds, started, onFinish, config.audio, audioDuration]);
+  }, [elapsed, totalSeconds, started, onFinish, config.audio, audioDuration]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    const el = audioRef.current;
-    if (el && started) {
+    if (started) {
       el.muted = muted;
       el.volume = muted ? 0 : volume;
     }
-  }, [volume, muted, started]);
+  }, [volume, muted, started]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Fade in suave en los primeros 3 segundos (solo sesiones no guiadas)
   useEffect(() => {
     if (!started || isVoiceTrack(config.audio) || muted) return;
-    const el = audioRef.current;
-    if (!el) return;
     el.volume = 0;
     const target = volume;
     const duration = 3000;
@@ -173,18 +183,23 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     };
     rafId = requestAnimationFrame(step);
     return () => cancelAnimationFrame(rafId);
-  }, [started, config.audio, volume, muted]);
+  }, [started, config.audio, volume, muted]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Fade out suave en los últimos 3 segundos (solo sesiones no guiadas)
   useEffect(() => {
     if (!started || isVoiceTrack(config.audio) || muted) return;
-    const el = audioRef.current;
-    if (!el) return;
     const remaining = totalSeconds - elapsed;
     if (remaining <= 3 && remaining > 0) {
       el.volume = volume * (remaining / 3);
     }
-  }, [elapsed, totalSeconds, started, config.audio, volume, muted]);
+  }, [elapsed, totalSeconds, started, config.audio, volume, muted]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // limpieza al desmontar: pausar el audio
+  useEffect(() => {
+    return () => {
+      try { el.pause(); } catch (e) {}
+    };
+  }, [el]);
 
   const remaining = Math.max(0, totalSeconds - elapsed);
   const mm = String(Math.floor(remaining / 60)).padStart(2, "0");
@@ -193,56 +208,23 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const currentStep = script ? script.steps[stepIndex] : null;
   const phase = elapsed % 10 < 4 ? "Inhala" : "Exhala";
 
-  // Retroceder 10s (solo guiada): regresa el audio y el temporizador, sin adelantar
   const handleRewind = () => {
-    const el = audioRef.current;
     setElapsed((e) => Math.max(0, e - 10));
-    if (el) {
-      try { el.currentTime = Math.max(0, (el.currentTime || 0) - 10); } catch (err) {}
-    }
+    try { el.currentTime = Math.max(0, (el.currentTime || 0) - 10); } catch (err) {}
   };
 
-  // Reiniciar (solo guiada): vuelve al inicio del audio y del temporizador
   const handleRestart = () => {
-    const el = audioRef.current;
     setElapsed(0);
-    if (el) {
-      try { el.currentTime = 0; } catch (err) {}
-    }
+    try { el.currentTime = 0; } catch (err) {}
   };
 
   return (
     <div className="flex flex-col items-center min-h-[70vh] justify-between py-6">
-      <audio
-        ref={audioRef}
-        src={audioUrlFor(config.audio)}
-        loop={!isVoiceTrack(config.audio)}
-        preload="auto"
-        className="hidden"
-        onLoadedMetadata={(e) => {
-          const d = e.currentTarget.duration;
-          if (isVoiceTrack(config.audio) && d && isFinite(d)) setAudioDuration(d);
-        }}
-        onTimeUpdate={(e) => {
-          if (isVoiceTrack(config.audio) && started && !paused && !finishedRef.current) {
-            const t = Math.floor(e.currentTarget.currentTime);
-            if (t !== elapsed) setElapsed(t);
-          }
-        }}
-        onEnded={() => {
-          if (isVoiceTrack(config.audio) && !finishedRef.current) {
-            finishedRef.current = true;
-            onFinish({ actualSeconds: Math.round(audioDuration || elapsed), completed: true });
-          }
-        }} />
-      
-
       <div className="w-full flex items-center justify-between text-xs text-muted-foreground">
         <button
           onClick={onCancel}
           className="flex items-center gap-1.5 hover:text-foreground transition-colors -ml-1"
           aria-label="Volver">
-          
           <ArrowLeft className="w-4 h-4" /> Volver
         </button>
         <span className="uppercase tracking-[0.18em]">
@@ -253,7 +235,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       <div className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full border border-primary/30 bg-primary/5">
         <Headphones className="w-4 h-4 text-primary shrink-0" />
         <p className="text-[13px] text-foreground/85 font-light leading-snug max-w-xs text-left">Sugerimos el uso de audífonos y deja que el sonido te abrace por completo ✦ tu viaje sonoro será más profundo.
-
         </p>
       </div>
 
@@ -269,12 +250,10 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ duration: 0.4 }}
             className="text-7xl font-display font-light tabular-nums neon-text">
-            
               {countdown}
             </motion.p>
             <p className="text-xs text-muted-foreground uppercase tracking-[0.18em]">Preparando tu espacio</p>
           </div> :
-
         <>
             <div className="text-center">
               <p className="text-5xl font-display font-light tracking-tight tabular-nums">
@@ -294,7 +273,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 1.2 }}
               className="max-w-md text-center px-2">
-              
                   <p className="text-[15px] leading-relaxed text-foreground/90 font-light">{currentStep.text}</p>
                 </motion.div>
             }
@@ -303,7 +281,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         }
       </div>
 
-      {/* controles de retroceso / reinicio (solo sesiones guiadas) */}
       {isGuided && started && (
         <div className="flex items-center justify-center gap-3 mb-3">
           <button
@@ -327,16 +304,13 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         </div>
       )}
 
-      {/* barra de progreso */}
       <div className="w-full h-1 bg-accent rounded-full overflow-hidden mb-6">
         <motion.div
           className="h-full bg-gradient-to-r from-primary to-glow-cyan"
           style={{ width: `${progress}%` }}
           transition={{ ease: "linear" }} />
-        
       </div>
 
-      {/* toggle de cuencos (solo Reiki) */}
       {isReiki && !hideVisualCues &&
       <button
         onClick={() => setBowlsOn((v) => !v)}
@@ -347,23 +321,19 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         "border-white/10 bg-card/80 text-muted-foreground hover:text-foreground"}`
         }
         aria-label={bowlsOn ? "Desactivar cuencos" : "Activar cuencos"}>
-        
           <BellRing className="w-4 h-4" />
           {bowlsOn ? "Desactivar cuencos" : "Activar cuencos"}
         </button>
       }
 
-      {/* controles */}
       <div className="flex items-center gap-4">
         <button
           onClick={() => setPaused((p) => !p)}
           disabled={countdown > 0}
           className="w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-primary to-glow-cyan text-primary-foreground neon-glow transition-transform active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
           aria-label={paused ? "Reanudar" : "Pausar"}>
-          
           {paused ? <Play className="w-6 h-6 ml-0.5" /> : <Pause className="w-6 h-6" />}
         </button>
       </div>
     </div>);
-
 }
