@@ -74,7 +74,12 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       }
     };
     const onEnded = () => {
-      if (isVoiceTrack(config.audio)) finishGuided();
+      if (isVoiceTrack(config.audio)) { finishGuided(); return; }
+      // No guiada: si el loop falla y el audio termina, reiniciarlo manualmente
+      if (started && !paused && !finishedRef.current) {
+        try { el.currentTime = 0; } catch (e) {}
+        el.play().catch(() => {});
+      }
     };
     el.addEventListener("loadedmetadata", onLoaded);
     el.addEventListener("timeupdate", onTime);
@@ -100,6 +105,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     if (!started) return;
     el.muted = muted;
     el.volume = muted ? 0 : volume;
+    el.loop = !isVoiceTrack(config.audio);
     try { el.currentTime = 0; } catch (e) {}
     if (el.paused) el.play().catch(() => {});
   }, [started]); // eslint-disable-line react-hooks/exhaustive-deps
