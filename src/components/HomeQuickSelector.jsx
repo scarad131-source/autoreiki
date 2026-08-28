@@ -1,99 +1,68 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { MoonStar, Hand } from "lucide-react";
+import { Image } from "@/components/ui/image";
 import { CHAKRAS } from "@/lib/guidedScripts";
 import { audioUrlFor, isVoiceTrack } from "@/lib/audioSources";
 import { sessionAudio } from "@/lib/sessionAudio";
 
-const TIMES = [15, 30, 45];
-const GOALS = [
-  { id: "calma", label: "Calma" },
-  { id: "enfoque", label: "Enfoque" },
-  { id: "reiki", label: "Practicar Reiki" }
+const CARDS = [
+  { id: "calma", Icon: MoonStar, title: "Calma rápida", minutes: 5, mode: "unguided", audio: "beach", chakras: [] },
+  { id: "dormir", image: "https://media.base44.com/images/public/6a7d30a899098694894dbd88/75700294f_generated_image.png", title: "Antes de dormir", minutes: 10, mode: "unguided", audio: "rain", chakras: [] },
+  { id: "manos", Icon: Hand, title: "Solo manos", minutes: 7, mode: "guided", audio: "reikiGuided", chakras: CHAKRAS.map((c) => c.id) },
 ];
-
-const SUGGESTIONS = {
-  calma: { title: "Meditación de calma", desc: "sonido ambiental y respiración", mode: "unguided", audio: "beach" },
-  enfoque: { title: "Enfoque mental", desc: "ambiente sonoro y quietud", mode: "unguided", audio: "forest" },
-  reiki: { title: "Autotratamiento guiado", desc: "avisos visuales y sonoros", mode: "guided", audio: "reikiGuided" }
-};
 
 export default function HomeQuickSelector({ level }) {
   const navigate = useNavigate();
-  const [minutes, setMinutes] = useState(15);
-  const [goal, setGoal] = useState("reiki");
-  const s = SUGGESTIONS[goal];
-  const chakras = goal === "reiki" ? CHAKRAS.map((c) => c.id) : [];
 
-  const handleUse = () => {
-    const trackId = s.audio;
+  const handleSelect = (card) => {
+    const trackId = card.audio;
     sessionAudio.unlock(audioUrlFor(trackId), { loop: !isVoiceTrack(trackId) });
     navigate("/meditar", {
       state: {
         preset: {
-          mode: s.mode,
+          mode: card.mode,
           level: level || "beginner",
           audio: trackId,
-          minutes,
-          chakras
-        }
-      }
+          minutes: card.minutes,
+          chakras: card.chakras,
+        },
+      },
     });
   };
 
   return (
-    <section className="rounded-2xl border border-white/10 bg-card/80 p-5">
-      <p className="text-[11px] uppercase tracking-[0.22em] text-primary">Selector rápido</p>
-      <h3 className="text-lg font-semibold mt-1">¿Qué necesitas hoy?</h3>
-
-      <div className="mt-4">
-        <p className="text-xs text-muted-foreground mb-2">Tengo</p>
-        <div className="flex flex-wrap gap-2">
-          {TIMES.map((t) => (
-            <button
-              key={t}
-              onClick={() => setMinutes(t)}
-              className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
-                minutes === t
-                  ? "bg-gradient-to-r from-amber-light to-primary text-primary-foreground"
-                  : "border border-white/10 bg-background/60 text-foreground hover:border-primary/40"
-              }`}>
-              {t} min
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="mt-4">
-        <p className="text-xs text-muted-foreground mb-2">Busco</p>
-        <div className="flex flex-wrap gap-2">
-          {GOALS.map((g) => (
-            <button
-              key={g.id}
-              onClick={() => setGoal(g.id)}
-              className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
-                goal === g.id
-                  ? "bg-gradient-to-r from-amber-light to-primary text-primary-foreground"
-                  : "border border-white/10 bg-background/60 text-foreground hover:border-primary/40"
-              }`}>
-              {g.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="mt-4 rounded-xl border border-white/10 bg-background/40 p-3.5">
-        <p className="text-xs text-muted-foreground">Ruta sugerida</p>
-        <p className="text-sm font-semibold text-primary mt-0.5">{s.title}</p>
-        <p className="text-xs text-muted-foreground mt-0.5">{minutes} minutos · {s.desc}</p>
-      </div>
-
-      <button
-        onClick={handleUse}
-        className="w-full mt-3 rounded-xl border border-white/10 bg-background/60 text-foreground font-medium py-3 flex items-center justify-center gap-2 hover:border-primary/40 active:scale-[0.99] transition-all">
-        Usar esta recomendación
-        <ArrowRight className="w-4 h-4" />
-      </button>
-    </section>
+    <div className="grid grid-cols-3 gap-3">
+      {CARDS.map((card) => {
+        const Icon = card.Icon;
+        return (
+          <button
+            key={card.id}
+            onClick={() => handleSelect(card)}
+            className="relative flex flex-col items-center justify-end gap-2 rounded-2xl border border-white/10 bg-card/40 backdrop-blur-sm overflow-hidden aspect-square hover:border-primary/40 transition-all active:scale-[0.97]">
+            {card.image ? (
+              <>
+                <Image
+                  src={card.image}
+                  alt={card.title}
+                  className="absolute inset-0 w-full h-full"
+                  fittingType="fill"
+                />
+                <div className="relative w-full text-center pb-2.5 pt-8 bg-gradient-to-t from-black/80 to-transparent">
+                  <p className="text-sm font-semibold text-white leading-tight">{card.title}</p>
+                </div>
+              </>
+            ) : (
+              <>
+                <Icon className="w-7 h-7" style={{ color: "hsl(225 35% 62%)" }} />
+                <div className="text-center">
+                  <p className="text-sm font-semibold text-foreground leading-tight">{card.title}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{card.minutes} min</p>
+                </div>
+              </>
+            )}
+          </button>
+        );
+      })}
+    </div>
   );
 }
