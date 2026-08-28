@@ -62,9 +62,9 @@ export default function Diario() {
         </button>
       </div>
 
-      <div className="rounded-2xl bg-card border border-white/5 p-4 flex gap-3">
-        <Lock className="w-4 h-4 shrink-0 text-muted-foreground mt-0.5" />
-        <p className="text-sm text-muted-foreground leading-relaxed">
+      <div className="bg-[#D4AC4D] border-2 border-black p-4 flex items-center gap-3">
+        <Lock className="w-5 h-5 shrink-0 text-[#6B4E0E]" />
+        <p className="text-sm text-black font-medium leading-relaxed">
           Podrás ingresar tu experiencia ya que termines tu meditación o tu sesión de Reiki
         </p>
       </div>
