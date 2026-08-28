@@ -305,29 +305,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         }
       </div>
 
-      {isGuided && started && (
-        <div className="flex items-center justify-center gap-3 mb-3">
-          <button
-            onClick={handleRewind}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/10 bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors text-xs"
-            aria-label="Retroceder 10 segundos"
-            title="Retroceder 10s"
-          >
-            <Rewind className="w-3.5 h-3.5" />
-            <span>10s</span>
-          </button>
-          <button
-            onClick={handleRestart}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/10 bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors text-xs"
-            aria-label="Reiniciar meditación"
-            title="Reiniciar"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>Reiniciar</span>
-          </button>
-        </div>
-      )}
-
       <div className="w-full h-1 bg-accent rounded-full overflow-hidden mb-6">
         <motion.div
           className="h-full bg-gradient-to-r from-primary to-glow-cyan"
@@ -350,7 +327,18 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         </button>
       }
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center justify-center gap-4">
+        {isGuided && started && (
+          <button
+            onClick={handleRewind}
+            className="flex items-center gap-1.5 px-4 py-2.5 rounded-full border border-white/10 bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors text-xs"
+            aria-label="Retroceder 10 segundos"
+            title="Retroceder 10s"
+          >
+            <Rewind className="w-4 h-4" />
+            <span>10s</span>
+          </button>
+        )}
         <button
           onClick={() => setPaused((p) => !p)}
           disabled={countdown > 0}
@@ -358,6 +346,17 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
           aria-label={paused ? "Reanudar" : "Pausar"}>
           {paused ? <Play className="w-6 h-6 ml-0.5" /> : <Pause className="w-6 h-6" />}
         </button>
+        {isGuided && started && (
+          <button
+            onClick={handleRestart}
+            className="flex items-center gap-1.5 px-4 py-2.5 rounded-full border border-white/10 bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors text-xs"
+            aria-label="Reiniciar meditación"
+            title="Reiniciar"
+          >
+            <RotateCcw className="w-4 h-4" />
+            <span>Reiniciar</span>
+          </button>
+        )}
       </div>
     </div>);
 }
