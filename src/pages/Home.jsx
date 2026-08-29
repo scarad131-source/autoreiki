@@ -175,7 +175,11 @@ export default function Home() {
       </section>
 
       {/* Botones destacados */}
-      <nav className="flex justify-center gap-3 mx-5">
+      <nav className="flex items-center justify-center gap-3 mx-5">
+        <div className="flex-1 text-right pr-1">
+          <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Tus enlaces</p>
+          <p className="text-lg font-display font-semibold text-primary neon-text">Rápidos</p>
+        </div>
         <button
           onClick={() => navigate("/configurar")}
           className="flex flex-col items-center gap-2.5 rounded-2xl border border-primary/30 bg-card/50 px-3 py-4 gold-glow hover:border-primary/50 transition-colors active:scale-[0.98]"
