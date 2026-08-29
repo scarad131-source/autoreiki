@@ -184,8 +184,8 @@ export default function Home() {
             onClick={() => navigate("/configurar")}
             className="flex flex-col items-center gap-2.5 rounded-2xl border border-primary/30 bg-card/50 px-4 py-5 gold-glow hover:border-primary/50 transition-colors active:scale-[0.98]"
             style={{ boxShadow: "0 0 24px 4px hsl(36 77% 45% / 0.45), 0 0 50px 12px hsl(36 77% 45% / 0.25)" }}>
-            <div className="w-24 h-24 rounded-xl overflow-hidden border border-primary/20">
-              <Image src={IMAGES.diarioBtn} alt="5 min" className="w-full h-full block" fittingType="fill" />
+            <div className="w-16 h-16 rounded-xl overflow-hidden border border-primary/20">
+              <Image src="https://media.base44.com/images/public/6a7d30a899098694894dbd88/35fe8b70d_generated_image.png" alt="5 min" className="w-full h-full block" fittingType="fill" />
             </div>
             <span className="text-sm font-medium tracking-wide">5 min</span>
           </button>
@@ -193,8 +193,8 @@ export default function Home() {
             onClick={() => navigate("/configurar")}
             className="flex flex-col items-center gap-2.5 rounded-2xl border border-primary/30 bg-card/50 px-4 py-5 gold-glow hover:border-primary/50 transition-colors active:scale-[0.98]"
             style={{ boxShadow: "0 0 24px 4px hsl(36 77% 45% / 0.45), 0 0 50px 12px hsl(36 77% 45% / 0.25)" }}>
-            <div className="w-24 h-24 rounded-xl overflow-hidden border border-primary/20">
-              <Image src={IMAGES.diarioBtn} alt="Dormir tranquilo" className="w-full h-full block" fittingType="fill" />
+            <div className="w-16 h-16 rounded-xl overflow-hidden border border-primary/20">
+              <Image src="https://media.base44.com/images/public/6a7d30a899098694894dbd88/f15820055_generated_image.png" alt="Dormir tranquilo" className="w-full h-full block" fittingType="fill" />
             </div>
             <span className="text-sm font-medium tracking-wide">Dormir tranquilo</span>
           </button>
