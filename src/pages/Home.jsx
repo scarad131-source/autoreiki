@@ -175,32 +175,31 @@ export default function Home() {
       </section>
 
       {/* Botones destacados */}
-      <nav className="flex items-center justify-center gap-3 mx-5">
-        <div className="flex-1 text-left pr-1">
-          <p className="uppercase tracking-[0.22em] text-muted-foreground text-sm">Tus enlaces</p>
-          <p className="text-lg font-display font-semibold text-primary neon-text">Rápidos</p>
+      <section className="space-y-4">
+        <div className="text-center">
+          <p className="uppercase tracking-[0.22em] text-muted-foreground text-xs">Tus enlaces rápidos</p>
         </div>
-        <button
-          onClick={() => navigate("/configurar")}
-          className="flex flex-col items-center gap-2.5 rounded-2xl border border-primary/30 bg-card/50 px-3 py-4 gold-glow hover:border-primary/50 transition-colors active:scale-[0.98]"
-          style={{ boxShadow: "0 0 24px 4px hsl(36 77% 45% / 0.45), 0 0 50px 12px hsl(36 77% 45% / 0.25)" }}>
-          
-          <div className="w-24 h-24 rounded-xl overflow-hidden border border-primary/20">
-            <Image src={IMAGES.diarioBtn} alt="5 min" className="w-full h-full block" fittingType="fill" />
-          </div>
-          <span className="text-sm font-medium tracking-wide">5 min</span>
-        </button>
-        <button
-          onClick={() => navigate("/configurar")}
-          className="flex flex-col items-center gap-2.5 rounded-2xl border border-primary/30 bg-card/50 px-3 py-4 gold-glow hover:border-primary/50 transition-colors active:scale-[0.98]"
-          style={{ boxShadow: "0 0 24px 4px hsl(36 77% 45% / 0.45), 0 0 50px 12px hsl(36 77% 45% / 0.25)" }}>
-          
-          <div className="w-24 h-24 rounded-xl overflow-hidden border border-primary/20">
-            <Image src={IMAGES.diarioBtn} alt="Dormir tranquilo" className="w-full h-full block" fittingType="fill" />
-          </div>
-          <span className="text-sm font-medium tracking-wide">Dormir tranquilo</span>
-        </button>
-      </nav>
+        <nav className="grid grid-cols-2 gap-5 mx-5">
+          <button
+            onClick={() => navigate("/configurar")}
+            className="flex flex-col items-center gap-2.5 rounded-2xl border border-primary/30 bg-card/50 px-4 py-5 gold-glow hover:border-primary/50 transition-colors active:scale-[0.98]"
+            style={{ boxShadow: "0 0 24px 4px hsl(36 77% 45% / 0.45), 0 0 50px 12px hsl(36 77% 45% / 0.25)" }}>
+            <div className="w-24 h-24 rounded-xl overflow-hidden border border-primary/20">
+              <Image src={IMAGES.diarioBtn} alt="5 min" className="w-full h-full block" fittingType="fill" />
+            </div>
+            <span className="text-sm font-medium tracking-wide">5 min</span>
+          </button>
+          <button
+            onClick={() => navigate("/configurar")}
+            className="flex flex-col items-center gap-2.5 rounded-2xl border border-primary/30 bg-card/50 px-4 py-5 gold-glow hover:border-primary/50 transition-colors active:scale-[0.98]"
+            style={{ boxShadow: "0 0 24px 4px hsl(36 77% 45% / 0.45), 0 0 50px 12px hsl(36 77% 45% / 0.25)" }}>
+            <div className="w-24 h-24 rounded-xl overflow-hidden border border-primary/20">
+              <Image src={IMAGES.diarioBtn} alt="Dormir tranquilo" className="w-full h-full block" fittingType="fill" />
+            </div>
+            <span className="text-sm font-medium tracking-wide">Dormir tranquilo</span>
+          </button>
+        </nav>
+      </section>
 
       {/* Accesos rápidos */}
       <nav className="grid grid-cols-3 gap-3 mx-5">
