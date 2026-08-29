@@ -183,13 +183,13 @@ export default function Home() {
           <button
             onClick={() => navigate("/configurar")}
             className="relative aspect-square w-full overflow-hidden transition-transform active:scale-[0.98]">
-            <Image src="https://media.base44.com/images/public/6a7d30a899098694894dbd88/35fe8b70d_generated_image.png" alt="5 min" className="w-full h-full block" fittingType="fill" />
+            <Image src="https://media.base44.com/images/public/6a7d30a899098694894dbd88/5851ddd7a_generated_image.png" alt="5 min" className="w-full h-full block object-contain p-4" fittingType="fit" />
             <span className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent py-2 text-center text-xs font-medium tracking-wide">5 min</span>
           </button>
           <button
             onClick={() => navigate("/configurar")}
             className="relative aspect-square w-full overflow-hidden transition-transform active:scale-[0.98]">
-            <Image src="https://media.base44.com/images/public/6a7d30a899098694894dbd88/f15820055_generated_image.png" alt="Dormir tranquilo" className="w-full h-full block" fittingType="fill" />
+            <Image src="https://media.base44.com/images/public/6a7d30a899098694894dbd88/75954f770_generated_image.png" alt="Dormir tranquilo" className="w-full h-full block object-contain p-4" fittingType="fit" />
             <span className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent py-2 text-center text-sm font-medium tracking-wide">Dormir tranquilo</span>
           </button>
         </nav>
