@@ -183,9 +183,9 @@ export default function Home() {
             style={{ boxShadow: "0 0 24px 4px hsl(36 77% 45% / 0.45), 0 0 50px 12px hsl(36 77% 45% / 0.25)" }}
           >
             <div className="w-24 h-24 rounded-xl overflow-hidden border border-primary/20">
-              <Image src={IMAGES.diarioBtn} alt="Diario" className="w-full h-full block" fittingType="fill" />
+              <Image src={IMAGES.diarioBtn} alt="5 min" className="w-full h-full block" fittingType="fill" />
             </div>
-            <span className="text-sm font-medium tracking-wide">Diario</span>
+            <span className="text-sm font-medium tracking-wide">5 min</span>
           </button>
         ))}
       </nav>
