@@ -17,7 +17,7 @@ export default function Configurar() {
   const [mode, setMode] = useState("guided");
   const [level, setLevel] = useState("intermediate");
   const [minutes, setMinutes] = useState(30);
-  const [audio, setAudio] = useState("bowls");
+  const [audio, setAudio] = useState("beach");
 
   const toggle = (id) => {
     if (mode === "guided") return;
@@ -126,7 +126,7 @@ export default function Configurar() {
       <section>
           <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Sonido ambientAL</h2>
           <div className="grid grid-cols-2 gap-3">
-            {Object.values(AUDIO_SOURCES).filter((a) => a.id !== "meditation21" && a.id !== "reikiGuided").map((a) =>
+            {Object.values(AUDIO_SOURCES).filter((a) => a.id !== "meditation21" && a.id !== "reikiGuided" && a.id !== "bowls").map((a) =>
           <button
             key={a.id}
             onClick={() => setAudio(a.id)}

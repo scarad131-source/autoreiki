@@ -102,7 +102,7 @@ export default function Meditate() {
 
   const handleStart = () => {
     const chakras = CHAKRAS.map((c) => c.id);
-    const audio = mode === "guided" ? "reikiGuided" : "bowls";
+    const audio = mode === "guided" ? "reikiGuided" : "beach";
     start({ mode, level: userLevel, audio, minutes: 30, chakras });
   };
 
