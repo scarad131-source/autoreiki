@@ -177,7 +177,7 @@ export default function Home() {
       {/* Botones destacados */}
       <section className="space-y-4">
         <div className="text-center">
-          <p className="uppercase tracking-[0.22em] text-muted-foreground text-xs">Tus enlaces rápidos</p>
+          <p className="uppercase tracking-[0.22em] text-muted-foreground text-base bg-[hsl(var(--primary))]">Tus enlaces rápidos</p>
         </div>
         <nav className="grid grid-cols-2 gap-3">
           <button
