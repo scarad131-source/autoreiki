@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Clock, Sparkles, Calendar, Flame } from "lucide-react";
+import { Clock, Sparkles, Calendar, Flame, ArrowUpRight } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import StatsOverview from "@/components/StatsOverview";
 import WeeklyStats from "@/components/WeeklyStats";
@@ -9,7 +9,6 @@ import Badges from "@/components/Badges";
 import ReminderSettings from "@/components/ReminderSettings";
 import DeleteAccountButton from "@/components/DeleteAccountButton";
 import PersonalizationCard from "@/components/PersonalizationCard";
-import HomeGreetingCard from "@/components/HomeGreetingCard";
 import { computeActiveDays, getStreakMessage, JOURNEY } from "@/lib/journey";
 import { getDailyPhrase } from "@/lib/dailyPhrases";
 import { Image } from "@/components/ui/image";
@@ -125,10 +124,8 @@ export default function Home() {
         </p>
       </section>
 
-      {/* Personalización breve / Selector rápido */}
-      {personalized ? (
-        <HomeGreetingCard name={firstName} />
-      ) : (
+      {/* Personalización breve */}
+      {!personalized && (
         <PersonalizationCard user={user} onSaved={refreshUser} />
       )}
 
@@ -169,6 +166,12 @@ export default function Home() {
             <AudioIcon className="w-3.5 h-3.5 text-primary" /> {audio.name}
           </span>
         </div>
+        <button
+          onClick={() => navigate("/configurar")}
+          className="w-full mt-4 rounded-full bg-gradient-to-r from-amber-light to-primary text-primary-foreground font-semibold py-3 flex items-center justify-center gap-2 neon-gold active:scale-[0.99] transition-transform">
+          Preparar mi sesión
+          <ArrowUpRight className="w-4 h-4" />
+        </button>
       </section>
 
       {/* Accesos rápidos */}
