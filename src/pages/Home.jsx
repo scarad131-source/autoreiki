@@ -176,7 +176,7 @@ export default function Home() {
 
       {/* Botones destacados */}
       <nav className="flex items-center justify-center gap-3 mx-5">
-        <div className="flex-1 text-right pr-1">
+        <div className="flex-1 text-left pr-1">
           <p className="uppercase tracking-[0.22em] text-muted-foreground text-sm">Tus enlaces</p>
           <p className="text-lg font-display font-semibold text-primary neon-text">Rápidos</p>
         </div>
