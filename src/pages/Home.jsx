@@ -196,16 +196,14 @@ export default function Home() {
       </section>
 
       {/* Accesos rápidos */}
-      <nav className="grid grid-cols-3 gap-3 mx-5">
+      <nav className="grid grid-cols-3 gap-3">
         {quickActions.map(({ label, img, to }) =>
         <button
           key={to}
           onClick={() => navigate(to)}
-          className="flex flex-col items-center gap-2.5 rounded-2xl border border-white/8 bg-card/50 hover:border-primary/40 hover:bg-accent/40 transition-colors active:scale-[0.98] px-3 py-4">
-            <div className="w-24 h-24 rounded-xl overflow-hidden border border-white/10">
-              <Image src={img} alt={label} className="w-full h-full block" fittingType="fill" />
-            </div>
-            <span className="text-sm font-medium tracking-wide">{label}</span>
+          className="relative aspect-square w-full overflow-hidden transition-transform active:scale-[0.98]">
+            <Image src={img} alt={label} className="w-full h-full block" fittingType="fill" />
+            <span className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent py-2 text-center text-sm font-medium tracking-wide">{label}</span>
           </button>
         )}
       </nav>
