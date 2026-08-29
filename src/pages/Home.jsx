@@ -185,7 +185,7 @@ export default function Home() {
             <div className="w-24 h-24 rounded-xl overflow-hidden border border-primary/20">
               <Image src={IMAGES.diarioBtn} alt="5 min" className="w-full h-full block" fittingType="fill" />
             </div>
-            <span className="text-sm font-medium tracking-wide">5 min</span>
+            <span className="text-sm font-medium tracking-wide">Dormir tranquilo</span>
           </button>
         ))}
       </nav>
