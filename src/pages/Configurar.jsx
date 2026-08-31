@@ -7,7 +7,7 @@ import { CHAKRAS } from "@/lib/guidedScripts";
 import { sessionAudio } from "@/lib/sessionAudio";
 
 const MODES = [
-{ id: "guided", name: "GUIADA - Principiante", desc: "Audio con voz que te guía durante tu meditación", color: "#00C698", duration: 13 },
+{ id: "guided", name: "GUIADA - Principiante", desc: "Audio con voz que te guía durante tu meditación", color: "#00C698", duration: 26 },
 { id: "unguided", name: "NO GUIADA - Avanzado", desc: "Solo tú, tu respiración y el sonido", color: "#FF7A00" }];
 
 
