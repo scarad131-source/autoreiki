@@ -4,7 +4,7 @@ export const AUDIO_SOURCES = {
   beach: {
     id: "beach",
     name: "Playa tranquila",
-    url: "https://media.base44.com/videos/public/6a7d30a899098694dbd88/af73fce44_sonidodeplayatranqullaalamanecer.mp4",
+    url: "https://media.base44.com/files/public/6a7d30a899098694894dbd88/200ce5b7d_Sonidoplayatranquila30mmp3.mp3",
   },
   bowls: {
     id: "bowls",
