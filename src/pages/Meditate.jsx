@@ -4,6 +4,7 @@ import { ChevronLeft } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import MeditationRunner from "@/components/MeditationRunner";
 import ReflectionForm from "@/components/ReflectionForm";
+import PrepChecklist from "@/components/PrepChecklist";
 import { buildChakraScript, CHAKRAS } from "@/lib/guidedScripts";
 import { unlockSpeech } from "@/lib/speech";
 import { audioUrlFor, isVoiceTrack } from "@/lib/audioSources";
@@ -121,6 +122,8 @@ export default function Meditate() {
       <header className="text-center">
         <h1 className="uppercase tracking-[0.14em] text-2xl font-display font-semibold">Configura tu espacio sagrado</h1>
       </header>
+
+      <PrepChecklist />
 
       <section className="grid grid-cols-2 gap-4">
         {MODES.map((m) => {

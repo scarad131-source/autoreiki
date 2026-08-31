@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, ChevronLeft } from "lucide-react";
 import ChakraFigure from "@/components/ChakraFigure";
+import PrepChecklist from "@/components/PrepChecklist";
 import { AUDIO_SOURCES, audioUrlFor, isVoiceTrack } from "@/lib/audioSources";
 import { CHAKRAS } from "@/lib/guidedScripts";
 import { sessionAudio } from "@/lib/sessionAudio";
@@ -68,6 +69,8 @@ export default function Configurar() {
         <h1 className="font-display font-semibold tracking-tight text-[hsl(var(--primary))] text-4xl">Sesión de Reiki</h1>
         <p className="text-sm text-muted-foreground mt-1">Toca los chakras que quieras trabajar</p>
       </header>
+
+      <PrepChecklist />
 
       <h2 className="text-sm font-semibold">Zonas a tratar</h2>
 
