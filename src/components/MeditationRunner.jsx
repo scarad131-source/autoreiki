@@ -191,9 +191,11 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     }
   }, [volume, muted, started]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Fade in suave en los primeros 3 segundos (solo sesiones no guiadas)
+  // Fade in suave en los primeros 3 segundos (solo sesiones no guiadas).
+  // Depende solo de `started` y `config.audio` para no reiniciarse cuando el
+  // usuario ajusta el volumen durante la sesión.
   useEffect(() => {
-    if (!started || isVoiceTrack(config.audio) || muted) return;
+    if (!started || isVoiceTrack(config.audio)) return;
     el.volume = 0;
     const target = volume;
     const duration = 3000;
@@ -207,7 +209,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     };
     rafId = requestAnimationFrame(step);
     return () => cancelAnimationFrame(rafId);
-  }, [started, config.audio, volume, muted]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [started, config.audio]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Fade out suave en los últimos 3 segundos (solo sesiones no guiadas)
   useEffect(() => {
