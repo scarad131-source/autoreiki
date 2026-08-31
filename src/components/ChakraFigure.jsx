@@ -36,7 +36,7 @@ export default function ChakraFigure({ selected = [], onToggle, onSelectAll, sel
         <img
           src={FIGURE_URL}
           alt="Silueta en meditación con chakras"
-          className="block w-full h-auto my-1"
+          className="block w-full h-auto"
           draggable={false} />
         
       </div>
