@@ -47,29 +47,6 @@ export default function IntensitySlider({ value, onChange }) {
           />
         </div>
 
-        {/* Clickable segments */}
-        <div className="absolute inset-0 flex">
-          {LEVELS.map((l) => (
-            <button
-              key={l.value}
-              onClick={() => onChange(l.value)}
-              className="flex-1 group relative"
-              aria-label={`Intensidad ${l.value}: ${l.label}`}
-            >
-              {/* Tick mark */}
-              <span
-                className={`absolute top-0 left-1/2 -translate-x-1/2 w-1.5 h-2 rounded-full transition-all ${
-                  value >= l.value ? "bg-primary" : "bg-muted-foreground/40"
-                }`}
-              />
-              {/* Hover label */}
-              <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[9px] text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                {l.value}
-              </span>
-            </button>
-          ))}
-        </div>
-
         {/* Thumb */}
         <div
           className="absolute top-0.5 w-5 h-5 rounded-full bg-primary border-2 border-background pointer-events-none transition-all duration-300"
