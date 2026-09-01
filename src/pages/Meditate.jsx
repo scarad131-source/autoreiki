@@ -96,9 +96,9 @@ export default function Meditate() {
     } catch (e) {
 
 
+
       // ignore save errors
     }navigate(to);};
-
   if (stage === "running" && config) {
     return <MeditationRunner config={config} onFinish={finish} onCancel={() => navigate("/configurar")} />;
   }
@@ -182,7 +182,7 @@ export default function Meditate() {
             </div>
           </section>
 
-          <section className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start my-3">
+          <section className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start py-1 px-1">
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <div className="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
