@@ -156,22 +156,22 @@ export default function Configurar() {
             const Icon = s.icon;
             return (
               <button
-                key={s.id}
-                onClick={() => setAudio(s.id)}
-                className={`flex items-center gap-2.5 p-2.5 rounded-2xl border text-left transition-all active:scale-[0.98] ${
-                active ?
-                "border-primary bg-accent/60 neon-glow" :
-                "border-white/10 bg-card/50 hover:border-primary/40"}`
-                }>
-                  <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${active ? "bg-primary/20" : "bg-white/5"}`}>
-                    <Icon className={active ? "text-primary" : "text-muted-foreground"} style={{ width: 18, height: 18 }} />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="font-semibold text-[12px] leading-tight" style={{ color: active ? "hsl(var(--primary))" : undefined }}>{s.title}</p>
-                    <p className="text-[10px] text-muted-foreground leading-tight mt-0.5">{s.desc}</p>
-                  </div>
-                  <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${active ? "bg-primary" : "bg-white/15"}`} />
-                </button>);
+              key={s.id}
+              onClick={() => setAudio(s.id)}
+              className={`flex items-center gap-2.5 p-2.5 rounded-2xl border text-left transition-all active:scale-[0.98] h-[68px] ${
+              active ?
+              "border-primary bg-accent/60 neon-glow" :
+              "border-white/10 bg-card/50 hover:border-primary/40"}`
+              }>
+                <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${active ? "bg-primary/20" : "bg-white/5"}`}>
+                  <Icon className={active ? "text-primary" : "text-muted-foreground"} style={{ width: 18, height: 18 }} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="font-semibold text-[12px] leading-tight" style={{ color: active ? "hsl(var(--primary))" : undefined }}>{s.title}</p>
+                  <p className="text-[10px] text-muted-foreground leading-tight mt-0.5">{s.desc}</p>
+                </div>
+                <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${active ? "bg-primary" : "bg-white/15"}`} />
+              </button>);
 
           })}
           </div>
