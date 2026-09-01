@@ -23,52 +23,49 @@ export default function PrepChecklist() {
       </p>
 
       <div
-        className="rounded-2xl border p-5"
-        style={{ background: "#F9F5EF", borderColor: "#E8E0D4" }}
+        className="rounded-xl border p-3 mx-auto"
+        style={{ background: "#fcfaf4", borderColor: "#E8E0D4", maxWidth: "16rem" }}
       >
         <div className="flex items-start justify-between">
           <div>
             <p
-              className="text-[11px] uppercase tracking-[0.18em] font-semibold"
-              style={{ color: "#6A329F" }}
+              className="text-[9px] uppercase tracking-[0.16em] font-semibold"
+              style={{ color: "#6b3fa0" }}
             >
               Ritual de 2 minutos
             </p>
             <h3
-              className="text-xl font-semibold mt-1"
-              style={{ color: "#1A1A1A", fontFamily: "'Cormorant Garamond', serif" }}
+              className="text-base font-semibold mt-0.5 leading-tight"
+              style={{ color: "#1a1a1a", fontFamily: "'Cormorant Garamond', serif" }}
             >
               Checklist de preparación
             </h3>
           </div>
-          <div
-            className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
-            style={{ background: "#6A329F15" }}
-          >
-            <ListChecks className="w-5 h-5" style={{ color: "#6A329F" }} />
+          <div className="w-6 h-6 rounded-md flex items-center justify-center shrink-0">
+            <ListChecks className="w-4 h-4" style={{ color: "#6b3fa0" }} />
           </div>
         </div>
 
-        <div className="mt-4 space-y-3">
+        <div className="mt-2.5 space-y-2">
           {ITEMS.map((label, i) => (
             <button
               key={label}
               onClick={() => toggle(i)}
-              className="flex items-center gap-3 w-full text-left active:scale-[0.99] transition-transform"
+              className="flex items-center gap-2 w-full text-left active:scale-[0.99] transition-transform"
             >
               <span
-                className="w-6 h-6 rounded-md flex items-center justify-center transition-colors"
+                className="w-4 h-4 rounded-[4px] flex items-center justify-center transition-colors shrink-0"
                 style={
                   checked[i]
-                    ? { background: "#6A329F", borderColor: "#6A329F" }
-                    : { background: "#FFFDF8", border: "1.5px solid #D8CFC0" }
+                    ? { background: "#6b3fa0", borderColor: "#6b3fa0" }
+                    : { background: "#FFFDF8", border: "1.5px solid #dcd0c0" }
                 }
               >
-                {checked[i] && <Check className="w-4 h-4 text-white" strokeWidth={3} />}
+                {checked[i] && <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />}
               </span>
               <span
-                className="text-sm"
-                style={{ color: checked[i] ? "#1A1A1A" : "#555555" }}
+                className="text-xs leading-tight"
+                style={{ color: checked[i] ? "#1a1a1a" : "#999999" }}
               >
                 {label}
               </span>
@@ -76,8 +73,8 @@ export default function PrepChecklist() {
           ))}
         </div>
 
-        <div className="mt-4 pt-3 border-t" style={{ borderColor: "#E8E0D4" }}>
-          <p className="text-xs font-semibold" style={{ color: "#6A329F" }}>
+        <div className="mt-2.5 pt-2 border-t" style={{ borderColor: "#E8E0D4" }}>
+          <p className="text-[11px] font-semibold" style={{ color: "#6b3fa0" }}>
             {count} de {ITEMS.length} preparados
           </p>
         </div>
