@@ -19,6 +19,7 @@ export default function Configurar() {
   const [level, setLevel] = useState("intermediate");
   const [minutes, setMinutes] = useState(30);
   const [audio, setAudio] = useState("beach");
+  const [bowlsMarkers, setBowlsMarkers] = useState(false);
 
   const toggle = (id) => {
     if (mode === "guided") return;
@@ -48,7 +49,8 @@ export default function Configurar() {
           level,
           audio: trackId,
           minutes,
-          chakras: selected
+          chakras: selected,
+          bowlsMarkers
         }
       }
     });
@@ -127,29 +129,31 @@ export default function Configurar() {
 
       {mode === "unguided" &&
       <section>
-          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Sonido ambientAL</h2>
-          <div className="grid grid-cols-2 gap-3">
+          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Sonido ambiental</h2>
+          <div className="grid grid-cols-4 gap-2">
             {Object.values(AUDIO_SOURCES).filter((a) => a.id !== "meditation21" && a.id !== "reikiGuided").map((a) =>
           <button
             key={a.id}
             onClick={() => setAudio(a.id)}
-            className={`text-left p-4 rounded-2xl border transition-all ${
+            className={`aspect-square rounded-xl border flex flex-col items-center justify-center text-center px-1 transition-all ${
             audio === a.id ?
             "border-primary bg-accent neon-glow" :
             "border-glow/20 bg-card/50 hover:border-primary/50"}`
             }>
-            
-                <p className="font-medium text-sm">{a.name}</p>
+                <p className="font-medium text-[11px] leading-tight">{a.name}</p>
               </button>
           )}
           </div>
+          <button
+            onClick={() => setBowlsMarkers((v) => !v)}
+            className={`w-full mt-2 py-3 rounded-xl border text-xs font-semibold tracking-wide transition-all flex items-center justify-center gap-2 ${
+            bowlsMarkers ?
+            "border-primary bg-accent text-primary neon-glow" :
+            "border-glow/20 bg-card/50 text-muted-foreground hover:border-primary/50"}`
+            }>
+            {bowlsMarkers ? "✓ " : ""}ACTIVAR MARCADORES CON CUENCOS
+          </button>
         </section>
-      }
-
-      {mode === "unguided" &&
-        <p className="text-center text-xs text-muted-foreground leading-relaxed px-4">
-          El sonido de <span className="text-primary font-medium">CUENCOS</span> te ayudará a dividir el tiempo de manera uniforme para tu terapia, según el número de chakras a tratar hoy.
-        </p>
       }
 
       <p className="text-center text-sm text-muted-foreground mb-3">
