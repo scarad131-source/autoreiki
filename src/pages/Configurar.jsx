@@ -7,6 +7,7 @@ import BowlsScheduleCard from "@/components/BowlsScheduleCard";
 import { AUDIO_SOURCES, audioUrlFor, isVoiceTrack } from "@/lib/audioSources";
 import { CHAKRAS } from "@/lib/guidedScripts";
 import { sessionAudio } from "@/lib/sessionAudio";
+import { ambient } from "@/lib/audioEngine";
 
 const MODES = [
 { id: "guided", name: "GUIADA - Principiante", desc: "Audio con voz que te guía durante tu meditación", color: "#00C698", duration: 26 },
@@ -47,6 +48,12 @@ export default function Configurar() {
       loop: !isVoiceTrack(trackId),
       boost: trackId === "bowls" ? 2.5 : 1
     });
+    // Inicializa el contexto de audio del motor de cuencos dentro del gesto
+    // para que los marcadores suenen correctamente durante la sesión.
+    if (bowlsMarkers) {
+      ambient.init();
+      ambient.resumeCtx();
+    }
     navigate("/meditar", {
       state: {
         preset: {

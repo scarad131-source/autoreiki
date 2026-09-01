@@ -20,7 +20,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const [volume, setVolume] = useState(isBowls ? 0.7 : 0.5);
   const [muted, setMuted] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
-  const [bowlsOn, setBowlsOn] = useState(false);
+  const bowlsOn = config.bowlsMarkers === true;
   const timerRef = useRef(null);
   const audioRef = useRef(sessionAudio.element());
   const finishedRef = useRef(false);
@@ -147,19 +147,21 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     }
   }, [paused, started]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // cuencos: suenan cada 3 minutos de sesión cuando están activados (solo Reiki).
+  // cuencos: suenan al cambiar de zona según el cronograma (duración / nº de chakras)
   useEffect(() => {
     if (!started || !bowlsOn || paused || !bowlChakras.length) return;
-    const step = Math.floor(elapsed / 180);
+    const perChakra = Math.round((config.minutes * 60) / bowlChakras.length);
+    if (perChakra <= 0) return;
+    const step = Math.floor(elapsed / perChakra);
     if (step <= lastBowlStepRef.current) return;
     lastBowlStepRef.current = step;
     const c = bowlChakras[step % bowlChakras.length];
     ambient.playBowl(c.freq, 0.7);
-  }, [elapsed, started, bowlsOn, paused, bowlChakras]);
+  }, [elapsed, started, bowlsOn, paused, bowlChakras, config.minutes]);
 
   useEffect(() => {
     if (!bowlsOn) lastBowlStepRef.current = -1;
-  }, [bowlsOn]);
+  }, [bowlsOn, started]);
 
   // fin de sesión (no guiadas): por temporizador
   useEffect(() => {
