@@ -181,7 +181,7 @@ export default function Home() {
           key={to}
           onClick={() => navigate(to)}
           className="relative aspect-square w-full overflow-hidden rounded-xl border border-white/10 bg-card transition-transform active:scale-[0.98]">
-            <Image src={img} alt={label} className="w-full h-full block p-1.5" fittingType={label === "Ayuda" ? "fit" : "fill"} />
+            <Image src={img} alt={label} className="w-full h-full block p-2" fittingType="fit" />
             <span className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent py-2 text-center text-sm font-medium tracking-wide">{label}</span>
           </button>
         )}
