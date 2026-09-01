@@ -98,9 +98,9 @@ export default function Meditate() {
 
 
 
+
       // ignore save errors
-    }navigate(to);};if (stage === "running" && config) {
-    return <MeditationRunner config={config} onFinish={finish} onCancel={() => navigate("/configurar")} />;
+    }navigate(to);};if (stage === "running" && config) {return <MeditationRunner config={config} onFinish={finish} onCancel={() => navigate("/configurar")} />;
   }
 
   if (stage === "reflection" && config && result) {
@@ -208,7 +208,7 @@ export default function Meditate() {
                   <button
                     key={s.id}
                     onClick={() => setAudio(s.id)}
-                    className={`flex items-center gap-2.5 p-2.5 rounded-2xl border text-left transition-all active:scale-[0.98] mx-3 ${
+                    className={`flex items-center gap-2.5 p-2.5 rounded-2xl border text-left transition-all active:scale-[0.98] mx-2 ${
                     active ? "border-primary bg-accent/60 neon-glow" : "border-white/10 bg-card/50 hover:border-primary/40"}`
                     }>
                     
