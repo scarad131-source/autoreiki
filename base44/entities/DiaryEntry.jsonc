@@ -2,6 +2,50 @@
   "name": "DiaryEntry",
   "type": "object",
   "properties": {
+    "mood": {
+      "type": "string",
+      "enum": [
+        "tenso",
+        "inquieto",
+        "neutral",
+        "en_calma",
+        "ligero"
+      ],
+      "description": "Estado emocional registrado tras la sesi\u00f3n"
+    },
+    "sensation": {
+      "type": "string",
+      "enum": [
+        "hormigueo",
+        "calor",
+        "frio",
+        "liberacion",
+        "somnolencia",
+        "nada",
+        "dolor"
+      ],
+      "description": "Sensaci\u00f3n principal percibida"
+    },
+    "zone": {
+      "type": "string",
+      "enum": [
+        "manos",
+        "brazos",
+        "piernas",
+        "pies",
+        "cabeza",
+        "cuello",
+        "pecho",
+        "abdomen",
+        "espalda",
+        "general"
+      ],
+      "description": "Zona del cuerpo donde se percibi\u00f3 la sensaci\u00f3n"
+    },
+    "intensity": {
+      "type": "number",
+      "description": "Intensidad percibida de 1 a 5"
+    },
     "sensations": {
       "type": "array",
       "items": {
