@@ -29,7 +29,7 @@ export default function PrepChecklist() {
         <div className="flex items-start justify-between">
           <div>
             <p
-              className="text-[9px] uppercase tracking-[0.16em] font-semibold"
+              className="uppercase tracking-[0.16em] font-semibold text-[hsl(var(--primary))] text-xs"
               style={{ color: "#6b3fa0" }}>
               
               Ritual de 2 minutos
