@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowRight, ChevronLeft, Headphones, Waves, CloudRain, Trees, CircleDot } from "lucide-react";
 import ChakraFigure from "@/components/ChakraFigure";
 import PrepChecklist from "@/components/PrepChecklist";
+import BowlsScheduleCard from "@/components/BowlsScheduleCard";
 import { AUDIO_SOURCES, audioUrlFor, isVoiceTrack } from "@/lib/audioSources";
 import { CHAKRAS } from "@/lib/guidedScripts";
 import { sessionAudio } from "@/lib/sessionAudio";
@@ -128,7 +129,8 @@ export default function Configurar() {
       }
 
       {mode === "unguided" &&
-      <section className="space-y-3">
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+        <div className="space-y-3">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
               <Headphones className="w-5 h-5 text-primary" />
@@ -179,7 +181,10 @@ export default function Configurar() {
           }>
             {bowlsMarkers ? "✓ " : ""}ACTIVAR MARCADORES CON CUENCOS
           </button>
-        </section>
+        </div>
+
+        <BowlsScheduleCard minutes={minutes} selected={selected} audio={audio} bowlsMarkers={bowlsMarkers} />
+      </section>
       }
 
       <p className="text-center text-sm text-muted-foreground mb-3">
