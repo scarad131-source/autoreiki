@@ -134,29 +134,29 @@ export default function Configurar() {
               <Headphones className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <h2 className="font-display text-lg font-semibold leading-tight">Ambiente sonoro</h2>
-              <p className="text-xs text-muted-foreground leading-snug mt-0.5">Elige el paisaje que sostendrá tu práctica y escucha una muestra.</p>
+              <h2 className="font-display font-semibold leading-tight text-2xl text-[hsl(var(--primary))]">Ambiente sonoro</h2>
+              <p className="text-xs text-muted-foreground leading-snug mt-0.5">Elige el paisaje que sostendrá tu práctica.</p>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-2">
             {[
-              { id: "beach", icon: Waves, title: "Playa tranquila", desc: "Corriente tranquila con cantos espaciados" },
-              { id: "rain", icon: CloudRain, title: "Lluvia relajante", desc: "Textura continua de baja intensidad" },
-              { id: "forest", icon: Trees, title: "Bosque nocturno", desc: "Ambiente grave y sereno" },
-              { id: "bowls", icon: CircleDot, title: "Frecuencias Sanadoras", desc: "Tono continuo de cuencos armónicos" }
-            ].map((s) => {
-              const active = audio === s.id;
-              const Icon = s.icon;
-              return (
-                <button
-                  key={s.id}
-                  onClick={() => setAudio(s.id)}
-                  className={`flex items-center gap-2.5 p-2.5 rounded-2xl border text-left transition-all active:scale-[0.98] ${
-                  active ?
-                  "border-primary bg-accent/60 neon-glow" :
-                  "border-white/10 bg-card/50 hover:border-primary/40"}`
-                  }>
+          { id: "beach", icon: Waves, title: "Playa tranquila", desc: "Corriente tranquila con cantos espaciados" },
+          { id: "rain", icon: CloudRain, title: "Lluvia relajante", desc: "Textura continua de baja intensidad" },
+          { id: "forest", icon: Trees, title: "Bosque nocturno", desc: "Ambiente grave y sereno" },
+          { id: "bowls", icon: CircleDot, title: "Frecuencias Sanadoras", desc: "Tono continuo de cuencos armónicos" }].
+          map((s) => {
+            const active = audio === s.id;
+            const Icon = s.icon;
+            return (
+              <button
+                key={s.id}
+                onClick={() => setAudio(s.id)}
+                className={`flex items-center gap-2.5 p-2.5 rounded-2xl border text-left transition-all active:scale-[0.98] ${
+                active ?
+                "border-primary bg-accent/60 neon-glow" :
+                "border-white/10 bg-card/50 hover:border-primary/40"}`
+                }>
                   <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${active ? "bg-primary/20" : "bg-white/5"}`}>
                     <Icon className={active ? "text-primary" : "text-muted-foreground"} style={{ width: 18, height: 18 }} />
                   </div>
@@ -165,18 +165,18 @@ export default function Configurar() {
                     <p className="text-[10px] text-muted-foreground leading-tight mt-0.5">{s.desc}</p>
                   </div>
                   <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${active ? "bg-primary" : "bg-white/15"}`} />
-                </button>
-              );
-            })}
+                </button>);
+
+          })}
           </div>
 
           <button
-            onClick={() => setBowlsMarkers((v) => !v)}
-            className={`w-full py-3 rounded-xl border text-xs font-semibold tracking-wide transition-all flex items-center justify-center gap-2 ${
-            bowlsMarkers ?
-            "border-primary bg-accent text-primary neon-glow" :
-            "border-glow/20 bg-card/50 text-muted-foreground hover:border-primary/50"}`
-            }>
+          onClick={() => setBowlsMarkers((v) => !v)}
+          className={`w-full py-3 rounded-xl border text-xs font-semibold tracking-wide transition-all flex items-center justify-center gap-2 ${
+          bowlsMarkers ?
+          "border-primary bg-accent text-primary neon-glow" :
+          "border-glow/20 bg-card/50 text-muted-foreground hover:border-primary/50"}`
+          }>
             {bowlsMarkers ? "✓ " : ""}ACTIVAR MARCADORES CON CUENCOS
           </button>
         </section>
