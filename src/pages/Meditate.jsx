@@ -5,7 +5,6 @@ import { base44 } from "@/api/base44Client";
 import MeditationRunner from "@/components/MeditationRunner";
 import ReflectionForm from "@/components/ReflectionForm";
 import PrepChecklist from "@/components/PrepChecklist";
-import BowlsScheduleCard from "@/components/BowlsScheduleCard";
 import { buildChakraScript, CHAKRAS } from "@/lib/guidedScripts";
 import { unlockSpeech } from "@/lib/speech";
 import { audioUrlFor, isVoiceTrack } from "@/lib/audioSources";
@@ -25,7 +24,6 @@ export default function Meditate() {
   const [minutes, setMinutes] = useState(30);
   const [audio, setAudio] = useState("beach");
   const [bowlsMarkers, setBowlsMarkers] = useState(false);
-  const [selected, setSelected] = useState([]);
 
   useEffect(() => {
     base44.auth.me().
@@ -49,13 +47,6 @@ export default function Meditate() {
       setStage("running");
     }
   }, [location.state]);
-
-  // En modo no guiada, inicializa todos los chakras seleccionados por defecto
-  useEffect(() => {
-    if (mode === "unguided" && !selected.length) {
-      setSelected(CHAKRAS.map((c) => c.id));
-    }
-  }, [mode]);
 
   const start = (cfg) => {
     unlockSpeech();
@@ -124,7 +115,7 @@ export default function Meditate() {
       const chakras = CHAKRAS.map((c) => c.id);
       start({ mode, level: userLevel, audio: "reikiGuided", minutes: 26, chakras });
     } else {
-      start({ mode, level: userLevel, audio, minutes, chakras: selected, bowlsMarkers });
+      start({ mode, level: userLevel, audio, minutes, chakras: CHAKRAS.map((c) => c.id), bowlsMarkers });
     }
   };
 
@@ -208,7 +199,7 @@ export default function Meditate() {
                   <button
                     key={s.id}
                     onClick={() => setAudio(s.id)}
-                    className={`flex items-center gap-2.5 rounded-2xl border text-left transition-all active:scale-[0.98] my-1 px-2 py-3 h-[68px] ${
+                    className={`flex items-center gap-2.5 rounded-2xl border text-left transition-all active:scale-[0.98] my-1 px-2 py-3 ${
                     active ? "border-primary bg-accent/60 neon-glow" : "border-white/10 bg-card/50 hover:border-primary/40"}`
                     }>
                     
@@ -228,9 +219,6 @@ export default function Meditate() {
             </div>
           </section>
 
-          <p className="text-center text-sm text-muted-foreground">
-            <span className="text-primary font-semibold">{selected.length}</span> de 7 zonas elegidas
-          </p>
         </>
       }
 

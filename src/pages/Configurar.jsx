@@ -158,7 +158,7 @@ export default function Configurar() {
               <button
               key={s.id}
               onClick={() => setAudio(s.id)}
-              className={`flex items-center gap-2.5 p-2.5 rounded-2xl border text-left transition-all active:scale-[0.98] h-[68px] ${
+              className={`flex items-center gap-2.5 p-2.5 rounded-2xl border text-left transition-all active:scale-[0.98] ${
               active ?
               "border-primary bg-accent/60 neon-glow" :
               "border-white/10 bg-card/50 hover:border-primary/40"}`
@@ -177,6 +177,9 @@ export default function Configurar() {
           </div>
 
         </div>
+
+        <BowlsScheduleCard minutes={minutes} selected={selected} audio={audio} bowlsMarkers={bowlsMarkers} />
+
       </section>
       }
 
