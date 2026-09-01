@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
+import { base44 } from "@/api/base44Client";
 import DiaryTabNav from "@/components/diary/DiaryTabNav";
 import NewEntryTab from "@/components/diary/NewEntryTab";
 import InterpreterTab from "@/components/diary/InterpreterTab";
@@ -9,6 +10,25 @@ import PatternsTab from "@/components/diary/PatternsTab";
 export default function Diario() {
   const navigate = useNavigate();
   const [tab, setTab] = useState("nueva");
+  const [entries, setEntries] = useState([]);
+  const [entriesLoaded, setEntriesLoaded] = useState(false);
+
+  const refreshEntries = useCallback(async () => {
+    try {
+      const list = await base44.entities.DiaryEntry.list("-created_date", 100);
+      setEntries(list);
+    } catch (e) {}
+    setEntriesLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    refreshEntries();
+  }, [refreshEntries]);
+
+  const handleSaved = useCallback(() => {
+    refreshEntries();
+    setTab("patrones");
+  }, [refreshEntries]);
 
   return (
     <div className="space-y-6">
@@ -25,9 +45,9 @@ export default function Diario() {
 
       <DiaryTabNav active={tab} onChange={setTab} />
 
-      {tab === "nueva" && <NewEntryTab onSaved={() => setTab("patrones")} />}
+      {tab === "nueva" && <NewEntryTab onSaved={handleSaved} />}
       {tab === "interprete" && <InterpreterTab />}
-      {tab === "patrones" && <PatternsTab />}
+      {tab === "patrones" && <PatternsTab entries={entries} loaded={entriesLoaded} />}
     </div>
   );
 }

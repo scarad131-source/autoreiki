@@ -1,27 +1,10 @@
-import { useEffect, useState } from "react";
-import { base44 } from "@/api/base44Client";
 import { BarChart3 } from "lucide-react";
 import { SENSATIONS, sensationMap } from "@/lib/diarySensations";
 import { MOODS } from "@/lib/diaryOptions";
 import DiaryPatterns from "@/components/DiaryPatterns";
 import DiaryHistory from "@/components/DiaryHistory";
 
-export default function PatternsTab() {
-  const [entries, setEntries] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const list = await base44.entities.DiaryEntry.list("-created_date", 100);
-        setEntries(list);
-      } catch (e) {
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, []);
-
+export default function PatternsTab({ entries = [], loaded = true }) {
   const total = entries.length;
 
   // Emoción frecuente
