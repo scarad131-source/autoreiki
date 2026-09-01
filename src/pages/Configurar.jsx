@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, ChevronLeft, Headphones, Waves, CloudRain, Trees, CircleDot, Check } from "lucide-react";
+import { ArrowRight, ChevronLeft, Headphones, Waves, CloudRain, Trees, CircleDot } from "lucide-react";
 import ChakraFigure from "@/components/ChakraFigure";
 import PrepChecklist from "@/components/PrepChecklist";
 import { AUDIO_SOURCES, audioUrlFor, isVoiceTrack } from "@/lib/audioSources";
@@ -143,7 +143,8 @@ export default function Configurar() {
             {[
               { id: "beach", icon: Waves, title: "Playa tranquila", desc: "Corriente tranquila con cantos espaciados" },
               { id: "rain", icon: CloudRain, title: "Lluvia relajante", desc: "Textura continua de baja intensidad" },
-              { id: "forest", icon: Trees, title: "Bosque nocturno", desc: "Ambiente grave y sereno" }
+              { id: "forest", icon: Trees, title: "Bosque nocturno", desc: "Ambiente grave y sereno" },
+              { id: "bowls", icon: CircleDot, title: "Frecuencias Sanadoras", desc: "Tono continuo de cuencos armónicos" }
             ].map((s) => {
               const active = audio === s.id;
               const Icon = s.icon;
@@ -157,7 +158,7 @@ export default function Configurar() {
                   "border-white/10 bg-card/50 hover:border-primary/40"}`
                   }>
                   <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${active ? "bg-primary/20" : "bg-white/5"}`}>
-                    <Icon className={`w-4.5 h-4.5 ${active ? "text-primary" : "text-muted-foreground"}`} style={{ width: 18, height: 18 }} />
+                    <Icon className={active ? "text-primary" : "text-muted-foreground"} style={{ width: 18, height: 18 }} />
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="font-semibold text-[12px] leading-tight" style={{ color: active ? "hsl(var(--primary))" : undefined }}>{s.title}</p>
@@ -168,28 +169,6 @@ export default function Configurar() {
               );
             })}
           </div>
-
-          <button
-            onClick={() => setAudio("bowls")}
-            className={`w-full flex items-center gap-3 p-3 rounded-2xl border-2 text-left transition-all active:scale-[0.99] ${
-            audio === "bowls" ?
-            "border-purple bg-gradient-to-r from-accent/60 to-purple/10 purple-glow" :
-            "border-white/10 bg-card/50 hover:border-purple/40"}`
-            }>
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${audio === "bowls" ? "bg-purple/20" : "bg-white/5"}`}>
-              <CircleDot className={`w-5 h-5 ${audio === "bowls" ? "text-purple" : "text-muted-foreground"}`} />
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="font-semibold text-sm leading-tight" style={{ color: audio === "bowls" ? "hsl(var(--purple))" : undefined }}>Frecuencias Sanadoras</p>
-              <p className="text-[11px] text-muted-foreground leading-tight mt-0.5">Tono continuo de cuencos armónicos</p>
-            </div>
-            {audio === "bowls" ?
-              <div className="w-6 h-6 rounded-full bg-purple flex items-center justify-center shrink-0">
-                <Check className="w-3.5 h-3.5 text-primary-foreground" />
-              </div> :
-              <span className="w-2.5 h-2.5 rounded-full bg-white/15 shrink-0" />
-            }
-          </button>
 
           <button
             onClick={() => setBowlsMarkers((v) => !v)}
