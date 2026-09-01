@@ -156,7 +156,7 @@ export default function Meditate() {
               className={`flex flex-col items-center justify-center text-center min-h-[110px] px-3 py-4 rounded-2xl border-2 transition-all duration-300 active:scale-[0.98] ${
               active ? "border-primary scale-[1.01]" : "border-white/10 bg-card/60 hover:border-primary/40"}`
               }
-              style={active ? { background: "#6A4B9E", boxShadow: "0 0 34px hsl(var(--primary) / 0.8), 0 0 60px hsl(var(--primary) / 0.4), inset 0 0 18px hsl(var(--primary) / 0.25)" } : undefined}>
+              style={active ? { boxShadow: "0 0 34px hsl(var(--primary) / 0.8), 0 0 60px hsl(var(--primary) / 0.4), inset 0 0 18px hsl(var(--primary) / 0.25)" } : undefined}>
               <p className="font-semibold text-lg" style={{ color: active ? "hsl(var(--primary))" : undefined }}>{m.name}</p>
               <p className="text-muted-foreground mt-1.5 leading-snug text-sm max-w-[150px]">{m.desc}</p>
             </button>);

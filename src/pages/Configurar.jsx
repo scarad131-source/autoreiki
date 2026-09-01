@@ -94,7 +94,7 @@ export default function Configurar() {
                 onClick={() => setMode(m.id)}
                 style={{
                   borderColor: m.color,
-                  background: active ? "#6A4B9E" : "#1A1426",
+                  background: "#1A1426",
                   boxShadow: active ? `0 0 34px ${m.color}CC, 0 0 60px ${m.color}55, inset 0 0 18px ${m.color}44` : "none",
                   opacity: active ? 1 : 0.55
                 }}
