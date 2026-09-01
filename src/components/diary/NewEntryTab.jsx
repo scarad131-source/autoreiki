@@ -4,6 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { toast } from "@/components/ui/use-toast";
 import { SENSATIONS, sensationMap } from "@/lib/diarySensations";
 import { MOODS, ZONES } from "@/lib/diaryOptions";
+import IntensitySlider from "@/components/diary/IntensitySlider";
 
 export default function NewEntryTab({ onSaved }) {
   const [mood, setMood] = useState(null);
@@ -111,15 +112,8 @@ export default function NewEntryTab({ onSaved }) {
           </div>
         </div>
         <div>
-          <h3 className="text-sm font-semibold mb-3">Intensidad percibida: {intensity}/5</h3>
-          <input
-            type="range"
-            min="1"
-            max="5"
-            value={intensity}
-            onChange={(e) => setIntensity(Number(e.target.value))}
-            className="w-full accent-primary cursor-pointer mt-3"
-          />
+          <h3 className="text-sm font-semibold mb-3">Intensidad percibida</h3>
+          <IntensitySlider value={intensity} onChange={setIntensity} />
         </div>
       </section>
 

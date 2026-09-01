@@ -3,6 +3,7 @@ import { ChevronDown, Sparkles, ArrowRight, HeartHandshake, AlertTriangle } from
 import { base44 } from "@/api/base44Client";
 import { SENSATIONS } from "@/lib/diarySensations";
 import { ZONES } from "@/lib/diaryOptions";
+import IntensitySlider from "@/components/diary/IntensitySlider";
 
 export default function InterpreterTab() {
   const [sensation, setSensation] = useState("hormigueo");
@@ -71,15 +72,8 @@ export default function InterpreterTab() {
           </div>
 
           <div>
-            <label className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">Intensidad: {intensity}/5</label>
-            <input
-              type="range"
-              min="1"
-              max="5"
-              value={intensity}
-              onChange={(e) => setIntensity(Number(e.target.value))}
-              className="w-full accent-primary cursor-pointer mt-2"
-            />
+            <label className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground mb-2 block">Intensidad</label>
+            <IntensitySlider value={intensity} onChange={setIntensity} />
           </div>
 
           <div className="space-y-2.5 pt-1">
