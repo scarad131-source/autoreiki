@@ -135,12 +135,12 @@ export default function Configurar() {
           <button
             key={a.id}
             onClick={() => setAudio(a.id)}
-            className={`aspect-square rounded-lg border flex flex-col items-center justify-center text-center px-0.5 transition-all ${
+            className={`aspect-square rounded-xl border-2 flex flex-col items-center justify-center text-center px-1 transition-all ${
             audio === a.id ?
             "border-primary bg-accent neon-glow" :
             "border-glow/20 bg-card/50 hover:border-primary/50"}`
             }>
-                <p className="font-medium text-[9px] leading-tight">{a.name}</p>
+                <p className="font-semibold text-[11px] leading-tight" style={{ color: audio === a.id ? "hsl(var(--primary))" : undefined }}>{a.name}</p>
               </button>
           )}
           </div>
