@@ -178,7 +178,28 @@ export default function Configurar() {
 
         </div>
 
-        <BowlsScheduleCard minutes={minutes} selected={selected} audio={audio} bowlsMarkers={bowlsMarkers} />
+        <div className="space-y-3">
+          <button
+            onClick={() => setBowlsMarkers(!bowlsMarkers)}
+            className={`flex items-center justify-between w-full p-3 rounded-2xl border transition-all active:scale-[0.98] ${
+              bowlsMarkers ? "border-primary bg-accent/60 neon-glow" : "border-white/10 bg-card/50 hover:border-primary/40"
+            }`}>
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${bowlsMarkers ? "bg-primary/20" : "bg-white/5"}`}>
+                <CircleDot className={bowlsMarkers ? "text-primary" : "text-muted-foreground"} style={{ width: 16, height: 16 }} />
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold leading-tight" style={{ color: bowlsMarkers ? "hsl(var(--primary))" : undefined }}>Activar marcadores con cuencos</p>
+                <p className="text-[10px] text-muted-foreground leading-tight mt-0.5">Suena un cuenco al cambiar de zona</p>
+              </div>
+            </div>
+            <span className={`w-11 h-6 rounded-full transition-colors relative shrink-0 ${bowlsMarkers ? "bg-primary" : "bg-white/20"}`}>
+              <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${bowlsMarkers ? "translate-x-5" : "translate-x-0.5"}`} />
+            </span>
+          </button>
+
+          <BowlsScheduleCard minutes={minutes} selected={selected} audio={audio} bowlsMarkers={bowlsMarkers} />
+        </div>
 
       </section>
       }

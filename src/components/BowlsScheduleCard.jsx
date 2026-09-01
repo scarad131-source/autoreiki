@@ -9,9 +9,12 @@ const CREAM = "#F9F4E8";
 
 export default function BowlsScheduleCard({ minutes, selected, audio, bowlsMarkers }) {
   const count = selected.length || 1;
-  const perChakra = Math.round((minutes / count) * 10) / 10;
-  const fmt = (n) => (Number.isInteger(n) ? `${n}` : n.toFixed(1));
   const ambienteNombre = (AUDIO_SOURCES[audio] && AUDIO_SOURCES[audio].name) || "Ambiente";
+
+  // Distribuye los minutos de forma que la suma de todas las zonas coincida
+  // exactamente con la duración total elegida por el usuario.
+  const base = Math.floor(minutes / count);
+  const remainder = minutes - base * count;
 
   const items = selected.map((id, i) => {
     const c = CHAKRAS.find((x) => x.id === id);
@@ -19,7 +22,7 @@ export default function BowlsScheduleCard({ minutes, selected, audio, bowlsMarke
       num: String(i + 1).padStart(2, "0"),
       name: c ? c.name : id,
       freq: c ? c.freq : null,
-      min: fmt(perChakra)
+      min: String(i < remainder ? base + 1 : base)
     };
   });
 
