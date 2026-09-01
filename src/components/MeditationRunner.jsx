@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { ArrowLeft, Pause, Play, BellRing, Headphones, Rewind, RotateCcw } from "lucide-react";
+import { ArrowLeft, Pause, Play, Headphones, Rewind, RotateCcw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { RELEASE_SCRIPTS, CHAKRAS } from "@/lib/guidedScripts";
 import { ambient } from "@/lib/audioEngine";
@@ -313,21 +313,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
           style={{ width: `${progress}%` }}
           transition={{ ease: "linear" }} />
       </div>
-
-      {isReiki && !hideVisualCues &&
-      <button
-        onClick={() => setBowlsOn((v) => !v)}
-        disabled={countdown > 0}
-        className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed ${
-        bowlsOn ?
-        "border-primary bg-primary/15 text-primary neon-glow" :
-        "border-white/10 bg-card/80 text-muted-foreground hover:text-foreground"}`
-        }
-        aria-label={bowlsOn ? "Desactivar cuencos" : "Activar cuencos"}>
-          <BellRing className="w-4 h-4" />
-          {bowlsOn ? "Desactivar cuencos" : "Activar cuencos"}
-        </button>
-      }
 
       <div className="flex items-center justify-center gap-6">
         {started && (
