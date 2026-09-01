@@ -35,7 +35,7 @@ export default function PrepChecklist() {
               Ritual de 2 minutos
             </p>
             <h3
-              className="leading-tight text-lg mt-2 mr-2 px-2 font-semibold [font-family:'Cabin',_sans-serif]"
+              className="leading-tight text-lg mt-2 mr-2 px-2 font-bold [font-family:'Gazpacho',_sans-serif]"
               style={{ color: "#1a1a1a", fontFamily: "'Cormorant Garamond', serif" }}>
               
               Checklist de preparación
