@@ -64,7 +64,11 @@ export default function Meditate() {
       finalCfg.customScript = buildChakraScript(finalCfg.chakras);
     }
     // Desbloquea el audio dentro del gesto para que iOS permita reproducirlo.
-    sessionAudio.unlock(audioUrlFor(finalCfg.audio), { loop: !isVoiceTrack(finalCfg.audio) });
+    // "Frecuencias Sanadoras" (bowls) recibe un boost de ganancia para sonar más fuerte.
+    sessionAudio.unlock(audioUrlFor(finalCfg.audio), {
+      loop: !isVoiceTrack(finalCfg.audio),
+      boost: finalCfg.audio === "bowls" ? 2.5 : 1
+    });
     setConfig(finalCfg);
     setStage("running");
   };

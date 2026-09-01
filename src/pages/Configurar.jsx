@@ -42,7 +42,11 @@ export default function Configurar() {
     if (!selected.length) return;
     const trackId = mode === "unguided" ? audio : "reikiGuided";
     // Desbloquea el audio dentro del gesto para que iOS permita reproducirlo.
-    sessionAudio.unlock(audioUrlFor(trackId), { loop: !isVoiceTrack(trackId) });
+    // "Frecuencias Sanadoras" (bowls) recibe un boost de ganancia para sonar más fuerte.
+    sessionAudio.unlock(audioUrlFor(trackId), {
+      loop: !isVoiceTrack(trackId),
+      boost: trackId === "bowls" ? 2.5 : 1
+    });
     navigate("/meditar", {
       state: {
         preset: {

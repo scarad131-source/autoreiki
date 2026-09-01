@@ -14,7 +14,10 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const [countdown, setCountdown] = useState(isVoiceTrack(config.audio) ? 2 : 3);
   const [elapsed, setElapsed] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [volume, setVolume] = useState(0.5);
+  // "Frecuencias Sanadoras" (bowls) suena bajo: subimos el volumen base y
+  // aplicamos una amplificación extra vía Web Audio para que se escuche claro.
+  const isBowls = config.audio === "bowls";
+  const [volume, setVolume] = useState(isBowls ? 0.7 : 0.5);
   const [muted, setMuted] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
   const [bowlsOn, setBowlsOn] = useState(false);
