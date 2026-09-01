@@ -174,27 +174,6 @@ export default function Home() {
         </button>
       </section>
 
-      {/* Botones destacados */}
-      <section className="space-y-4">
-        <div className="text-center">
-          <p className="uppercase tracking-[0.22em] text-muted-foreground text-base bg-[hsl(var(--primary))]">Tus enlaces rápidos</p>
-        </div>
-        <nav className="grid grid-cols-2 gap-3">
-          <button
-            onClick={() => navigate("/configurar")}
-            className="relative aspect-square w-full overflow-hidden transition-transform active:scale-[0.98]">
-            <Image src="https://media.base44.com/images/public/6a7d30a899098694894dbd88/35fe8b70d_generated_image.png" alt="5 min" className="w-full h-full block" fittingType="fill" />
-            <span className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent py-2 text-center text-xs font-medium tracking-wide">5 min</span>
-          </button>
-          <button
-            onClick={() => navigate("/configurar")}
-            className="relative aspect-square w-full overflow-hidden transition-transform active:scale-[0.98]">
-            <Image src="https://media.base44.com/images/public/6a7d30a899098694894dbd88/f15820055_generated_image.png" alt="Dormir tranquilo" className="w-full h-full block" fittingType="fill" />
-            <span className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent py-2 text-center text-sm font-medium tracking-wide">Dormir tranquilo</span>
-          </button>
-        </nav>
-      </section>
-
       {/* Accesos rápidos */}
       <nav className="grid grid-cols-3 gap-3">
         {quickActions.map(({ label, img, to }) =>
