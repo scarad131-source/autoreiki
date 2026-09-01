@@ -176,11 +176,9 @@ export default function Configurar() {
           })}
           </div>
 
-        </div>
-
-        <div className="space-y-3">
           <button
-            onClick={() => setBowlsMarkers(!bowlsMarkers)}
+            onClick={() => setBowlsMarkers((v) => !v)}
+            type="button"
             className={`flex items-center justify-between w-full p-3 rounded-2xl border transition-all active:scale-[0.98] ${
               bowlsMarkers ? "border-primary bg-accent/60 neon-glow" : "border-white/10 bg-card/50 hover:border-primary/40"
             }`}>
@@ -194,12 +192,13 @@ export default function Configurar() {
               </div>
             </div>
             <span className={`w-11 h-6 rounded-full transition-colors relative shrink-0 ${bowlsMarkers ? "bg-primary" : "bg-white/20"}`}>
-              <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${bowlsMarkers ? "translate-x-5" : "translate-x-0.5"}`} />
+              <span className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200 ${bowlsMarkers ? "translate-x-5" : "translate-x-0"}`} />
             </span>
           </button>
 
-          <BowlsScheduleCard minutes={minutes} selected={selected} audio={audio} bowlsMarkers={bowlsMarkers} />
         </div>
+
+        <BowlsScheduleCard minutes={minutes} selected={selected} audio={audio} bowlsMarkers={bowlsMarkers} />
 
       </section>
       }
