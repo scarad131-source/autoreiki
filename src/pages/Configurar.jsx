@@ -130,17 +130,17 @@ export default function Configurar() {
       {mode === "unguided" &&
       <section>
           <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Sonido ambiental</h2>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-4 gap-1.5">
             {Object.values(AUDIO_SOURCES).filter((a) => a.id !== "meditation21" && a.id !== "reikiGuided").map((a) =>
           <button
             key={a.id}
             onClick={() => setAudio(a.id)}
-            className={`aspect-square rounded-xl border flex flex-col items-center justify-center text-center px-1 transition-all ${
+            className={`aspect-square rounded-lg border flex flex-col items-center justify-center text-center px-0.5 transition-all ${
             audio === a.id ?
             "border-primary bg-accent neon-glow" :
             "border-glow/20 bg-card/50 hover:border-primary/50"}`
             }>
-                <p className="font-medium text-[11px] leading-tight">{a.name}</p>
+                <p className="font-medium text-[9px] leading-tight">{a.name}</p>
               </button>
           )}
           </div>
