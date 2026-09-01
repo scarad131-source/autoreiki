@@ -176,18 +176,7 @@ export default function Configurar() {
           })}
           </div>
 
-          <button
-          onClick={() => setBowlsMarkers((v) => !v)}
-          className={`w-full py-3 rounded-xl border text-xs font-semibold tracking-wide transition-all flex items-center justify-center gap-2 ${
-          bowlsMarkers ?
-          "border-primary bg-accent text-primary neon-glow" :
-          "border-glow/20 bg-card/50 text-muted-foreground hover:border-primary/50"}`
-          }>
-            {bowlsMarkers ? "✓ " : ""}ACTIVAR MARCADORES CON CUENCOS
-          </button>
         </div>
-
-        <BowlsScheduleCard minutes={minutes} selected={selected} audio={audio} bowlsMarkers={bowlsMarkers} />
       </section>
       }
 
