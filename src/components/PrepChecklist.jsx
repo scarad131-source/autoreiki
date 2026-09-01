@@ -2,17 +2,17 @@ import { useState } from "react";
 import { Check, ListChecks } from "lucide-react";
 
 const ITEMS = [
-  "Espacio sin interrupciones",
-  "Postura cómoda",
-  "Intención simple",
-  "Agua al alcance"
-];
+"Espacio sin interrupciones",
+"Postura cómoda",
+"Intención simple",
+"Agua al alcance"];
+
 
 export default function PrepChecklist() {
   const [checked, setChecked] = useState(() => ITEMS.map(() => false));
 
   const toggle = (i) =>
-    setChecked((prev) => prev.map((v, idx) => (idx === i ? !v : v)));
+  setChecked((prev) => prev.map((v, idx) => idx === i ? !v : v));
 
   const count = checked.filter(Boolean).length;
 
@@ -24,20 +24,20 @@ export default function PrepChecklist() {
 
       <div
         className="rounded-xl border p-3 mx-auto"
-        style={{ background: "#fcfaf4", borderColor: "#E8E0D4", maxWidth: "16rem" }}
-      >
+        style={{ background: "#fcfaf4", borderColor: "#E8E0D4", maxWidth: "16rem" }}>
+        
         <div className="flex items-start justify-between">
           <div>
             <p
               className="text-[9px] uppercase tracking-[0.16em] font-semibold"
-              style={{ color: "#6b3fa0" }}
-            >
+              style={{ color: "#6b3fa0" }}>
+              
               Ritual de 2 minutos
             </p>
             <h3
-              className="text-base font-semibold mt-0.5 leading-tight"
-              style={{ color: "#1a1a1a", fontFamily: "'Cormorant Garamond', serif" }}
-            >
+              className="font-semibold mt-0.5 leading-tight text-lg"
+              style={{ color: "#1a1a1a", fontFamily: "'Cormorant Garamond', serif" }}>
+              
               Checklist de preparación
             </h3>
           </div>
@@ -47,30 +47,30 @@ export default function PrepChecklist() {
         </div>
 
         <div className="mt-2.5 space-y-2">
-          {ITEMS.map((label, i) => (
-            <button
-              key={label}
-              onClick={() => toggle(i)}
-              className="flex items-center gap-2 w-full text-left active:scale-[0.99] transition-transform"
-            >
+          {ITEMS.map((label, i) =>
+          <button
+            key={label}
+            onClick={() => toggle(i)}
+            className="flex items-center gap-2 w-full text-left active:scale-[0.99] transition-transform">
+            
               <span
-                className="w-4 h-4 rounded-[4px] flex items-center justify-center transition-colors shrink-0"
-                style={
-                  checked[i]
-                    ? { background: "#6b3fa0", borderColor: "#6b3fa0" }
-                    : { background: "#FFFDF8", border: "1.5px solid #dcd0c0" }
-                }
-              >
+              className="w-4 h-4 rounded-[4px] flex items-center justify-center transition-colors shrink-0"
+              style={
+              checked[i] ?
+              { background: "#6b3fa0", borderColor: "#6b3fa0" } :
+              { background: "#FFFDF8", border: "1.5px solid #dcd0c0" }
+              }>
+              
                 {checked[i] && <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />}
               </span>
               <span
-                className="text-xs leading-tight"
-                style={{ color: checked[i] ? "#1a1a1a" : "#999999" }}
-              >
+              className="text-xs leading-tight"
+              style={{ color: checked[i] ? "#1a1a1a" : "#999999" }}>
+              
                 {label}
               </span>
             </button>
-          ))}
+          )}
         </div>
 
         <div className="mt-2.5 pt-2 border-t" style={{ borderColor: "#E8E0D4" }}>
@@ -79,6 +79,6 @@ export default function PrepChecklist() {
           </p>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
