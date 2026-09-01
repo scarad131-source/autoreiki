@@ -1,3 +1,4 @@
+import { useRef, useCallback } from "react";
 import { Sun, SunDim, CloudSun, Cloud, Moon } from "lucide-react";
 
 const LEVELS = [
@@ -9,9 +10,32 @@ const LEVELS = [
 ];
 
 export default function IntensitySlider({ value, onChange }) {
+  const trackRef = useRef(null);
   const current = LEVELS.find((l) => l.value === value) || LEVELS[1];
   const CurrentIcon = current.icon;
   const pct = ((value - 1) / 4) * 100;
+
+  const updateFromX = useCallback((clientX) => {
+    const el = trackRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const ratio = Math.min(Math.max((clientX - rect.left) / rect.width, 0), 1);
+    const raw = 1 + ratio * 4;
+    const clamped = Math.round(raw);
+    onChange(Math.min(Math.max(clamped, 1), 5));
+  }, [onChange]);
+
+  const onPointerDown = useCallback((e) => {
+    e.currentTarget.setPointerCapture(e.pointerId);
+    updateFromX(e.clientX);
+  }, [updateFromX]);
+
+  const onPointerMove = useCallback((e) => {
+    if (e.buttons !== 1 && e.pointerType === "mouse") return;
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      updateFromX(e.clientX);
+    }
+  }, [updateFromX]);
 
   return (
     <div className="space-y-3">
@@ -38,18 +62,23 @@ export default function IntensitySlider({ value, onChange }) {
       </div>
 
       {/* Slider track */}
-      <div className="relative pt-1">
+      <div
+        ref={trackRef}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        className="relative pt-1 cursor-pointer touch-none select-none"
+      >
         {/* Track background */}
         <div className="h-2 rounded-full bg-accent/60 overflow-hidden">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-primary/60 to-primary transition-all duration-300"
+            className="h-full rounded-full bg-gradient-to-r from-primary/60 to-primary transition-all duration-150"
             style={{ width: `${pct}%`, boxShadow: "0 0 12px hsl(var(--glow) / 0.4)" }}
           />
         </div>
 
         {/* Thumb */}
         <div
-          className="absolute top-0.5 w-5 h-5 rounded-full bg-primary border-2 border-background pointer-events-none transition-all duration-300"
+          className="absolute top-0.5 w-5 h-5 rounded-full bg-primary border-2 border-background pointer-events-none transition-all duration-150"
           style={{
             left: `calc(${pct}% - 10px)`,
             boxShadow: "0 0 14px hsl(var(--glow) / 0.5)",
