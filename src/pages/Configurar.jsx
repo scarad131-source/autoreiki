@@ -94,8 +94,8 @@ export default function Configurar() {
                 onClick={() => setMode(m.id)}
                 style={{
                   borderColor: m.color,
-                  background: "#1A1426",
-                  boxShadow: active ? `0 0 22px ${m.color}66, inset 0 0 14px ${m.color}22` : "none",
+                  background: active ? "#6A4B9E" : "#1A1426",
+                  boxShadow: active ? `0 0 34px ${m.color}CC, 0 0 60px ${m.color}55, inset 0 0 18px ${m.color}44` : "none",
                   opacity: active ? 1 : 0.55
                 }}
                 className={`flex items-center justify-between text-left min-h-[56px] px-3 py-2 rounded-xl border-2 transition-all duration-300 active:scale-[0.98] ${
