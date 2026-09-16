@@ -6,7 +6,7 @@ import { ambient } from "@/lib/audioEngine";
 import { isVoiceTrack } from "@/lib/audioSources";
 
 // Fondo de pantalla para la sesión de meditación (piedras zen sobre el agua).
-const ZEN_BG = "https://media.base44.com/images/public/6a7d30a899098694894dbd88/382f3fdde_piedaszen.png";
+const ZEN_BG = "https://media.base44.com/images/public/6a7d30a899098694894dbd88/c9ee16c53_Piedraszen2.jpeg";
 import { sessionAudio } from "@/lib/sessionAudio";
 
 export default function MeditationRunner({ config, onFinish, onCancel }) {
@@ -252,7 +252,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
 
   return (
     <div className="relative -mx-5 -mt-4 flex flex-col overflow-hidden min-h-[calc(100svh-3.5rem-8rem)]">
-      <img src={ZEN_BG} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-contain object-center" />
+      <img src={ZEN_BG} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "center 60%" }} />
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/45" />
 
       <div className="relative z-10 flex flex-col min-h-[calc(100svh-3.5rem-8rem)] justify-between py-6 px-4">
