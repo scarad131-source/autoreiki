@@ -9,8 +9,6 @@ import { buildChakraScript, CHAKRAS } from "@/lib/guidedScripts";
 import { unlockSpeech } from "@/lib/speech";
 import { audioUrlFor, isVoiceTrack } from "@/lib/audioSources";
 import { sessionAudio } from "@/lib/sessionAudio";
-import PausedSessionCard from "@/components/PausedSessionCard";
-import { savePausedSession, getPausedSession, clearPausedSession } from "@/lib/pausedSession";
 
 export default function Meditate() {
   const navigate = useNavigate();
@@ -26,7 +24,6 @@ export default function Meditate() {
   const [minutes, setMinutes] = useState(30);
   const [audio, setAudio] = useState("beach");
   const [bowlsMarkers, setBowlsMarkers] = useState(false);
-  const [pausedSession, setPausedSession] = useState(() => getPausedSession());
 
   useEffect(() => {
     base44.auth.me().
@@ -51,25 +48,9 @@ export default function Meditate() {
     }
   }, [location.state]);
 
-  const resumePaused = () => {
-    const ps = pausedSession;
-    if (!ps) return;
-    clearPausedSession();
-    setPausedSession(null);
-    start({ ...ps.config, resumeAt: ps.elapsed });
-  };
-
-  const restartPaused = () => {
-    const ps = pausedSession;
-    if (!ps) return;
-    clearPausedSession();
-    setPausedSession(null);
-    start({ ...ps.config });
-  };
-
   const start = (cfg) => {
     unlockSpeech();
-    const finalCfg = { ...cfg, journeyDay: cfg.journeyDay ?? journeyDay };
+    const finalCfg = { ...cfg, journeyDay };
     if (finalCfg.mode === "guided" && finalCfg.chakras && finalCfg.chakras.length) {
       finalCfg.customScript = buildChakraScript(finalCfg.chakras);
     }
@@ -84,8 +65,6 @@ export default function Meditate() {
   };
 
   const finish = ({ actualSeconds, completed }) => {
-    clearPausedSession();
-    setPausedSession(null);
     setResult({ actualSeconds, completed });
     setStage("reflection");
   };
@@ -115,7 +94,7 @@ export default function Meditate() {
 
 
       // ignore save errors
-    }navigate(to);};if (stage === "running" && config) {return <MeditationRunner config={config} onFinish={finish} onCancel={(elapsed) => { if (config.mode === "guided") savePausedSession(config, elapsed); navigate("/configurar"); }} />;}if (stage === "reflection" && config && result) {
+    }navigate(to);};if (stage === "running" && config) {return <MeditationRunner config={config} onFinish={finish} onCancel={() => navigate("/configurar")} />;}if (stage === "reflection" && config && result) {
     return (
       <ReflectionForm
         config={config}
@@ -155,10 +134,6 @@ export default function Meditate() {
       <header className="text-center">
         <h1 className="uppercase tracking-[0.14em] text-2xl font-display font-semibold">Configura tu espacio sagrado</h1>
       </header>
-
-      {pausedSession && (
-        <PausedSessionCard elapsed={pausedSession.elapsed} onResume={resumePaused} onRestart={restartPaused} />
-      )}
 
       <PrepChecklist />
 

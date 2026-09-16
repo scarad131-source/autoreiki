@@ -11,9 +11,8 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const [audioDuration, setAudioDuration] = useState(null);
   // En meditaciones guiadas el temporizador coincide con la duración real del audio
   const totalSeconds = isVoiceTrack(config.audio) && audioDuration ? Math.ceil(audioDuration) : config.minutes * 60;
-  const resumeAt = config.resumeAt || 0;
-  const [countdown, setCountdown] = useState(resumeAt ? 0 : (isVoiceTrack(config.audio) ? 2 : 3));
-  const [elapsed, setElapsed] = useState(resumeAt || 0);
+  const [countdown, setCountdown] = useState(isVoiceTrack(config.audio) ? 2 : 3);
+  const [elapsed, setElapsed] = useState(0);
   const [paused, setPaused] = useState(false);
   // "Frecuencias Sanadoras" (bowls) suena bajo: subimos el volumen base y
   // aplicamos una amplificación extra vía Web Audio para que se escuche claro.
@@ -26,7 +25,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const audioRef = useRef(sessionAudio.element());
   const finishedRef = useRef(false);
   const lastBowlStepRef = useRef(-1);
-  const seekedRef = useRef(false);
 
   const started = countdown === 0;
   const el = audioRef.current;
@@ -98,14 +96,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     };
   }, [el, config.audio, started, paused, onFinish]);
 
-  // Reanudar sesión guiada: sitúa el audio en el punto guardado cuando la metadata está lista
-  useEffect(() => {
-    if (!resumeAt || !isVoiceTrack(config.audio) || seekedRef.current) return;
-    if (audioDuration && isFinite(audioDuration)) {
-      try { el.currentTime = Math.min(resumeAt, audioDuration - 1); seekedRef.current = true; } catch (e) {}
-    }
-  }, [resumeAt, audioDuration, config.audio, el]);
-
   // cuenta regresiva de inicio
   useEffect(() => {
     if (countdown <= 0) return;
@@ -119,7 +109,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     el.muted = muted;
     el.volume = muted ? 0 : volume;
     el.loop = !isVoiceTrack(config.audio);
-    try { el.currentTime = resumeAt || 0; } catch (e) {}
+    try { el.currentTime = 0; } catch (e) {}
     if (el.paused) el.play().catch(() => {});
   }, [started]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -263,7 +253,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     <div className="flex flex-col items-center min-h-[70vh] justify-between py-6">
       <div className="w-full flex items-center justify-between text-xs text-muted-foreground">
         <button
-          onClick={() => onCancel(elapsed)}
+          onClick={onCancel}
           className="flex items-center gap-1.5 hover:text-foreground transition-colors -ml-1"
           aria-label="Volver">
           <ArrowLeft className="w-4 h-4" /> Volver
