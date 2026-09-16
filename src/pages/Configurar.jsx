@@ -8,6 +8,8 @@ import { AUDIO_SOURCES, audioUrlFor, isVoiceTrack } from "@/lib/audioSources";
 import { CHAKRAS } from "@/lib/guidedScripts";
 import { sessionAudio } from "@/lib/sessionAudio";
 import { ambient } from "@/lib/audioEngine";
+import PausedSessionCard from "@/components/PausedSessionCard";
+import { getPausedSession, clearPausedSession } from "@/lib/pausedSession";
 
 const MODES = [
 { id: "guided", name: "GUIADA - Principiante", desc: "Audio con voz que te guía durante tu meditación", color: "#00C698", duration: 13 },
@@ -22,6 +24,27 @@ export default function Configurar() {
   const [minutes, setMinutes] = useState(30);
   const [audio, setAudio] = useState("beach");
   const [bowlsMarkers, setBowlsMarkers] = useState(false);
+  const [pausedSession, setPausedSession] = useState(() => getPausedSession());
+
+  const resumePaused = () => {
+    const ps = pausedSession;
+    if (!ps) return;
+    const trackId = ps.config.audio;
+    sessionAudio.unlock(audioUrlFor(trackId), { loop: !isVoiceTrack(trackId), boost: trackId === "bowls" ? 2.5 : 1 });
+    clearPausedSession();
+    setPausedSession(null);
+    navigate("/meditar", { state: { preset: { ...ps.config, resumeAt: ps.elapsed } } });
+  };
+
+  const restartPaused = () => {
+    const ps = pausedSession;
+    if (!ps) return;
+    const trackId = ps.config.audio;
+    sessionAudio.unlock(audioUrlFor(trackId), { loop: !isVoiceTrack(trackId), boost: trackId === "bowls" ? 2.5 : 1 });
+    clearPausedSession();
+    setPausedSession(null);
+    navigate("/meditar", { state: { preset: { ...ps.config } } });
+  };
 
   const toggle = (id) => {
     if (mode === "guided") return;
@@ -41,6 +64,8 @@ export default function Configurar() {
 
   const start = () => {
     if (!selected.length) return;
+    clearPausedSession();
+    setPausedSession(null);
     const trackId = mode === "unguided" ? audio : "reikiGuided";
     // Desbloquea el audio dentro del gesto para que iOS permita reproducirlo.
     // "Frecuencias Sanadoras" (bowls) recibe un boost de ganancia para sonar más fuerte.
@@ -83,6 +108,10 @@ export default function Configurar() {
         <h1 className="font-display font-semibold tracking-tight text-[hsl(var(--primary))] text-4xl">Sesión de Reiki</h1>
         <p className="text-sm text-muted-foreground mt-1">Toca los chakras que quieras trabajar</p>
       </header>
+
+      {pausedSession && (
+        <PausedSessionCard elapsed={pausedSession.elapsed} onResume={resumePaused} onRestart={restartPaused} />
+      )}
 
       <PrepChecklist />
 
