@@ -251,13 +251,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
 
   return (
     <div className="flex flex-col items-center min-h-[70vh] justify-between py-6">
-      <div className="w-full flex items-center justify-between text-xs text-muted-foreground">
-        <button
-          onClick={onCancel}
-          className="flex items-center gap-1.5 hover:text-foreground transition-colors -ml-1"
-          aria-label="Volver">
-          Volver
-        </button>
+      <div className="w-full flex items-center justify-end text-xs text-muted-foreground">
         <span className="uppercase tracking-[0.18em]">
           {isGuided ? "Guiada" : "No guiada"}
         </span>
