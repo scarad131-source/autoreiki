@@ -186,7 +186,7 @@ export default function Meditate() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                 {[
               { id: "beach", icon: Waves, title: "Playa tranquila", desc: "Corriente tranquila con cantos espaciados" },
               { id: "rain", icon: CloudRain, title: "Lluvia relajante", desc: "Textura continua de baja intensidad" },
@@ -199,18 +199,17 @@ export default function Meditate() {
                   <button
                     key={s.id}
                     onClick={() => setAudio(s.id)}
-                    className={`flex items-center gap-2.5 rounded-2xl border text-left transition-all active:scale-[0.98] my-1 px-2 py-3 ${
-                    active ? "border-primary bg-accent/60 neon-glow" : "border-white/10 bg-card/50 hover:border-primary/40"}`
+                    className={`flex items-center gap-2 rounded-2xl border text-left transition-all active:scale-[0.98] px-2 py-2 ${
+                    active ? "border-primary bg-accent/60 neon-glow" : "border-white/10 bg-card hover:border-primary/40"}`
                     }>
                     
-                      <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${active ? "bg-primary/20" : "bg-white/5"}`}>
-                        <Icon className={active ? "text-primary" : "text-muted-foreground"} style={{ width: 18, height: 18 }} />
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${active ? "bg-primary/20" : "bg-white/5"}`}>
+                        <Icon className={active ? "text-primary" : "text-muted-foreground"} style={{ width: 16, height: 16 }} />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="font-semibold text-[12px] leading-tight" style={{ color: active ? "hsl(var(--primary))" : undefined }}>{s.title}</p>
-                        <p className="text-[10px] text-muted-foreground leading-tight mt-0.5">{s.desc}</p>
+                        <p className="font-semibold text-[11px] leading-tight truncate" style={{ color: active ? "hsl(var(--primary))" : undefined }}>{s.title}</p>
+                        <p className="text-[9px] text-muted-foreground leading-tight mt-0.5 truncate">{s.desc}</p>
                       </div>
-                      <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${active ? "bg-primary" : "bg-white/15"}`} />
                     </button>);
 
               })}
