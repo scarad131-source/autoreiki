@@ -251,7 +251,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   };
 
   return (
-    <div className="relative -mx-5 -mt-4 flex flex-col overflow-hidden min-h-[calc(100svh-3.5rem-8rem)]">
+    <div className="relative -mt-4 mx-auto w-full max-w-[440px] flex flex-col overflow-hidden rounded-[1.75rem] ring-1 ring-white/10 shadow-2xl min-h-[calc(100svh-3.5rem-8rem)]">
       <img src={ZEN_BG} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "center 40%" }} />
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/45" />
 
@@ -260,13 +260,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
           <span className="uppercase tracking-[0.18em] text-xs text-foreground/80 drop-shadow">
             {isGuided ? "Guiada" : "No guiada"}
           </span>
-        </div>
-
-        <div className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full border border-primary/30 bg-black/30 backdrop-blur-sm self-center max-w-sm">
-          <Headphones className="w-4 h-4 text-primary shrink-0" />
-          <p className="text-[13px] text-foreground/85 font-light leading-snug text-left">
-            Sugerimos el uso de audífonos y deja que el sonido te abrace por completo ✦ tu viaje sonoro será más profundo.
-          </p>
         </div>
 
         <div className="flex-1 flex flex-col items-center justify-center gap-6 w-full">
@@ -352,6 +345,15 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
               </button>
             )}
           </div>
+        </div>
+      </div>
+
+      <div className="absolute left-3 top-1/2 -translate-y-1/2 z-10 max-w-[168px]">
+        <div className="inline-flex items-start gap-2 px-3 py-2.5 rounded-2xl border border-primary/30 bg-black/40 backdrop-blur-sm">
+          <Headphones className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+          <p className="text-[11px] text-foreground/85 font-light leading-snug text-left">
+            Sugerimos el uso de audífonos y deja que el sonido te abrace por completo ✦ tu viaje sonoro será más profundo.
+          </p>
         </div>
       </div>
     </div>);
