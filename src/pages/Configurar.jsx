@@ -10,7 +10,7 @@ import { sessionAudio } from "@/lib/sessionAudio";
 import { ambient } from "@/lib/audioEngine";
 
 const MODES = [
-{ id: "guided", name: "GUIADA - Principiante", desc: "Audio con voz que te guía durante tu meditación", color: "#00C698", duration: 26 },
+{ id: "guided", name: "GUIADA - Principiante", desc: "Audio con voz que te guía durante tu meditación", color: "#00C698", duration: 13 },
 { id: "unguided", name: "NO GUIADA - Avanzado", desc: "Solo tú, tu respiración y el sonido", color: "#FF7A00" }];
 
 

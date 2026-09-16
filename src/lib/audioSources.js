@@ -19,7 +19,7 @@ export const AUDIO_SOURCES = {
   reikiGuided: {
     id: "reikiGuided",
     name: "Reiki Guiada",
-    url: "https://media.base44.com/files/public/6a7d30a899098694894dbd88/c81714508_Sesion_Reiki_guiada_26minmp3.mp3",
+    url: "https://media.base44.com/files/public/6a7d30a899098694894dbd88/2d897d16b_MEDITACION21DIAS_02.mp3",
   },
   rain: {
     id: "rain",
