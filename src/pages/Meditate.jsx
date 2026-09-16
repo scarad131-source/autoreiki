@@ -121,15 +121,6 @@ export default function Meditate() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center -ml-1">
-        <button
-          onClick={() => navigate(-1)}
-          className="px-3 py-1.5 rounded-full bg-card border border-white/5 text-sm text-muted-foreground hover:border-primary/30 transition-colors"
-          aria-label="Atrás">
-          Atrás
-        </button>
-      </div>
-
       <header className="text-center">
         <h1 className="uppercase tracking-[0.14em] text-2xl font-display font-semibold">Configura tu espacio sagrado</h1>
       </header>

@@ -70,15 +70,7 @@ export default function Configurar() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center -ml-1">
-        <button
-          onClick={() => navigate(-1)}
-          className="px-3 py-1.5 rounded-full bg-card border border-white/5 text-sm text-muted-foreground hover:border-primary/30 transition-colors"
-          aria-label="Atrás">
-          Atrás
-        </button>
-      </div>
-      <header className="text-center -mt-1">
+      <header className="text-center">
         <h1 className="font-display font-semibold tracking-tight text-[hsl(var(--primary))] text-4xl">Sesión de Reiki</h1>
         <p className="text-sm text-muted-foreground mt-1">Toca los chakras que quieras trabajar</p>
       </header>
