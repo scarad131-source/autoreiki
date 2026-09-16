@@ -3,8 +3,10 @@ import { Pause, Play, Headphones, Rewind, RotateCcw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { RELEASE_SCRIPTS, CHAKRAS } from "@/lib/guidedScripts";
 import { ambient } from "@/lib/audioEngine";
-import BreathingOrb from "@/components/BreathingOrb";
 import { isVoiceTrack } from "@/lib/audioSources";
+
+// Fondo de pantalla para la sesión de meditación (piedras zen sobre el agua).
+const ZEN_BG = "https://media.base44.com/images/public/6a7d30a899098694894dbd88/382f3fdde_piedaszen.png";
 import { sessionAudio } from "@/lib/sessionAudio";
 
 export default function MeditationRunner({ config, onFinish, onCancel }) {
@@ -237,7 +239,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const ss = String(remaining % 60).padStart(2, "0");
   const progress = elapsed / totalSeconds * 100;
   const currentStep = script ? script.steps[stepIndex] : null;
-  const phase = elapsed % 10 < 4 ? "Inhala" : "Exhala";
 
   const handleRewind = () => {
     setElapsed((e) => Math.max(0, e - 10));
@@ -250,97 +251,108 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-[70vh] justify-between py-6">
-      <div className="w-full flex items-center justify-end text-xs text-muted-foreground">
-        <span className="uppercase tracking-[0.18em]">
-          {isGuided ? "Guiada" : "No guiada"}
-        </span>
-      </div>
+    <div className="relative -mx-5 -mt-4 flex flex-col overflow-hidden min-h-[calc(100svh-3.5rem-9rem)]">
+      <img src={ZEN_BG} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover object-center" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/45" />
 
-      <div className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full border border-primary/30 bg-primary/5">
-        <Headphones className="w-4 h-4 text-primary shrink-0" />
-        <p className="text-[13px] text-foreground/85 font-light leading-snug max-w-xs text-left">Sugerimos el uso de audífonos y deja que el sonido te abrace por completo ✦ tu viaje sonoro será más profundo.
-        </p>
-      </div>
+      <div className="relative z-10 flex flex-col min-h-[calc(100svh-3.5rem-9rem)] justify-between py-6 px-4">
+        <div className="w-full flex items-center justify-end">
+          <span className="uppercase tracking-[0.18em] text-xs text-foreground/80 drop-shadow">
+            {isGuided ? "Guiada" : "No guiada"}
+          </span>
+        </div>
 
-      <div className="flex-1 flex flex-col items-center justify-center gap-8 w-full">
-        <BreathingOrb active={started && !paused} label={countdown > 0 ? "Comienza" : paused ? "Pausa" : phase} />
+        <div className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full border border-primary/30 bg-black/30 backdrop-blur-sm self-center max-w-sm">
+          <Headphones className="w-4 h-4 text-primary shrink-0" />
+          <p className="text-[13px] text-foreground/85 font-light leading-snug text-left">
+            Sugerimos el uso de audífonos y deja que el sonido te abrace por completo ✦ tu viaje sonoro será más profundo.
+          </p>
+        </div>
 
-        {countdown > 0 ?
-        <div className="text-center">
-            <motion.p
-            key={countdown}
-            initial={{ opacity: 0, scale: 1.4 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.4 }}
-            className="text-7xl font-display font-light tabular-nums neon-text">
-              {countdown}
-            </motion.p>
-            <p className="text-xs text-muted-foreground uppercase tracking-[0.18em]">Preparando tu espacio</p>
-          </div> :
-        <>
+        <div className="flex-1 flex flex-col items-center justify-center gap-6 w-full">
+          {countdown > 0 ? (
             <div className="text-center">
-              <p className="text-5xl font-display font-light tracking-tight tabular-nums">
-                {mm}:{ss}
-              </p>
-              <p className="text-xs text-muted-foreground mt-2 uppercase tracking-[0.18em]">
-                {paused ? "En pausa" : "Respira con calma"}
-              </p>
+              <motion.p
+                key={countdown}
+                initial={{ opacity: 0, scale: 1.4 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.4 }}
+                className="text-7xl font-display font-light tabular-nums neon-text drop-shadow-lg"
+              >
+                {countdown}
+              </motion.p>
+              <p className="text-xs text-foreground/70 uppercase tracking-[0.18em]">Preparando tu espacio</p>
             </div>
+          ) : (
+            <>
+              <div className="text-center">
+                <p className="text-5xl font-display font-light tracking-tight tabular-nums drop-shadow-lg">
+                  {mm}:{ss}
+                </p>
+                <p className="text-xs text-foreground/70 mt-2 uppercase tracking-[0.18em]">
+                  {paused ? "En pausa" : "Respira con calma"}
+                </p>
+              </div>
 
-            <AnimatePresence mode="wait">
-              {currentStep && !paused && voiceActive && !hideVisualCues &&
+              <AnimatePresence mode="wait">
+                {currentStep && !paused && voiceActive && !hideVisualCues && (
+                  <motion.div
+                    key={stepIndex}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 1.2 }}
+                    className="max-w-md text-center px-2"
+                  >
+                    <p className="text-[15px] leading-relaxed text-foreground/95 font-light drop-shadow">{currentStep.text}</p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </>
+          )}
+        </div>
+
+        <div className="space-y-6">
+          <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden">
             <motion.div
-              key={stepIndex}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 1.2 }}
-              className="max-w-md text-center px-2">
-                  <p className="text-[15px] leading-relaxed text-foreground/90 font-light">{currentStep.text}</p>
-                </motion.div>
-            }
-            </AnimatePresence>
-          </>
-        }
-      </div>
+              className="h-full bg-gradient-to-r from-primary to-glow-cyan"
+              style={{ width: `${progress}%` }}
+              transition={{ ease: "linear" }}
+            />
+          </div>
 
-      <div className="w-full h-1 bg-accent rounded-full overflow-hidden mb-6">
-        <motion.div
-          className="h-full bg-gradient-to-r from-primary to-glow-cyan"
-          style={{ width: `${progress}%` }}
-          transition={{ ease: "linear" }} />
-      </div>
-
-      <div className="flex items-center justify-center gap-6">
-        {started && (
-          <button
-            onClick={handleRewind}
-            className="w-12 h-12 rounded-full flex items-center justify-center border border-white/10 bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
-            aria-label="Retroceder 10 segundos"
-            title="Retroceder 10s"
-          >
-            <Rewind className="w-5 h-5" />
-          </button>
-        )}
-        <button
-          onClick={() => setPaused((p) => !p)}
-          disabled={countdown > 0}
-          className="w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-primary to-glow-cyan text-primary-foreground neon-glow transition-transform active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
-          aria-label={paused ? "Reanudar" : "Pausar"}>
-          {paused ? <Play className="w-6 h-6 ml-0.5" /> : <Pause className="w-6 h-6" />}
-        </button>
-        {started && (
-          <button
-            onClick={handleRestart}
-            className="w-12 h-12 rounded-full flex items-center justify-center border border-white/10 bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
-            aria-label="Reiniciar meditación"
-            title="Reiniciar"
-          >
-            <RotateCcw className="w-5 h-5" />
-          </button>
-        )}
+          <div className="flex items-center justify-center gap-6">
+            {started && (
+              <button
+                onClick={handleRewind}
+                className="w-12 h-12 rounded-full flex items-center justify-center border border-white/20 bg-black/30 backdrop-blur-sm text-foreground/80 hover:text-foreground hover:border-primary/40 transition-colors"
+                aria-label="Retroceder 10 segundos"
+                title="Retroceder 10s"
+              >
+                <Rewind className="w-5 h-5" />
+              </button>
+            )}
+            <button
+              onClick={() => setPaused((p) => !p)}
+              disabled={countdown > 0}
+              className="w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-primary to-glow-cyan text-primary-foreground neon-glow transition-transform active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
+              aria-label={paused ? "Reanudar" : "Pausar"}
+            >
+              {paused ? <Play className="w-6 h-6 ml-0.5" /> : <Pause className="w-6 h-6" />}
+            </button>
+            {started && (
+              <button
+                onClick={handleRestart}
+                className="w-12 h-12 rounded-full flex items-center justify-center border border-white/20 bg-black/30 backdrop-blur-sm text-foreground/80 hover:text-foreground hover:border-primary/40 transition-colors"
+                aria-label="Reiniciar meditación"
+                title="Reiniciar"
+              >
+                <RotateCcw className="w-5 h-5" />
+              </button>
+            )}
+          </div>
+        </div>
       </div>
     </div>);
 }
