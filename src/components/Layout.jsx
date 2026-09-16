@@ -10,7 +10,7 @@ const navItems = [
   { to: "/", label: "Inicio", icon: Star, end: true },
   { to: "/meditar", label: "Meditar", icon: LotusIcon },
   { to: "/recorrido", label: "21 días", icon: CalendarDays },
-  { to: "/configurar", label: "Mi sesión", icon: ChakraCircleIcon },
+  { to: "/configurar", label: "Reiki", icon: ChakraCircleIcon },
   { to: "/agenda-reiki", label: "Agenda", icon: CalendarClock },
 ];
 
