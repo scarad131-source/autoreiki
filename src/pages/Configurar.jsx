@@ -10,7 +10,7 @@ import { sessionAudio } from "@/lib/sessionAudio";
 import { ambient } from "@/lib/audioEngine";
 
 const MODES = [
-{ id: "guided", name: "GUIADA - Principiante", desc: "Audio con voz que te guía durante tu meditación", color: "#00C698", duration: 13 },
+{ id: "guided", name: "GUIADA - Principiante", desc: "Audio con voz que te guía durante tu meditación", color: "#00C698", duration: 26 },
 { id: "unguided", name: "NO GUIADA - Avanzado", desc: "Solo tú, tu respiración y el sonido", color: "#FF7A00" }];
 
 
@@ -41,7 +41,7 @@ export default function Configurar() {
 
   const start = () => {
     if (!selected.length) return;
-    const trackId = mode === "unguided" ? audio : "reikiGuided";
+    const trackId = mode === "unguided" ? audio : "reikiGuided26";
     // Desbloquea el audio dentro del gesto para que iOS permita reproducirlo.
     // "Frecuencias Sanadoras" (bowls) recibe un boost de ganancia para sonar más fuerte.
     sessionAudio.unlock(audioUrlFor(trackId), {
@@ -60,7 +60,7 @@ export default function Configurar() {
           mode,
           level,
           audio: trackId,
-          minutes,
+          minutes: mode === "guided" ? 26 : minutes,
           chakras: selected,
           bowlsMarkers
         }

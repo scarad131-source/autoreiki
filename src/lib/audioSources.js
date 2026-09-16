@@ -21,6 +21,11 @@ export const AUDIO_SOURCES = {
     name: "Reiki Guiada",
     url: "https://media.base44.com/files/public/6a7d30a899098694894dbd88/2d897d16b_MEDITACION21DIAS_02.mp3",
   },
+  reikiGuided26: {
+    id: "reikiGuided26",
+    name: "Reiki Guiada 26 min",
+    url: "https://media.base44.com/files/public/6a7d30a899098694894dbd88/e40c23ab0_Sesion_Reiki_guiada_26minmp3.mp3",
+  },
   rain: {
     id: "rain",
     name: "Lluvia relajante",
@@ -37,7 +42,7 @@ export const AMBIENT_URL_DEFAULT = AUDIO_SOURCES.beach.url;
 
 // Tracks de voz guiada: se reproducen una sola vez y su duración define el
 // temporizador de la sesión (a diferencia del ambiente, que va en bucle).
-export const VOICE_TRACK_IDS = ["meditation21", "reikiGuided"];
+export const VOICE_TRACK_IDS = ["meditation21", "reikiGuided", "reikiGuided26"];
 export const isVoiceTrack = (id) => VOICE_TRACK_IDS.includes(id);
 
 export function audioUrlFor(id) {
