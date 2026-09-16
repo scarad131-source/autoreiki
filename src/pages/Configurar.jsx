@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, ChevronLeft, Headphones, Waves, CloudRain, Trees, CircleDot } from "lucide-react";
+import { ArrowRight, Headphones, Waves, CloudRain, Trees, CircleDot } from "lucide-react";
 import ChakraFigure from "@/components/ChakraFigure";
 import PrepChecklist from "@/components/PrepChecklist";
 import BowlsScheduleCard from "@/components/BowlsScheduleCard";
@@ -73,10 +73,9 @@ export default function Configurar() {
       <div className="flex items-center -ml-1">
         <button
           onClick={() => navigate(-1)}
-          className="w-9 h-9 rounded-full bg-card border border-white/5 flex items-center justify-center hover:border-primary/30 transition-colors"
+          className="px-3 py-1.5 rounded-full bg-card border border-white/5 text-sm text-muted-foreground hover:border-primary/30 transition-colors"
           aria-label="Atrás">
-          
-          <ChevronLeft className="w-4 h-4" />
+          Atrás
         </button>
       </div>
       <header className="text-center -mt-1">

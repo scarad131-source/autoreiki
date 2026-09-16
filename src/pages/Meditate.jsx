@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ChevronLeft, Headphones, Waves, CloudRain, Trees, CircleDot } from "lucide-react";
+import { Headphones, Waves, CloudRain, Trees, CircleDot } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import MeditationRunner from "@/components/MeditationRunner";
 import ReflectionForm from "@/components/ReflectionForm";
@@ -124,10 +124,9 @@ export default function Meditate() {
       <div className="flex items-center -ml-1">
         <button
           onClick={() => navigate(-1)}
-          className="w-10 h-10 rounded-full bg-card border border-white/5 flex items-center justify-center hover:border-primary/30 transition-colors"
+          className="px-3 py-1.5 rounded-full bg-card border border-white/5 text-sm text-muted-foreground hover:border-primary/30 transition-colors"
           aria-label="Atrás">
-          
-          <ChevronLeft className="w-5 h-5" />
+          Atrás
         </button>
       </div>
 

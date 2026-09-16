@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { ArrowLeft, Pause, Play, Headphones, Rewind, RotateCcw } from "lucide-react";
+import { Pause, Play, Headphones, Rewind, RotateCcw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { RELEASE_SCRIPTS, CHAKRAS } from "@/lib/guidedScripts";
 import { ambient } from "@/lib/audioEngine";
@@ -256,7 +256,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
           onClick={onCancel}
           className="flex items-center gap-1.5 hover:text-foreground transition-colors -ml-1"
           aria-label="Volver">
-          <ArrowLeft className="w-4 h-4" /> Volver
+          Volver
         </button>
         <span className="uppercase tracking-[0.18em]">
           {isGuided ? "Guiada" : "No guiada"}

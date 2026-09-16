@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import DiaryTabNav from "@/components/diary/DiaryTabNav";
 import NewEntryTab from "@/components/diary/NewEntryTab";
@@ -35,10 +34,10 @@ export default function Diario() {
       <header className="flex items-center gap-3">
         <button
           onClick={() => navigate("/")}
-          className="w-9 h-9 rounded-full flex items-center justify-center text-muted-foreground hover:bg-card hover:text-foreground transition-colors"
+          className="px-3 py-1.5 rounded-full text-sm text-muted-foreground hover:bg-card hover:text-foreground transition-colors"
           aria-label="Volver"
         >
-          <ChevronLeft className="w-5 h-5" />
+          Volver
         </button>
         <h1 className="font-display text-xl font-semibold">Diario</h1>
       </header>

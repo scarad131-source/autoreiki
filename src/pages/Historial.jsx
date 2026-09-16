@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import SessionCard from "@/components/SessionCard";
 
@@ -26,10 +25,10 @@ export default function Historial() {
       <header className="flex items-center gap-3 pt-2">
         <button
           onClick={() => navigate("/")}
-          className="w-9 h-9 rounded-full flex items-center justify-center text-muted-foreground hover:bg-card hover:text-foreground transition-colors"
+          className="px-3 py-1.5 rounded-full text-sm text-muted-foreground hover:bg-card hover:text-foreground transition-colors"
           aria-label="Volver"
         >
-          <ChevronLeft className="w-5 h-5" />
+          Volver
         </button>
         <div>
           <p className="text-[11px] tracking-[0.22em] uppercase text-primary/80 font-medium">AutoReiki</p>
