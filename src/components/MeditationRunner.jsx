@@ -252,7 +252,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
 
   return (
     <div className="relative -mx-5 -mt-4 flex flex-col overflow-hidden min-h-[calc(100svh-3.5rem-8rem)]">
-      <img src={ZEN_BG} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "center 60%" }} />
+      <img src={ZEN_BG} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "center 40%" }} />
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/45" />
 
       <div className="relative z-10 flex flex-col min-h-[calc(100svh-3.5rem-8rem)] justify-between py-6 px-4">
