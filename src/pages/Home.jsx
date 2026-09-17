@@ -8,6 +8,7 @@ import SessionCard from "@/components/SessionCard";
 import Badges from "@/components/Badges";
 import ReminderSettings from "@/components/ReminderSettings";
 import DeleteAccountButton from "@/components/DeleteAccountButton";
+import HelpButton from "@/components/HelpButton";
 import PersonalizationCard from "@/components/PersonalizationCard";
 import { computeActiveDays, getStreakMessage, JOURNEY } from "@/lib/journey";
 import { getDailyPhrase } from "@/lib/dailyPhrases";
@@ -258,7 +259,8 @@ export default function Home() {
 
       {!loading && <ReminderSettings user={user} onSaved={refreshUser} />}
 
-      <div className="pt-4 pb-2 flex justify-center">
+      <div className="pt-4 pb-2 flex items-center justify-center gap-3">
+        <HelpButton user={user} onSaved={refreshUser} />
         <DeleteAccountButton />
       </div>
     </div>);
