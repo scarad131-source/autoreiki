@@ -1,6 +1,9 @@
 // Motor de audio ambiental sintetizado con Web Audio API.
 // No requiere archivos externos: genera playa, bosque nocturno y frecuencias sanadoras.
 
+// Timbre de cuenco real para marcar el cambio de zona en sesiones no guiadas.
+const BOWL_HIT_URL = "https://media.base44.com/files/public/6a7d30a899098694dbd88/f05ac055c_freesound_community-singing-bowlhit.mp3";
+
 export class AmbientAudio {
   constructor() {
     this.ctx = null;
@@ -8,6 +11,8 @@ export class AmbientAudio {
     this.nodes = [];
     this.intervals = [];
     this.currentType = null;
+    this._bowlBuffer = null;
+    this._bowlLoading = false;
   }
 
   init() {
@@ -70,8 +75,42 @@ export class AmbientAudio {
     }
   }
 
-  // Cuenco tibetano sintetizado: golpe con armónicos inarmónicos y decay largo
-  playBowl(freq = 440, gain = 0.7) {
+  // Precarga el timbre del cuenco real para que suene sin retardo al marcar zonas
+  async preloadBowl() {
+    if (this._bowlBuffer || this._bowlLoading) return;
+    this._bowlLoading = true;
+    try {
+      this.init();
+      const res = await fetch(BOWL_HIT_URL);
+      const arr = await res.arrayBuffer();
+      this._bowlBuffer = await this.ctx.decodeAudioData(arr);
+    } catch (e) {}
+    finally {
+      this._bowlLoading = false;
+    }
+  }
+
+  // Cuenco real: reproduce el timbre adjunto para marcar el cambio de cada zona.
+  // Si el buffer aún no está disponible, usa el cuenco sintetizado como respaldo.
+  async playBowl(freq = 440, gain = 0.7) {
+    this.init();
+    if (this.ctx.state === "suspended") { try { await this.ctx.resume(); } catch (e) {} }
+    if (this._bowlBuffer) {
+      const ctx = this.ctx;
+      const src = ctx.createBufferSource();
+      src.buffer = this._bowlBuffer;
+      const g = ctx.createGain();
+      g.gain.value = gain;
+      src.connect(g);
+      g.connect(this.master);
+      src.start();
+      return;
+    }
+    this.playBowlSynth(freq, gain);
+  }
+
+  // Cuenco tibetano sintetizado (respaldo): golpe con armónicos inarmónicos y decay largo
+  playBowlSynth(freq = 440, gain = 0.7) {
     this.init();
     if (this.ctx.state === "suspended") this.ctx.resume();
     const ctx = this.ctx;

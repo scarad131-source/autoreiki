@@ -53,6 +53,7 @@ export default function Configurar() {
     if (bowlsMarkers) {
       ambient.init();
       ambient.resumeCtx();
+      ambient.preloadBowl();
     }
     navigate("/meditar", {
       state: {

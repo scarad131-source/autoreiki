@@ -165,6 +165,11 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     if (!bowlsOn) lastBowlStepRef.current = -1;
   }, [bowlsOn, started]);
 
+  // Precarga el timbre del cuenco real al activar marcadores para que suene al instante
+  useEffect(() => {
+    if (bowlsOn) ambient.preloadBowl();
+  }, [bowlsOn]);
+
   // fin de sesión (no guiadas): por temporizador
   useEffect(() => {
     if (!started || finishedRef.current) return;
