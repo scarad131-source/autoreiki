@@ -19,6 +19,11 @@ export default function HelpButton({ user, onSaved }) {
   const [view, setView] = useState("menu"); // menu | support | name
   const [name, setName] = useState(user?.preferred_name || "");
   const [saving, setSaving] = useState(false);
+  const [emailName, setEmailName] = useState(user?.preferred_name || "");
+  const [emailAddress, setEmailAddress] = useState(user?.email || "");
+  const [emailMessage, setEmailMessage] = useState("");
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
 
   const reset = () => setView("menu");
 
@@ -50,6 +55,27 @@ export default function HelpButton({ user, onSaved }) {
       });
     } finally {
       setSaving(false);
+    }
+  };
+
+  const sendEmail = async () => {
+    if (!emailAddress.trim() || !emailMessage.trim()) return;
+    setSending(true);
+    try {
+      await base44.functions.invoke("sendSupportEmail", {
+        name: emailName.trim(),
+        email: emailAddress.trim(),
+        message: emailMessage.trim(),
+      });
+      setSent(true);
+    } catch (e) {
+      toast({
+        title: "No se pudo enviar",
+        description: "Inténtalo de nuevo en un momento.",
+        variant: "destructive",
+      });
+    } finally {
+      setSending(false);
     }
   };
 
@@ -124,6 +150,12 @@ export default function HelpButton({ user, onSaved }) {
               >
                 Ver sección de Ayuda
               </button>
+              <button
+                onClick={() => setView("email")}
+                className="w-full rounded-xl bg-gradient-to-r from-amber-light to-primary text-primary-foreground font-semibold py-3 neon-glow active:scale-[0.99] transition-transform"
+              >
+                Enviar email
+              </button>
             </div>
           </>
         )}
@@ -160,6 +192,73 @@ export default function HelpButton({ user, onSaved }) {
                 {saving ? "Guardando…" : "Guardar"}
               </button>
             </div>
+          </>
+        )}
+
+        {view === "email" && (
+          <>
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <button
+                  onClick={() => { setView("support"); setSent(false); }}
+                  className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-accent transition-colors"
+                  aria-label="Volver"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                </button>
+                Enviar email
+              </DialogTitle>
+            </DialogHeader>
+            {sent ? (
+              <div className="space-y-4 text-center py-4">
+                <div className="w-14 h-14 rounded-full bg-primary/15 flex items-center justify-center mx-auto">
+                  <Check className="w-7 h-7 text-primary" />
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Gracias por escribirnos. Tu mensaje llegó con calma; te responderemos a la brevedad con el cuidado que mereces.
+                </p>
+                <button
+                  onClick={() => { setOpen(false); setTimeout(() => { reset(); setSent(false); }, 200); }}
+                  className="w-full rounded-xl border border-primary/30 bg-primary/5 text-primary font-semibold py-3 hover:bg-primary/15 transition-colors"
+                >
+                  Cerrar
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Comparte tu mensaje con nosotros. Cada palabra es bienvenida, y te responderemos a la brevedad con el cuidado que mereces.
+                </p>
+                <input
+                  type="text"
+                  value={emailName}
+                  onChange={(e) => setEmailName(e.target.value)}
+                  placeholder="Nombre"
+                  className="w-full rounded-xl border border-white/10 bg-background/60 px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary/50"
+                />
+                <input
+                  type="email"
+                  value={emailAddress}
+                  onChange={(e) => setEmailAddress(e.target.value)}
+                  placeholder="Correo electrónico"
+                  className="w-full rounded-xl border border-white/10 bg-background/60 px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary/50"
+                />
+                <textarea
+                  value={emailMessage}
+                  onChange={(e) => setEmailMessage(e.target.value)}
+                  placeholder="Mensaje"
+                  rows={4}
+                  className="w-full rounded-xl border border-white/10 bg-background/60 px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary/50 resize-none"
+                />
+                <button
+                  onClick={sendEmail}
+                  disabled={sending || !emailAddress.trim() || !emailMessage.trim()}
+                  className="w-full rounded-xl bg-gradient-to-r from-amber-light to-primary text-primary-foreground font-semibold py-3 neon-glow active:scale-[0.99] transition-transform flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {sending ? "Enviando…" : "Enviar mensaje"}
+                </button>
+              </div>
+            )}
           </>
         )}
       </DialogContent>
