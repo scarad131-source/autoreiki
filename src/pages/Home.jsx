@@ -78,7 +78,7 @@ export default function Home() {
   const recent = sessions.slice(0, 3);
 
   // Práctica de hoy según el recorrido de 21 días
-  const currentDay = Math.min(completedJourneyDays + 1, 21);
+  const currentDay = Math.min(Math.max(1, completedJourneyDays), 21);
   const todayJourney = JOURNEY[currentDay - 1];
   const audio = audioMeta[todayJourney.config.audio] || audioMeta.healing;
   const AudioIcon = audio.icon;
