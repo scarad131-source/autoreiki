@@ -259,7 +259,7 @@ export default function Home() {
 
       {!loading && <ReminderSettings user={user} onSaved={refreshUser} />}
 
-      <div className="pt-4 pb-2 flex items-center justify-center gap-3">
+      <div className="pt-4 pb-2 flex flex-col items-center gap-3">
         <HelpButton user={user} onSaved={refreshUser} />
         <DeleteAccountButton />
       </div>
