@@ -58,15 +58,16 @@ export default function Home() {
   }, []);
 
   const tz = user?.reminder_timezone;
-  // Fuente única de verdad: días activos totales (cualquier práctica). No se
-  // reinicia al faltar un día, así refleja siempre el avance real del usuario
-  // y coincide en todos los módulos (Tu semana, Tu perfil, Insignias, Tu práctica).
+  // Días completados del recorrido de 21 días (registros de JourneyProgress),
+  // misma fuente que el calendario de "Recorrido" para que ambas vistas coincidan.
+  const completedJourneyDays = new Set((journey || []).map((p) => p.day_number)).size;
+  // Días activos totales (cualquier práctica): base para insignias y racha general.
   const activeDaysTotal = computeActiveDays(sessions, diaryEntries, journey, tz).size;
   const bestStreak = activeDaysTotal;
-  const msg = getStreakMessage(activeDaysTotal);
+  const journeyProgress = Math.min(completedJourneyDays, 21);
+  const msg = getStreakMessage(journeyProgress);
   const firstName = user?.preferred_name || user?.full_name?.split(" ")[0] || "presencia";
   const personalized = !!user?.practice_level;
-  const journeyProgress = Math.min(activeDaysTotal, 21);
 
   const refreshUser = async () => {
     try {
@@ -77,7 +78,7 @@ export default function Home() {
   const recent = sessions.slice(0, 3);
 
   // Práctica de hoy según el recorrido de 21 días
-  const currentDay = Math.min(activeDaysTotal + 1, 21);
+  const currentDay = Math.min(completedJourneyDays + 1, 21);
   const todayJourney = JOURNEY[currentDay - 1];
   const audio = audioMeta[todayJourney.config.audio] || audioMeta.healing;
   const AudioIcon = audio.icon;
