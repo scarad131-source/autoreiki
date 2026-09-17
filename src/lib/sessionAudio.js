@@ -77,7 +77,11 @@ class SessionAudio {
     try { el.pause(); } catch (e) {}
     el.src = url;
     el.loop = !!loop;
-    el.muted = false;
+    // Silenciamos durante el ciclo play-pause del desbloqueo: en pistas largas
+    // (p. ej. Reiki guiada 26 min) la promesa de play() se resuelve tarde, solo
+    // cuando el audio realmente empieza a sonar, y sin mute se escucharía durante
+    // la cuenta regresiva. MeditationRunner reactiva el sonido al iniciar.
+    el.muted = true;
     el.volume = volume;
     try { el.currentTime = 0; } catch (e) {}
     if (boost && boost !== 1) {
@@ -87,15 +91,21 @@ class SessionAudio {
       this.setBoost(1);
     }
     this._resumeCtx();
-    const p = el.play();
-    const pauseBack = () => {
-      try { el.pause(); } catch (e) {}
-      try { el.currentTime = 0; } catch (e) {}
+    // Pausamos en cuanto el audio realmente empieza a sonar (aún muteado, así
+    // que no se escucha) para dejarlo en 0:00 listo para la sesión. Si la carga
+    // tarda más que la cuenta regresiva y el sonido ya se reactivó, no pausamos
+    // (gracias a la verificación de el.muted) y la sesión no se corta.
+    const onPlaying = () => {
+      if (el.muted) {
+        try { el.pause(); } catch (e) {}
+        try { el.currentTime = 0; } catch (e) {}
+      }
+      el.removeEventListener("playing", onPlaying);
     };
+    el.addEventListener("playing", onPlaying);
+    const p = el.play();
     if (p && typeof p.then === "function") {
-      p.then(pauseBack).catch(pauseBack);
-    } else {
-      pauseBack();
+      p.catch(() => el.removeEventListener("playing", onPlaying));
     }
     return el;
   }
