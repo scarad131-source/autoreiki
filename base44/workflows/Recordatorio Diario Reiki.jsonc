@@ -13,10 +13,7 @@
         "send_reminders": {
           "call": "invoke_backend_function",
           "with": {
-            "function_name": "sendReikiReminders",
-            "args": {
-              "token": "rk_r3m1nd3r_7f9c2e1a8b"
-            }
+            "function_name": "sendReikiReminders"
           },
           "then": "end",
           "x-base44": {

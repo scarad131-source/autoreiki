@@ -16,6 +16,10 @@ export default async function(req) {
     if (!date || !sessions.length) {
       return Response.json({ error: 'date y sessions son requeridos' }, { status: 400 });
     }
+    // Valida el formato de la fecha (YYYY-MM-DD) para evitar texto arbitrario
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      return Response.json({ error: 'Formato de fecha inválido' }, { status: 400 });
+    }
 
     let sheetId = secrets.get("GOOGLE_SHEET_ID") || '';
     // Acepta también la URL completa de la hoja y extrae el ID
@@ -56,16 +60,22 @@ export default async function(req) {
       });
     }
 
-    // Agrega una fila por cada sesión programada
+    // Agrega una fila por cada sesión programada, validando y acotando la entrada:
+    // máximo 20 sesiones por invocación, time en formato HH:MM, label ≤ 50 caracteres.
     const now = new Date().toISOString();
-    const rows = sessions.map((s) => [
+    const TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
+    const MAX_SESSIONS = 20;
+    const rows = sessions.slice(0, MAX_SESSIONS).map((s) => [
       user.email || '',
       user.full_name || '',
       date,
-      s.time || '',
-      s.label || '',
+      typeof s?.time === 'string' && TIME_RE.test(s.time) ? s.time : '',
+      typeof s?.label === 'string' ? s.label.slice(0, 50) : '',
       now
-    ]);
+    ]).filter((r) => r[3] || r[4]);
+    if (!rows.length) {
+      return Response.json({ error: 'Sin sesiones válidas para registrar' }, { status: 400 });
+    }
 
     const appendRes = await fetch(`${base}/values/${encodeURIComponent(tab)}!A:F:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`, {
       method: 'POST',
