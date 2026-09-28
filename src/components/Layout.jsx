@@ -5,6 +5,7 @@ import ChakraCircleIcon from "@/components/ChakraCircleIcon";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
 import { IMAGES } from "@/lib/assets";
+import OfflineBanner from "@/components/OfflineBanner";
 
 const navItems = [
   { to: "/", label: "Inicio", icon: Star, end: true },
@@ -35,6 +36,8 @@ export default function Layout() {
           </button>
         </div>
       </header>
+
+      <OfflineBanner />
 
       <main className="flex-1 max-w-3xl w-full mx-auto px-5 pb-32 pt-4">
         <Outlet />

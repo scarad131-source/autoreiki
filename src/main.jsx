@@ -15,6 +15,13 @@ if (import.meta.env.DEV && 'serviceWorker' in navigator) {
   });
 }
 
+// Producción: registrar service worker para que la app cargue en modo avión.
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <App />
 )

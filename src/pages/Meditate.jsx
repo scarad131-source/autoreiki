@@ -9,6 +9,7 @@ import { buildChakraScript, CHAKRAS } from "@/lib/guidedScripts";
 import { unlockSpeech } from "@/lib/speech";
 import { audioUrlFor, isVoiceTrack } from "@/lib/audioSources";
 import { sessionAudio } from "@/lib/sessionAudio";
+import { queueIfOffline } from "@/lib/offlineSync";
 
 export default function Meditate() {
   const navigate = useNavigate();
@@ -71,7 +72,7 @@ export default function Meditate() {
 
   const save = async ({ moodAfter, notes }, to = "/") => {
     try {
-      await base44.entities.MeditationSession.create({
+      const sessionData = {
         mode: config.mode,
         level: config.level,
         audio: config.audio,
@@ -80,9 +81,17 @@ export default function Meditate() {
         mood_after: moodAfter,
         notes,
         completed: result.completed
-      });
+      };
+      await queueIfOffline(
+        () => base44.entities.MeditationSession.create(sessionData),
+        { kind: "entity", entity: "MeditationSession", method: "create", data: sessionData }
+      );
       if (config.journeyDay) {
-        await base44.entities.JourneyProgress.create({ day_number: config.journeyDay });
+        const journeyData = { day_number: config.journeyDay };
+        await queueIfOffline(
+          () => base44.entities.JourneyProgress.create(journeyData),
+          { kind: "entity", entity: "JourneyProgress", method: "create", data: journeyData }
+        );
       }
     } catch (e) {
 

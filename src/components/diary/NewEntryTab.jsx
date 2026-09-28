@@ -5,6 +5,7 @@ import { toast } from "@/components/ui/use-toast";
 import { SENSATIONS, sensationMap } from "@/lib/diarySensations";
 import { MOODS, ZONES } from "@/lib/diaryOptions";
 import IntensitySlider from "@/components/diary/IntensitySlider";
+import { queueIfOffline } from "@/lib/offlineSync";
 
 export default function NewEntryTab({ onSaved }) {
   const [mood, setMood] = useState(null);
@@ -18,15 +19,23 @@ export default function NewEntryTab({ onSaved }) {
     if (!mood && !sensation && !note.trim()) return;
     setSaving(true);
     try {
-      await base44.entities.DiaryEntry.create({
+      const entryData = {
         mood,
         sensation,
         zone,
         intensity,
         sensations: sensation ? [sensation] : [],
         note: note.trim(),
-      });
-      toast({ title: "Entrada guardada", description: "Tu registro quedó en tu diario." });
+      };
+      const res = await queueIfOffline(
+        () => base44.entities.DiaryEntry.create(entryData),
+        { kind: "entity", entity: "DiaryEntry", method: "create", data: entryData }
+      );
+      toast(
+        res?.__offline_queued
+          ? { title: "Guardado sin conexión", description: "Se sincronizará al volver a internet." }
+          : { title: "Entrada guardada", description: "Tu registro quedó en tu diario." }
+      );
       setMood(null);
       setSensation(null);
       setIntensity(2);
