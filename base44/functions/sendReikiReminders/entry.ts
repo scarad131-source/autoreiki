@@ -1,4 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.40';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.52';
 
 // Token compartido que autoriza la invocación de esta función programada.
 // El workflow lo envía en el cuerpo; las llamadas HTTP directas sin él se rechazan.
