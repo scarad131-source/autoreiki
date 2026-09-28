@@ -1,5 +1,5 @@
 {
-  "description": "Una vez al d\u00eda env\u00eda recordatorio a usuarios con recordatorio activo",
+  "description": "Cada 15 min env\u00eda recordatorio a usuarios cuya hora local coincide con su hora programada",
   "name": "Recordatorio Diario Reiki",
   "definition": {
     "document": {
@@ -18,7 +18,7 @@
           "then": "end",
           "x-base44": {
             "title": "Enviar recordatorios",
-            "description": "Recordatorio diario a usuarios con recordatorio activo"
+            "description": "Recordatorio a usuarios cuya hora local coincide con su hora programada"
           }
         }
       }
@@ -30,7 +30,7 @@
       "trigger_type": "scheduled",
       "events": [],
       "schedule_mode": "recurring",
-      "cron_expression": "0 9 * * *",
+      "cron_expression": "*/15 * * * *",
       "one_time_date": null,
       "timezone": "America/Tijuana",
       "interval_value": null,
