@@ -15,26 +15,13 @@ export default async function(req) {
     }
 
     const users = await base44.asServiceRole.entities.User.list("-created_date", 500);
-    const now = new Date();
     let sent = 0;
     let checked = 0;
 
     for (const u of users) {
-      if (!u.reminder_enabled || !u.reminder_time) continue;
+      if (!u.reminder_enabled) continue;
       checked++;
-      const tz = u.reminder_timezone || "UTC";
       try {
-        const parts = new Intl.DateTimeFormat("en-GB", {
-          timeZone: tz,
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        }).format(now);
-        const [h, m] = parts.split(":").map(Number);
-        const slotMin = Math.floor(m / 15) * 15;
-        const currentSlot = `${String(h).padStart(2, "0")}:${String(slotMin).padStart(2, "0")}`;
-        if (currentSlot !== u.reminder_time) continue;
-
         const firstName = u.preferred_name || (u.full_name ? u.full_name.split(" ")[0] : "");
 
         // Email: llega al móvil (app de correo) sin requerir build nativo.
