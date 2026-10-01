@@ -39,8 +39,8 @@ export default function Login() {
   return (
     <AuthLayout
       icon={LogIn}
-      title="Bienvenida de nuevo"
-      subtitle="Inicia sesión en tu cuenta"
+      title="Bienvenido/a a AutoReiki"
+      subtitle="Tu espacio de bienestar comienza aquí"
       footer={
         <>
           ¿No tienes cuenta?{" "}
