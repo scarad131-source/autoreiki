@@ -43,13 +43,15 @@ export default function Login() {
       subtitle="Tu espacio de bienestar comienza aquí"
       footer={
         <>
-          ¿No tienes cuenta?{" "}
-          <Link
-            to={"/register" + (returnTo !== "/" ? "?returnTo=" + encodeURIComponent(returnTo) : "")}
+          ¿Aún no tienes acceso?{" "}
+          <a
+            href="https://www.ebookmaker.online/builder/gerador-de-pagina/pagina-de-vendas-9aa15497-6fe9-42fc-a517-57f6818e9902"
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-primary font-medium hover:underline"
           >
-            Crear una
-          </Link>
+            Obtén acceso a AUTOREIKI
+          </a>
         </>
       }
     >
