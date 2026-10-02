@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +12,8 @@ import { toast } from "@/components/ui/use-toast";
 import { safeReturnTo } from "@/lib/authReturnTo";
 
 export default function Register() {
-  const [email, setEmail] = useState("");
+  const location = useLocation();
+  const [email, setEmail] = useState(location.state?.hotmartEmail || "");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
@@ -50,6 +51,14 @@ export default function Register() {
         try {
           const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
           await base44.auth.updateMe({ reminder_timezone: tz });
+        } catch (e) {}
+        // Re-valida la compra activa en backend antes de permitir el acceso:
+        // confirma que HotmartPurchase.access_active === true para este correo.
+        // Si la compra fue reembolsada entre la verificacion inicial y ahora,
+        // syncUserAccess pondra access_active en false y ProtectedRoute mostrara
+        // la pantalla de NoAccess.
+        try {
+          await base44.functions.invoke("syncUserAccess", {});
         } catch (e) {}
       }
       window.location.href = safeReturnTo();
