@@ -1,0 +1,81 @@
+{
+  "name": "HotmartPurchase",
+  "type": "object",
+  "properties": {
+    "buyer_name": {
+      "type": "string",
+      "description": "Nombre completo del comprador"
+    },
+    "buyer_email": {
+      "type": "string",
+      "description": "Email del comprador (clave unica de la compra, en minusculas)"
+    },
+    "transaction_id": {
+      "type": "string",
+      "description": "Identificador unico del evento/transaccion de Hotmart"
+    },
+    "product_id": {
+      "type": "string",
+      "description": "ID del producto comprado en Hotmart"
+    },
+    "product_name": {
+      "type": "string",
+      "description": "Nombre del producto comprado"
+    },
+    "purchase_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Fecha de aprobacion de la compra en formato ISO"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "approved",
+        "refunded",
+        "chargeback",
+        "canceled",
+        "expired"
+      ],
+      "description": "Estado de la compra segun el ultimo evento de Hotmart procesado"
+    },
+    "access_active": {
+      "type": "boolean",
+      "default": false,
+      "description": "Si el comprador tiene acceso activo a AUTOREIKI"
+    },
+    "last_event_id": {
+      "type": "string",
+      "description": "ID del ultimo evento de Hotmart procesado (para idempotencia)"
+    },
+    "last_event_date": {
+      "type": "number",
+      "description": "Fecha de creacion del ultimo evento procesado en ms (proteccion anti-desorden)"
+    }
+  },
+  "required": [
+    "buyer_email",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

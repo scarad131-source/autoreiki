@@ -1,0 +1,41 @@
+{
+  "description": "Al registrarse o iniciar sesion, sincroniza el acceso del usuario segun sus compras de Hotmart registradas por el webhook",
+  "name": "Sincronizar Acceso Hotmart",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "app_user_auth",
+      "events": [
+        "signup",
+        "login"
+      ]
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "sync_hotmart_access",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "sync_access": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "syncUserAccess",
+            "args": {
+              "user_id": "${ .trigger.user_id }",
+              "email": "${ .trigger.email }"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Sincronizar acceso",
+            "description": "Activa o desactiva el acceso segun las compras de Hotmart del usuario"
+          }
+        }
+      }
+    ]
+  }
+}
