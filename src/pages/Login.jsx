@@ -86,7 +86,7 @@ export default function Login() {
         <>
           ¿Aún no tienes acceso?{" "}
           <a
-            href="https://www.ebookmaker.online/builder/gerador-de-pagina/pagina-de-vendas-9aa15497-6fe9-42fc-a517-57f6818e9902"
+            href="https://scarad131-source.github.io/landing-page-AUTOREIKI/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary font-medium hover:underline"
