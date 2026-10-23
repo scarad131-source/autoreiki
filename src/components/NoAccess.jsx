@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Lock, RefreshCw, LogOut, ExternalLink } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useAuth } from "@/lib/AuthContext";
+import { ACCESS_DENIED_MESSAGE } from "@/lib/accessMessages";
 
 const SALES_URL = "https://www.ebookmaker.online/builder/gerador-de-pagina/pagina-de-vendas-9aa15497-6fe9-42fc-a517-57f6818e9902";
 
@@ -33,6 +34,7 @@ export default function NoAccess() {
             Tu acceso a <span className="text-foreground font-semibold">AUTOREIKI</span> se activa automáticamente al
             completar tu compra. Usa el mismo correo con el que compraste para registrarte.
           </p>
+          <p className="text-sm font-medium text-primary">{ACCESS_DENIED_MESSAGE}</p>
         </div>
 
         <div className="space-y-3">

@@ -4,7 +4,10 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { LogIn, Mail, Lock, Loader2 } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ACCESS_DENIED_MESSAGE } from "@/lib/accessMessages";
+import { saveRememberPreference } from "@/lib/sessionPreference";
+import { Mail, Lock, Loader2 } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
 import GoogleIcon from "@/components/GoogleIcon";
 import { safeReturnTo } from "@/lib/authReturnTo";
@@ -14,7 +17,13 @@ const SALES_URL = "https://www.ebookmaker.online/builder/gerador-de-pagina/pagin
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  // Marcada por defecto: si no se toca, la sesión se comporta como hasta ahora.
+  const [remember, setRemember] = useState(true);
+  // El backend cierra la sesión y vuelve aquí con ?denied=1 cuando el correo no
+  // tiene una compra aprobada y activa en Hotmart (validación invisible).
+  const [error, setError] = useState(() =>
+    new URLSearchParams(window.location.search).get("denied") === "1" ? ACCESS_DENIED_MESSAGE : ""
+  );
   const [loading, setLoading] = useState(false);
   const [showActivate, setShowActivate] = useState(false);
   const [activateEmail, setActivateEmail] = useState("");
@@ -26,12 +35,34 @@ export default function Login() {
   const returnTo = safeReturnTo();
   const navigate = useNavigate();
 
+  // Comprueba en backend que el correo tenga una compra aprobada y activa en
+  // Hotmart, sin mostrar nada al usuario. Si no la tiene, cierra la sesión
+  // recién creada y vuelve al login con el mensaje de acceso denegado.
+  // Los admins siempre pasan, igual que en ProtectedRoute.
+  const denyAccessIfNotPurchased = async () => {
+    try {
+      const me = await base44.auth.me();
+      if (!me || me.role === "admin") return false;
+      const res = await base44.functions.invoke("verifyHotmartAccess", { email: me.email || email });
+      if ((res.data || {}).authorized !== true) {
+        await base44.auth.logout("/login?denied=1");
+        return true;
+      }
+    } catch (e) {
+      // Si la verificación no se puede hacer, el control final sigue siendo
+      // ProtectedRoute (que vuelve a validar contra Hotmart).
+    }
+    return false;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
+    saveRememberPreference(remember);
     try {
       await base44.auth.loginViaEmailPassword(email, password);
+      if (await denyAccessIfNotPurchased()) return;
       window.location.href = returnTo;
     } catch (err) {
       setError(err.message || "Correo o contraseña inválidos");
@@ -41,6 +72,7 @@ export default function Login() {
   };
 
   const handleGoogle = () => {
+    saveRememberPreference(remember);
     base44.auth.loginWithProvider("google", returnTo);
   };
 
@@ -79,7 +111,7 @@ export default function Login() {
 
   return (
     <AuthLayout
-      icon={LogIn}
+      logo="/logo-autoreiki.png"
       title="Bienvenido/a a AutoReiki"
       subtitle="Tu espacio de bienestar comienza aquí"
       footer={
@@ -98,7 +130,7 @@ export default function Login() {
     >
       <Button
         variant="outline"
-        className="w-full h-12 text-sm font-medium mb-6"
+        className="w-full h-12 text-sm font-medium mb-6 bg-card border border-amber-light text-foreground hover:bg-amber-light/10 hover:text-foreground"
         onClick={handleGoogle}
       >
         <GoogleIcon className="w-5 h-5 mr-2" />
@@ -175,6 +207,16 @@ export default function Login() {
             "Iniciar sesión"
           )}
         </Button>
+        <div className="flex items-center gap-2">
+          <Checkbox
+            id="remember"
+            checked={remember}
+            onCheckedChange={(value) => setRemember(value === true)}
+          />
+          <Label htmlFor="remember" className="text-sm font-normal text-muted-foreground cursor-pointer">
+            Recordarme
+          </Label>
+        </div>
       </form>
 
       {!showActivate && (

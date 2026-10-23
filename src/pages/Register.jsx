@@ -10,6 +10,7 @@ import AuthLayout from "@/components/AuthLayout";
 import GoogleIcon from "@/components/GoogleIcon";
 import { toast } from "@/components/ui/use-toast";
 import { safeReturnTo } from "@/lib/authReturnTo";
+import { ACCESS_DENIED_MESSAGE } from "@/lib/accessMessages";
 
 export default function Register() {
   const location = useLocation();
@@ -57,8 +58,19 @@ export default function Register() {
         // Si la compra fue reembolsada entre la verificacion inicial y ahora,
         // syncUserAccess pondra access_active en false y ProtectedRoute mostrara
         // la pantalla de NoAccess.
+        // Validación invisible con Hotmart: si el correo no tiene una compra
+        // aprobada y activa, no se permite entrar y se muestra el mensaje de
+        // acceso denegado (los admins siempre pasan).
         try {
-          await base44.functions.invoke("syncUserAccess", {});
+          const syncRes = await base44.functions.invoke("syncUserAccess", {});
+          if ((syncRes.data || {}).access_active === false) {
+            const me = await base44.auth.me();
+            if (!me || me.role !== "admin") {
+              setError(ACCESS_DENIED_MESSAGE);
+              setLoading(false);
+              return;
+            }
+          }
         } catch (e) {}
       }
       window.location.href = safeReturnTo();
