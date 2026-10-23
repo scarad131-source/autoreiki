@@ -14,6 +14,9 @@ import { safeReturnTo } from "@/lib/authReturnTo";
 
 const SALES_URL = "https://www.ebookmaker.online/builder/gerador-de-pagina/pagina-de-vendas-9aa15497-6fe9-42fc-a517-57f6818e9902";
 
+// Fondo a pantalla completa de la pantalla de acceso (ilustración de marca).
+const BACKGROUND_IMAGE = "https://media.base44.com/images/public/6a7d30a899098694894dbd88/db93b3e45_logo_AUTOREIKI_512x512.png";
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -112,8 +115,10 @@ export default function Login() {
   return (
     <AuthLayout
       logo="/logo-autoreiki.png"
-      title="Bienvenido/a a AutoReiki"
-      subtitle="Tu espacio de bienestar comienza aquí"
+      backgroundImage={BACKGROUND_IMAGE}
+      glass
+      title="Bienvenid@ a AutoReiki"
+      subtitle="Tu espacio para reconectar contigo"
       footer={
         <>
           ¿Aún no tienes acceso?{" "}
@@ -123,44 +128,40 @@ export default function Login() {
             rel="noopener noreferrer"
             className="text-primary font-medium hover:underline"
           >
-            Obtén acceso a AUTOREIKI
+            Descubre AutoReiki
           </a>
         </>
       }
     >
       <Button
         variant="outline"
-        className="w-full h-12 text-sm font-medium mb-6 bg-card border border-amber-light text-foreground hover:bg-amber-light/10 hover:text-foreground"
+        className="w-full h-12 text-sm font-semibold bg-foreground text-background border-transparent hover:bg-foreground/90 hover:text-background"
         onClick={handleGoogle}
       >
         <GoogleIcon className="w-5 h-5 mr-2" />
         Continuar con Google
       </Button>
 
-      <div className="relative mb-6">
+      <div className="relative my-6">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-border" />
+          <div className="w-full border-t border-foreground/15" />
         </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-3 text-muted-foreground">o</span>
+        <div className="relative flex justify-center">
+          <span className="rounded-full border border-foreground/15 bg-background/60 px-3 py-1 text-[11px] text-muted-foreground">
+            o continúa con tu correo
+          </span>
         </div>
       </div>
 
-      {error && (
-        <div className="mb-4 p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
-          {error}
-        </div>
-      )}
-
       {loginInfo && (
-        <div className="mb-4 p-3 rounded-lg bg-primary/10 text-primary text-sm">
+        <div className="mb-4 rounded-xl bg-primary/10 p-3 text-sm text-primary">
           {loginInfo}
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="email">Correo</Label>
+          <Label htmlFor="email">Correo electrónico</Label>
           <div className="relative">
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
             <Input
@@ -175,6 +176,9 @@ export default function Login() {
               required
             />
           </div>
+          <p className="text-xs text-muted-foreground">
+            Usa el mismo correo con el que compraste en Hotmart
+          </p>
         </div>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
@@ -197,16 +201,28 @@ export default function Login() {
             />
           </div>
         </div>
-        <Button type="submit" className="w-full h-12 font-medium" disabled={loading}>
+
+        {error && (
+          <div className="rounded-xl border border-destructive/25 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+            {error}
+          </div>
+        )}
+
+        <Button
+          type="submit"
+          className="w-full h-12 font-semibold bg-gradient-to-r from-primary to-purple text-primary-foreground shadow-lg hover:opacity-90"
+          disabled={loading}
+        >
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Iniciando sesión...
+              Ingresando...
             </>
           ) : (
-            "Iniciar sesión"
+            "Ingresar a mi cuenta"
           )}
         </Button>
+
         <div className="flex items-center gap-2">
           <Checkbox
             id="remember"

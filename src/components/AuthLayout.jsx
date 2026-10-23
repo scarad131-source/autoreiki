@@ -1,9 +1,26 @@
 import React from "react";
+import { Image } from "@/components/ui/image";
 
-export default function AuthLayout({ icon: Icon, logo, title, subtitle, footer, children }) {
+export default function AuthLayout({ icon: Icon, logo, title, subtitle, footer, children, backgroundImage, glass = false }) {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <div className="w-full max-w-md">
+    <div
+      className={`relative flex min-h-screen items-center justify-center px-4 py-8 ${
+        backgroundImage ? "" : "bg-background"
+      }`}
+    >
+      {backgroundImage && (
+        <div className="fixed inset-0" aria-hidden="true">
+          <Image
+            src={backgroundImage}
+            alt=""
+            fittingType="fill"
+            quality={60}
+            className="block w-full h-full scale-110 blur-[2px]"
+          />
+          <div className="absolute inset-0 bg-background/80" />
+        </div>
+      )}
+      <div className="relative w-full max-w-md">
         <div className="text-center mb-10">
           {logo ? (
             <img
@@ -19,7 +36,13 @@ export default function AuthLayout({ icon: Icon, logo, title, subtitle, footer, 
           <h1 className="text-3xl font-bold tracking-tight text-foreground">{title}</h1>
           {subtitle && <p className="text-muted-foreground mt-2">{subtitle}</p>}
         </div>
-        <div className="bg-card rounded-2xl shadow-sm border border-border p-8">
+        <div
+          className={
+            glass
+              ? "rounded-3xl border border-foreground/10 bg-background/60 p-6 shadow-2xl backdrop-blur-xl sm:p-8"
+              : "bg-card rounded-2xl shadow-sm border border-border p-8"
+          }
+        >
           {children}
         </div>
         {footer && (
