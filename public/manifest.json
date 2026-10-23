@@ -1,0 +1,28 @@
+{
+  "name": "AutoReiki",
+  "short_name": "AutoReiki",
+  "description": "Tu asistente personal de Reiki: meditación guiada, entornos sonoros y seguimiento de tu progreso.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#160f29",
+  "theme_color": "#160f29",
+  "lang": "es",
+  "dir": "ltr",
+  "categories": ["health", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
