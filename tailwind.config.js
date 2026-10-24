@@ -49,6 +49,7 @@ module.exports = {
   			'amber-light': 'hsl(var(--amber-light))',
   			purple: 'hsl(var(--purple))',
   			lilac: 'hsl(var(--lilac))',
+  			bone: 'hsl(var(--bone))',
   			success: 'hsl(var(--success))',
   			chart: {
   				'1': 'hsl(var(--chart-1))',

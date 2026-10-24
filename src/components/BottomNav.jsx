@@ -14,40 +14,33 @@ const navItems = [
 
 export default function BottomNav() {
   return (
-    // fixed: barra anclada al borde inferior de la pantalla, siempre visible al desplazar.
-    <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-glow/20 bg-background/95 backdrop-blur-xl pb-[env(safe-area-inset-bottom)]">
-      {/* Los 5 accesos se reparten en partes iguales (grid) con tamaño de tacto cómodo */}
-      <div className="max-w-2xl mx-auto grid grid-cols-5 px-1.5 py-1">
-        {navItems.map(({ to, label, icon: Icon, end }) => (
-          <NavLink
-            key={to}
-            to={to}
-            end={end}
-            className={({ isActive }) =>
-              `flex flex-col items-center justify-center gap-0.5 rounded-xl py-1.5 transition-colors ${
-                isActive ? "text-primary" : "text-foreground/70 hover:text-foreground"
-              }`
-            }
-          >
-            {({ isActive }) => (
-              <>
-                <span
-                  className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
-                    isActive
-                      ? "bg-primary/20 shadow-[0_0_12px_hsl(var(--primary)/0.45)]"
-                      : "bg-white/5"
-                  }`}
-                >
-                  <Icon
-                    className={`w-[18px] h-[18px] ${isActive ? "scale-105" : ""} transition-transform`}
-                    strokeWidth={isActive ? 2.4 : 2}
-                  />
-                </span>
-                <span className="text-[10px] leading-none font-medium">{label}</span>
-              </>
-            )}
-          </NavLink>
-        ))}
+    // Cápsula flotante de cristal con borde dorado, siempre visible al desplazar.
+    <nav className="fixed inset-x-0 bottom-0 z-50 px-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pointer-events-none">
+      <div className="pointer-events-auto max-w-md mx-auto rounded-full border border-primary/50 bg-white/5 backdrop-blur-[10px] shadow-[0_10px_30px_rgba(0,0,0,0.45)]">
+        <div className="grid grid-cols-5 px-2 py-2">
+          {navItems.map(({ to, label, icon: Icon, end }) => (
+            <NavLink
+              key={to}
+              to={to}
+              end={end}
+              className={({ isActive }) =>
+                `flex flex-col items-center gap-1 rounded-full py-1 font-body transition-colors ${
+                  isActive ? "text-primary" : "text-foreground/55 hover:text-foreground/85"
+                }`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  <Icon className="w-[18px] h-[18px]" strokeWidth={isActive ? 2.2 : 1.7} />
+                  <span className={`text-[9px] leading-none tracking-wide ${isActive ? "font-semibold" : "font-medium"}`}>
+                    {label}
+                  </span>
+                  <span className={`h-1 w-1 rounded-full ${isActive ? "bg-primary" : "bg-transparent"}`} />
+                </>
+              )}
+            </NavLink>
+          ))}
+        </div>
       </div>
     </nav>
   );
