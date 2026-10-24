@@ -66,45 +66,51 @@ export default function WeeklyStats({ sessions, diaryEntries, journeyProgress, t
       {/* Tres bloques equilibrados: 40% gráfico · 30% datos · 30% círculo y consistencia */}
       <div className="flex flex-row items-center justify-between gap-5">
 
-        {/* Bloque 1: gráfico de días repartido a todo el ancho del bloque */}
-        <div className="basis-[40%] min-w-0 h-24">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
-              <defs>
-                <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="hsl(var(--glow-cyan))" />
-                  <stop offset="100%" stopColor="hsl(var(--glow))" />
-                </linearGradient>
-              </defs>
-              <XAxis
-                dataKey="day"
-                tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <Tooltip
-                cursor={{ fill: "hsl(var(--accent) / 0.4)" }}
-                contentStyle={{
-                  background: "hsl(var(--card))",
-                  border: "1px solid hsl(var(--glow) / 0.3)",
-                  borderRadius: "12px",
-                  fontSize: "12px",
-                  color: "hsl(var(--foreground))",
-                }}
-                formatter={(v) => [`${v} min`, "Meditación"]}
-                labelStyle={{ color: "hsl(var(--muted-foreground))" }}
-              />
-              <Bar dataKey="mins" radius={[4, 4, 4, 4]} maxBarSize={20}>
-                {data.map((d, i) => (
-                  <Cell key={i} fill={d.active ? "url(#barGrad)" : "hsl(var(--accent))"} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+        {/* Bloque 1: gráfico de días, barras y etiquetas repartidas a todo el ancho */}
+        <div className="basis-[40%] min-w-0">
+          <div className="h-20 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={data} margin={{ top: 4, right: 0, left: 0, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="hsl(var(--glow-cyan))" />
+                    <stop offset="100%" stopColor="hsl(var(--glow))" />
+                  </linearGradient>
+                </defs>
+                <XAxis dataKey="day" tick={false} height={2} axisLine={false} tickLine={false} />
+                <Tooltip
+                  cursor={{ fill: "hsl(var(--accent) / 0.4)" }}
+                  contentStyle={{
+                    background: "hsl(var(--card))",
+                    border: "1px solid hsl(var(--glow) / 0.3)",
+                    borderRadius: "12px",
+                    fontSize: "12px",
+                    color: "hsl(var(--foreground))",
+                  }}
+                  formatter={(v) => [`${v} min`, "Meditación"]}
+                  labelStyle={{ color: "hsl(var(--muted-foreground))" }}
+                />
+                <Bar dataKey="mins" radius={[4, 4, 4, 4]} maxBarSize={20}>
+                  {data.map((d, i) => (
+                    <Cell key={i} fill={d.active ? "url(#barGrad)" : "hsl(var(--accent))"} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Fila de días: ancho completo y reparto uniforme bajo cada barra */}
+          <div className="flex w-full items-center justify-between mt-1">
+            {data.map((d) => (
+              <span key={d.day} className="flex-1 text-center text-xs text-muted-foreground">
+                {d.day}
+              </span>
+            ))}
+          </div>
         </div>
 
         {/* Bloque 2: datos alineados a la izquierda, sin fondo ni bordes */}
-        <div className="basis-[30%] min-w-0 flex flex-col gap-3">
+        <div className="basis-[35%] min-w-0 flex flex-col gap-3">
           <div className="flex items-start gap-2">
             <Clock className="w-4 h-4 mt-0.5 text-glow-cyan shrink-0" />
             <div className="min-w-0">
@@ -127,7 +133,7 @@ export default function WeeklyStats({ sessions, diaryEntries, journeyProgress, t
         </div>
 
         {/* Bloque 3: círculo de días y consistencia, alineados a la derecha */}
-        <div className="basis-[30%] min-w-0 flex flex-col items-end gap-2">
+        <div className="basis-[25%] min-w-0 flex flex-col items-end gap-2">
           <ConsistencyRing percent={consistency} days={activeDays} />
           <div className="w-full">
             <div className="flex items-center justify-end gap-1.5 text-[11px] text-muted-foreground">
