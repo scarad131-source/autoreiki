@@ -12,9 +12,9 @@ export default function Layout() {
   };
 
   return (
-    <div className="min-h-svh flex flex-col">
+    <div className="app-shell min-h-svh w-full flex flex-col overflow-x-clip">
       <header className="sticky top-0 z-30 backdrop-blur-xl bg-background/70 pt-[env(safe-area-inset-top)]">
-        <div className="max-w-3xl mx-auto px-5 h-14 flex items-center justify-between">
+        <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="w-7 h-7 rounded-full overflow-hidden shrink-0">
             <Image src={IMAGES.logo} alt="AutoReiki" className="w-full h-full" fittingType="fill" />
           </div>
@@ -30,7 +30,7 @@ export default function Layout() {
 
       <OfflineBanner />
 
-      <main className="flex-1 max-w-3xl w-full mx-auto px-5 pb-32 pt-4">
+      <main className="flex-1 max-w-2xl w-full mx-auto px-4 pt-3 pb-[calc(4.75rem+env(safe-area-inset-bottom))]">
         <Outlet />
       </main>
 

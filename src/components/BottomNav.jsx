@@ -14,18 +14,17 @@ const navItems = [
 
 export default function BottomNav() {
   return (
-    // sticky (no fixed): se ancla al borde inferior del scroll en cualquier contenedor,
-    // por lo que la barra queda siempre visible mientras se desplaza la página.
-    <nav className="sticky bottom-0 z-50 mt-auto w-full px-4 pt-2 pb-[calc(1rem+env(safe-area-inset-bottom))] pointer-events-none">
-      {/* Superficie oscura semitransparente con borde dorado sutil: contrasta con el degradado morado */}
-      <div className="max-w-md mx-auto pointer-events-auto rounded-full border border-glow/30 bg-background/95 backdrop-blur-xl px-2 py-2 flex items-center justify-around shadow-lg shadow-black/60">
+    // fixed: barra anclada al borde inferior de la pantalla, siempre visible al desplazar.
+    <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-glow/20 bg-background/95 backdrop-blur-xl pb-[env(safe-area-inset-bottom)]">
+      {/* Los 5 accesos se reparten en partes iguales (grid) con tamaño de tacto cómodo */}
+      <div className="max-w-2xl mx-auto grid grid-cols-5 px-1.5 py-1">
         {navItems.map(({ to, label, icon: Icon, end }) => (
           <NavLink
             key={to}
             to={to}
             end={end}
             className={({ isActive }) =>
-              `flex flex-col items-center gap-1.5 px-1.5 py-1 transition-all ${
+              `flex flex-col items-center justify-center gap-0.5 rounded-xl py-1.5 transition-colors ${
                 isActive ? "text-primary" : "text-foreground/70 hover:text-foreground"
               }`
             }
@@ -33,18 +32,18 @@ export default function BottomNav() {
             {({ isActive }) => (
               <>
                 <span
-                  className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+                  className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
                     isActive
-                      ? "bg-primary/20 shadow-[0_0_16px_hsl(var(--primary)/0.5)]"
+                      ? "bg-primary/20 shadow-[0_0_12px_hsl(var(--primary)/0.45)]"
                       : "bg-white/5"
                   }`}
                 >
                   <Icon
-                    className={`w-5 h-5 ${isActive ? "scale-110" : ""} transition-transform`}
+                    className={`w-[18px] h-[18px] ${isActive ? "scale-105" : ""} transition-transform`}
                     strokeWidth={isActive ? 2.4 : 2}
                   />
                 </span>
-                <span className="text-[10px] font-medium">{label}</span>
+                <span className="text-[10px] leading-none font-medium">{label}</span>
               </>
             )}
           </NavLink>

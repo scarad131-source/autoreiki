@@ -9,7 +9,7 @@ export default function OfflineBanner() {
   if (online && queueCount === 0 && !syncing) return null;
 
   return (
-    <div className="max-w-3xl mx-auto px-5 pt-2">
+    <div className="max-w-2xl mx-auto px-4 pt-2">
       <div className="rounded-2xl border border-amber-500/30 bg-amber-950/70 backdrop-blur-xl px-4 py-3 shadow-lg">
         {!online && (
           <div className="flex items-start gap-3">

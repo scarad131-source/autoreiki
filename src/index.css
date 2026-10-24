@@ -196,3 +196,73 @@
     box-shadow: 0 0 22px hsl(var(--purple) / 0.32);
   }
 }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Mobile-first: compactación global de las pantallas internas.
+   Van fuera de @layer para que estas reglas se apliquen después de las
+   utilidades de Tailwind. La pantalla de Login no usa estas clases clave
+   (su tarjeta es p-3 / p-8), por lo que conserva su diseño actual.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Sin scroll horizontal ni desbordes laterales ('clip' no rompe el header sticky) */
+html,
+body {
+  overflow-x: clip;
+  max-width: 100%;
+}
+
+@media (max-width: 767px) {
+
+  /* Menos aire dentro de tarjetas, diálogos y entre secciones */
+  .p-6 {
+    padding: 1rem;
+  }
+
+  .p-5 {
+    padding: 0.875rem;
+  }
+
+  .space-y-6 > * + * {
+    margin-top: 1rem;
+  }
+
+  .space-y-5 > * + * {
+    margin-top: 0.875rem;
+  }
+
+  .mb-6 {
+    margin-bottom: 1rem;
+  }
+
+  .mb-8 {
+    margin-bottom: 1.25rem;
+  }
+
+  .mt-6 {
+    margin-top: 1rem;
+  }
+
+  .gap-6 {
+    gap: 1rem;
+  }
+
+  /* Jerarquía tipográfica compacta dentro del shell de la app */
+  .app-shell h1 {
+    font-size: 1.625rem;
+    line-height: 1.2;
+  }
+
+  .app-shell h2 {
+    font-size: 1.25rem;
+    line-height: 1.25;
+  }
+
+  .app-shell h3 {
+    font-size: 1.0625rem;
+    line-height: 1.3;
+  }
+
+  .app-shell p {
+    line-height: 1.5;
+  }
+}
