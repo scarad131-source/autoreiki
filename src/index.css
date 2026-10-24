@@ -64,92 +64,92 @@
 
 @layer base {
   :root {
-    --background: 256 47% 11%;
+    --background: 267 62% 11%;
     --foreground: 266 73% 96%;
-    --card: 266 42% 28%;
+    --card: 266 52% 16%;
     --card-foreground: 266 73% 96%;
-    --popover: 256 46% 18%;
+    --popover: 265 50% 14%;
     --popover-foreground: 266 73% 96%;
-    --primary: 36 77% 45%;
+    --primary: 46 65% 52%;
     --primary-foreground: 257 58% 9%;
-    --secondary: 256 46% 18%;
+    --secondary: 265 45% 16%;
     --secondary-foreground: 266 73% 96%;
-    --muted: 256 45% 21%;
+    --muted: 265 45% 18%;
     --muted-foreground: 259 38% 75%;
-    --accent: 258 40% 29%;
+    --accent: 268 45% 26%;
     --accent-foreground: 266 73% 96%;
     --destructive: 0 72% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 36 32% 30%;
-    --input: 256 45% 21%;
-    --ring: 36 77% 45%;
-    --glow: 36 77% 45%;
+    --border: 46 45% 34%;
+    --input: 265 45% 18%;
+    --ring: 46 65% 52%;
+    --glow: 46 65% 52%;
     --glow-cyan: 255 92% 76%;
-    --gold: 36 77% 45%;
-    --amber-light: 38 76% 63%;
+    --gold: 46 65% 52%;
+    --amber-light: 46 70% 62%;
     --purple: 255 92% 76%;
     --lilac: 260 87% 85%;
     --success: 151 58% 60%;
-    --chart-1: 36 77% 45%;
-    --chart-2: 38 76% 63%;
+    --chart-1: 46 65% 52%;
+    --chart-2: 46 70% 62%;
     --chart-3: 255 92% 76%;
     --chart-4: 260 87% 85%;
-    --chart-5: 258 40% 29%;
+    --chart-5: 268 45% 26%;
     --radius: 1.25rem;
     --font-heading: "Cormorant Garamond", ui-serif, Georgia, serif;
     --font-body: "Mulish", ui-sans-serif, system-ui, sans-serif;
     --font-display: "Cormorant Garamond", ui-serif, Georgia, serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    --sidebar-background: 256 46% 18%;
+    --sidebar-background: 265 45% 15%;
     --sidebar-foreground: 266 73% 96%;
-    --sidebar-primary: 36 77% 45%;
+    --sidebar-primary: 46 65% 52%;
     --sidebar-primary-foreground: 257 58% 9%;
-    --sidebar-accent: 258 40% 29%;
+    --sidebar-accent: 268 45% 26%;
     --sidebar-accent-foreground: 266 73% 96%;
-    --sidebar-border: 258 30% 22%;
-    --sidebar-ring: 36 77% 45%;
+    --sidebar-border: 266 40% 22%;
+    --sidebar-ring: 46 65% 52%;
   }
 
   .dark {
-    --background: 256 47% 11%;
+    --background: 267 62% 11%;
     --foreground: 266 73% 96%;
-    --card: 266 42% 28%;
+    --card: 266 52% 16%;
     --card-foreground: 266 73% 96%;
-    --popover: 256 46% 18%;
+    --popover: 265 50% 14%;
     --popover-foreground: 266 73% 96%;
-    --primary: 36 77% 45%;
+    --primary: 46 65% 52%;
     --primary-foreground: 257 58% 9%;
-    --secondary: 256 46% 18%;
+    --secondary: 265 45% 16%;
     --secondary-foreground: 266 73% 96%;
-    --muted: 256 45% 21%;
+    --muted: 265 45% 18%;
     --muted-foreground: 259 38% 75%;
-    --accent: 258 40% 29%;
+    --accent: 268 45% 26%;
     --accent-foreground: 266 73% 96%;
     --destructive: 0 72% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 36 32% 30%;
-    --input: 256 45% 21%;
-    --ring: 36 77% 45%;
-    --glow: 36 77% 45%;
+    --border: 46 45% 34%;
+    --input: 265 45% 18%;
+    --ring: 46 65% 52%;
+    --glow: 46 65% 52%;
     --glow-cyan: 255 92% 76%;
-    --gold: 36 77% 45%;
-    --amber-light: 38 76% 63%;
+    --gold: 46 65% 52%;
+    --amber-light: 46 70% 62%;
     --purple: 255 92% 76%;
     --lilac: 260 87% 85%;
     --success: 151 58% 60%;
-    --chart-1: 36 77% 45%;
-    --chart-2: 38 76% 63%;
+    --chart-1: 46 65% 52%;
+    --chart-2: 46 70% 62%;
     --chart-3: 255 92% 76%;
     --chart-4: 260 87% 85%;
-    --chart-5: 258 40% 29%;
-    --sidebar-background: 256 46% 18%;
+    --chart-5: 268 45% 26%;
+    --sidebar-background: 265 45% 15%;
     --sidebar-foreground: 266 73% 96%;
-    --sidebar-primary: 36 77% 45%;
+    --sidebar-primary: 46 65% 52%;
     --sidebar-primary-foreground: 257 58% 9%;
-    --sidebar-accent: 258 40% 29%;
+    --sidebar-accent: 268 45% 26%;
     --sidebar-accent-foreground: 266 73% 96%;
-    --sidebar-border: 258 30% 22%;
-    --sidebar-ring: 36 77% 45%;
+    --sidebar-border: 266 40% 22%;
+    --sidebar-ring: 46 65% 52%;
   }
 }
 
@@ -160,11 +160,26 @@
 
   body {
     @apply text-foreground font-body;
-    /* Degradado místico: morado profundo arriba que se difumina a morado casi negro abajo */
-    background: radial-gradient(circle at 50% 0%, hsl(268 53% 24%) 0%, hsl(256 47% 11%) 100%);
+    /* Degradado místico premium: violeta más luminoso al centro que se apaga
+       hacia los bordes hasta un morado casi negro. */
+    background-color: hsl(267 62% 11%);
+    background-image: radial-gradient(
+      circle at 50% 32%,
+      hsl(268 57% 25%) 0%,
+      hsl(267 62% 12%) 58%,
+      hsl(264 64% 7%) 100%
+    );
     background-repeat: no-repeat;
     min-height: 100vh;
     overscroll-behavior-y: none;
+  }
+
+  /* Títulos principales en serif elegante; el cuerpo y las etiquetas pequeñas
+     siguen en sans-serif (font-body). */
+  h1,
+  h2,
+  h3 {
+    @apply font-heading;
   }
 
   /* UX móvil: evitar selección accidental y rebote de scroll en iOS */
@@ -195,6 +210,33 @@
   .purple-glow {
     box-shadow: 0 0 22px hsl(var(--purple) / 0.32);
   }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Glassmorphism global (referencia visual premium).
+
+   .glass-panel: receta reutilizable para nuevas tarjetas/contenedores.
+   Las reglas siguientes aplican el mismo cristal a las superficies de
+   tarjeta que ya usa toda la app (bg-card y sus variantes con opacidad),
+   de modo que todas las tarjetas y contenedores adoptan el efecto sin
+   tocar la lógica ni el marcado de cada página.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.glass-panel,
+.bg-card,
+.bg-card\/30,
+.bg-card\/40,
+.bg-card\/50,
+.bg-card\/60,
+.bg-card\/80 {
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Borde dorado muy fino en las superficies de cristal */
+.glass-panel {
+  border: 1px solid hsl(var(--gold) / 0.3);
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
