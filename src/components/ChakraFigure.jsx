@@ -3,7 +3,7 @@ import { Plus } from "lucide-react";
 import { CHAKRAS } from "@/lib/guidedScripts";
 
 const FIGURE_URL =
-"https://media.base44.com/images/public/6a7d30a899098694894dbd88/dbb94a092_image.png";
+"https://media.base44.com/images/public/6a7d30a899098694894dbd88/e29f36a9b_siluetameditacionconchackras.webp";
 
 const ALL_COLOR = "#8A82B6";
 
@@ -23,14 +23,12 @@ export default function ChakraFigure({ selected = [], onToggle, onSelectAll, sel
 
   return (
     <div className="max-w-[460px] mx-auto">
-      {/* Imagen de la silueta con mandala — tarjeta oscura elegante, sin líneas doradas */}
-      <div className="relative w-full aspect-[5/6] rounded-[20px] overflow-hidden border border-white/10 bg-background">
-        <img
-          src={FIGURE_URL}
-          alt="Silueta en meditación con chakras"
-          className="absolute inset-0 w-full h-full object-cover"
-          draggable={false} />
-      </div>
+      {/* Silueta con mandala — imagen suelta con aura oscura, sin marcos ni fondos */}
+      <img
+        src={FIGURE_URL}
+        alt="Silueta en meditación con chakras"
+        className="block w-full h-auto rounded-[20px] object-contain shadow-[0_0_50px_20px_rgba(0,0,0,0.8)]"
+        draggable={false} />
 
       {/* Círculos de selección debajo de la imagen */}
       <div className="mt-5 flex flex-wrap justify-center gap-x-4 gap-y-3">
