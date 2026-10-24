@@ -86,7 +86,7 @@ export default function AgendaReiki() {
       </div>
 
       {/* Calendario */}
-      <section className="rounded-3xl border border-glow/20 bg-card/50 p-4">
+      <section className="rounded-3xl border border-glow/45 bg-card/50 p-4 shadow-[0_0_30px_hsl(var(--gold)/0.22),inset_0_0_18px_hsl(var(--gold)/0.06)]">
         {/* Navegación de mes */}
         <div className="flex items-center justify-between mb-4">
           <button
