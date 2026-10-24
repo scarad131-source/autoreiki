@@ -13,7 +13,7 @@ import GoogleIcon from "@/components/GoogleIcon";
 import { safeReturnTo } from "@/lib/authReturnTo";
 
 // Fondo a pantalla completa de la pantalla de acceso (ilustración de marca).
-const BACKGROUND_IMAGE = "https://media.base44.com/images/public/6a7d30a899098694894dbd88/db93b3e45_logo_AUTOREIKI_512x512.png";
+const BACKGROUND_IMAGE = "https://media.base44.com/images/public/6a7d30a899098694894dbd88/4397b3992_ImagendefondoBIENVENIDAautoreiki.png";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -73,11 +73,8 @@ export default function Login() {
 
   return (
     <AuthLayout
-      logo="/logo-autoreiki.png"
       backgroundImage={BACKGROUND_IMAGE}
       glass
-      title="Bienvenid@ a AutoReiki"
-      subtitle="Tu espacio para reconectar contigo."
       footer={
         <>
           ¿Aún no tienes acceso?{" "}
