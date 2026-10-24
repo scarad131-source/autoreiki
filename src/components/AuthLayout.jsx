@@ -20,7 +20,7 @@ export default function AuthLayout({ icon: Icon, logo, title, subtitle, footer, 
           <div className="absolute inset-0 bg-gradient-to-b from-background/10 via-background/35 to-background/85" />
         </div>
       )}
-      <div className={`relative w-full ${backgroundImage ? "max-w-sm" : "max-w-md"}`}>
+      <div className={`relative w-full ${backgroundImage ? "max-w-[350px]" : "max-w-md"}`}>
         {title && (
           <div className="text-center mb-10">
             {logo ? (
@@ -41,7 +41,7 @@ export default function AuthLayout({ icon: Icon, logo, title, subtitle, footer, 
         <div
           className={
             glass
-              ? "rounded-3xl border border-foreground/10 bg-[rgba(20,5,35,0.65)] p-4 pt-4 shadow-2xl backdrop-blur-[10px] sm:p-5 sm:pt-4"
+              ? "rounded-3xl border border-foreground/10 bg-[rgba(20,5,35,0.65)] p-3 pt-3 shadow-2xl backdrop-blur-[10px] sm:p-4 sm:pt-3"
               : "bg-card rounded-2xl shadow-sm border border-border p-8"
           }
         >
