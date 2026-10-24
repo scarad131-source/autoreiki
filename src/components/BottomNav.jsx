@@ -14,9 +14,11 @@ const navItems = [
 
 export default function BottomNav() {
   return (
-    <nav className="fixed bottom-0 inset-x-0 z-40 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pointer-events-none">
+    // sticky (no fixed): se ancla al borde inferior del scroll en cualquier contenedor,
+    // por lo que la barra queda siempre visible mientras se desplaza la página.
+    <nav className="sticky bottom-0 z-50 mt-auto w-full px-4 pt-2 pb-[calc(1rem+env(safe-area-inset-bottom))] pointer-events-none">
       {/* Superficie oscura semitransparente con borde dorado sutil: contrasta con el degradado morado */}
-      <div className="max-w-md mx-auto pointer-events-auto rounded-full border border-glow/30 bg-background/90 backdrop-blur-xl px-2 py-2 flex items-center justify-around shadow-lg shadow-black/60">
+      <div className="max-w-md mx-auto pointer-events-auto rounded-full border border-glow/30 bg-background/95 backdrop-blur-xl px-2 py-2 flex items-center justify-around shadow-lg shadow-black/60">
         {navItems.map(({ to, label, icon: Icon, end }) => (
           <NavLink
             key={to}
