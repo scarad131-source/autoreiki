@@ -25,7 +25,7 @@ function ConsistencyRing({ percent, days }) {
   const c = 2 * Math.PI * r;
   const offset = c - (percent / 100) * c;
   return (
-    <div className="relative w-24 h-24 shrink-0">
+    <div className="relative w-16 h-16 shrink-0">
       <svg viewBox="0 0 80 80" className="w-full h-full -rotate-90">
         <circle cx="40" cy="40" r={r} fill="none" stroke="hsl(var(--accent))" strokeWidth="6" />
         <circle
@@ -42,8 +42,8 @@ function ConsistencyRing({ percent, days }) {
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <p className="text-xl font-display font-semibold tabular-nums">{days}<span className="text-sm text-muted-foreground">/7</span></p>
-        <p className="text-[10px] text-muted-foreground -mt-0.5">días</p>
+        <p className="text-base font-display font-semibold tabular-nums leading-none">{days}<span className="text-[10px] text-muted-foreground">/7</span></p>
+        <p className="text-[8px] text-muted-foreground mt-0.5 leading-none">días</p>
       </div>
     </div>
   );
@@ -57,31 +57,44 @@ export default function WeeklyStats({ sessions, diaryEntries, journeyProgress, t
   const avg = activeDays ? Math.round(totalMin / activeDays) : 0;
 
   return (
-    <section className="rounded-3xl border border-glow/20 bg-card/50 backdrop-blur-sm p-5 space-y-5">
+    <section className="rounded-3xl border border-glow/20 bg-card/50 backdrop-blur-sm p-4 space-y-3">
       <div className="flex items-center justify-between">
         <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Tu semana</h2>
         <span className="text-[11px] text-muted-foreground">últimos 7 días</span>
       </div>
 
-      <div className="flex items-center gap-5">
-        <ConsistencyRing percent={consistency} days={activeDays} />
-        <div className="flex-1 grid grid-cols-2 gap-2.5">
-          <div className="rounded-2xl bg-accent/50 p-3">
-            <Clock className="w-4 h-4 text-glow-cyan mb-1" />
-            <p className="text-xl font-display font-semibold tabular-nums">{totalMin}<span className="text-xs text-muted-foreground"> min</span></p>
-            <p className="text-[10px] text-muted-foreground">minutos totales</p>
+      {/* Métricas en una sola fila: el círculo a la izquierda de su recuadro y los minutos a la derecha del suyo */}
+      <div className="flex flex-row items-stretch gap-2.5">
+        <div className="flex items-center gap-2.5 rounded-2xl bg-accent/50 px-3 py-2">
+          <ConsistencyRing percent={consistency} days={activeDays} />
+          <p className="text-[10px] uppercase tracking-[0.12em] leading-tight text-muted-foreground">
+            días<br />activos
+          </p>
+        </div>
+
+        <div className="flex-1 min-w-0 rounded-2xl bg-accent/50 px-3 py-2 flex flex-col justify-center gap-2">
+          <div className="flex items-center justify-between gap-2">
+            <span className="flex items-center gap-1.5 text-[10px] leading-tight text-muted-foreground">
+              <Clock className="w-3.5 h-3.5 text-glow-cyan shrink-0" /> minutos totales
+            </span>
+            <p className="shrink-0 text-lg font-display font-semibold tabular-nums leading-none">
+              {totalMin}<span className="text-[10px] text-muted-foreground"> min</span>
+            </p>
           </div>
-          <div className="rounded-2xl bg-accent/50 p-3">
-            <Activity className="w-4 h-4 text-gold mb-1" />
-            <p className="text-xl font-display font-semibold tabular-nums">{avg}<span className="text-xs text-muted-foreground"> min</span></p>
-            <p className="text-[10px] text-muted-foreground">promedio por día activo</p>
+          <div className="flex items-center justify-between gap-2">
+            <span className="flex items-center gap-1.5 text-[10px] leading-tight text-muted-foreground">
+              <Activity className="w-3.5 h-3.5 text-gold shrink-0" /> promedio por día activo
+            </span>
+            <p className="shrink-0 text-lg font-display font-semibold tabular-nums leading-none">
+              {avg}<span className="text-[10px] text-muted-foreground"> min</span>
+            </p>
           </div>
         </div>
       </div>
 
-      <div className="h-40 -ml-2">
+      <div className="h-20 -ml-2 -mt-1">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} margin={{ top: 6, right: 6, left: 0, bottom: 0 }}>
+          <BarChart data={data} margin={{ top: 4, right: 6, left: 0, bottom: 0 }}>
             <defs>
               <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="hsl(var(--glow-cyan))" />
@@ -106,7 +119,7 @@ export default function WeeklyStats({ sessions, diaryEntries, journeyProgress, t
               formatter={(v) => [`${v} min`, "Meditación"]}
               labelStyle={{ color: "hsl(var(--muted-foreground))" }}
             />
-            <Bar dataKey="mins" radius={[6, 6, 6, 6]} maxBarSize={34}>
+            <Bar dataKey="mins" radius={[5, 5, 5, 5]} maxBarSize={22}>
               {data.map((d, i) => (
                 <Cell key={i} fill={d.active ? "url(#barGrad)" : "hsl(var(--accent))"} />
               ))}
@@ -115,7 +128,7 @@ export default function WeeklyStats({ sessions, diaryEntries, journeyProgress, t
         </ResponsiveContainer>
       </div>
 
-      <div className="flex items-center justify-between text-[11px] text-muted-foreground pt-1 border-t border-glow/10">
+      <div className="flex items-center justify-between text-[11px] text-muted-foreground pt-2 border-t border-glow/10">
         <span>Consistencia semanal</span>
         <span className="text-primary font-medium">{consistency}%</span>
       </div>
