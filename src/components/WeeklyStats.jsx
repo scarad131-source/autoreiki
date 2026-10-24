@@ -63,74 +63,88 @@ export default function WeeklyStats({ sessions, diaryEntries, journeyProgress, t
         <span className="text-[11px] text-muted-foreground">últimos 7 días</span>
       </div>
 
-      {/* Métricas en una sola fila: el círculo a la izquierda de su recuadro y los minutos a la derecha del suyo */}
-      <div className="flex flex-row items-stretch gap-2.5">
-        <div className="flex items-center gap-2.5 rounded-2xl bg-accent/50 px-3 py-2">
+      {/* Dos columnas sin recuadros: gráfico a la izquierda, datos a la derecha */}
+      <div className="flex flex-row items-stretch gap-4">
+
+        {/* Columna izquierda: círculo de días activos (aislado) sobre el gráfico de la semana */}
+        <div className="flex-1 min-w-0 flex flex-col items-center gap-2">
           <ConsistencyRing percent={consistency} days={activeDays} />
-          <p className="text-[10px] uppercase tracking-[0.12em] leading-tight text-muted-foreground">
-            días<br />activos
-          </p>
+
+          <div className="h-20 w-full -ml-1">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={data} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="hsl(var(--glow-cyan))" />
+                    <stop offset="100%" stopColor="hsl(var(--glow))" />
+                  </linearGradient>
+                </defs>
+                <XAxis
+                  dataKey="day"
+                  tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <Tooltip
+                  cursor={{ fill: "hsl(var(--accent) / 0.4)" }}
+                  contentStyle={{
+                    background: "hsl(var(--card))",
+                    border: "1px solid hsl(var(--glow) / 0.3)",
+                    borderRadius: "12px",
+                    fontSize: "12px",
+                    color: "hsl(var(--foreground))",
+                  }}
+                  formatter={(v) => [`${v} min`, "Meditación"]}
+                  labelStyle={{ color: "hsl(var(--muted-foreground))" }}
+                />
+                <Bar dataKey="mins" radius={[4, 4, 4, 4]} maxBarSize={14}>
+                  {data.map((d, i) => (
+                    <Cell key={i} fill={d.active ? "url(#barGrad)" : "hsl(var(--accent))"} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
 
-        <div className="flex-1 min-w-0 rounded-2xl bg-accent/50 px-3 py-2 flex flex-col justify-center gap-2">
-          <div className="flex items-center justify-between gap-2">
-            <span className="flex items-center gap-1.5 text-[10px] leading-tight text-muted-foreground">
-              <Clock className="w-3.5 h-3.5 text-glow-cyan shrink-0" /> minutos totales
-            </span>
-            <p className="shrink-0 text-lg font-display font-semibold tabular-nums leading-none">
-              {totalMin}<span className="text-[10px] text-muted-foreground"> min</span>
-            </p>
+        {/* Columna derecha: minutos y consistencia, alineados a la izquierda y sin fondo */}
+        <div className="flex-[2] min-w-0 border-l border-white/10 pl-4 flex flex-col justify-between gap-3">
+          <div className="flex items-center gap-2.5">
+            <Clock className="w-4 h-4 text-glow-cyan shrink-0" />
+            <div className="min-w-0">
+              <p className="text-lg font-display font-semibold tabular-nums leading-none">
+                {totalMin}<span className="text-[10px] text-muted-foreground"> min</span>
+              </p>
+              <p className="text-[10px] text-muted-foreground mt-1">minutos totales</p>
+            </div>
           </div>
-          <div className="flex items-center justify-between gap-2">
-            <span className="flex items-center gap-1.5 text-[10px] leading-tight text-muted-foreground">
-              <Activity className="w-3.5 h-3.5 text-gold shrink-0" /> promedio por día activo
-            </span>
-            <p className="shrink-0 text-lg font-display font-semibold tabular-nums leading-none">
-              {avg}<span className="text-[10px] text-muted-foreground"> min</span>
-            </p>
+
+          <div className="flex items-center gap-2.5">
+            <Activity className="w-4 h-4 text-gold shrink-0" />
+            <div className="min-w-0">
+              <p className="text-lg font-display font-semibold tabular-nums leading-none">
+                {avg}<span className="text-[10px] text-muted-foreground"> min</span>
+              </p>
+              <p className="text-[10px] text-muted-foreground mt-1">promedio por día activo</p>
+            </div>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+              <span>Consistencia semanal</span>
+              <span className="text-primary font-medium">{consistency}%</span>
+            </div>
+            <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-accent/60">
+              <div
+                className="h-full rounded-full"
+                style={{
+                  width: `${consistency}%`,
+                  background: "linear-gradient(90deg, hsl(var(--glow-cyan)), hsl(var(--glow)))",
+                }}
+              />
+            </div>
           </div>
         </div>
-      </div>
-
-      <div className="h-20 -ml-2 -mt-1">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} margin={{ top: 4, right: 6, left: 0, bottom: 0 }}>
-            <defs>
-              <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(var(--glow-cyan))" />
-                <stop offset="100%" stopColor="hsl(var(--glow))" />
-              </linearGradient>
-            </defs>
-            <XAxis
-              dataKey="day"
-              tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <Tooltip
-              cursor={{ fill: "hsl(var(--accent) / 0.4)" }}
-              contentStyle={{
-                background: "hsl(var(--card))",
-                border: "1px solid hsl(var(--glow) / 0.3)",
-                borderRadius: "12px",
-                fontSize: "12px",
-                color: "hsl(var(--foreground))",
-              }}
-              formatter={(v) => [`${v} min`, "Meditación"]}
-              labelStyle={{ color: "hsl(var(--muted-foreground))" }}
-            />
-            <Bar dataKey="mins" radius={[5, 5, 5, 5]} maxBarSize={22}>
-              {data.map((d, i) => (
-                <Cell key={i} fill={d.active ? "url(#barGrad)" : "hsl(var(--accent))"} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-
-      <div className="flex items-center justify-between text-[11px] text-muted-foreground pt-2 border-t border-glow/10">
-        <span>Consistencia semanal</span>
-        <span className="text-primary font-medium">{consistency}%</span>
       </div>
     </section>
   );
