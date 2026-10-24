@@ -7,6 +7,7 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
 import SessionPersistence from './components/SessionPersistence';
+import OfflineAudioCache from './components/OfflineAudioCache';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import Layout from '@/components/Layout';
 import Login from '@/pages/Login';
@@ -80,6 +81,7 @@ function App() {
         <Router>
           <ScrollToTop />
           <SessionPersistence />
+          <OfflineAudioCache />
           <AuthenticatedApp />
         </Router>
         <Toaster />

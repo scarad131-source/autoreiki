@@ -2,7 +2,7 @@
 // No requiere archivos externos: genera playa, bosque nocturno y frecuencias sanadoras.
 
 // Timbre de cuenco real para marcar el cambio de zona en sesiones no guiadas.
-const BOWL_HIT_URL = "https://media.base44.com/files/public/6a7d30a899098694dbd88/f05ac055c_freesound_community-singing-bowlhit.mp3";
+export const BOWL_HIT_URL = "https://media.base44.com/files/public/6a7d30a899098694dbd88/f05ac055c_freesound_community-singing-bowlhit.mp3";
 
 export class AmbientAudio {
   constructor() {

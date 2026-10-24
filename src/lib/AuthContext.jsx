@@ -2,6 +2,8 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { appParams } from '@/lib/app-params';
 import { createAxiosClient } from '@base44/sdk/dist/utils/axios-client';
+import { isOnline } from '@/lib/offlineSync';
+import { saveOfflineSession, getOfflineSession, clearOfflineSession } from '@/lib/offlineSession';
 
 const AuthContext = createContext();
 
@@ -48,6 +50,18 @@ export const AuthProvider = ({ children }) => {
         }
         setIsLoadingPublicSettings(false);
       } catch (appError) {
+        // Sin conexión: si ya iniciaste sesión en este dispositivo, entra con la
+        // última sesión verificada en lugar de mandarte a la pantalla de acceso.
+        const offlineUser = !isOnline() && appParams.token ? getOfflineSession() : null;
+        if (offlineUser) {
+          setUser(offlineUser);
+          setIsAuthenticated(true);
+          setAuthChecked(true);
+          setAuthError(null);
+          setIsLoadingPublicSettings(false);
+          setIsLoadingAuth(false);
+          return;
+        }
         console.error('App state check failed:', appError);
         
         // Handle app-level errors
@@ -95,10 +109,20 @@ export const AuthProvider = ({ children }) => {
       setIsLoadingAuth(true);
       const currentUser = await base44.auth.me();
       setUser(currentUser);
+      saveOfflineSession(currentUser);
       setIsAuthenticated(true);
       setIsLoadingAuth(false);
       setAuthChecked(true);
     } catch (error) {
+      // Sin conexión: usa la última sesión verificada guardada en el dispositivo.
+      const offlineUser = !isOnline() && appParams.token ? getOfflineSession() : null;
+      if (offlineUser) {
+        setUser(offlineUser);
+        setIsAuthenticated(true);
+        setIsLoadingAuth(false);
+        setAuthChecked(true);
+        return;
+      }
       console.error('User auth check failed:', error);
       setIsLoadingAuth(false);
       setIsAuthenticated(false);
@@ -115,6 +139,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = (shouldRedirect = true) => {
+    clearOfflineSession();
     setUser(null);
     setIsAuthenticated(false);
     
