@@ -3,7 +3,7 @@ import { Plus } from "lucide-react";
 import { CHAKRAS } from "@/lib/guidedScripts";
 
 const FIGURE_URL =
-"https://media.base44.com/images/public/6a7d30a899098694894dbd88/e29f36a9b_siluetameditacionconchackras.webp";
+"https://media.base44.com/images/public/6a7d30a899098694894dbd88/4bb7337fd_imagenavatarchakras-500x500-transparente.webp";
 
 const ALL_COLOR = "#8A82B6";
 
@@ -27,7 +27,7 @@ export default function ChakraFigure({ selected = [], onToggle, onSelectAll, sel
       <img
         src={FIGURE_URL}
         alt="Silueta en meditación con chakras"
-        className="block w-full h-auto rounded-[20px] object-contain shadow-[0_0_50px_20px_rgba(0,0,0,0.8)]"
+        className="block w-full h-auto mx-auto rounded-[20px] object-contain shadow-[0_0_60px_30px_rgba(0,0,0,0.9)]"
         draggable={false} />
 
       {/* Círculos de selección debajo de la imagen */}
