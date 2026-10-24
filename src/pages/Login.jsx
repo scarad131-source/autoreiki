@@ -91,14 +91,14 @@ export default function Login() {
     >
       <Button
         variant="outline"
-        className="w-full h-12 text-sm font-semibold bg-foreground text-background border-transparent hover:bg-foreground/90 hover:text-background"
+        className="w-full h-11 text-sm font-semibold bg-foreground text-background border-transparent hover:bg-foreground/90 hover:text-background"
         onClick={handleGoogle}
       >
         <GoogleIcon className="w-5 h-5 mr-2" />
         Continuar con Google
       </Button>
 
-      <div className="relative my-6">
+      <div className="relative my-4">
         <div className="absolute inset-0 flex items-center">
           <div className="w-full border-t border-foreground/15" />
         </div>
@@ -109,7 +109,7 @@ export default function Login() {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-3">
         <div className="space-y-2">
           <Label htmlFor="email">Correo electrónico</Label>
           <div className="relative">
@@ -122,7 +122,7 @@ export default function Login() {
               placeholder="tu@ejemplo.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="pl-10 h-12"
+              className="pl-10 h-11"
               required
             />
           </div>
@@ -144,7 +144,7 @@ export default function Login() {
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="pl-10 h-12"
+              className="pl-10 h-11"
               required
             />
           </div>
@@ -162,7 +162,7 @@ export default function Login() {
 
         <Button
           type="submit"
-          className="w-full h-12 font-semibold bg-gradient-to-r from-primary to-purple text-primary-foreground shadow-lg hover:opacity-90"
+          className="w-full h-11 font-semibold bg-gradient-to-r from-primary to-purple text-primary-foreground shadow-lg hover:opacity-90"
           disabled={loading}
         >
           {loading ? (

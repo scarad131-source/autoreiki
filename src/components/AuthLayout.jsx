@@ -4,8 +4,8 @@ import { Image } from "@/components/ui/image";
 export default function AuthLayout({ icon: Icon, logo, title, subtitle, footer, children, backgroundImage, glass = false }) {
   return (
     <div
-      className={`relative flex min-h-screen items-center justify-center px-4 py-8 ${
-        backgroundImage ? "pt-24" : "bg-background"
+      className={`relative flex min-h-screen justify-center px-4 ${
+        backgroundImage ? "items-end pt-28 pb-6" : "items-center py-8 bg-background"
       }`}
     >
       {backgroundImage && (
@@ -20,7 +20,7 @@ export default function AuthLayout({ icon: Icon, logo, title, subtitle, footer, 
           <div className="absolute inset-0 bg-gradient-to-b from-background/10 via-background/35 to-background/85" />
         </div>
       )}
-      <div className="relative w-full max-w-md">
+      <div className={`relative w-full ${backgroundImage ? "max-w-sm" : "max-w-md"}`}>
         {title && (
           <div className="text-center mb-10">
             {logo ? (
@@ -41,14 +41,14 @@ export default function AuthLayout({ icon: Icon, logo, title, subtitle, footer, 
         <div
           className={
             glass
-              ? "rounded-3xl border border-foreground/10 bg-[rgba(20,5,35,0.65)] p-6 shadow-2xl backdrop-blur-[10px] sm:p-8"
+              ? "rounded-3xl border border-foreground/10 bg-[rgba(20,5,35,0.65)] p-4 pt-4 shadow-2xl backdrop-blur-[10px] sm:p-5 sm:pt-4"
               : "bg-card rounded-2xl shadow-sm border border-border p-8"
           }
         >
           {children}
         </div>
         {footer && (
-          <p className="text-center text-sm text-muted-foreground mt-6">{footer}</p>
+          <p className={`text-center text-sm text-muted-foreground ${backgroundImage ? "mt-4" : "mt-6"}`}>{footer}</p>
         )}
       </div>
     </div>
