@@ -23,15 +23,13 @@ export default function ChakraFigure({ selected = [], onToggle, onSelectAll, sel
 
   return (
     <div className="max-w-[460px] mx-auto">
-      {/* Imagen de la silueta con mandala — tarjeta de cristal con borde dorado sutil */}
-      <div className="relative w-full rounded-[20px] border border-glow/30 bg-white/5 p-2 shadow-[0_0_30px_hsl(var(--gold)/0.20),inset_0_0_18px_hsl(var(--gold)/0.05)] backdrop-blur-[5px]">
-        <div className="relative w-full aspect-[5/6] rounded-[14px] overflow-hidden">
-          <img
-            src={FIGURE_URL}
-            alt="Silueta en meditación con chakras"
-            className="absolute inset-0 w-full h-full object-cover"
-            draggable={false} />
-        </div>
+      {/* Imagen de la silueta con mandala — tarjeta oscura elegante, sin líneas doradas */}
+      <div className="relative w-full aspect-[5/6] rounded-[20px] overflow-hidden border border-white/10 bg-background">
+        <img
+          src={FIGURE_URL}
+          alt="Silueta en meditación con chakras"
+          className="absolute inset-0 w-full h-full object-cover"
+          draggable={false} />
       </div>
 
       {/* Círculos de selección debajo de la imagen */}
