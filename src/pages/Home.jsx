@@ -92,20 +92,22 @@ export default function Home() {
 
   return (
     <div className="space-y-8">
-      {/* Encabezado: saludo a la izquierda, perfil en círculo dorado a la derecha */}
-      <header className="flex items-start justify-between gap-4 pt-1">
+      {/* Encabezado: saludo y subtítulo centrados, con el perfil debajo */}
+      <header className="flex flex-col items-center text-center gap-4 pt-1">
         <div className="min-w-0">
-          <h1 className="font-display text-4xl font-semibold leading-none">{greeting()}, {firstName}</h1>
-          <p className="mt-2 font-body text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
+          <h1 className="font-display !text-4xl md:!text-5xl font-semibold leading-tight">
+            {greeting()}, {firstName}
+          </h1>
+          <p className="mt-3 font-body text-xs md:text-sm font-semibold uppercase tracking-[0.3em] text-primary">
             Bienvenida a AutoReiki
           </p>
         </div>
         <button
           onClick={() => navigate("/mas")}
           aria-label="Tu perfil"
-          className="w-11 h-11 shrink-0 rounded-full border border-primary/70 bg-white/5 backdrop-blur-[10px] flex items-center justify-center text-primary transition-transform active:scale-95"
+          className="w-14 h-14 shrink-0 rounded-full border border-primary/70 bg-white/5 backdrop-blur-[10px] flex items-center justify-center text-primary transition-transform active:scale-95"
         >
-          <User className="w-5 h-5" strokeWidth={1.6} />
+          <User className="w-6 h-6" strokeWidth={1.6} />
         </button>
       </header>
 
