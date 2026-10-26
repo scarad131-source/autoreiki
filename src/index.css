@@ -292,8 +292,8 @@ body {
 
   /* Jerarquía tipográfica compacta dentro del shell de la app */
   .app-shell h1 {
-    font-size: 1.625rem;
-    line-height: 1.2;
+    font-size: 1.875rem;
+    line-height: 1.15;
   }
 
   .app-shell h2 {

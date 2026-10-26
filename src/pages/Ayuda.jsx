@@ -26,8 +26,8 @@ const TIPS = [
 export default function Ayuda() {
   return (
     <div className="space-y-6">
-      <header className="flex items-center justify-between">
-        <h1 className="font-display text-xl font-semibold">Ayuda</h1>
+      <header className="pt-2 text-center">
+        <h1 className="font-display !text-3xl font-semibold neon-text">Ayuda</h1>
       </header>
 
       <section>

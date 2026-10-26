@@ -13,7 +13,7 @@ export default function AgendaHistory({ schedule }) {
   if (all.length === 0) {
     return (
       <section className="space-y-3">
-        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground flex items-center gap-2">
+        <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground flex items-center gap-2">
           <History className="w-3.5 h-3.5" /> Historial de agenda
         </h2>
         <div className="rounded-2xl border border-dashed border-white/10 bg-card/30 p-8 text-center">
@@ -69,7 +69,7 @@ export default function AgendaHistory({ schedule }) {
 
   return (
     <section className="space-y-3">
-      <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground flex items-center gap-2">
+      <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground flex items-center gap-2">
         <History className="w-3.5 h-3.5" /> Historial de agenda
       </h2>
 

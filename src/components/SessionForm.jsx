@@ -32,7 +32,7 @@ export default function SessionForm({ onStart }) {
   return (
     <div className="space-y-8">
       <section>
-        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Hoy quiero mi meditación...</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Hoy quiero mi meditación...</h2>
         <div className="grid grid-cols-2 gap-3">
           {MODES.map((m) => (
             <button
@@ -50,7 +50,7 @@ export default function SessionForm({ onStart }) {
 
       {mode === "unguided" && (
         <section>
-          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-4">Elige tu tiempo para meditar</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-4">Elige tu tiempo para meditar</h2>
           <div className="flex flex-wrap justify-center gap-3">
             {DURATIONS.map((d) => (
               <button
@@ -68,7 +68,7 @@ export default function SessionForm({ onStart }) {
 
       {mode === "unguided" && (
         <section>
-          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Sonido ambiente</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Sonido ambiente</h2>
           <div className="grid grid-cols-2 gap-3">
             {SOUNDS.map((s) => (
               <button

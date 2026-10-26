@@ -72,18 +72,18 @@ export default function Configurar() {
   return (
     <div className="space-y-4">
       <header className="text-center">
-        <h1 className="font-display font-semibold tracking-tight text-[hsl(var(--primary))] text-4xl">Sesión de Reiki</h1>
+        <h1 className="font-display font-semibold tracking-tight text-[hsl(var(--primary))] !text-4xl neon-text">Sesión de Reiki</h1>
         <p className="text-sm text-muted-foreground mt-1">Toca los chakras que quieras trabajar</p>
       </header>
 
       <PrepChecklist />
 
-      <h2 className="text-sm font-semibold">Zonas a tratar</h2>
+      <h2 className="font-display text-lg font-semibold">Zonas a tratar</h2>
 
       <ChakraFigure selected={selected} onToggle={toggle} onSelectAll={selectAll} selectAllEnabled={mode === "unguided"} />
 
       <section>
-        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Elige tipo de terapia</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Elige tipo de terapia</h2>
         <div className="grid grid-cols-2 gap-4">
           {MODES.map((m) => {
             const active = mode === m.id;
@@ -115,7 +115,7 @@ export default function Configurar() {
 
       {mode === "unguided" &&
       <section>
-          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Duración</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Duración</h2>
           <div className="flex flex-wrap justify-center gap-3">
             {[20, 30, 45, 60, 90].map((d) =>
           <button

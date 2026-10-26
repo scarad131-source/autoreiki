@@ -38,7 +38,7 @@ export default function ReflectionForm({ config, actualSeconds, onSave, onRepeat
       </div>
 
       <section>
-        <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">¿Cómo te sientes ahora?</h3>
+        <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">¿Cómo te sientes ahora?</h3>
         <div className="grid grid-cols-5 gap-2">
           {MOOD_AFTER.map((m) => (
             <button
@@ -56,7 +56,7 @@ export default function ReflectionForm({ config, actualSeconds, onSave, onRepeat
       </section>
 
       <section>
-        <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Notas (opcional)</h3>
+        <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Notas (opcional)</h3>
         <textarea
           value={notes}
           onChange={(e) => setNotes(e.target.value)}

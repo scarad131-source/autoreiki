@@ -67,7 +67,7 @@ export default function AgendaReiki() {
         <div className="w-14 h-14 mx-auto rounded-full bg-gradient-to-br from-primary to-glow-cyan flex items-center justify-center neon-glow mb-3">
           <CalendarDays className="w-7 h-7 text-primary-foreground" />
         </div>
-        <h1 className="font-display font-semibold text-4xl">Agenda Reiki</h1>
+        <h1 className="font-display font-semibold !text-4xl neon-text">Agenda Reiki</h1>
         <p className="text-sm text-muted-foreground mt-1">
           Toca cualquier día para programar tus sesiones por hora y etiqueta.
         </p>

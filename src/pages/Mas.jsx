@@ -22,10 +22,10 @@ export default function Mas() {
   const navigate = useNavigate();
   return (
     <div className="space-y-7">
-      <header className="pt-2">
+      <header className="pt-2 text-center">
         <p className="text-[11px] tracking-[0.28em] uppercase text-muted-foreground font-medium">Más</p>
-        <h1 className="font-display text-3xl font-semibold tracking-tight mt-1.5">Tu espacio personal</h1>
-        <p className="text-sm text-muted-foreground mt-2 leading-relaxed max-w-md">
+        <h1 className="font-display !text-4xl font-semibold tracking-tight mt-1.5 neon-text">Tu espacio personal</h1>
+        <p className="text-sm text-muted-foreground mt-2 leading-relaxed max-w-md mx-auto">
           Registra tu evolución y encuentra acompañamiento cuando lo necesites.
         </p>
       </header>

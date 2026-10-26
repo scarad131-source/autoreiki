@@ -22,18 +22,16 @@ export default function Historial() {
 
   return (
     <div className="space-y-6">
-      <header className="flex items-center gap-3 pt-2">
+      <header className="relative pt-2 text-center">
         <button
           onClick={() => navigate("/")}
-          className="px-3 py-1.5 rounded-full text-sm text-muted-foreground hover:bg-card hover:text-foreground transition-colors"
+          className="absolute left-0 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-full text-sm text-muted-foreground hover:bg-card hover:text-foreground transition-colors"
           aria-label="Volver"
         >
           Volver
         </button>
-        <div>
-          <p className="text-[11px] tracking-[0.22em] uppercase text-primary/80 font-medium">AutoReiki</p>
-          <h1 className="font-display text-2xl font-semibold leading-tight">Historial de sesiones</h1>
-        </div>
+        <p className="text-[11px] tracking-[0.22em] uppercase text-primary/80 font-medium">AutoReiki</p>
+        <h1 className="font-display !text-3xl font-semibold leading-tight mt-1 neon-text">Historial de sesiones</h1>
       </header>
 
       {loading ? (

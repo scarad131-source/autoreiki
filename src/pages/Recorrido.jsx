@@ -57,7 +57,7 @@ export default function Recorrido() {
     <div className="space-y-7">
       <header className="text-center">
         <p className="text-[11px] tracking-[0.28em] uppercase text-muted-foreground font-medium">Constancia</p>
-        <h1 className="font-semibold tracking-tight mt-1.5 [font-family:'Bodoni_Moda',_serif] text-4xl">Reto de 21 días</h1>
+        <h1 className="font-semibold tracking-tight mt-1.5 [font-family:'Bodoni_Moda',_serif] !text-4xl neon-text">Reto de 21 días</h1>
         <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
           No busques hacerlo perfecto. Solo regresar, una vez más, a tu centro.
         </p>
@@ -74,7 +74,7 @@ export default function Recorrido() {
       </section>
 
       <section>
-        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Tu recorrido</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Tu recorrido</h2>
         <div className="grid grid-cols-7 gap-2">
           {JOURNEY.map((j) => {
             const done = completedDays.has(j.day);

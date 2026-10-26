@@ -131,7 +131,7 @@ export default function Meditate() {
   return (
     <div className="space-y-8">
       <header className="text-center">
-        <h1 className="uppercase tracking-[0.14em] text-2xl font-display font-semibold">Configura tu espacio sagrado</h1>
+        <h1 className="uppercase tracking-[0.14em] !text-3xl font-display font-semibold neon-text">Configura tu espacio sagrado</h1>
       </header>
 
       <PrepChecklist />
@@ -157,7 +157,7 @@ export default function Meditate() {
       {mode === "unguided" &&
       <>
           <section>
-            <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Duración</h2>
+            <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Duración</h2>
             <div className="flex flex-wrap justify-center gap-3">
               {[10, 20, 30, 45, 60, 90].map((d) =>
             <button
