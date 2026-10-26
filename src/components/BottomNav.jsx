@@ -31,11 +31,28 @@ export default function BottomNav() {
             >
               {({ isActive }) => (
                 <>
-                  <Icon className="w-[18px] h-[18px]" strokeWidth={isActive ? 2.2 : 1.7} />
+                  {/* Halo dorado sobre el icono de la sección activa */}
+                  <span
+                    className={`relative flex items-center justify-center rounded-full transition-all duration-300 ${
+                    isActive ?
+                    "w-8 h-8 bg-primary/15 shadow-[0_0_14px_hsl(var(--gold)/0.55),0_0_28px_hsl(var(--gold)/0.28),inset_0_0_10px_hsl(var(--gold)/0.18)]" :
+                    "w-8 h-8 bg-transparent"}`
+                    }>
+                    
+                    <Icon
+                      className={`w-[18px] h-[18px] transition-colors duration-300 ${isActive ? "text-primary" : ""}`}
+                      strokeWidth={isActive ? 2.2 : 1.7}
+                      style={isActive ? { filter: "drop-shadow(0 0 6px hsl(var(--gold) / 0.9))" } : undefined} />
+                    
+                  </span>
                   <span className={`text-[9px] leading-none tracking-wide ${isActive ? "font-semibold" : "font-medium"}`}>
                     {label}
                   </span>
-                  <span className={`h-1 w-1 rounded-full ${isActive ? "bg-primary" : "bg-transparent"}`} />
+                  <span
+                    className={`h-1 w-1 rounded-full transition-all duration-300 ${
+                    isActive ? "bg-primary shadow-[0_0_8px_hsl(var(--gold)/0.9)]" : "bg-transparent"}`
+                    } />
+                  
                 </>
               )}
             </NavLink>
