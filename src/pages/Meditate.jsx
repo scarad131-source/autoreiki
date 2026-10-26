@@ -164,7 +164,7 @@ export default function Meditate() {
           <section>
             <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">Duración</h2>
             <div className="flex flex-wrap justify-center gap-3">
-              {[10, 20, 30, 45, 60, 90].map((d) =>
+              {[10, 20, 30, 45, 60].map((d) =>
             <button
               key={d}
               onClick={() => setMinutes(d)}
