@@ -129,10 +129,10 @@ export default function Meditate() {
   };
 
   return (
-    // Altura útil real (descontando barra superior y navegación inferior) para
-    // que la pantalla se vea llena sin scroll: el contenido se agrupa arriba y
-    // el aire sobrante queda al final, antes del menú inferior.
-    <div className="flex flex-col justify-start gap-6 pt-5 pb-5 min-h-[calc(100svh_-_6.25rem_-_env(safe-area-inset-bottom))]">
+    // Sin reparto de espacio: el contenido fluye de arriba hacia abajo y el
+    // botón queda junto a los demás. El aire inferior es solo padding, para
+    // que el menú flotante no tape nada.
+    <div className="flex flex-col gap-6 pt-10 pb-[100px]">
       <header className="text-center">
         <h1 className="uppercase tracking-[0.14em] !text-3xl font-display font-semibold neon-text">Configura tu espacio sagrado</h1>
       </header>
