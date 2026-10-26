@@ -1,14 +1,16 @@
 import { useNavigate } from "react-router-dom";
-import { BookOpen, History } from "lucide-react";
+import { History } from "lucide-react";
 import { Image } from "@/components/ui/image";
 
-// Ilustración premium del acceso a Ayuda (imagen de marca del usuario).
+// Ilustraciones premium de los accesos (imágenes de marca del usuario).
+const DIARIO_ART =
+  "https://media.base44.com/images/public/6a7d30a899098694894dbd88/0f3e36f7d_AutoReiki_Boton_Diario.png";
 const AYUDA_ART =
   "https://media.base44.com/images/public/6a7d30a899098694894dbd88/e617d5608_AutoReiki_Boton_Ayuda.png";
 
 // Galería de accesos: misma proporción y mismo borde en las tres tarjetas.
 const ACTIONS = [
-  { label: "Diario", sub: "Tus emociones", icon: BookOpen, to: "/diario" },
+  { label: "Diario", sub: "Tus emociones", to: "/diario", image: DIARIO_ART },
   { label: "Ayuda", sub: "Acompañamiento", to: "/ayuda", image: AYUDA_ART },
   { label: "Historial", sub: "Tu evolución", icon: History, to: "/historial" },
 ];
