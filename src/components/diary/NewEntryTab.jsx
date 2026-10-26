@@ -52,7 +52,7 @@ export default function NewEntryTab({ onSaved }) {
     <div className="space-y-6">
       {/* Mood */}
       <section>
-        <h3 className="text-sm font-semibold mb-3">¿Cómo te sientes después de la sesión?</h3>
+        <h3 className="font-display !text-xl font-semibold mb-3">¿Cómo te sientes después de la sesión?</h3>
         <div className="grid grid-cols-5 gap-2">
           {MOODS.map((m) => {
             const Icon = m.icon;
@@ -63,8 +63,8 @@ export default function NewEntryTab({ onSaved }) {
                 onClick={() => setMood(m.id)}
                 className={`flex flex-col items-center gap-1.5 py-3 px-1 rounded-2xl border transition-all ${
                   active
-                    ? "border-primary bg-accent/60 neon-glow"
-                    : "border-white/10 bg-card/50 hover:border-primary/30"
+                    ? "border-primary bg-primary/15 neon-glow"
+                    : "border-primary/45 bg-card/50 hover:border-primary/70"
                 }`}
               >
                 <Icon className={`w-5 h-5 ${active ? "text-primary" : "text-muted-foreground"}`} />
@@ -77,7 +77,7 @@ export default function NewEntryTab({ onSaved }) {
 
       {/* Sensation */}
       <section>
-        <h3 className="text-sm font-semibold mb-3">Sensación principal</h3>
+        <h3 className="font-display !text-xl font-semibold mb-3">Sensación principal</h3>
         <div className="flex flex-wrap gap-2">
           {SENSATIONS.map((s) => {
             const active = sensation === s.id;
@@ -87,8 +87,8 @@ export default function NewEntryTab({ onSaved }) {
                 onClick={() => setSensation(s.id)}
                 className={`px-3.5 py-2 rounded-full text-xs font-medium border transition-all ${
                   active
-                    ? "border-primary bg-primary text-primary-foreground neon-glow"
-                    : "border-white/10 bg-card/50 text-muted-foreground hover:border-primary/30"
+                    ? "border-primary bg-primary/20 text-primary neon-glow"
+                    : "border-primary/45 bg-card/50 text-foreground/75 hover:border-primary/70"
                 }`}
               >
                 {s.label}
@@ -106,12 +106,12 @@ export default function NewEntryTab({ onSaved }) {
       {/* Zone + Intensity */}
       <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <h3 className="text-sm font-semibold mb-3">Zona</h3>
+          <h3 className="font-display !text-xl font-semibold mb-3">Zona</h3>
           <div className="relative">
             <select
               value={zone}
               onChange={(e) => setZone(e.target.value)}
-              className="w-full appearance-none px-4 py-2.5 rounded-xl bg-card border border-white/10 text-sm text-foreground outline-none focus:border-primary/50 cursor-pointer"
+              className="w-full appearance-none px-4 py-2.5 rounded-xl bg-card border border-primary/45 text-sm text-foreground outline-none focus:border-primary cursor-pointer"
             >
               {ZONES.map((z) => (
                 <option key={z.id} value={z.id} className="bg-card">{z.label}</option>
@@ -121,14 +121,14 @@ export default function NewEntryTab({ onSaved }) {
           </div>
         </div>
         <div>
-          <h3 className="text-sm font-semibold mb-3">Intensidad percibida</h3>
+          <h3 className="font-display !text-xl font-semibold mb-3">Intensidad percibida</h3>
           <IntensitySlider value={intensity} onChange={setIntensity} />
         </div>
       </section>
 
       {/* Note */}
       <section>
-        <h3 className="text-sm font-semibold mb-3">¿Qué aprendiste o qué quieres recordar?</h3>
+        <h3 className="font-display !text-xl font-semibold mb-3">¿Qué aprendiste o qué quieres recordar?</h3>
         <textarea
           value={note}
           onChange={(e) => setNote(e.target.value)}
