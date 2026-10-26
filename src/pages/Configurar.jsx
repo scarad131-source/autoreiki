@@ -57,6 +57,9 @@ export default function Configurar() {
     }
     navigate("/meditar", {
       state: {
+        // Marca la sesión como Reiki para que el menú mantenga activa la
+        // sección Reiki mientras suena el audio (no la sección Meditar).
+        reiki: true,
         preset: {
           mode,
           level,
