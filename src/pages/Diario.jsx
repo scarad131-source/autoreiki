@@ -31,15 +31,17 @@ export default function Diario() {
 
   return (
     <div className="space-y-6">
-      <header className="flex items-center gap-3">
+      <header className="relative flex items-center justify-center min-h-[2.75rem]">
         <button
           onClick={() => navigate("/")}
-          className="px-3 py-1.5 rounded-full text-sm text-muted-foreground hover:bg-card hover:text-foreground transition-colors"
+          className="absolute left-0 px-3 py-1.5 rounded-full text-sm text-muted-foreground hover:bg-card hover:text-foreground transition-colors"
           aria-label="Volver"
         >
           Volver
         </button>
-        <h1 className="font-display text-xl font-semibold">Diario</h1>
+        {/* Título centrado y destacado (el ! mantiene el tamaño en móvil,
+            donde la compactación global reduce los h1). */}
+        <h1 className="font-display !text-3xl font-semibold text-center neon-text">Diario</h1>
       </header>
 
       <DiaryTabNav active={tab} onChange={setTab} />

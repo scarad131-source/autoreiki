@@ -17,9 +17,9 @@ export default function DiaryEntryCard({ entry }) {
 
   return (
     <div className="rounded-2xl bg-card/60 border border-primary/25 p-4 neon-glow">
-      <div className="flex items-center justify-between">
-        <p className="text-sm font-medium capitalize">{dateLabel}</p>
-        <p className="text-xs text-muted-foreground tabular-nums">{timeLabel}</p>
+      <div className="flex items-baseline justify-between gap-3">
+        <p className="text-base font-semibold capitalize">{dateLabel}</p>
+        <p className="text-sm text-foreground/70 tabular-nums">{timeLabel}</p>
       </div>
       {sensations.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mt-3">
