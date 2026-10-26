@@ -4,6 +4,7 @@ import { Leaf, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { computeStreak, JOURNEY } from "@/lib/journey";
 import JourneyBenefits from "@/components/JourneyBenefits";
+import ResetJourneyButton from "@/components/ResetJourneyButton";
 
 export default function Recorrido() {
   const navigate = useNavigate();
@@ -114,6 +115,8 @@ export default function Recorrido() {
           Si un día se interrumpe, no has perdido nada. Retoma cuando puedas y deja que la práctica vuelva a encontrarte.
         </p>
       </section>
+
+      <ResetJourneyButton onReset={() => setProgress([])} />
     </div>);
 
 }
