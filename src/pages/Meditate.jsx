@@ -129,7 +129,10 @@ export default function Meditate() {
   };
 
   return (
-    <div className="flex flex-col justify-center gap-6 min-h-[calc(100dvh-7rem)]">
+    // Altura útil real (descontando barra superior y navegación inferior) para
+    // llenar la pantalla sin provocar scroll. En móvil el contenido se reparte
+    // uniformemente; desde tablet vuelve al bloque centrado.
+    <div className="flex flex-col justify-between md:justify-center gap-6 min-h-[calc(100svh_-_6.25rem_-_env(safe-area-inset-bottom))]">
       <header className="text-center">
         <h1 className="uppercase tracking-[0.14em] !text-3xl font-display font-semibold neon-text">Configura tu espacio sagrado</h1>
       </header>
