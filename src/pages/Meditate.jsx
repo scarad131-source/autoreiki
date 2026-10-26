@@ -129,7 +129,7 @@ export default function Meditate() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="flex flex-col justify-center gap-6 min-h-[calc(100dvh-7rem)]">
       <header className="text-center">
         <h1 className="uppercase tracking-[0.14em] !text-3xl font-display font-semibold neon-text">Configura tu espacio sagrado</h1>
       </header>
@@ -222,7 +222,7 @@ export default function Meditate() {
 
       <button
         onClick={handleStart}
-        className="w-[70%] max-w-[250px] mx-auto px-4 py-4 rounded-2xl bg-gradient-to-r from-primary to-purple text-primary-foreground font-semibold text-lg flex items-center justify-center gap-2 text-center neon-glow active:scale-[0.99] transition-transform">
+        className="w-[70%] max-w-[250px] mx-auto mt-2 px-4 py-4 rounded-2xl bg-gradient-to-r from-primary to-purple text-primary-foreground font-semibold text-lg flex items-center justify-center gap-2 text-center neon-glow active:scale-[0.99] transition-transform">
         Comenzar sesión
         <span aria-hidden="true">→</span>
       </button>
