@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Clock, Sparkles, Calendar, Flame, ArrowRight, User } from "lucide-react";
+import { Clock, Sparkles, Calendar, Flame, ArrowRight } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import WeeklyStats from "@/components/WeeklyStats";
 import HomeQuickAccess from "@/components/HomeQuickAccess";
@@ -92,8 +92,8 @@ export default function Home() {
 
   return (
     <div className="space-y-8">
-      {/* Encabezado: saludo y subtítulo centrados, con el perfil debajo */}
-      <header className="flex flex-col items-center text-center gap-4 pt-1">
+      {/* Encabezado: saludo y subtítulo centrados */}
+      <header className="flex flex-col items-center text-center pt-1">
         <div className="min-w-0">
           <h1 className="font-display !text-4xl md:!text-5xl font-semibold leading-tight">
             {greeting()}, {firstName}
@@ -102,13 +102,6 @@ export default function Home() {
             Bienvenida a AutoReiki
           </p>
         </div>
-        <button
-          onClick={() => navigate("/mas")}
-          aria-label="Tu perfil"
-          className="w-14 h-14 shrink-0 rounded-full border border-primary/70 bg-white/5 backdrop-blur-[10px] flex items-center justify-center text-primary transition-transform active:scale-95"
-        >
-          <User className="w-6 h-6" strokeWidth={1.6} />
-        </button>
       </header>
 
       {/* Ilustración principal */}
