@@ -222,7 +222,7 @@ export default function Meditate() {
 
       <button
         onClick={handleStart}
-        className="w-full py-4 rounded-2xl bg-gradient-to-r from-primary to-purple text-primary-foreground font-semibold text-lg flex items-center justify-center gap-2 neon-glow active:scale-[0.99] transition-transform">
+        className="w-[70%] max-w-[250px] mx-auto px-4 py-4 rounded-2xl bg-gradient-to-r from-primary to-purple text-primary-foreground font-semibold text-lg flex items-center justify-center gap-2 text-center neon-glow active:scale-[0.99] transition-transform">
         Comenzar sesión
         <span aria-hidden="true">→</span>
       </button>
