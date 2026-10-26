@@ -22,7 +22,7 @@ export default function Layout() {
       <header className="sticky top-0 z-30 backdrop-blur-xl bg-background/70 pt-[env(safe-area-inset-top)]">
         <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="w-7 h-7 rounded-full overflow-hidden shrink-0">
-            <Image src={IMAGES.logo} alt="AutoReiki" className="w-full h-full" fittingType="fill" />
+            <Image src={IMAGES.logo} alt="AutoReiki" className="block w-full h-full" fittingType="fill" />
           </div>
           <button
             onClick={handleLogout}

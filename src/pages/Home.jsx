@@ -119,7 +119,7 @@ export default function Home() {
           <Image
             src={HERO_ART}
             alt="Silueta de meditación con chakras"
-            className="relative w-full h-full rounded-[20px] opacity-90"
+            className="relative block w-full h-full rounded-[20px] opacity-90"
             fittingType="fill"
           />
         </div>
