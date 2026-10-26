@@ -130,17 +130,19 @@ export default function Meditate() {
 
   return (
     // Altura útil real (descontando barra superior y navegación inferior) para
-    // llenar la pantalla sin provocar scroll. En móvil el contenido se reparte
-    // uniformemente; desde tablet vuelve al bloque centrado.
-    <div className="flex flex-col justify-between md:justify-center gap-6 min-h-[calc(100svh_-_6.25rem_-_env(safe-area-inset-bottom))]">
+    // que la pantalla se vea llena sin scroll: el contenido se agrupa arriba y
+    // el aire sobrante queda al final, antes del menú inferior.
+    <div className="flex flex-col justify-start gap-6 pt-5 pb-5 min-h-[calc(100svh_-_6.25rem_-_env(safe-area-inset-bottom))]">
       <header className="text-center">
         <h1 className="uppercase tracking-[0.14em] !text-3xl font-display font-semibold neon-text">Configura tu espacio sagrado</h1>
       </header>
 
       <PrepChecklist />
 
-      <section className="grid grid-cols-2 gap-4">
-        {MODES.map((m) => {
+      {/* Bloque de acción: elección de modo, ajustes y botón de inicio van juntos */}
+      <div className="flex flex-col gap-6">
+        <section className="grid grid-cols-2 gap-4">
+          {MODES.map((m) => {
           const active = mode === m.id;
           return (
             <button
@@ -223,12 +225,13 @@ export default function Meditate() {
         </>
       }
 
-      <button
-        onClick={handleStart}
-        className="w-[70%] max-w-[250px] mx-auto mt-2 px-4 py-4 rounded-2xl bg-gradient-to-r from-primary to-purple text-primary-foreground font-semibold text-lg flex items-center justify-center gap-2 text-center neon-glow active:scale-[0.99] transition-transform">
-        Comenzar sesión
-        <span aria-hidden="true">→</span>
-      </button>
+        <button
+          onClick={handleStart}
+          className="w-[70%] max-w-[250px] mx-auto px-4 py-4 rounded-2xl bg-gradient-to-r from-primary to-purple text-primary-foreground font-semibold text-lg flex items-center justify-center gap-2 text-center neon-glow active:scale-[0.99] transition-transform">
+          Comenzar sesión
+          <span aria-hidden="true">→</span>
+        </button>
+      </div>
     </div>);
 
 }
