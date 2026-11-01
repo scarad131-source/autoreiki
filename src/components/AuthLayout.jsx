@@ -4,23 +4,28 @@ import { Image } from "@/components/ui/image";
 export default function AuthLayout({ icon: Icon, logo, title, subtitle, footer, children, backgroundImage, glass = false }) {
   return (
     <div
-      className={`relative flex min-h-screen justify-center px-4 ${
-        backgroundImage ? "items-end pt-28 pb-6" : "items-center py-8 bg-background"
+      className={`relative flex min-h-[100svh] justify-center overflow-y-auto bg-background px-4 py-6 ${
+        backgroundImage ? "pb-[calc(1.5rem+env(safe-area-inset-bottom))]" : ""
       }`}
     >
       {backgroundImage && (
-        <div className="fixed inset-0" aria-hidden="true">
+        // Fondo a pantalla completa: cubre toda la vista (sin huecos), centrado
+        // en horizontal y anclado hacia arriba para que el logo de la imagen
+        // nunca quede recortado ni tapado por la tarjeta.
+        <div className="fixed inset-0 overflow-hidden" aria-hidden="true">
           <Image
             src={backgroundImage}
             alt=""
             fittingType="fill"
+            focalPointX={0.5}
+            focalPointY={0.25}
             quality={85}
             className="block w-full h-full"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/10 via-background/35 to-background/85" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/25 to-background/70" />
         </div>
       )}
-      <div className={`relative w-full ${backgroundImage ? "max-w-[350px]" : "max-w-md"}`}>
+      <div className={`relative m-auto w-full ${backgroundImage ? "max-w-[350px]" : "max-w-md"}`}>
         {title && (
           <div className="text-center mb-10">
             {logo ? (
