@@ -1,0 +1,111 @@
+import { useEffect, useState } from "react";
+import { Download, Share, Plus, MoreVertical } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { promptInstall, isStandalone, isIOS, subscribeInstallAvailability } from "@/lib/pwaInstall";
+
+export default function InstallAppButton() {
+  const [open, setOpen] = useState(false);
+  const [installed, setInstalled] = useState(() => isStandalone());
+  const [canPrompt, setCanPrompt] = useState(false);
+  const ios = isIOS();
+
+  // El navegador avisa cuándo ofrece el diálogo nativo de instalación.
+  useEffect(() => subscribeInstallAvailability(setCanPrompt), []);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(display-mode: standalone)");
+    const onChange = () => setInstalled(isStandalone());
+    mq.addEventListener?.("change", onChange);
+    return () => mq.removeEventListener?.("change", onChange);
+  }, []);
+
+  const handleClick = async () => {
+    // Sin evento nativo (iOS o navegadores sin soporte): instrucciones paso a paso.
+    if (!canPrompt) {
+      setOpen(true);
+      return;
+    }
+    const result = await promptInstall();
+    if (result === "accepted") setInstalled(true);
+    if (result === "unavailable") setOpen(true);
+  };
+
+  // Si la app ya está instalada no tiene sentido mostrar el botón.
+  if (installed) return null;
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={handleClick}
+        className="flex items-center justify-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-5 py-2.5 font-body text-sm font-semibold text-primary hover:bg-primary/20 transition-colors active:scale-[0.99]"
+      >
+        <Download className="w-4 h-4" />
+        Instalar App
+      </button>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-sm rounded-3xl border-primary/20">
+          <DialogHeader>
+            <DialogTitle>Instala AutoReiki</DialogTitle>
+            <DialogDescription>
+              {ios
+                ? "Añádela a tu pantalla de inicio para abrirla como una app."
+                : "Sigue estos pasos en tu navegador para instalarla."}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-3">
+            {ios ? (
+              <>
+                <Step
+                  icon={Share}
+                  text="Toca el botón Compartir en la barra de Safari (el cuadro con la flecha hacia arriba)."
+                />
+                <Step icon={Plus} text="Elige “Añadir a pantalla de inicio”." />
+                <Step icon={Download} text="Confirma con “Añadir”. El ícono aparecerá en tu inicio." />
+              </>
+            ) : (
+              <>
+                <Step
+                  icon={MoreVertical}
+                  text="Abre el menú del navegador (los tres puntos ⋮ arriba a la derecha)."
+                />
+                <Step icon={Plus} text="Elige “Instalar app” o “Añadir a pantalla de inicio”." />
+                <Step icon={Download} text="Confirma y ábrela desde el ícono de tu inicio." />
+              </>
+            )}
+
+            <p className="pt-1 font-body text-xs leading-relaxed text-muted-foreground">
+              Nota: en iPhone debes usar Safari; en Android, Chrome.
+            </p>
+
+            <button
+              onClick={() => setOpen(false)}
+              className="w-full rounded-xl bg-gradient-to-r from-amber-light to-primary py-3 font-body font-semibold text-primary-foreground neon-glow active:scale-[0.99] transition-transform"
+            >
+              Entendido
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
+
+function Step({ icon: Icon, text }) {
+  return (
+    <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-card/60 p-3">
+      <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
+        <Icon className="w-4 h-4 text-primary" />
+      </div>
+      <p className="font-body text-sm leading-snug text-foreground/90">{text}</p>
+    </div>
+  );
+}

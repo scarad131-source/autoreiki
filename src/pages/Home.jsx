@@ -9,6 +9,7 @@ import ReminderSettings from "@/components/ReminderSettings";
 import DeleteAccountButton from "@/components/DeleteAccountButton";
 import HelpButton from "@/components/HelpButton";
 import PersonalizationCard from "@/components/PersonalizationCard";
+import InstallAppButton from "@/components/InstallAppButton";
 import { computeActiveDays, getStreakMessage, JOURNEY } from "@/lib/journey";
 import { getDailyPhrase } from "@/lib/dailyPhrases";
 import { Image } from "@/components/ui/image";
@@ -126,6 +127,11 @@ export default function Home() {
           Auto-Reiki guiado, a tu ritmo en cada paso.
         </p>
       </section>
+
+      {/* Instalar app (PWA) */}
+      <div className="flex justify-center">
+        <InstallAppButton />
+      </div>
 
       {/* Personalización breve */}
       {!personalized &&
