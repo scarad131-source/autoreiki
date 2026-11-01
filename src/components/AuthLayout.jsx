@@ -4,7 +4,7 @@ import { Image } from "@/components/ui/image";
 export default function AuthLayout({ icon: Icon, logo, title, subtitle, footer, children, backgroundImage, glass = false }) {
   return (
     <div
-      className={`relative flex min-h-[100svh] justify-center overflow-y-auto bg-background px-4 py-6 ${
+      className={`relative flex min-h-[100svh] flex-col overflow-y-auto bg-background px-4 py-6 ${
         backgroundImage ? "pb-[calc(1.5rem+env(safe-area-inset-bottom))]" : ""
       }`}
     >
@@ -25,7 +25,18 @@ export default function AuthLayout({ icon: Icon, logo, title, subtitle, footer, 
           <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/25 to-background/70" />
         </div>
       )}
-      <div className={`relative m-auto w-full ${backgroundImage ? "max-w-[350px]" : "max-w-md"}`}>
+      {backgroundImage && (
+        // Reserva la franja superior de la ilustración (logo + letras de
+        // bienvenida, que con `cover` ocupan hasta el 32% del alto o el 48% del
+        // ancho, lo que sea mayor) para que el recuadro nunca tape el texto y
+        // quede centrado en el espacio libre que deja el arte.
+        <div aria-hidden="true" className="h-[max(36vh,50vw)] w-full shrink-0 lg:h-[38vh]" />
+      )}
+      <div
+        className={`relative w-full ${
+          backgroundImage ? "mx-auto my-auto max-w-[350px]" : "m-auto max-w-md"
+        }`}
+      >
         {title && (
           <div className="text-center mb-10">
             {logo ? (
