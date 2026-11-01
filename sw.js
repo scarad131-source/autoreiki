@@ -16,6 +16,7 @@ const SHELL_ASSETS = [
   '/icon-192.png',
   '/icon-512.png',
   '/icon-maskable-512.png',
+  '/apple-touch-icon.png',
 ];
 
 // Recursos estáticos de otros dominios que conviene tener guardados.
