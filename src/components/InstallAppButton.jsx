@@ -44,7 +44,7 @@ export default function InstallAppButton() {
       <button
         type="button"
         onClick={handleClick}
-        className="flex items-center justify-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-5 py-2.5 font-body text-sm font-semibold text-primary hover:bg-primary/20 transition-colors active:scale-[0.99]"
+        className="flex items-center justify-center gap-2 rounded-full border border-primary/60 bg-primary/15 px-5 py-2.5 font-body text-sm font-semibold text-primary shadow-[0_0_18px_hsl(var(--gold)/0.45),0_0_40px_hsl(var(--gold)/0.22),inset_0_0_12px_hsl(var(--gold)/0.12)] hover:bg-primary/25 hover:shadow-[0_0_26px_hsl(var(--gold)/0.6),0_0_55px_hsl(var(--gold)/0.3),inset_0_0_14px_hsl(var(--gold)/0.16)] transition-all active:scale-[0.99]"
       >
         <Download className="w-4 h-4" />
         Instalar App
