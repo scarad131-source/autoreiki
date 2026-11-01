@@ -51,17 +51,17 @@ export default function InstallAppButton() {
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
-          className="w-[calc(100%-2rem)] max-w-sm max-h-[85vh] overflow-y-auto rounded-3xl border-primary/40 bg-gradient-to-b from-[rgba(46,20,74,0.92)] to-[rgba(18,8,34,0.96)] backdrop-blur-[10px] shadow-[0_0_30px_hsl(var(--gold)/0.38),0_0_80px_hsl(var(--gold)/0.20),0_18px_45px_rgba(0,0,0,0.55)]"
+          className="w-[calc(100%-2rem)] max-w-[19rem] max-h-[85vh] gap-3 overflow-y-auto rounded-3xl p-4 border-primary/40 bg-gradient-to-b from-[rgba(46,20,74,0.92)] to-[rgba(18,8,34,0.96)] backdrop-blur-[10px] shadow-[0_0_30px_hsl(var(--gold)/0.38),0_0_80px_hsl(var(--gold)/0.20),0_18px_45px_rgba(0,0,0,0.55)]"
         >
           <DialogHeader>
-            <DialogTitle>Instala AutoReiki</DialogTitle>
+            <DialogTitle className="text-lg">Instala AutoReiki</DialogTitle>
             <DialogDescription>
               Añádela a tu pantalla de inicio siguiendo los pasos de tu teléfono.
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-3">
-            <p className="font-body text-[10px] font-semibold uppercase tracking-[0.24em] text-primary">
+          <div className="space-y-2">
+            <p className="font-body text-[10px] font-semibold uppercase tracking-[0.22em] text-primary">
               En iPhone · Safari
             </p>
             <Step
@@ -71,7 +71,7 @@ export default function InstallAppButton() {
             <Step icon={Plus} text="Desliza las opciones y elige “Añadir a pantalla de inicio”." />
             <Step icon={Download} text="Confirma con “Añadir”. El ícono aparecerá en tu inicio." />
 
-            <p className="pt-2 font-body text-[10px] font-semibold uppercase tracking-[0.24em] text-primary">
+            <p className="pt-1 font-body text-[10px] font-semibold uppercase tracking-[0.22em] text-primary">
               En Android · Chrome
             </p>
             <Step
@@ -83,7 +83,7 @@ export default function InstallAppButton() {
 
             <button
               onClick={() => setOpen(false)}
-              className="w-full rounded-xl bg-gradient-to-r from-amber-light to-primary py-3 font-body font-semibold text-primary-foreground neon-glow active:scale-[0.99] transition-transform"
+              className="w-full rounded-xl bg-gradient-to-r from-amber-light to-primary py-2.5 font-body text-sm font-semibold text-primary-foreground neon-glow active:scale-[0.99] transition-transform"
             >
               Entendido
             </button>
@@ -96,11 +96,11 @@ export default function InstallAppButton() {
 
 function Step({ icon: Icon, text }) {
   return (
-    <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-card/60 p-3">
-      <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
-        <Icon className="w-4 h-4 text-primary" />
+    <div className="flex items-start gap-2.5 rounded-xl border border-white/10 bg-card/60 p-2.5">
+      <div className="w-7 h-7 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
+        <Icon className="w-3.5 h-3.5 text-primary" />
       </div>
-      <p className="font-body text-sm leading-snug text-foreground/90">{text}</p>
+      <p className="font-body text-[13px] leading-relaxed text-foreground/90">{text}</p>
     </div>
   );
 }
