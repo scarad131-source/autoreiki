@@ -67,6 +67,10 @@ export default function AuthLayout({ icon: Icon, logo, title, subtitle, footer, 
           <p className={`text-center text-sm text-muted-foreground ${backgroundImage ? "mt-4" : "mt-6"}`}>{footer}</p>
         )}
       </div>
+      {backgroundImage && (
+        // Reserva inferior: sube un poco el recuadro dentro del hueco del arte.
+        <div aria-hidden="true" className="h-[10vh] w-full shrink-0" />
+      )}
     </div>
   );
 }
