@@ -7,13 +7,12 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { promptInstall, isStandalone, isIOS, subscribeInstallAvailability } from "@/lib/pwaInstall";
+import { promptInstall, isStandalone, subscribeInstallAvailability } from "@/lib/pwaInstall";
 
 export default function InstallAppButton() {
   const [open, setOpen] = useState(false);
   const [installed, setInstalled] = useState(() => isStandalone());
   const [canPrompt, setCanPrompt] = useState(false);
-  const ios = isIOS();
 
   // El navegador avisa cuándo ofrece el diálogo nativo de instalación.
   useEffect(() => subscribeInstallAvailability(setCanPrompt), []);
@@ -57,36 +56,30 @@ export default function InstallAppButton() {
           <DialogHeader>
             <DialogTitle>Instala AutoReiki</DialogTitle>
             <DialogDescription>
-              {ios
-                ? "Añádela a tu pantalla de inicio para abrirla como una app."
-                : "Sigue estos pasos en tu navegador para instalarla."}
+              Añádela a tu pantalla de inicio siguiendo los pasos de tu teléfono.
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-3">
-            {ios ? (
-              <>
-                <Step
-                  icon={Share}
-                  text="Toca el botón Compartir en la barra de Safari (el cuadro con la flecha hacia arriba)."
-                />
-                <Step icon={Plus} text="Elige “Añadir a pantalla de inicio”." />
-                <Step icon={Download} text="Confirma con “Añadir”. El ícono aparecerá en tu inicio." />
-              </>
-            ) : (
-              <>
-                <Step
-                  icon={MoreVertical}
-                  text="Abre el menú del navegador (los tres puntos ⋮ arriba a la derecha)."
-                />
-                <Step icon={Plus} text="Elige “Instalar app” o “Añadir a pantalla de inicio”." />
-                <Step icon={Download} text="Confirma y ábrela desde el ícono de tu inicio." />
-              </>
-            )}
-
-            <p className="pt-1 font-body text-xs leading-relaxed text-muted-foreground">
-              Nota: en iPhone debes usar Safari; en Android, Chrome.
+            <p className="font-body text-[10px] font-semibold uppercase tracking-[0.24em] text-primary">
+              En iPhone · Safari
             </p>
+            <Step
+              icon={Share}
+              text="Abre la app en Safari y toca el botón Compartir de la barra inferior (el cuadro con la flecha hacia arriba). Ahí no hay tres puntos."
+            />
+            <Step icon={Plus} text="Desliza las opciones y elige “Añadir a pantalla de inicio”." />
+            <Step icon={Download} text="Confirma con “Añadir”. El ícono aparecerá en tu inicio." />
+
+            <p className="pt-2 font-body text-[10px] font-semibold uppercase tracking-[0.24em] text-primary">
+              En Android · Chrome
+            </p>
+            <Step
+              icon={MoreVertical}
+              text="Abre la app en Chrome y toca el menú de los tres puntos ⋮ arriba a la derecha."
+            />
+            <Step icon={Plus} text="Elige “Instalar app” o “Añadir a pantalla de inicio”." />
+            <Step icon={Download} text="Confirma y ábrela desde el ícono de tu inicio." />
 
             <button
               onClick={() => setOpen(false)}

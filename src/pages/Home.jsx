@@ -128,11 +128,6 @@ export default function Home() {
         </p>
       </section>
 
-      {/* Instalar app (PWA) */}
-      <div className="flex justify-center">
-        <InstallAppButton />
-      </div>
-
       {/* Personalización breve */}
       {!personalized &&
       <PersonalizationCard user={user} onSaved={refreshUser} />
@@ -234,6 +229,7 @@ export default function Home() {
       {!loading && <ReminderSettings user={user} onSaved={refreshUser} />}
 
       <div className="pt-4 pb-2 flex flex-col items-center gap-3">
+        <InstallAppButton />
         <HelpButton user={user} onSaved={refreshUser} />
         <DeleteAccountButton />
       </div>
