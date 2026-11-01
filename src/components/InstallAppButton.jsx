@@ -51,7 +51,9 @@ export default function InstallAppButton() {
       </button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-sm rounded-3xl border-primary/20">
+        <DialogContent
+          className="w-[calc(100%-2rem)] max-w-sm max-h-[85vh] overflow-y-auto rounded-3xl border-primary/40 bg-gradient-to-b from-[rgba(46,20,74,0.92)] to-[rgba(18,8,34,0.96)] backdrop-blur-[10px] shadow-[0_0_30px_hsl(var(--gold)/0.38),0_0_80px_hsl(var(--gold)/0.20),0_18px_45px_rgba(0,0,0,0.55)]"
+        >
           <DialogHeader>
             <DialogTitle>Instala AutoReiki</DialogTitle>
             <DialogDescription>
