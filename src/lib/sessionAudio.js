@@ -15,6 +15,7 @@ class SessionAudio {
     this.sourceNode = null;
     this.gainNode = null;
     this.boostFactor = 1;
+    this._onUnlockPlaying = null;
 
     // iOS y Android suspenden el audio cuando la app pasa a segundo plano o una
     // llamada interrumpe el AudioContext. Al volver a la app se reanuda para que
@@ -23,6 +24,10 @@ class SessionAudio {
       document.addEventListener("visibilitychange", () => {
         if (document.visibilityState === "visible") this._resumeCtx();
       });
+      // iOS restaura la app desde la memoria (bfcache) sin disparar
+      // visibilitychange; aquí también hay que reanudar el contexto.
+      window.addEventListener("pageshow", () => this._resumeCtx());
+      window.addEventListener("focus", () => this._resumeCtx());
     }
   }
 
@@ -70,6 +75,21 @@ class SessionAudio {
     this._resumeCtx();
   }
 
+  // Red de seguridad contra los cortes: si el sistema dejó el elemento en pausa
+  // (llamada, bloqueo de pantalla, cambio de app, pérdida de foco de audio) o el
+  // contexto quedó suspendido, devuelve el sonido a la posición actual.
+  // Si el navegador aún no autoriza la reproducción, el reintento se repite hasta
+  // que el usuario toque la pantalla.
+  ensurePlaying() {
+    this._resumeCtx();
+    const el = this.el;
+    if (!el || !el.src || el.ended) return;
+    if (el.paused) {
+      const p = el.play();
+      if (p && typeof p.catch === "function") p.catch(() => {});
+    }
+  }
+
   // Define un factor de amplificación (> 1 sube el volumen por encima del
   // límite nativo). Debe llamarse dentro o cerca de un gesto del usuario.
   setBoost(factor) {
@@ -90,6 +110,13 @@ class SessionAudio {
   // MeditationRunner pueda reanudarlo tras la cuenta regresiva sin gesto.
   unlock(url, { loop, volume = 0.5, boost = 1 }) {
     const el = this._ensure();
+    // Quita el detector de la sesión anterior. Si aquel quedó pendiente (por
+    // ejemplo cuando el navegador bloqueó el play), al reproducirse un audio
+    // nuevo pausaría la sesión a media reproducción y el sonido se cortaría.
+    if (this._onUnlockPlaying) {
+      el.removeEventListener("playing", this._onUnlockPlaying);
+      this._onUnlockPlaying = null;
+    }
     try { el.pause(); } catch (e) {}
     el.src = url;
     el.loop = !!loop;
@@ -112,16 +139,23 @@ class SessionAudio {
     // tarda más que la cuenta regresiva y el sonido ya se reactivó, no pausamos
     // (gracias a la verificación de el.muted) y la sesión no se corta.
     const onPlaying = () => {
+      if (this._onUnlockPlaying === onPlaying) this._onUnlockPlaying = null;
+      // Solo se pausa si seguimos dentro de la ventana muda del desbloqueo.
+      // Si la sesión ya arrancó y reactivó el sonido, se deja sonar.
       if (el.muted) {
         try { el.pause(); } catch (e) {}
         try { el.currentTime = 0; } catch (e) {}
       }
       el.removeEventListener("playing", onPlaying);
     };
+    this._onUnlockPlaying = onPlaying;
     el.addEventListener("playing", onPlaying);
     const p = el.play();
     if (p && typeof p.then === "function") {
-      p.catch(() => el.removeEventListener("playing", onPlaying));
+      p.catch(() => {
+        el.removeEventListener("playing", onPlaying);
+        if (this._onUnlockPlaying === onPlaying) this._onUnlockPlaying = null;
+      });
     }
     return el;
   }

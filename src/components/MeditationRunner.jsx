@@ -149,20 +149,28 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     }
   }, [paused, started]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // iOS/Android: al bloquear el teléfono o volver de otra app, el sistema pausa
-  // el audio. Si la sesión sigue activa, se reanuda al regresar a la app.
+  // iOS/Android: al bloquear el teléfono, entrar una llamada o volver de otra app,
+  // el sistema pausa el audio. Reanudamos al instante (visibilitychange/pageshow)
+  // y además revisamos cada 2 s que la sesión siga sonando, para que el sonido de
+  // fondo no se corte a media meditación.
   useEffect(() => {
     if (!started) return;
     const onVisible = () => {
       if (document.visibilityState !== "visible" || paused || finishedRef.current) return;
-      sessionAudio.resumeCtx();
-      if (el.paused) el.play().catch(() => {});
+      sessionAudio.ensurePlaying();
     };
+    const watchdog = setInterval(() => {
+      if (paused || finishedRef.current || document.visibilityState === "hidden") return;
+      sessionAudio.ensurePlaying();
+    }, 2000);
     document.addEventListener("visibilitychange", onVisible);
     window.addEventListener("pageshow", onVisible);
+    window.addEventListener("focus", onVisible);
     return () => {
+      clearInterval(watchdog);
       document.removeEventListener("visibilitychange", onVisible);
       window.removeEventListener("pageshow", onVisible);
+      window.removeEventListener("focus", onVisible);
     };
   }, [started, paused, el]);
 

@@ -20,6 +20,8 @@ export class AmbientAudio {
       document.addEventListener("visibilitychange", () => {
         if (document.visibilityState === "visible") this.resumeCtx();
       });
+      window.addEventListener("pageshow", () => this.resumeCtx());
+      window.addEventListener("focus", () => this.resumeCtx());
     }
   }
 
@@ -120,6 +122,11 @@ export class AmbientAudio {
       g.gain.value = gain;
       src.connect(g);
       g.connect(this.master);
+      // Libera los nodos al terminar: en sesiones largas con varios cuencos, si
+      // se acumulan acaban saturando el motor de audio y cortan el sonido.
+      src.onended = () => {
+        try { src.disconnect(); g.disconnect(); } catch (e) {}
+      };
       src.start();
       return;
     }
@@ -151,6 +158,9 @@ export class AmbientAudio {
       og.connect(bus);
       osc.start(now);
       osc.stop(now + 4.5);
+      osc.onended = () => {
+        try { osc.disconnect(); og.disconnect(); } catch (e) {}
+      };
     });
     bus.gain.setValueAtTime(0, now);
     bus.gain.linearRampToValueAtTime(gain, now + 0.03);
@@ -263,6 +273,9 @@ export class AmbientAudio {
     }
     osc.start(t);
     osc.stop(t + 0.45);
+    osc.onended = () => {
+      try { osc.disconnect(); g.disconnect(); } catch (e) {}
+    };
   }
 
   // Frecuencias sanadoras: solfeggio 396, 417, 528 Hz con vibración lenta
@@ -349,6 +362,9 @@ export class AmbientAudio {
     g.gain.exponentialRampToValueAtTime(0.0001, t + 0.09);
     osc.start(t);
     osc.stop(t + 0.12);
+    osc.onended = () => {
+      try { osc.disconnect(); g.disconnect(); } catch (e) {}
+    };
   }
 
 }
