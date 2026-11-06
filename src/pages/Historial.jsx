@@ -1,31 +1,34 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import SessionCard from "@/components/SessionCard";
+import PullToRefresh from "@/components/PullToRefresh";
 
 export default function Historial() {
   const navigate = useNavigate();
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const list = await base44.entities.MeditationSession.list("-created_date", 200);
-        setSessions(list);
-      } catch (e) {
-      } finally {
-        setLoading(false);
-      }
-    })();
+  const load = useCallback(async () => {
+    try {
+      const list = await base44.entities.MeditationSession.list("-created_date", 200);
+      setSessions(list);
+    } catch (e) {
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
 
   return (
     <div className="space-y-6">
       <header className="relative pt-2 text-center">
         <button
           onClick={() => navigate("/")}
-          className="absolute left-0 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-full text-sm text-muted-foreground hover:bg-card hover:text-foreground transition-colors"
+          className="absolute left-0 top-1/2 -translate-y-1/2 min-h-[44px] px-4 rounded-full text-sm text-muted-foreground hover:bg-card hover:text-foreground transition-colors"
           aria-label="Volver"
         >
           Volver
@@ -34,7 +37,8 @@ export default function Historial() {
         <h1 className="font-display !text-3xl font-semibold leading-tight mt-1 neon-text">Historial de sesiones</h1>
       </header>
 
-      {loading ? (
+      <PullToRefresh onRefresh={load} className="space-y-6">
+        {loading ? (
         <div className="space-y-3">
           {[...Array(5)].map((_, i) => (
             <div key={i} className="h-16 rounded-2xl bg-card/60 animate-pulse" />
@@ -60,6 +64,7 @@ export default function Historial() {
           ))}
         </div>
       )}
+      </PullToRefresh>
     </div>
   );
 }

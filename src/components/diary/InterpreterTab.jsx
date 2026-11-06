@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { ChevronDown, Sparkles, ArrowRight, HeartHandshake, AlertTriangle } from "lucide-react";
+import { Sparkles, ArrowRight, HeartHandshake, AlertTriangle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { SENSATIONS } from "@/lib/diarySensations";
 import { ZONES } from "@/lib/diaryOptions";
 import IntensitySlider from "@/components/diary/IntensitySlider";
+import BottomSheetSelect from "@/components/ui/BottomSheetSelect";
+
+const SENSATION_OPTIONS = SENSATIONS.map((s) => ({ value: s.id, label: s.label }));
+const ZONE_OPTIONS = ZONES.map((z) => ({ value: z.id, label: z.label }));
 
 export default function InterpreterTab() {
   const [sensation, setSensation] = useState("hormigueo");
@@ -41,33 +45,25 @@ export default function InterpreterTab() {
         <div className="space-y-4">
           <div>
             <label className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">Sensación</label>
-            <div className="relative mt-1.5">
-              <select
+            <div className="mt-1.5">
+              <BottomSheetSelect
+                label="Sensación"
                 value={sensation}
-                onChange={(e) => setSensation(e.target.value)}
-                className="w-full appearance-none px-4 py-2.5 rounded-xl bg-accent/40 border border-white/10 text-sm text-foreground outline-none focus:border-primary/50 cursor-pointer"
-              >
-                {SENSATIONS.map((s) => (
-                  <option key={s.id} value={s.id} className="bg-card">{s.label}</option>
-                ))}
-              </select>
-              <ChevronDown className="w-4 h-4 text-muted-foreground absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                options={SENSATION_OPTIONS}
+                onChange={setSensation}
+              />
             </div>
           </div>
 
           <div>
             <label className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">Zona</label>
-            <div className="relative mt-1.5">
-              <select
+            <div className="mt-1.5">
+              <BottomSheetSelect
+                label="Zona"
                 value={zone}
-                onChange={(e) => setZone(e.target.value)}
-                className="w-full appearance-none px-4 py-2.5 rounded-xl bg-accent/40 border border-white/10 text-sm text-foreground outline-none focus:border-primary/50 cursor-pointer"
-              >
-                {ZONES.map((z) => (
-                  <option key={z.id} value={z.id} className="bg-card">{z.label}</option>
-                ))}
-              </select>
-              <ChevronDown className="w-4 h-4 text-muted-foreground absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                options={ZONE_OPTIONS}
+                onChange={setZone}
+              />
             </div>
           </div>
 
@@ -148,7 +144,7 @@ export default function InterpreterTab() {
             )}
             <button
               onClick={getGuidance}
-              className="mt-auto text-xs text-primary hover:underline self-start"
+              className="mt-auto min-h-[44px] inline-flex items-center text-xs text-primary hover:underline self-start"
             >
               Volver a consultar
             </button>

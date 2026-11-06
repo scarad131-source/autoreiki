@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import AgendaDayDialog from "@/components/AgendaDayDialog";
 import AgendaHistory from "@/components/AgendaHistory";
+import PullToRefresh from "@/components/PullToRefresh";
 import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, addMonths, isSameMonth, isToday } from "date-fns";
 import { es } from "date-fns/locale";
 
@@ -15,17 +16,19 @@ export default function AgendaReiki() {
   const [cursor, setCursor] = useState(new Date());
   const [dialogDate, setDialogDate] = useState(null);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const u = await base44.auth.me();
-        setSchedule(u.reiki_schedule || []);
-      } catch (e) {
-      } finally {
-        setLoading(false);
-      }
-    })();
+  const load = useCallback(async () => {
+    try {
+      const u = await base44.auth.me();
+      setSchedule(u.reiki_schedule || []);
+    } catch (e) {
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
 
   const persist = async (next) => {
     setSaving(true);
@@ -73,6 +76,7 @@ export default function AgendaReiki() {
         </p>
       </header>
 
+      <PullToRefresh onRefresh={load} className="space-y-7">
       {/* Resumen */}
       <div className="grid grid-cols-2 gap-3">
         <div className="rounded-2xl border border-glow/15 bg-card/50 p-4 text-center">
@@ -91,7 +95,7 @@ export default function AgendaReiki() {
         <div className="flex items-center justify-between mb-4">
           <button
             onClick={() => setCursor((c) => addMonths(c, -1))}
-            className="w-9 h-9 rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+            className="w-11 h-11 rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
             aria-label="Mes anterior">
             
             <ChevronLeft className="w-5 h-5" />
@@ -101,7 +105,7 @@ export default function AgendaReiki() {
           </h2>
           <button
             onClick={() => setCursor((c) => addMonths(c, 1))}
-            className="w-9 h-9 rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+            className="w-11 h-11 rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
             aria-label="Mes siguiente">
             
             <ChevronRight className="w-5 h-5" />
@@ -168,7 +172,7 @@ export default function AgendaReiki() {
 
                   )}
                       {daySessions.length > 3 &&
-                  <span className="text-[8px] text-teal-300 leading-none">+</span>
+                  <span className="text-[11px] text-teal-300 leading-none">+</span>
                   }
                     </div>
                 }
@@ -185,6 +189,7 @@ export default function AgendaReiki() {
 
       {/* Historial de agenda */}
       {!loading && <AgendaHistory schedule={schedule} />}
+      </PullToRefresh>
 
       {dialogDate &&
       <AgendaDayDialog

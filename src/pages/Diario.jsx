@@ -34,7 +34,7 @@ export default function Diario() {
       <header className="relative flex items-center justify-center min-h-[2.75rem]">
         <button
           onClick={() => navigate("/")}
-          className="absolute left-0 px-3 py-1.5 rounded-full text-sm text-muted-foreground hover:bg-card hover:text-foreground transition-colors"
+          className="absolute left-0 min-h-[44px] px-4 rounded-full text-sm text-muted-foreground hover:bg-card hover:text-foreground transition-colors"
           aria-label="Volver"
         >
           Volver
@@ -48,7 +48,9 @@ export default function Diario() {
 
       {tab === "nueva" && <NewEntryTab onSaved={handleSaved} />}
       {tab === "interprete" && <InterpreterTab />}
-      {tab === "patrones" && <PatternsTab entries={entries} loaded={entriesLoaded} />}
+      {tab === "patrones" && (
+        <PatternsTab entries={entries} loaded={entriesLoaded} onRefresh={refreshEntries} />
+      )}
     </div>
   );
 }

@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { Save, Lock, ChevronDown } from "lucide-react";
+import { Save, Lock } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { toast } from "@/components/ui/use-toast";
 import { SENSATIONS, sensationMap } from "@/lib/diarySensations";
 import { MOODS, ZONES } from "@/lib/diaryOptions";
 import IntensitySlider from "@/components/diary/IntensitySlider";
 import { queueIfOffline } from "@/lib/offlineSync";
+import BottomSheetSelect from "@/components/ui/BottomSheetSelect";
+
+const ZONE_OPTIONS = ZONES.map((z) => ({ value: z.id, label: z.label }));
 
 export default function NewEntryTab({ onSaved }) {
   const [mood, setMood] = useState(null);
@@ -61,14 +64,14 @@ export default function NewEntryTab({ onSaved }) {
               <button
                 key={m.id}
                 onClick={() => setMood(m.id)}
-                className={`flex flex-col items-center gap-1.5 py-3 px-1 rounded-2xl border transition-all ${
+                className={`flex flex-col items-center justify-center gap-1.5 min-h-[56px] py-3 px-1 rounded-2xl border transition-all ${
                   active
                     ? "border-primary bg-primary/15 neon-glow"
                     : "border-primary/45 bg-card/50 hover:border-primary/70"
                 }`}
               >
                 <Icon className={`w-5 h-5 ${active ? "text-primary" : "text-muted-foreground"}`} />
-                <span className="text-[10px] text-center leading-tight">{m.label}</span>
+                <span className="text-[11px] text-center leading-tight">{m.label}</span>
               </button>
             );
           })}
@@ -85,7 +88,7 @@ export default function NewEntryTab({ onSaved }) {
               <button
                 key={s.id}
                 onClick={() => setSensation(s.id)}
-                className={`px-3.5 py-2 rounded-full text-xs font-medium border transition-all ${
+                className={`px-3.5 py-2 min-h-[44px] rounded-full text-xs font-medium border transition-all ${
                   active
                     ? "border-primary bg-primary/20 text-primary neon-glow"
                     : "border-primary/45 bg-card/50 text-foreground/75 hover:border-primary/70"
@@ -107,18 +110,13 @@ export default function NewEntryTab({ onSaved }) {
       <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <h3 className="font-display !text-xl font-semibold mb-3">Zona</h3>
-          <div className="relative">
-            <select
-              value={zone}
-              onChange={(e) => setZone(e.target.value)}
-              className="w-full appearance-none px-4 py-2.5 rounded-xl bg-card border border-primary/45 text-sm text-foreground outline-none focus:border-primary cursor-pointer"
-            >
-              {ZONES.map((z) => (
-                <option key={z.id} value={z.id} className="bg-card">{z.label}</option>
-              ))}
-            </select>
-            <ChevronDown className="w-4 h-4 text-muted-foreground absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-          </div>
+          <BottomSheetSelect
+            label="Zona"
+            value={zone}
+            options={ZONE_OPTIONS}
+            onChange={setZone}
+            triggerClassName="bg-card border-primary/45"
+          />
         </div>
         <div>
           <h3 className="font-display !text-xl font-semibold mb-3">Intensidad percibida</h3>

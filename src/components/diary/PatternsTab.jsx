@@ -1,8 +1,9 @@
 import { MOODS } from "@/lib/diaryOptions";
 import DiaryPatterns from "@/components/DiaryPatterns";
 import DiaryHistory from "@/components/DiaryHistory";
+import PullToRefresh from "@/components/PullToRefresh";
 
-export default function PatternsTab({ entries = [], loaded = true }) {
+export default function PatternsTab({ entries = [], loaded = true, onRefresh }) {
   const total = entries.length;
 
   // Emoción frecuente
@@ -20,7 +21,7 @@ export default function PatternsTab({ entries = [], loaded = true }) {
     : "0";
 
   return (
-    <div className="space-y-5">
+    <PullToRefresh onRefresh={onRefresh} className="space-y-5">
       {/* Summary cards */}
       <div className="grid grid-cols-3 gap-3">
         <div className="rounded-2xl border border-white/10 bg-card/50 p-4">
@@ -47,6 +48,6 @@ export default function PatternsTab({ entries = [], loaded = true }) {
           <DiaryHistory />
         </div>
       )}
-    </div>
+    </PullToRefresh>
   );
 }

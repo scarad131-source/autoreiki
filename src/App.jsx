@@ -1,6 +1,7 @@
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
+import { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
@@ -10,19 +11,26 @@ import SessionPersistence from './components/SessionPersistence';
 import OfflineAudioCache from './components/OfflineAudioCache';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import Layout from '@/components/Layout';
-import Login from '@/pages/Login';
-import Register from '@/pages/Register';
-import ForgotPassword from '@/pages/ForgotPassword';
-import ResetPassword from '@/pages/ResetPassword';
-import Home from '@/pages/Home';
-import Meditate from '@/pages/Meditate';
-import Recorrido from '@/pages/Recorrido';
-import Configurar from '@/pages/Configurar';
-import Mas from '@/pages/Mas';
-import Diario from '@/pages/Diario';
-import Ayuda from '@/pages/Ayuda';
-import AgendaReiki from '@/pages/AgendaReiki';
-import Historial from '@/pages/Historial';
+// Cada pantalla se carga solo cuando se visita (code splitting).
+const Login = lazy(() => import('@/pages/Login'));
+const Register = lazy(() => import('@/pages/Register'));
+const ForgotPassword = lazy(() => import('@/pages/ForgotPassword'));
+const ResetPassword = lazy(() => import('@/pages/ResetPassword'));
+const Home = lazy(() => import('@/pages/Home'));
+const Meditate = lazy(() => import('@/pages/Meditate'));
+const Recorrido = lazy(() => import('@/pages/Recorrido'));
+const Configurar = lazy(() => import('@/pages/Configurar'));
+const Mas = lazy(() => import('@/pages/Mas'));
+const Diario = lazy(() => import('@/pages/Diario'));
+const Ayuda = lazy(() => import('@/pages/Ayuda'));
+const AgendaReiki = lazy(() => import('@/pages/AgendaReiki'));
+const Historial = lazy(() => import('@/pages/Historial'));
+
+const PageLoader = () => (
+  <div className="fixed inset-0 flex items-center justify-center">
+    <div className="w-8 h-8 rounded-full border-4 border-primary/25 border-t-primary animate-spin" />
+  </div>
+);
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -49,7 +57,8 @@ const AuthenticatedApp = () => {
 
   // Render the main app
   return (
-    <Routes>
+    <Suspense fallback={<PageLoader />}>
+      <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -68,7 +77,8 @@ const AuthenticatedApp = () => {
         </Route>
       </Route>
       <Route path="*" element={<PageNotFound />} />
-    </Routes>
+      </Routes>
+    </Suspense>
   );
 };
 
