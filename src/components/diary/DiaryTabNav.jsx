@@ -16,7 +16,7 @@ export default function DiaryTabNav({ active, onChange }) {
           <button
             key={t.id}
             onClick={() => onChange(t.id)}
-            className={`flex-1 py-2.5 rounded-full text-xs font-medium transition-all flex items-center justify-center gap-1.5 ${
+            className={`flex-1 min-h-[44px] py-2.5 rounded-full text-xs font-medium transition-all flex items-center justify-center gap-1.5 ${
               isActive
                 ? "bg-primary text-primary-foreground neon-glow"
                 : "text-muted-foreground hover:text-foreground"

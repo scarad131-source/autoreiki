@@ -44,7 +44,7 @@ export default function ReflectionForm({ config, actualSeconds, onSave, onRepeat
             <button
               key={m.id}
               onClick={() => setMoodAfter(m.id)}
-              className={`flex flex-col items-center gap-1 py-3 rounded-2xl border transition-all ${
+              className={`flex flex-col items-center justify-center gap-1 min-h-[56px] py-3 rounded-2xl border transition-all ${
                 moodAfter === m.id ? "border-primary bg-accent neon-glow" : "border-glow/20 bg-card/50 hover:border-primary/50"
               }`}
             >

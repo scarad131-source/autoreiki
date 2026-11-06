@@ -241,6 +241,14 @@
   border: 1px solid hsl(var(--gold) / 0.3);
 }
 
+/* Accesibilidad móvil: ninguna etiqueta por debajo de 11px (los nombres de
+   pestaña, pasos y microcopy dejan de ser ilegibles en pantallas pequeñas). */
+.text-\[9px\],
+.text-\[10px\] {
+  font-size: 11px;
+  line-height: 1.25;
+}
+
 /* ─────────────────────────────────────────────────────────────────────────
    Mobile-first: compactación global de las pantallas internas.
    Van fuera de @layer para que estas reglas se apliquen después de las
