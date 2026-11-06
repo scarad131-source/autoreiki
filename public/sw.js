@@ -81,7 +81,14 @@ async function serveAudio(req) {
     return cached;
   }
 
-  const res = await fetch(req);
+  let res;
+  try {
+    res = await fetch(req);
+  } catch (err) {
+    // Sin conexión y sin copia guardada: se responde 503 en lugar de lanzar una
+    // excepción que Safari/Chrome reportan como error de la página.
+    return new Response(null, { status: 503 });
+  }
   // Solo se guardan respuestas completas (las parciales no se pueden almacenar).
   if (res.status === 200) cache.put(req.url, res.clone()).catch(() => {});
   return res;
@@ -118,9 +125,14 @@ async function cacheFirst(req, cacheName) {
   const cached = await cache.match(req, { ignoreVary: true });
   if (cached) return cached;
 
-  const res = await fetch(req);
-  if (res.ok) cache.put(req, res.clone()).catch(() => {});
-  return res;
+  try {
+    const res = await fetch(req);
+    if (res.ok) cache.put(req, res.clone()).catch(() => {});
+    return res;
+  } catch (err) {
+    // Sin conexión y sin copia guardada: respuesta vacía, sin excepciones.
+    return new Response(null, { status: 503 });
+  }
 }
 
 self.addEventListener('fetch', (e) => {
@@ -145,7 +157,12 @@ self.addEventListener('fetch', (e) => {
 
   // Navegación: red primero, con respaldo en el index guardado.
   if (req.mode === 'navigate') {
-    e.respondWith(fetch(req).catch(() => caches.match('/index.html', { ignoreVary: true })));
+    e.respondWith(
+      fetch(req).catch(async () => {
+        const shell = await caches.match('/index.html', { ignoreVary: true });
+        return shell || new Response('', { status: 503, headers: { 'Content-Type': 'text/html' } });
+      })
+    );
     return;
   }
 

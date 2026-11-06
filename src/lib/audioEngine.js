@@ -13,15 +13,30 @@ export class AmbientAudio {
     this.currentType = null;
     this._bowlBuffer = null;
     this._bowlLoading = false;
+
+    // iOS/Android interrumpen el AudioContext al salir de la app o al recibir
+    // una llamada. Al volver se reanuda para que el ambiente siga sonando.
+    if (typeof document !== "undefined") {
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") this.resumeCtx();
+      });
+    }
   }
 
   init() {
     if (this.ctx) return;
     const AC = window.AudioContext || window.webkitAudioContext;
-    this.ctx = new AC();
-    this.master = this.ctx.createGain();
-    this.master.gain.value = 0.5;
-    this.master.connect(this.ctx.destination);
+    // Navegadores sin Web Audio: se omite el ambiente en lugar de romper la sesión.
+    if (!AC) return;
+    try {
+      this.ctx = new AC();
+      this.master = this.ctx.createGain();
+      this.master.gain.value = 0.5;
+      this.master.connect(this.ctx.destination);
+    } catch (e) {
+      this.ctx = null;
+      this.master = null;
+    }
   }
 
   cleanup() {
@@ -46,7 +61,8 @@ export class AmbientAudio {
 
   async play(type) {
     this.init();
-    if (this.ctx.state === "suspended") await this.ctx.resume();
+    if (!this.ctx) return;
+    if (this.ctx.state !== "running") { try { await this.ctx.resume(); } catch (e) {} }
     this.stop();
     this.currentType = type;
     if (type === "beach") this.playBeach();
@@ -70,7 +86,7 @@ export class AmbientAudio {
   }
 
   async resumeCtx() {
-    if (this.ctx && this.ctx.state === "suspended") {
+    if (this.ctx && this.ctx.state !== "running") {
       try { await this.ctx.resume(); } catch (e) {}
     }
   }
@@ -94,7 +110,8 @@ export class AmbientAudio {
   // Si el buffer aún no está disponible, usa el cuenco sintetizado como respaldo.
   async playBowl(freq = 440, gain = 0.7) {
     this.init();
-    if (this.ctx.state === "suspended") { try { await this.ctx.resume(); } catch (e) {} }
+    if (!this.ctx) return;
+    if (this.ctx.state !== "running") { try { await this.ctx.resume(); } catch (e) {} }
     if (this._bowlBuffer) {
       const ctx = this.ctx;
       const src = ctx.createBufferSource();
@@ -112,7 +129,8 @@ export class AmbientAudio {
   // Cuenco tibetano sintetizado (respaldo): golpe con armónicos inarmónicos y decay largo
   playBowlSynth(freq = 440, gain = 0.7) {
     this.init();
-    if (this.ctx.state === "suspended") this.ctx.resume();
+    if (!this.ctx) return;
+    if (this.ctx.state !== "running") this.ctx.resume().catch(() => {});
     const ctx = this.ctx;
     const now = ctx.currentTime;
     const bus = ctx.createGain();

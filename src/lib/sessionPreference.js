@@ -6,10 +6,14 @@ export const REMEMBER_KEY = "autoreiki_remember";
 export const TAB_KEY = "autoreiki_tab";
 
 export function saveRememberPreference(remember) {
-  if (remember) {
-    localStorage.setItem(REMEMBER_KEY, "1");
-  } else {
-    localStorage.setItem(REMEMBER_KEY, "0");
-    sessionStorage.setItem(TAB_KEY, "1");
-  }
+  // El almacenamiento puede estar bloqueado (navegación privada en iOS/Android):
+  // nunca debe impedir que el inicio de sesión continúe.
+  try {
+    if (remember) {
+      localStorage.setItem(REMEMBER_KEY, "1");
+    } else {
+      localStorage.setItem(REMEMBER_KEY, "0");
+      sessionStorage.setItem(TAB_KEY, "1");
+    }
+  } catch (e) {}
 }

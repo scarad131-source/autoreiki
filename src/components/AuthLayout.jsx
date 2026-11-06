@@ -4,9 +4,7 @@ import { Image } from "@/components/ui/image";
 export default function AuthLayout({ icon: Icon, logo, title, subtitle, footer, children, backgroundImage, glass = false }) {
   return (
     <div
-      className={`relative flex min-h-[100svh] flex-col overflow-y-auto bg-background px-4 py-6 ${
-        backgroundImage ? "pb-[calc(1.5rem+env(safe-area-inset-bottom))]" : ""
-      }`}
+      className="relative flex min-h-[100svh] flex-col overflow-y-auto bg-background px-4 pt-[calc(1.5rem+env(safe-area-inset-top))] pb-[calc(1.5rem+env(safe-area-inset-bottom))]"
     >
       {backgroundImage && (
         // Fondo a pantalla completa: cubre toda la vista (sin huecos), centrado

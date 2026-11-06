@@ -14,7 +14,13 @@ export function getQueue() {
 }
 
 function saveQueue(q) {
-  localStorage.setItem(QUEUE_KEY, JSON.stringify(q));
+  // En navegación privada (iOS/Android) escribir en localStorage puede lanzar
+  // una excepción: se ignora para no romper el registro de la práctica.
+  try {
+    localStorage.setItem(QUEUE_KEY, JSON.stringify(q));
+  } catch {
+    // Sin espacio o almacenamiento bloqueado: la cola no se persiste.
+  }
 }
 
 export function getQueueCount() {

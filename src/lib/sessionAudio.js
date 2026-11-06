@@ -15,6 +15,15 @@ class SessionAudio {
     this.sourceNode = null;
     this.gainNode = null;
     this.boostFactor = 1;
+
+    // iOS y Android suspenden el audio cuando la app pasa a segundo plano o una
+    // llamada interrumpe el AudioContext. Al volver a la app se reanuda para que
+    // la sesión no se quede en silencio.
+    if (typeof document !== "undefined") {
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") this._resumeCtx();
+      });
+    }
   }
 
   _ensure() {
@@ -49,9 +58,16 @@ class SessionAudio {
 
   // Reanuda el AudioContext si quedó suspendido (políticas de autoplay).
   _resumeCtx() {
-    if (this.audioCtx && this.audioCtx.state === "suspended") {
+    // "interrupted" es el estado que usa iOS cuando otra app (o una llamada) se
+    // lleva el audio: también hay que reanudarlo al volver.
+    if (this.audioCtx && this.audioCtx.state !== "running") {
       this.audioCtx.resume().catch(() => {});
     }
+  }
+
+  // Expuesto para reanudar el contexto desde fuera (al volver del segundo plano).
+  resumeCtx() {
+    this._resumeCtx();
   }
 
   // Define un factor de amplificación (> 1 sube el volumen por encima del

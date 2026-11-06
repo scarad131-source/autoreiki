@@ -149,6 +149,45 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     }
   }, [paused, started]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // iOS/Android: al bloquear el teléfono o volver de otra app, el sistema pausa
+  // el audio. Si la sesión sigue activa, se reanuda al regresar a la app.
+  useEffect(() => {
+    if (!started) return;
+    const onVisible = () => {
+      if (document.visibilityState !== "visible" || paused || finishedRef.current) return;
+      sessionAudio.resumeCtx();
+      if (el.paused) el.play().catch(() => {});
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("pageshow", onVisible);
+    return () => {
+      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("pageshow", onVisible);
+    };
+  }, [started, paused, el]);
+
+  // Mantiene la pantalla encendida durante la sesión: si el teléfono se bloquea,
+  // Android e iOS detienen el audio. Soportado en Chrome/Android y Safari 16.4+.
+  useEffect(() => {
+    if (!started || paused) return;
+    let lock = null;
+    const request = async () => {
+      try {
+        if ("wakeLock" in navigator) lock = await navigator.wakeLock.request("screen");
+      } catch (e) {}
+    };
+    request();
+    const onVisible = () => {
+      if (document.visibilityState === "visible" && !lock) request();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      document.removeEventListener("visibilitychange", onVisible);
+      try { if (lock) lock.release(); } catch (e) {}
+      lock = null;
+    };
+  }, [started, paused]);
+
   // cuencos: suenan al cambiar de zona según el cronograma (duración / nº de chakras)
   useEffect(() => {
     if (!started || !bowlsOn || paused || !bowlChakras.length) return;
