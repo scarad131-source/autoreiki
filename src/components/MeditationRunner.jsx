@@ -11,15 +11,23 @@ import { sessionAudio } from "@/lib/sessionAudio";
 
 export default function MeditationRunner({ config, onFinish, onCancel }) {
   const [audioDuration, setAudioDuration] = useState(null);
-  // En meditaciones guiadas el temporizador coincide con la duración real del audio
-  const totalSeconds = isVoiceTrack(config.audio) && audioDuration ? Math.ceil(audioDuration) : config.minutes * 60;
+  // En meditaciones guiadas la sesión dura lo que dura la voz, pero nunca más
+  // que el tiempo previsto: los días cortos del reto (5 min) no deben registrar
+  // la pista completa.
+  const totalSeconds = isVoiceTrack(config.audio)
+    ? Math.min(audioDuration ? Math.ceil(audioDuration) : Infinity, config.minutes * 60)
+    : config.minutes * 60;
   const [countdown, setCountdown] = useState(isVoiceTrack(config.audio) ? 2 : 3);
   const [elapsed, setElapsed] = useState(0);
   const [paused, setPaused] = useState(false);
+  // El navegador puede bloquear el audio guiado (política de autoplay): en ese
+  // caso se muestra un botón para activar el sonido con un toque.
+  const [needsTap, setNeedsTap] = useState(false);
   // "Frecuencias Sanadoras" (bowls) suena bajo: subimos el volumen base y
   // aplicamos una amplificación extra vía Web Audio para que se escuche claro.
   const isBowls = config.audio === "bowls";
-  const [volume, setVolume] = useState(isBowls ? 0.7 : 0.5);
+  // La voz guiada suena a volumen pleno: es lo que el usuario necesita oír.
+  const [volume, setVolume] = useState(isVoiceTrack(config.audio) ? 1 : isBowls ? 0.7 : 0.5);
   const [muted, setMuted] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
   const bowlsOn = config.bowlsMarkers === true;
@@ -33,6 +41,15 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
 
   const started = countdown === 0;
   const el = audioRef.current;
+
+  // Reproductor con aviso: si el navegador rechaza el play (autoplay), se pide
+  // un toque del usuario en lugar de quedarse en silencio.
+  const playAudio = () => {
+    const p = el.play();
+    if (p && typeof p.then === "function") {
+      p.then(() => setNeedsTap(false)).catch(() => setNeedsTap(true));
+    }
+  };
 
   const isGuided = config.mode === "guided";
   const isJourney = !!config.journeyDay;
@@ -78,7 +95,9 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       const cur = e.currentTarget.currentTime;
       const d = e.currentTarget.duration;
       if (isVoiceTrack(config.audio)) {
-        if (d && isFinite(d)) setAudioDuration(d);
+        // Solo se acepta una duración real (> 2 s): un valor mínimo del
+        // reproductor cerraría la sesión al instante.
+        if (d && isFinite(d) && d > 2) setAudioDuration(d);
         if (started && !paused && !finishedRef.current) {
           const t = Math.floor(cur);
           setElapsed((prev) => (t !== prev ? t : prev));
@@ -128,7 +147,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     el.volume = muted ? 0 : volume;
     el.loop = !isVoiceTrack(config.audio);
     try { el.currentTime = 0; } catch (e) {}
-    if (el.paused) el.play().catch(() => {});
+    if (el.paused) playAudio();
   }, [started]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // calcular paso actual guiado (solo para texto visual en pantalla)
@@ -163,7 +182,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     if (paused) {
       try { el.pause(); } catch (e) {}
     } else {
-      el.play().catch(() => {});
+      playAudio();
     }
   }, [paused, started]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -330,7 +349,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     if (finishedRef.current) return;
     finishedRef.current = true;
     try { el.pause(); } catch (err) {}
-    const seconds = Math.max(elapsed, Math.round(el.currentTime || 0));
+    const seconds = Math.max(1, elapsed, Math.round(el.currentTime || 0));
     onFinish({ actualSeconds: seconds, completed: false });
   };
 
@@ -371,6 +390,15 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
                   {paused ? "En pausa" : "Respira con calma"}
                 </p>
               </div>
+
+              {needsTap && (
+                <button
+                  onClick={() => { setNeedsTap(false); playAudio(); }}
+                  className="min-h-[44px] px-5 rounded-full bg-primary text-primary-foreground text-sm font-semibold shadow-lg active:scale-[0.98]"
+                >
+                  Toca para activar el sonido
+                </button>
+              )}
 
               <AnimatePresence mode="wait">
                 {currentStep && !paused && voiceActive && !hideVisualCues && (

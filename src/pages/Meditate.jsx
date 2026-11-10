@@ -107,7 +107,8 @@ export default function Meditate() {
         () => base44.entities.MeditationSession.create(sessionData),
         { kind: "entity", entity: "MeditationSession", method: "create", data: sessionData }
       );
-      if (config.journeyDay) {
+      // El día del reto solo cuenta cuando la sesión se completó.
+      if (config.journeyDay && result.completed) {
         const journeyData = { day_number: config.journeyDay };
         await queueIfOffline(
           () => base44.entities.JourneyProgress.create(journeyData),
