@@ -6,6 +6,7 @@ import MeditationRunner from "@/components/MeditationRunner";
 import ReflectionForm from "@/components/ReflectionForm";
 import PrepChecklist from "@/components/PrepChecklist";
 import { buildChakraScript, CHAKRAS } from "@/lib/guidedScripts";
+import { JOURNEY } from "@/lib/journey";
 import { unlockSpeech } from "@/lib/speech";
 import { audioUrlFor, isVoiceTrack } from "@/lib/audioSources";
 import { sessionAudio } from "@/lib/sessionAudio";
@@ -20,6 +21,7 @@ export default function Meditate() {
   const [journeyDay, setJourneyDay] = useState(null);
   const [mode, setMode] = useState("guided");
   const [userLevel, setUserLevel] = useState("beginner");
+  const [guidedMinutes, setGuidedMinutes] = useState(13);
 
   // Configuración para modo no guiada
   const [minutes, setMinutes] = useState(30);
@@ -38,6 +40,16 @@ export default function Meditate() {
     if (location.state?.journeyDay) {
       setJourneyDay(location.state.journeyDay);
     }
+    // "Iniciar día N" desde el reto de 21 días: precarga la práctica de ese día
+    // (audio y duración) y el usuario pulsa Comenzar para arrancar el sonido.
+    if (location.state?.meditarHoy && !preset) {
+      const dayConfig = JOURNEY[(location.state.journeyDay || 1) - 1]?.config;
+      if (dayConfig) {
+        setMode(dayConfig.mode);
+        setUserLevel(dayConfig.level);
+        setGuidedMinutes(dayConfig.minutes);
+      }
+    }
     if (preset) {
       unlockSpeech();
       const cfg = { ...preset, journeyDay: location.state?.journeyDay ?? preset.journeyDay ?? null };
@@ -46,8 +58,14 @@ export default function Meditate() {
       }
       setConfig(cfg);
       setStage("running");
+      // Se limpia el preset del historial del navegador: al volver a esta
+      // pantalla (botón atrás) no debe reiniciarse la sesión ya terminada.
+      navigate(location.pathname, {
+        replace: true,
+        state: location.state?.reiki ? { reiki: true } : null,
+      });
     }
-  }, [location.state]);
+  }, [location.state]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const start = (cfg) => {
     unlockSpeech();
@@ -70,18 +88,21 @@ export default function Meditate() {
     setStage("reflection");
   };
 
-  const save = async ({ moodAfter, notes }, to = "/") => {
+  // Guarda la sesión (y el día del recorrido si venía de los 21 días) y lleva
+  // al historial para que el registro recién creado quede a la vista.
+  const save = async ({ moodAfter, notes }, to = "/historial") => {
+    const sessionData = {
+      mode: config.mode,
+      level: config.level,
+      audio: config.audio,
+      planned_minutes: config.minutes,
+      actual_seconds: result.actualSeconds,
+      notes,
+      completed: result.completed,
+    };
+    if (moodAfter) sessionData.mood_after = moodAfter;
+
     try {
-      const sessionData = {
-        mode: config.mode,
-        level: config.level,
-        audio: config.audio,
-        planned_minutes: config.minutes,
-        actual_seconds: result.actualSeconds,
-        mood_after: moodAfter,
-        notes,
-        completed: result.completed
-      };
       await queueIfOffline(
         () => base44.entities.MeditationSession.create(sessionData),
         { kind: "entity", entity: "MeditationSession", method: "create", data: sessionData }
@@ -94,20 +115,21 @@ export default function Meditate() {
         );
       }
     } catch (e) {
+      // Si el guardado falla, el historial muestra lo que ya quedó registrado.
+    }
+    navigate(to);
+  };
 
+  if (stage === "running" && config) {
+    return <MeditationRunner config={config} onFinish={finish} onCancel={() => navigate("/configurar")} />;
+  }
 
-
-
-
-
-
-
-      // ignore save errors
-    }navigate(to);};if (stage === "running" && config) {return <MeditationRunner config={config} onFinish={finish} onCancel={() => navigate("/configurar")} />;}if (stage === "reflection" && config && result) {
+  if (stage === "reflection" && config && result) {
     return (
       <ReflectionForm
         config={config}
         actualSeconds={result.actualSeconds}
+        completed={result.completed}
         onSave={save}
         onRepeat={() => setStage("running")} />);
 
@@ -122,7 +144,7 @@ export default function Meditate() {
   const handleStart = () => {
     if (mode === "guided") {
       const chakras = CHAKRAS.map((c) => c.id);
-      start({ mode, level: userLevel, audio: "meditation21", minutes: 13, chakras });
+      start({ mode, level: userLevel, audio: "meditation21", minutes: guidedMinutes, chakras });
     } else {
       start({ mode, level: userLevel, audio, minutes, chakras: CHAKRAS.map((c) => c.id), bowlsMarkers });
     }

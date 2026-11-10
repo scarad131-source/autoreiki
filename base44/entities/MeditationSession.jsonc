@@ -8,6 +8,10 @@
         "guided",
         "unguided"
       ],
+      "enumColors": [
+        "purple",
+        "blue"
+      ],
       "description": "Tipo de sesi\u00f3n: guiada o no guiada"
     },
     "level": {
@@ -15,6 +19,10 @@
       "enum": [
         "beginner",
         "intermediate"
+      ],
+      "enumColors": [
+        "green",
+        "yellow"
       ],
       "description": "Nivel de experiencia"
     },
@@ -24,10 +32,23 @@
         "beach",
         "rain",
         "forest",
+        "bowls",
         "healing",
-        "bowls"
+        "meditation21",
+        "reikiGuided",
+        "reikiGuided26"
       ],
-      "description": "Ambiente sonoro elegido"
+      "enumColors": [
+        "blue",
+        "blue",
+        "green",
+        "yellow",
+        "yellow",
+        "purple",
+        "pink",
+        "pink"
+      ],
+      "description": "Pista de audio de la sesi\u00f3n: ambiente sonoro o voz guiada (Reiki / 21 d\u00edas)"
     },
     "planned_minutes": {
       "type": "number",
@@ -76,7 +97,9 @@
     "planned_minutes"
   ],
   "rls": {
-    "create": true,
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
     "read": {
       "created_by_id": "{{user.id}}"
     },

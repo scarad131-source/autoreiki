@@ -11,6 +11,7 @@ import HelpButton from "@/components/HelpButton";
 import PersonalizationCard from "@/components/PersonalizationCard";
 import InstallAppButton from "@/components/InstallAppButton";
 import { computeActiveDays, getStreakMessage, JOURNEY } from "@/lib/journey";
+import { audioLabel } from "@/lib/sessionLabels";
 import { getDailyPhrase } from "@/lib/dailyPhrases";
 import { Image } from "@/components/ui/image";
 import { format } from "date-fns";
@@ -162,7 +163,7 @@ export default function Home() {
             <Clock className="w-3.5 h-3.5 text-primary" strokeWidth={1.6} /> {todayJourney.config.minutes} min
           </span>
           <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/25 px-3 py-1 font-body text-[11px] text-foreground/85">
-            <AudioIcon className="w-3.5 h-3.5 text-primary" strokeWidth={1.6} /> {audio.name}
+            <AudioIcon className="w-3.5 h-3.5 text-primary" strokeWidth={1.6} /> {audioLabel(todayJourney.config.audio)}
           </span>
         </div>
 

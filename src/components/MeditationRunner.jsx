@@ -27,6 +27,9 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const audioRef = useRef(sessionAudio.element());
   const finishedRef = useRef(false);
   const lastBowlStepRef = useRef(-1);
+  // Tiempo practicado según el reloj de la sesión (lo usan los detectores de
+  // fin de audio, que viven fuera del render).
+  const elapsedRef = useRef(0);
 
   const started = countdown === 0;
   const el = audioRef.current;
@@ -53,13 +56,19 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const scriptTotalSec = script ? script.steps.reduce((a, s) => a + s.seconds, 0) : 0;
   const voiceActive = script ? elapsed < scriptTotalSec : false;
 
+  useEffect(() => {
+    elapsedRef.current = elapsed;
+  }, [elapsed]);
+
   // Listeners del elemento de audio singleton (metadata, timeupdate, ended)
   useEffect(() => {
     const finishGuided = () => {
       if (finishedRef.current) return;
       finishedRef.current = true;
       const d = el.duration;
-      onFinish({ actualSeconds: Math.round((d && isFinite(d)) ? d : (el.currentTime || 0)), completed: true });
+      // Duración real del audio; si aún no se conoce, el tiempo del reloj.
+      const secs = d && isFinite(d) && d > 1 ? d : Math.max(el.currentTime || 0, elapsedRef.current);
+      onFinish({ actualSeconds: Math.max(1, Math.round(secs)), completed: true });
     };
     const onLoaded = () => {
       const d = el.duration;
@@ -73,13 +82,20 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         if (started && !paused && !finishedRef.current) {
           const t = Math.floor(cur);
           setElapsed((prev) => (t !== prev ? t : prev));
-          // Detección de fin: cuando el audio llega casi al final
-          if (d && isFinite(d) && cur >= d - 0.4) finishGuided();
+          // Detección de fin: cuando el audio llega casi al final. Se exige una
+          // duración real (> 2 s) para no cerrar la sesión si el reproductor
+          // informa un final vacío antes de cargar la pista.
+          if (d && isFinite(d) && d > 2 && cur >= d - 0.4) finishGuided();
         }
       }
     };
     const onEnded = () => {
-      if (isVoiceTrack(config.audio)) { finishGuided(); return; }
+      if (isVoiceTrack(config.audio)) {
+        // Solo cuenta como final válido si el audio realmente avanzó.
+        const dur = el.duration;
+        if ((dur && isFinite(dur) && dur > 2) || el.currentTime > 2) finishGuided();
+        return;
+      }
       // No guiada: si el loop falla y el audio termina, reiniciarlo manualmente
       if (started && !paused && !finishedRef.current) {
         try { el.currentTime = 0; } catch (e) {}
@@ -132,7 +148,9 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   // timer (solo sesiones no guiadas; las guiadas se sincronizan con timeupdate)
   useEffect(() => {
     if (!started || paused) return;
-    if (isVoiceTrack(config.audio)) return;
+    // El reloj corre también en las sesiones guiadas: si el audio no llega a
+    // sonar (autoplay bloqueado, sin conexión), la sesión avanza y termina igual
+    // para que quede registrada en el historial.
     timerRef.current = setInterval(() => {
       setElapsed((e) => e + 1);
     }, 1000);
@@ -217,10 +235,10 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     if (bowlsOn) ambient.preloadBowl();
   }, [bowlsOn]);
 
-  // fin de sesión (no guiadas): por temporizador
+  // fin de sesión (todos los modos): por temporizador. Es la red de seguridad
+  // cuando el audio guiado no puede reproducirse y no dispara "ended".
   useEffect(() => {
     if (!started || finishedRef.current) return;
-    if (isVoiceTrack(config.audio)) return;
     if (elapsed >= totalSeconds) {
       finishedRef.current = true;
       try { el.pause(); } catch (e) {}
@@ -234,10 +252,14 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     const id = setInterval(() => {
       if (finishedRef.current) return;
       const d = el.duration;
-      if (el.ended || (d && isFinite(d) && el.currentTime >= d - 0.4)) {
+      const knownDuration = d && isFinite(d) && d > 2;
+      const realEnd = el.ended && (knownDuration || el.currentTime > 2);
+      const nearEnd = knownDuration && el.currentTime >= d - 0.4;
+      if (realEnd || nearEnd) {
         finishedRef.current = true;
         clearInterval(id);
-        onFinish({ actualSeconds: Math.round((d && isFinite(d)) ? d : (el.currentTime || 0)), completed: true });
+        const secs = knownDuration ? d : Math.max(el.currentTime || 0, elapsedRef.current);
+        onFinish({ actualSeconds: Math.max(1, Math.round(secs)), completed: true });
       }
     }, 500);
     return () => clearInterval(id);
@@ -300,6 +322,16 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const handleRestart = () => {
     setElapsed(0);
     try { el.currentTime = 0; } catch (err) {}
+  };
+
+  // Cierra la sesión antes de tiempo y la guarda igual (queda marcada como
+  // incompleta en el historial, con el tiempo realmente practicado).
+  const handleFinishEarly = () => {
+    if (finishedRef.current) return;
+    finishedRef.current = true;
+    try { el.pause(); } catch (err) {}
+    const seconds = Math.max(elapsed, Math.round(el.currentTime || 0));
+    onFinish({ actualSeconds: seconds, completed: false });
   };
 
   return (
@@ -397,6 +429,15 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
               </button>
             )}
           </div>
+
+          {started && (
+            <button
+              onClick={handleFinishEarly}
+              className="mx-auto block min-h-[44px] px-5 rounded-full border border-white/25 bg-black/35 backdrop-blur-sm text-[13px] text-foreground/85 hover:border-primary/50 hover:text-foreground transition-colors"
+            >
+              Terminar y guardar
+            </button>
+          )}
         </div>
       </div>
 

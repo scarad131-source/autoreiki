@@ -9,7 +9,7 @@ const MOOD_AFTER = [
   { id: "neutral", label: "Neutral", emoji: "😐" },
 ];
 
-export default function ReflectionForm({ config, actualSeconds, onSave, onRepeat }) {
+export default function ReflectionForm({ config, actualSeconds, completed = true, onSave, onRepeat }) {
   const [moodAfter, setMoodAfter] = useState(null);
   const [notes, setNotes] = useState("");
 
@@ -31,9 +31,13 @@ export default function ReflectionForm({ config, actualSeconds, onSave, onRepeat
         <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-primary to-glow-cyan flex items-center justify-center neon-glow mb-4">
           <Check className="w-8 h-8 text-primary-foreground" strokeWidth={2.5} />
         </div>
-        <h2 className="font-display text-2xl font-semibold">Sesión completada</h2>
+        <h2 className="font-display text-2xl font-semibold">
+          {completed ? "Sesión completada" : "Sesión finalizada"}
+        </h2>
         <p className="text-sm text-muted-foreground mt-1">
-          Meditaste <span className="font-medium text-foreground">{mins} min</span> · {config.level === "beginner" ? "Principiante" : "Intermedio"}
+          {completed ? "Meditaste " : "Registramos "}
+          <span className="font-medium text-foreground">{mins} min</span>
+          {completed ? "" : " de práctica"} · {config.level === "beginner" ? "Principiante" : "Intermedio"}
         </p>
       </div>
 
@@ -68,11 +72,11 @@ export default function ReflectionForm({ config, actualSeconds, onSave, onRepeat
 
       <div>
         <button
-          onClick={() => onSave({ moodAfter, notes }, "/diario")}
+          onClick={() => onSave({ moodAfter, notes }, "/historial")}
           className="w-full py-4 rounded-2xl bg-gradient-to-r from-primary to-glow-cyan text-primary-foreground font-medium neon-glow hover:scale-[1.01] transition-transform active:scale-[0.99] flex items-center justify-center gap-2"
         >
           <BookOpen className="w-4 h-4" />
-          Guardar / Ir a mi diario
+          Guardar y ver mi historial
         </button>
       </div>
     </div>

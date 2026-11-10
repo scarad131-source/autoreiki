@@ -4,7 +4,7 @@ import { ArrowRight, Headphones, Waves, CloudRain, Trees, CircleDot } from "luci
 import ChakraFigure from "@/components/ChakraFigure";
 import PrepChecklist from "@/components/PrepChecklist";
 import BowlsScheduleCard from "@/components/BowlsScheduleCard";
-import { AUDIO_SOURCES, audioUrlFor, isVoiceTrack } from "@/lib/audioSources";
+import { audioUrlFor, isVoiceTrack } from "@/lib/audioSources";
 import { CHAKRAS } from "@/lib/guidedScripts";
 import { sessionAudio } from "@/lib/sessionAudio";
 import { ambient } from "@/lib/audioEngine";

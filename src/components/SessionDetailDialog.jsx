@@ -17,13 +17,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 
-const AUDIO_NAMES = {
-  beach: "Mar",
-  rain: "Lluvia",
-  forest: "Bosque",
-  healing: "Frecuencias sanadoras",
-  bowls: "Cuencos tibetanos",
-};
+import { audioLabel } from "@/lib/sessionLabels";
 
 const MOOD_BEFORE = {
   calm: "En calma",
@@ -96,7 +90,7 @@ export default function SessionDetailDialog({ session, open, onOpenChange }) {
                 : formatDuration(session.actual_seconds)
             }
           />
-          <Row icon={Waves} label="Ambiente sonoro" value={AUDIO_NAMES[session.audio] || session.audio} />
+          <Row icon={Waves} label="Audio de la sesión" value={audioLabel(session.audio)} />
           <Row icon={Sparkles} label="Nivel" value={LEVELS[session.level] || session.level} />
           <Row icon={Heart} label="Ánimo antes" value={MOOD_BEFORE[session.mood_before] || session.mood_before} />
           <Row icon={Heart} label="Ánimo después" value={MOOD_AFTER[session.mood_after] || session.mood_after} />
