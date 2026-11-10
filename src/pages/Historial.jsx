@@ -2,12 +2,14 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import SessionCard from "@/components/SessionCard";
+import SessionDetailDialog from "@/components/SessionDetailDialog";
 import PullToRefresh from "@/components/PullToRefresh";
 
 export default function Historial() {
   const navigate = useNavigate();
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selected, setSelected] = useState(null);
 
   const load = useCallback(async () => {
     try {
@@ -60,11 +62,17 @@ export default function Historial() {
       ) : (
         <div className="space-y-2.5">
           {sessions.map((s) => (
-            <SessionCard key={s.id} session={s} />
+            <SessionCard key={s.id} session={s} onOpen={setSelected} />
           ))}
         </div>
       )}
       </PullToRefresh>
+
+      <SessionDetailDialog
+        session={selected}
+        open={!!selected}
+        onOpenChange={(v) => !v && setSelected(null)}
+      />
     </div>
   );
 }
