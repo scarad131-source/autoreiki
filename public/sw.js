@@ -4,9 +4,9 @@
 //   2) imágenes y fuentes que usa la interfaz             -> MEDIA_CACHE
 //   3) los audios de las sesiones (ambiente y voz guiada) -> AUDIO_CACHE
 
-const SHELL_CACHE = 'autoreiki-shell-v2';
-const MEDIA_CACHE = 'autoreiki-media-v2';
-const AUDIO_CACHE = 'autoreiki-audio-v2';
+const SHELL_CACHE = 'autoreiki-shell-v3';
+const MEDIA_CACHE = 'autoreiki-media-v3';
+const AUDIO_CACHE = 'autoreiki-audio-v3';
 const CACHES = [SHELL_CACHE, MEDIA_CACHE, AUDIO_CACHE];
 
 const SHELL_ASSETS = [
@@ -168,4 +168,45 @@ self.addEventListener('fetch', (e) => {
 
   // Assets (JS/CSS): caché primero para que la app abra sin conexión.
   e.respondWith(cacheFirst(req, SHELL_CACHE));
+});
+
+// --- Avisos push: los entrega el sistema aunque la app esté cerrada ---
+self.addEventListener('push', (e) => {
+  let payload = {};
+  try {
+    payload = e.data ? e.data.json() : {};
+  } catch (err) {
+    payload = {};
+  }
+
+  e.waitUntil(
+    self.registration.showNotification(payload.title || 'AutoReiki', {
+      body: payload.body || 'Es hora de tu sesión de Reiki.',
+      icon: '/icon-192.png',
+      badge: '/icon-192.png',
+      tag: 'autoreiki-recordatorio',
+      renotify: true,
+      vibrate: [200, 100, 200],
+      data: { url: payload.url || '/' },
+    })
+  );
+});
+
+// Al tocar el aviso se abre (o se trae al frente) la app.
+self.addEventListener('notificationclick', (e) => {
+  e.notification.close();
+  const target = (e.notification.data && e.notification.data.url) || '/';
+  e.waitUntil(
+    (async () => {
+      const clientsList = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+      for (const client of clientsList) {
+        if ('focus' in client) {
+          await client.focus();
+          if ('navigate' in client) await client.navigate(target).catch(() => {});
+          return;
+        }
+      }
+      await self.clients.openWindow(target);
+    })()
+  );
 });

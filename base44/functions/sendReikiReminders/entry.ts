@@ -1,4 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.52';
+import { sendToUser } from '../../shared/webpush.ts';
 
 // Frases de aliento y motivación para rotar en cada recordatorio.
 const PHRASES = [
@@ -77,16 +78,14 @@ export default async function(req) {
           } catch (e) {}
         }
 
-        // Push: requiere build nativo con credenciales push configuradas.
+        // Aviso push del navegador: suena en el teléfono aunque la app esté cerrada.
         try {
-          await base44.asServiceRole.integrations.Core.SendPushNotification({
-            user_id: u.id,
-            title: "Es hora de tu Reiki",
-            content: `Tu sesión diaria te espera. ${phrase}`,
-            action_label: "Meditar ahora",
-            action_url: "/",
+          const pushed = await sendToUser(base44, u.id, {
+            title: "Es hora de tu Reiki ✦",
+            body: `${firstName ? firstName + ", tu" : "Tu"} sesión diaria te espera. ${phrase}`,
+            url: "/configurar",
           });
-          delivered = true;
+          if (pushed > 0) delivered = true;
         } catch (e) {}
 
         if (delivered) sent++;

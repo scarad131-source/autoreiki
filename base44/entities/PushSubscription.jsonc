@@ -1,0 +1,41 @@
+{
+  "name": "PushSubscription",
+  "type": "object",
+  "properties": {
+    "endpoint": {
+      "type": "string",
+      "description": "Endpoint del servicio push del navegador del usuario"
+    },
+    "p256dh": {
+      "type": "string",
+      "description": "Clave p\u00fablica del dispositivo para cifrar el aviso"
+    },
+    "auth": {
+      "type": "string",
+      "description": "Secreto de autenticaci\u00f3n del dispositivo"
+    },
+    "device": {
+      "type": "string",
+      "description": "Descripci\u00f3n breve del dispositivo/navegador"
+    }
+  },
+  "required": [
+    "endpoint",
+    "p256dh",
+    "auth"
+  ],
+  "rls": {
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "read": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}

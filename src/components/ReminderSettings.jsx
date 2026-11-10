@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Bell, BellOff, Clock, Volume2 } from "lucide-react";
 import { initReminderAudio, playReminderChime } from "@/lib/reminderAlarm";
+import ReminderPushCard from "@/components/ReminderPushCard";
 
 export default function ReminderSettings({ user, onSaved }) {
   const [enabled, setEnabled] = useState(!!user?.reminder_enabled);
@@ -106,9 +107,11 @@ export default function ReminderSettings({ user, onSaved }) {
           </button>
 
           <p className="text-[11px] text-muted-foreground leading-snug">
-            A esa hora suena una campanilla suave dentro de la app. Si la app está
-            cerrada, te llega el recordatorio por correo.
+            A esa hora suena una campanilla suave dentro de la app. Con la app
+            cerrada, el aviso llega como notificación al teléfono.
           </p>
+
+          <ReminderPushCard />
         </div>
       )}
     </section>
