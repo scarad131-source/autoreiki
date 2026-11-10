@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { Bell, BellOff, Clock } from "lucide-react";
+import { Bell, BellOff, Clock, Volume2 } from "lucide-react";
+import { initReminderAudio, playReminderChime } from "@/lib/reminderAlarm";
 
 export default function ReminderSettings({ user, onSaved }) {
   const [enabled, setEnabled] = useState(!!user?.reminder_enabled);
@@ -13,13 +14,15 @@ export default function ReminderSettings({ user, onSaved }) {
     setTime(user?.reminder_time || "09:00");
   }, [user]);
 
-  const save = async () => {
+  useEffect(() => initReminderAudio(), []);
+
+  const save = async (overrides = {}) => {
     setSaving(true);
     try {
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
       await base44.auth.updateMe({
-        reminder_enabled: enabled,
-        reminder_time: time,
+        reminder_enabled: overrides.enabled ?? enabled,
+        reminder_time: overrides.time ?? time,
         reminder_timezone: tz,
       });
       setStatus("saved");
@@ -29,6 +32,13 @@ export default function ReminderSettings({ user, onSaved }) {
     } finally {
       setSaving(false);
     }
+  };
+
+  // El interruptor se guarda al instante: antes solo cambiaba en pantalla.
+  const toggle = () => {
+    const next = !enabled;
+    setEnabled(next);
+    save({ enabled: next });
   };
 
   return (
@@ -45,13 +55,14 @@ export default function ReminderSettings({ user, onSaved }) {
           <div className="min-w-0">
             <p className="font-medium text-sm">Recordatorio diario</p>
             <p className="text-xs text-muted-foreground leading-snug">
-              Notificación push para tu sesión de Reiki
+              Alarma suave para tu sesión de Reiki
             </p>
           </div>
         </div>
         <button
-          onClick={() => setEnabled((e) => !e)}
-          className={`relative w-12 h-7 rounded-full transition-colors shrink-0 ${
+          onClick={toggle}
+          disabled={saving}
+          className={`relative w-12 h-7 rounded-full transition-colors shrink-0 disabled:opacity-60 ${
             enabled ? "bg-primary" : "bg-accent"
           }`}
           aria-label="Activar recordatorio"
@@ -75,24 +86,28 @@ export default function ReminderSettings({ user, onSaved }) {
               step={900}
               value={time}
               onChange={(e) => setTime(e.target.value)}
-              className="flex-1 px-3 py-2 rounded-xl bg-accent/40 border border-glow/20 text-foreground text-sm font-medium outline-none focus:border-primary/60"
+              className="flex-1 min-h-[44px] px-3 py-2 rounded-xl bg-accent/40 border border-glow/20 text-foreground text-base font-medium outline-none focus:border-primary/60"
             />
             <button
-              onClick={save}
+              onClick={() => save()}
               disabled={saving}
-              className="shrink-0 px-4 py-2 rounded-xl bg-gradient-to-r from-primary to-glow-cyan text-primary-foreground text-sm font-medium neon-glow disabled:opacity-40 flex items-center justify-center gap-1.5 active:scale-[0.99]"
+              className="shrink-0 min-h-[44px] px-4 py-2 rounded-xl bg-gradient-to-r from-primary to-glow-cyan text-primary-foreground text-sm font-medium neon-glow disabled:opacity-40 flex items-center justify-center gap-1.5 active:scale-[0.99]"
             >
-              {saving
-                ? "Guardando…"
-                : status === "saved"
-                ? "Guardado ✓"
-                : "Guardar"}
+              {saving ? "Guardando…" : status === "saved" ? "Guardado ✓" : "Guardar"}
             </button>
           </div>
+
+          <button
+            onClick={() => playReminderChime()}
+            className="w-full min-h-[44px] rounded-xl border border-primary/40 bg-primary/10 text-primary text-sm font-medium flex items-center justify-center gap-2 hover:bg-primary/20 transition-colors"
+          >
+            <Volume2 className="w-4 h-4" />
+            Escuchar la alarma
+          </button>
+
           <p className="text-[11px] text-muted-foreground leading-snug">
-            Las notificaciones push se entregan en la app móvil nativa. Configura
-            tu hora igual: el recordatorio comenzará a funcionar al publicar la
-            app con notificaciones push habilitadas.
+            A esa hora suena una campanilla suave dentro de la app. Si la app está
+            cerrada, te llega el recordatorio por correo.
           </p>
         </div>
       )}

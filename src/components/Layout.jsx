@@ -6,6 +6,7 @@ import { IMAGES } from "@/lib/assets";
 import OfflineBanner from "@/components/OfflineBanner";
 import BottomNav from "@/components/BottomNav";
 import RouteTransition from "@/components/RouteTransition";
+import ReminderWatcher from "@/components/ReminderWatcher";
 
 export default function Layout() {
   const { pathname } = useLocation();
@@ -59,6 +60,7 @@ export default function Layout() {
       </main>
 
       <BottomNav />
+      <ReminderWatcher />
     </div>
   );
 }

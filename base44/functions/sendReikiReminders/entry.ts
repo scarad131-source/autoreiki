@@ -53,9 +53,13 @@ export default async function(req) {
           hour12: false,
         }).format(now);
         const [h, m] = parts.split(":").map(Number);
-        const slotMin = Math.floor(m / 15) * 15;
-        const currentSlot = `${String(h).padStart(2, "0")}:${String(slotMin).padStart(2, "0")}`;
-        if (currentSlot !== u.reminder_time) continue;
+        const nowMin = h * 60 + m;
+        // La hora del usuario no tiene por qué ser múltiplo de 15 (ej. 10:50):
+        // la pasada de cada cuarto de hora cubre los recordatorios de su ventana.
+        const [th, tm] = String(u.reminder_time).slice(0, 5).split(":").map(Number);
+        const targetMin = (th || 0) * 60 + (tm || 0);
+        const diff = nowMin - targetMin;
+        if (diff < 0 || diff >= 15) continue;
 
         checked++;
         const firstName = u.preferred_name || (u.full_name ? u.full_name.split(" ")[0] : "");

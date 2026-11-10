@@ -78,6 +78,20 @@ export default function Home() {
     } catch (e) {}
   };
 
+  // Al volver a la app (o al cambiar de pantalla) la agenda mostrada aquí se
+  // refresca, para que refleje lo último programado en Agenda Reiki.
+  useEffect(() => {
+    const onVisible = () => {
+      if (document.visibilityState === "visible") refreshUser();
+    };
+    window.addEventListener("focus", onVisible);
+    window.addEventListener("pageshow", onVisible);
+    return () => {
+      window.removeEventListener("focus", onVisible);
+      window.removeEventListener("pageshow", onVisible);
+    };
+  }, []);
+
   // Práctica de hoy según el recorrido de 21 días
   const currentDay = Math.min(Math.max(1, completedJourneyDays), 21);
   const todayJourney = JOURNEY[currentDay - 1];
@@ -152,22 +166,37 @@ export default function Home() {
           </span>
         </div>
 
-        <div className="mt-5 rounded-2xl border border-white/10 px-4 py-3">
-          <p className="font-body text-[9px] uppercase tracking-[0.24em] text-muted-foreground">Agenda hoy</p>
+        <button
+          type="button"
+          onClick={() => navigate("/agenda-reiki")}
+          className="mt-5 w-full rounded-2xl border border-white/10 px-4 py-3 text-left transition-colors hover:border-primary/40 active:scale-[0.99]"
+        >
+          <div className="flex items-center justify-between gap-2">
+            <p className="font-body text-[10px] uppercase tracking-[0.24em] text-muted-foreground">Agenda hoy</p>
+            <span className="inline-flex items-center gap-1 font-body text-[11px] text-primary">
+              Ver agenda <ArrowRight className="w-3 h-3" />
+            </span>
+          </div>
           {todaySessions.length > 0 ?
-          <div className="mt-2 space-y-1">
+          <div className="mt-2 space-y-1.5">
               {todaySessions.map((s, i) =>
-            <p key={i} className="font-body text-xs leading-snug text-primary">
-                  <span className="tabular-nums font-semibold">{s.time}</span>
-                  <span className="text-muted-foreground/70"> · </span>
-                  {s.label || "Reiki"}
-                </p>
+            <div key={i}>
+                  <p className="font-body text-xs leading-snug text-primary">
+                    <span className="tabular-nums font-semibold">{s.time}</span>
+                    {s.endTime ? <span className="text-muted-foreground/70"> – {s.endTime}</span> : null}
+                    <span className="text-muted-foreground/70"> · </span>
+                    {s.label || "Reiki"}
+                  </p>
+                  {s.details ?
+              <p className="font-body text-[11px] leading-snug text-muted-foreground/80">{s.details}</p> :
+              null}
+                </div>
             )}
             </div> :
 
           <p className="mt-2 font-body text-xs text-muted-foreground/70">Sin sesiones programadas</p>
           }
-        </div>
+        </button>
 
         <button
           onClick={() => navigate("/configurar")}
