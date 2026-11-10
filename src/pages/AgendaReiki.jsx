@@ -195,8 +195,9 @@ export default function AgendaReiki() {
       <AgendaDayDialog
         dateStr={dialogDate}
         sessions={sessionsFor(dialogDate)}
+        getSessionsFor={sessionsFor}
         onClose={() => setDialogDate(null)}
-        onSave={(sessions) => saveDay(dialogDate, sessions)} />
+        onSave={(date, sessions) => saveDay(date, sessions)} />
 
       }
     </div>);
