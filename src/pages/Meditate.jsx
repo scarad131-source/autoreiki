@@ -7,7 +7,6 @@ import ReflectionForm from "@/components/ReflectionForm";
 import PrepChecklist from "@/components/PrepChecklist";
 import { buildChakraScript, CHAKRAS } from "@/lib/guidedScripts";
 import { JOURNEY } from "@/lib/journey";
-import { unlockSpeech } from "@/lib/speech";
 import { audioUrlFor, isVoiceTrack } from "@/lib/audioSources";
 import { sessionAudio } from "@/lib/sessionAudio";
 import { queueIfOffline } from "@/lib/offlineSync";
@@ -51,7 +50,6 @@ export default function Meditate() {
       }
     }
     if (preset) {
-      unlockSpeech();
       const cfg = { ...preset, journeyDay: location.state?.journeyDay ?? preset.journeyDay ?? null };
       if (cfg.mode === "guided" && cfg.chakras && cfg.chakras.length) {
         cfg.customScript = buildChakraScript(cfg.chakras);
@@ -68,7 +66,6 @@ export default function Meditate() {
   }, [location.state]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const start = (cfg) => {
-    unlockSpeech();
     const finalCfg = { ...cfg, journeyDay };
     if (finalCfg.mode === "guided" && finalCfg.chakras && finalCfg.chakras.length) {
       finalCfg.customScript = buildChakraScript(finalCfg.chakras);

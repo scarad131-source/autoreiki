@@ -75,6 +75,16 @@ class SessionAudio {
     this._resumeCtx();
   }
 
+  // Avisa al service worker de que hay (o no) una sesión en curso. Mientras dura,
+  // la descarga de audios para uso sin conexión se detiene: son casi 150 MB y
+  // competir con ella deja la pista guiada sin datos para sonar.
+  setSessionActive(active) {
+    try {
+      const sw = navigator.serviceWorker && navigator.serviceWorker.controller;
+      if (sw) sw.postMessage({ type: "SESSION_ACTIVE", active: !!active });
+    } catch (e) {}
+  }
+
   // Red de seguridad contra los cortes: si el sistema dejó el elemento en pausa
   // (llamada, bloqueo de pantalla, cambio de app, pérdida de foco de audio) o el
   // contexto quedó suspendido, devuelve el sonido a la posición actual.
@@ -94,7 +104,11 @@ class SessionAudio {
   // límite nativo). Debe llamarse dentro o cerca de un gesto del usuario.
   setBoost(factor) {
     this.boostFactor = factor || 1;
-    this._setupWebAudio();
+    // Solo se enruta el audio por Web Audio cuando hay que amplificar. Así una
+    // pista normal (voz de Reiki, ambiente) sale por la ruta nativa del
+    // navegador, la más fiable, y no puede quedarse muda porque el contexto de
+    // audio de Web Audio esté suspendido.
+    if (this.boostFactor > 1) this._setupWebAudio();
     this._resumeCtx();
     if (this.gainNode) {
       try {
@@ -120,6 +134,7 @@ class SessionAudio {
     try { el.pause(); } catch (e) {}
     el.src = url;
     el.loop = !!loop;
+    this.setSessionActive(true);
     // Silenciamos durante el ciclo play-pause del desbloqueo: en pistas largas
     // (p. ej. Reiki guiada 26 min) la promesa de play() se resuelve tarde, solo
     // cuando el audio realmente empieza a sonar, y sin mute se escucharía durante

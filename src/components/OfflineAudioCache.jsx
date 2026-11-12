@@ -17,12 +17,18 @@ export default function OfflineAudioCache() {
     // Respeta el ahorro de datos y las conexiones muy lentas.
     if (conn && (conn.saveData || conn.effectiveType === "slow-2g" || conn.effectiveType === "2g")) return;
 
-    navigator.serviceWorker.ready
-      .then((registration) => {
-        const worker = registration.active || navigator.serviceWorker.controller;
-        if (worker) worker.postMessage({ type: "CACHE_AUDIO", urls: AUDIO_URLS });
-      })
-      .catch(() => {});
+    // Se espera a que la app termine de cargar: son casi 150 MB y no deben
+    // competir con el audio de una sesión que empiece enseguida. Si ya hay una
+    // sesión en curso, el service worker espera su turno.
+    const timer = setTimeout(() => {
+      navigator.serviceWorker.ready
+        .then((registration) => {
+          const worker = registration.active || navigator.serviceWorker.controller;
+          if (worker) worker.postMessage({ type: "CACHE_AUDIO", urls: AUDIO_URLS });
+        })
+        .catch(() => {});
+    }, 15000);
+    return () => clearTimeout(timer);
   }, []);
 
   return null;

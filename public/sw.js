@@ -9,6 +9,10 @@ const MEDIA_CACHE = 'autoreiki-media-v4';
 const AUDIO_CACHE = 'autoreiki-audio-v4';
 const CACHES = [SHELL_CACHE, MEDIA_CACHE, AUDIO_CACHE];
 
+// La app avisa cuando hay una sesión sonando: la descarga anticipada se detiene
+// mientras dura para no quitarle ancho de banda a la reproducción.
+let sessionActive = false;
+
 const SHELL_ASSETS = [
   '/',
   '/index.html',
@@ -52,6 +56,9 @@ self.addEventListener('message', (e) => {
   if (data.type === 'CACHE_AUDIO' && Array.isArray(data.urls)) {
     e.waitUntil(cacheAudios(data.urls));
   }
+  if (data.type === 'SESSION_ACTIVE') {
+    sessionActive = !!data.active;
+  }
 });
 
 // Descarga cada audio completo (sin cabecera Range, para poder guardarlo entero)
@@ -59,6 +66,10 @@ self.addEventListener('message', (e) => {
 async function cacheAudios(urls) {
   const cache = await caches.open(AUDIO_CACHE);
   for (const url of urls) {
+    // Con una sesión sonando la descarga espera: primero el audio de la sesión.
+    while (sessionActive) {
+      await new Promise((r) => setTimeout(r, 5000));
+    }
     try {
       const cached = await cache.match(url, { ignoreVary: true });
       if (cached) continue;

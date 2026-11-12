@@ -9,6 +9,10 @@ import { isVoiceTrack } from "@/lib/audioSources";
 const ZEN_BG = "https://media.base44.com/images/public/6a7d30a899098694894dbd88/c9ee16c53_Piedraszen2.jpeg";
 import { sessionAudio } from "@/lib/sessionAudio";
 
+// Una pista de voz guiada dura minutos: cualquier duración menor es una
+// estimación temporal del reproductor y cerraría la sesión al instante.
+const MIN_VOICE_DURATION = 60;
+
 export default function MeditationRunner({ config, onFinish, onCancel }) {
   const [audioDuration, setAudioDuration] = useState(null);
   // En meditaciones guiadas la sesión dura lo que dura la voz, pero nunca más
@@ -109,16 +113,17 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       const d = e.currentTarget.duration;
       if (cur > 1) playedRef.current = true;
       if (isVoiceTrack(config.audio)) {
-        // Solo se acepta una duración real (> 2 s): un valor mínimo del
-        // reproductor cerraría la sesión al instante.
-        if (d && isFinite(d) && d > 2) setAudioDuration(d);
+        // Solo se acepta la duración real de una pista guiada (minutos): una
+        // estimación mínima del reproductor cerraría la sesión al instante.
+        if (d && isFinite(d) && d > MIN_VOICE_DURATION) setAudioDuration(d);
         if (started && !paused && !finishedRef.current) {
-          const t = Math.floor(cur);
-          setElapsed((prev) => (t !== prev ? t : prev));
+          // El reloj lo lleva únicamente el intervalo de 1 s (más abajo). Aquí
+          // solo se detecta el final: si además escribiera el tiempo, ambos
+          // valores chocarían y el temporizador saltaría hacia atrás.
           // Detección de fin: cuando el audio llega casi al final. Se exige una
           // duración real (> 2 s) para no cerrar la sesión si el reproductor
           // informa un final vacío antes de cargar la pista.
-          if (d && isFinite(d) && d > 2 && cur >= d - 0.4) finishGuided();
+          if (d && isFinite(d) && d > MIN_VOICE_DURATION && cur >= d - 0.4) finishGuided();
         }
       }
     };
@@ -126,7 +131,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       if (isVoiceTrack(config.audio)) {
         // Solo cuenta como final válido si el audio realmente avanzó.
         const dur = el.duration;
-        if ((dur && isFinite(dur) && dur > 2) || el.currentTime > 2) finishGuided();
+        if ((dur && isFinite(dur) && dur > MIN_VOICE_DURATION) || el.currentTime > 2) finishGuided();
         return;
       }
       // No guiada: si el loop falla y el audio termina, reiniciarlo manualmente
@@ -193,7 +198,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     setStepIndex(script.steps.length - 1);
   }, [elapsed, script, started]);
 
-  // timer (solo sesiones no guiadas; las guiadas se sincronizan con timeupdate)
+  // Reloj único de la sesión (todos los modos): es el valor que se muestra.
   useEffect(() => {
     if (!started || paused) return;
     // El reloj corre también en las sesiones guiadas: si el audio no llega a
@@ -305,7 +310,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     const id = setInterval(() => {
       if (finishedRef.current) return;
       const d = el.duration;
-      const knownDuration = d && isFinite(d) && d > 2;
+      const knownDuration = d && isFinite(d) && d > MIN_VOICE_DURATION;
       const realEnd = el.ended && (knownDuration || el.currentTime > 2);
       const nearEnd = knownDuration && el.currentTime >= d - 0.4;
       if (realEnd || nearEnd) {
@@ -358,6 +363,9 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   useEffect(() => {
     return () => {
       try { el.pause(); } catch (e) {}
+      // La sesión terminó: la descarga de audios para uso sin conexión puede
+      // reanudarse sin quitarle ancho de banda a nada.
+      sessionAudio.setSessionActive(false);
     };
   }, [el]);
 
