@@ -4,9 +4,9 @@
 //   2) imágenes y fuentes que usa la interfaz             -> MEDIA_CACHE
 //   3) los audios de las sesiones (ambiente y voz guiada) -> AUDIO_CACHE
 
-const SHELL_CACHE = 'autoreiki-shell-v3';
-const MEDIA_CACHE = 'autoreiki-media-v3';
-const AUDIO_CACHE = 'autoreiki-audio-v3';
+const SHELL_CACHE = 'autoreiki-shell-v4';
+const MEDIA_CACHE = 'autoreiki-media-v4';
+const AUDIO_CACHE = 'autoreiki-audio-v4';
 const CACHES = [SHELL_CACHE, MEDIA_CACHE, AUDIO_CACHE];
 
 const SHELL_ASSETS = [
@@ -73,6 +73,16 @@ async function cacheAudios(urls) {
 // Sirve un audio desde la caché. Los reproductores piden fragmentos (Range), así
 // que cuando hay una copia completa guardada se responde el fragmento solicitado.
 async function serveAudio(req) {
+  // RED PRIMERO. La reproducción en línea va por la ruta nativa del navegador
+  // (la más fiable en iOS/Android para archivos largos con Range). La copia
+  // guardada se usa solo cuando no hay conexión, para el modo avión.
+  try {
+    const res = await fetch(req);
+    if (res && (res.status === 200 || res.status === 206)) return res;
+  } catch (err) {
+    // Sin red: se intenta la copia guardada.
+  }
+
   const cache = await caches.open(AUDIO_CACHE);
   const cached = await cache.match(req.url, { ignoreVary: true });
   if (cached) {
@@ -80,18 +90,8 @@ async function serveAudio(req) {
     if (range && cached.status === 200) return rangedResponse(cached, range);
     return cached;
   }
-
-  let res;
-  try {
-    res = await fetch(req);
-  } catch (err) {
-    // Sin conexión y sin copia guardada: se responde 503 en lugar de lanzar una
-    // excepción que Safari/Chrome reportan como error de la página.
-    return new Response(null, { status: 503 });
-  }
-  // Solo se guardan respuestas completas (las parciales no se pueden almacenar).
-  if (res.status === 200) cache.put(req.url, res.clone()).catch(() => {});
-  return res;
+  // Sin red y sin copia guardada: 503 en lugar de una excepción de la página.
+  return new Response(null, { status: 503 });
 }
 
 // Recorta la copia guardada al fragmento de bytes que pidió el reproductor.

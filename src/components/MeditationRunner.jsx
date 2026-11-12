@@ -38,6 +38,8 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   // Tiempo practicado según el reloj de la sesión (lo usan los detectores de
   // fin de audio, que viven fuera del render).
   const elapsedRef = useRef(0);
+  // ¿El audio llegó a sonar? Evita registrar como "completada" una sesión muda.
+  const playedRef = useRef(false);
 
   const started = countdown === 0;
   const el = audioRef.current;
@@ -49,6 +51,17 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     if (p && typeof p.then === "function") {
       p.then(() => setNeedsTap(false)).catch(() => setNeedsTap(true));
     }
+  };
+
+  // Reintento manual (dentro del toque del usuario): recarga la pista desde
+  // cero, por si la carga falló (sin conexión, error del reproductor).
+  const retryAudio = () => {
+    setNeedsTap(false);
+    try { el.load(); } catch (e) {}
+    el.muted = muted;
+    el.volume = muted ? 0 : volume;
+    el.loop = !isVoiceTrack(config.audio);
+    playAudio();
   };
 
   const isGuided = config.mode === "guided";
@@ -94,6 +107,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     const onTime = (e) => {
       const cur = e.currentTarget.currentTime;
       const d = e.currentTarget.duration;
+      if (cur > 1) playedRef.current = true;
       if (isVoiceTrack(config.audio)) {
         // Solo se acepta una duración real (> 2 s): un valor mínimo del
         // reproductor cerraría la sesión al instante.
@@ -121,15 +135,28 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         el.play().catch(() => {});
       }
     };
+    // El audio llegó a sonar (para el registro) y nunca debe quedar en silencio
+    // sin avisar: si el navegador no puede cargarlo, se ofrece reintentar.
+    const onPlaying = () => {
+      playedRef.current = true;
+      setNeedsTap(false);
+    };
+    const onError = () => {
+      if (!finishedRef.current) setNeedsTap(true);
+    };
     el.addEventListener("loadedmetadata", onLoaded);
     el.addEventListener("timeupdate", onTime);
     el.addEventListener("ended", onEnded);
+    el.addEventListener("playing", onPlaying);
+    el.addEventListener("error", onError);
     // Si la metadata ya cargó antes de montar, léela ahora.
     if (el.duration && isFinite(el.duration)) onLoaded();
     return () => {
       el.removeEventListener("loadedmetadata", onLoaded);
       el.removeEventListener("timeupdate", onTime);
       el.removeEventListener("ended", onEnded);
+      el.removeEventListener("playing", onPlaying);
+      el.removeEventListener("error", onError);
     };
   }, [el, config.audio, started, paused, onFinish]);
 
@@ -146,7 +173,9 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     el.muted = muted;
     el.volume = muted ? 0 : volume;
     el.loop = !isVoiceTrack(config.audio);
-    try { el.currentTime = 0; } catch (e) {}
+    // Solo se rebobina si la pista ya tiene metadata: en archivos largos pedir
+    // currentTime antes de cargar reinicia la descarga y retrasa el sonido.
+    if (el.readyState >= 1) { try { el.currentTime = 0; } catch (e) {} }
     if (el.paused) playAudio();
   }, [started]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -199,6 +228,9 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     const watchdog = setInterval(() => {
       if (paused || finishedRef.current || document.visibilityState === "hidden") return;
       sessionAudio.ensurePlaying();
+      // Si el sistema mantiene el audio detenido (bloqueo de autoplay, corte del
+      // contexto), se ofrece el toque de reactivación en pantalla.
+      if (el.paused && !el.ended) setNeedsTap(true);
     }, 2000);
     document.addEventListener("visibilitychange", onVisible);
     window.addEventListener("pageshow", onVisible);
@@ -261,7 +293,9 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     if (elapsed >= totalSeconds) {
       finishedRef.current = true;
       try { el.pause(); } catch (e) {}
-      onFinish({ actualSeconds: totalSeconds, completed: true });
+      // Si el audio nunca sonó (autoplay bloqueado, sin conexión) el registro
+      // queda como sesión no completada, para no acreditar tiempo no escuchado.
+      onFinish({ actualSeconds: totalSeconds, completed: playedRef.current });
     }
   }, [elapsed, totalSeconds, started, onFinish, config.audio]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -393,7 +427,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
 
               {needsTap && (
                 <button
-                  onClick={() => { setNeedsTap(false); playAudio(); }}
+                  onClick={retryAudio}
                   className="min-h-[44px] px-5 rounded-full bg-primary text-primary-foreground text-sm font-semibold shadow-lg active:scale-[0.98]"
                 >
                   Toca para activar el sonido
