@@ -230,12 +230,19 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       if (document.visibilityState !== "visible" || paused || finishedRef.current) return;
       sessionAudio.ensurePlaying();
     };
+    let silentTicks = 0;
     const watchdog = setInterval(() => {
       if (paused || finishedRef.current || document.visibilityState === "hidden") return;
       sessionAudio.ensurePlaying();
       // Si el sistema mantiene el audio detenido (bloqueo de autoplay, corte del
       // contexto), se ofrece el toque de reactivación en pantalla.
       if (el.paused && !el.ended) setNeedsTap(true);
+      // Si el audio aún no ha sonado nada, se ofrece el mismo toque: recarga la
+      // pista en lugar de dejar la sesión en silencio sin avisar.
+      if (!playedRef.current) {
+        silentTicks += 1;
+        if (silentTicks >= 4) setNeedsTap(true);
+      }
     }, 2000);
     document.addEventListener("visibilitychange", onVisible);
     window.addEventListener("pageshow", onVisible);

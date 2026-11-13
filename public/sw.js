@@ -81,19 +81,11 @@ async function cacheAudios(urls) {
   }
 }
 
-// Sirve un audio desde la caché. Los reproductores piden fragmentos (Range), así
-// que cuando hay una copia completa guardada se responde el fragmento solicitado.
-async function serveAudio(req) {
-  // RED PRIMERO. La reproducción en línea va por la ruta nativa del navegador
-  // (la más fiable en iOS/Android para archivos largos con Range). La copia
-  // guardada se usa solo cuando no hay conexión, para el modo avión.
-  try {
-    const res = await fetch(req);
-    if (res && (res.status === 200 || res.status === 206)) return res;
-  } catch (err) {
-    // Sin red: se intenta la copia guardada.
-  }
-
+// Sirve un audio guardado, solo sin conexión. Los reproductores piden fragmentos
+// (Range), así que cuando hay una copia completa se responde el fragmento pedido.
+// En línea NO se reenvía la petición desde aquí: el CDN no acepta el encabezado
+// Range en una petición de este tipo y el audio se quedaría sin cargar.
+async function serveAudioCached(req) {
   const cache = await caches.open(AUDIO_CACHE);
   const cached = await cache.match(req.url, { ignoreVary: true });
   if (cached) {
@@ -153,7 +145,11 @@ self.addEventListener('fetch', (e) => {
 
   // Audios de las sesiones: disponibles sin conexión.
   if (AUDIO_RE.test(url.pathname)) {
-    e.respondWith(serveAudio(req));
+    // En línea el audio va directo del CDN al reproductor: es la ruta fiable
+    // (soporta las peticiones por partes que pide el navegador). El service
+    // worker solo responde cuando no hay conexión, con la copia guardada.
+    if (navigator.onLine) return;
+    e.respondWith(serveAudioCached(req));
     return;
   }
 
