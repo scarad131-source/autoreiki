@@ -25,6 +25,7 @@ const Diario = lazy(() => import('@/pages/Diario'));
 const Ayuda = lazy(() => import('@/pages/Ayuda'));
 const AgendaReiki = lazy(() => import('@/pages/AgendaReiki'));
 const Historial = lazy(() => import('@/pages/Historial'));
+const Ajustes = lazy(() => import('@/pages/Ajustes'));
 
 const PageLoader = () => (
   <div className="fixed inset-0 flex items-center justify-center">
@@ -74,6 +75,7 @@ const AuthenticatedApp = () => {
           <Route path="/ayuda" element={<Ayuda />} />
           <Route path="/agenda-reiki" element={<AgendaReiki />} />
           <Route path="/historial" element={<Historial />} />
+          <Route path="/ajustes" element={<Ajustes />} />
         </Route>
       </Route>
       <Route path="*" element={<PageNotFound />} />

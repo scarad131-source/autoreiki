@@ -81,18 +81,18 @@ export default function ReminderSettings({ user, onSaved }) {
           <label className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground flex items-center gap-1.5">
             <Clock className="w-3.5 h-3.5" /> Hora del recordatorio
           </label>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
             <input
               type="time"
               step={900}
               value={time}
               onChange={(e) => setTime(e.target.value)}
-              className="flex-1 min-h-[44px] px-3 py-2 rounded-xl bg-accent/40 border border-glow/20 text-foreground text-base font-medium outline-none focus:border-primary/60"
+              className="w-full min-w-0 min-h-[44px] px-3 py-2 rounded-xl bg-accent/40 border border-glow/20 text-foreground text-base font-medium outline-none focus:border-primary/60"
             />
             <button
               onClick={() => save()}
               disabled={saving}
-              className="shrink-0 min-h-[44px] px-4 py-2 rounded-xl bg-gradient-to-r from-primary to-glow-cyan text-primary-foreground text-sm font-medium neon-glow disabled:opacity-40 flex items-center justify-center gap-1.5 active:scale-[0.99]"
+              className="w-full sm:w-auto shrink-0 min-h-[44px] px-4 py-2 rounded-xl bg-gradient-to-r from-primary to-glow-cyan text-primary-foreground text-sm font-medium neon-glow disabled:opacity-40 flex items-center justify-center gap-1.5 active:scale-[0.99]"
             >
               {saving ? "Guardando…" : status === "saved" ? "Guardado ✓" : "Guardar"}
             </button>

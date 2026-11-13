@@ -1,7 +1,14 @@
 import { useNavigate } from "react-router-dom";
-import { BookOpen, Sparkles, ChevronRight, History } from "lucide-react";
+import { BookOpen, Sparkles, ChevronRight, History, Settings } from "lucide-react";
 
 const ITEMS = [
+  {
+    to: "/ajustes",
+    icon: Settings,
+    title: "Ajustes",
+    desc: "Tu nombre, el recordatorio diario, los avisos del teléfono y tu cuenta.",
+    tone: "gold",
+  },
   {
     to: "/diario",
     icon: BookOpen,

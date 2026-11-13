@@ -20,6 +20,8 @@ const TAB_OF = {
   "/diario": "/",
   "/ayuda": "/",
   "/historial": "/",
+  "/ajustes": "/",
+  "/mas": "/",
   "/meditar": "/meditar",
   "/recorrido": "/recorrido",
   "/configurar": "/configurar",

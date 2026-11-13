@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Clock, Sparkles, Calendar, Flame, ArrowRight } from "lucide-react";
+import { Clock, Sparkles, Calendar, Flame, ArrowRight, Settings } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import WeeklyStats from "@/components/WeeklyStats";
 import HomeQuickAccess from "@/components/HomeQuickAccess";
 import Badges from "@/components/Badges";
-import ReminderSettings from "@/components/ReminderSettings";
-import DeleteAccountButton from "@/components/DeleteAccountButton";
 import HelpButton from "@/components/HelpButton";
 import PersonalizationCard from "@/components/PersonalizationCard";
 import InstallAppButton from "@/components/InstallAppButton";
@@ -256,12 +254,26 @@ export default function Home() {
         }
       </section>
 
-      {!loading && <ReminderSettings user={user} onSaved={refreshUser} />}
-
+      {/* Ajustes: nombre, recordatorio diario, avisos y cuenta en una sola pantalla */}
       <div className="pt-4 pb-2 flex flex-col items-center gap-3">
         <InstallAppButton />
         <HelpButton user={user} onSaved={refreshUser} />
-        <DeleteAccountButton />
+        <button
+          type="button"
+          onClick={() => navigate("/ajustes")}
+          className="w-full max-w-sm rounded-2xl border border-primary/40 bg-white/5 px-4 py-3.5 flex items-center gap-3 text-left active:scale-[0.99] transition-transform"
+        >
+          <div className="w-9 h-9 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
+            <Settings className="w-4 h-4 text-primary" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold leading-tight">Ajustes</p>
+            <p className="text-[11px] text-muted-foreground leading-snug mt-0.5">
+              Tu nombre, el recordatorio diario y tu cuenta
+            </p>
+          </div>
+          <ArrowRight className="w-4 h-4 text-primary shrink-0" />
+        </button>
       </div>
     </div>);
 

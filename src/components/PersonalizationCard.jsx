@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -7,11 +7,19 @@ const LEVELS = [
 { id: "intermediate", label: "Ya practico" }];
 
 
-export default function PersonalizationCard({ user, onSaved }) {
+export default function PersonalizationCard({ user, onSaved, variant = "onboarding" }) {
   const { toast } = useToast();
   const [name, setName] = useState(user?.preferred_name || "");
   const [level, setLevel] = useState(user?.practice_level || "beginner");
   const [saving, setSaving] = useState(false);
+  const isSettings = variant === "settings";
+
+  // En Ajustes la tarjeta está siempre visible: si el perfil llega después o
+  // cambia, los campos se sincronizan con lo que hay guardado.
+  useEffect(() => {
+    setName(user?.preferred_name || "");
+    setLevel(user?.practice_level || "beginner");
+  }, [user?.preferred_name, user?.practice_level]);
 
   const handleSave = async () => {
     setSaving(true);
@@ -35,13 +43,15 @@ export default function PersonalizationCard({ user, onSaved }) {
   return (
     <section className="rounded-2xl border border-white/10 bg-card/80 p-5 text-center">
       <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-        Personalización breve
+        {isSettings ? "Tus datos" : "Personalización breve"}
       </p>
       <h3 className="text-lg leading-snug mt-2 [font-family:'Cabin',_sans-serif] font-medium">
-        Antes de guiarte, cuéntame cómo practicas.
+        {isSettings ? "Tu nombre y tu nivel" : "Antes de guiarte, cuéntame cómo practicas."}
       </h3>
-      <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">Dos respuestas permiten ajustar el lenguaje y el nivel de ayuda.
-
+      <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
+        {isSettings
+          ? "Así te saludamos y ajustamos el lenguaje de tus sesiones."
+          : "Dos respuestas permiten ajustar el lenguaje y el nivel de ayuda."}
       </p>
 
       <div className="mt-5 space-y-4">
@@ -54,7 +64,7 @@ export default function PersonalizationCard({ user, onSaved }) {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Nombre opcional"
-            className="w-full rounded-xl border border-white/10 bg-background/60 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary/50" />
+            className="w-full rounded-xl border border-white/10 bg-background/60 px-4 py-3 text-base text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary/50" />
           
         </div>
 
@@ -85,7 +95,7 @@ export default function PersonalizationCard({ user, onSaved }) {
         disabled={saving}
         className="w-full mt-5 rounded-xl bg-gradient-to-r from-amber-light to-primary text-primary-foreground font-semibold py-3.5 neon-glow active:scale-[0.99] transition-transform disabled:opacity-60 disabled:cursor-not-allowed">
         
-        {saving ? "Guardando…" : "Guardar y continuar"}
+        {saving ? "Guardando…" : isSettings ? "Guardar cambios" : "Guardar y continuar"}
       </button>
     </section>);
 
