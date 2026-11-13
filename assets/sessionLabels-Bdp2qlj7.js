@@ -1,0 +1,1 @@
+const i={beach:"Playa tranquila",rain:"Lluvia relajante",forest:"Bosque nocturno",bowls:"Frecuencias Sanadoras",healing:"Frecuencias Sanadoras",meditation21:"Meditación guiada 21 días",reikiGuided:"Reiki guiada",reikiGuided26:"Reiki guiada 26 min"},e=a=>i[a]||"Ambiente sonoro";export{e as a};
