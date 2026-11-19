@@ -69,9 +69,9 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   // cero, por si la carga falló (sin conexión, error del reproductor).
   const retryAudio = () => {
     setNeedsTap(false);
-    // Solo se recarga la pista si de verdad falló: recargarla mientras descarga
-    // reinicia el archivo y la voz guiada nunca llega a sonar.
-    if (el.error || el.readyState === 0) {
+    // Solo se recarga la pista si el reproductor dio un error real: recargarla
+    // mientras descarga reinicia el archivo y la voz guiada nunca llega a sonar.
+    if (el.error) {
       try { el.load(); } catch (e) {}
     }
     el.muted = muted;
