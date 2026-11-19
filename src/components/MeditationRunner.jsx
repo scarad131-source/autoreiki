@@ -15,18 +15,26 @@ const MIN_VOICE_DURATION = 60;
 
 export default function MeditationRunner({ config, onFinish, onCancel }) {
   const [audioDuration, setAudioDuration] = useState(null);
-  // En meditaciones guiadas la sesión dura lo que dura la voz, pero nunca más
-  // que el tiempo previsto: los días cortos del reto (5 min) no deben registrar
-  // la pista completa.
+  const plannedSeconds = Math.max(1, Math.round(config.minutes * 60));
+  // Meditación guiada: la sesión dura lo que dura la voz, para que no se corte a
+  // media frase. Solo los días del reto (que reutilizan la misma pista con
+  // prácticas cortas) se recortan al tiempo previsto.
+  // Mientras llega la duración real se usa el tiempo previsto: con Infinity el
+  // reloj mostraba "Infinity:NaN" y la sesión no podía terminar.
   const totalSeconds = isVoiceTrack(config.audio)
-    ? Math.min(audioDuration ? Math.ceil(audioDuration) : Infinity, config.minutes * 60)
-    : config.minutes * 60;
+    ? audioDuration
+      ? Math.max(1, Math.round(config.journeyDay ? Math.min(audioDuration, plannedSeconds) : audioDuration))
+      : plannedSeconds
+    : plannedSeconds;
   const [countdown, setCountdown] = useState(isVoiceTrack(config.audio) ? 2 : 3);
   const [elapsed, setElapsed] = useState(0);
   const [paused, setPaused] = useState(false);
   // El navegador puede bloquear el audio guiado (política de autoplay): en ese
   // caso se muestra un botón para activar el sonido con un toque.
   const [needsTap, setNeedsTap] = useState(false);
+  // El audio guiado pesa minutos de descarga: mientras llega se avisa en pantalla
+  // en lugar de pedir un toque que reiniciaría la descarga.
+  const [buffering, setBuffering] = useState(true);
   // "Frecuencias Sanadoras" (bowls) suena bajo: subimos el volumen base y
   // aplicamos una amplificación extra vía Web Audio para que se escuche claro.
   const isBowls = config.audio === "bowls";
@@ -61,7 +69,11 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   // cero, por si la carga falló (sin conexión, error del reproductor).
   const retryAudio = () => {
     setNeedsTap(false);
-    try { el.load(); } catch (e) {}
+    // Solo se recarga la pista si de verdad falló: recargarla mientras descarga
+    // reinicia el archivo y la voz guiada nunca llega a sonar.
+    if (el.error || el.readyState === 0) {
+      try { el.load(); } catch (e) {}
+    }
     el.muted = muted;
     el.volume = muted ? 0 : volume;
     el.loop = !isVoiceTrack(config.audio);
@@ -145,15 +157,21 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     const onPlaying = () => {
       playedRef.current = true;
       setNeedsTap(false);
+      setBuffering(false);
     };
     const onError = () => {
+      setBuffering(false);
       if (!finishedRef.current) setNeedsTap(true);
     };
+    const onWaiting = () => setBuffering(true);
+    const onCanPlay = () => setBuffering(false);
     el.addEventListener("loadedmetadata", onLoaded);
     el.addEventListener("timeupdate", onTime);
     el.addEventListener("ended", onEnded);
     el.addEventListener("playing", onPlaying);
     el.addEventListener("error", onError);
+    el.addEventListener("waiting", onWaiting);
+    el.addEventListener("canplay", onCanPlay);
     // Si la metadata ya cargó antes de montar, léela ahora.
     if (el.duration && isFinite(el.duration)) onLoaded();
     return () => {
@@ -162,6 +180,8 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       el.removeEventListener("ended", onEnded);
       el.removeEventListener("playing", onPlaying);
       el.removeEventListener("error", onError);
+      el.removeEventListener("waiting", onWaiting);
+      el.removeEventListener("canplay", onCanPlay);
     };
   }, [el, config.audio, started, paused, onFinish]);
 
@@ -241,7 +261,10 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       // pista en lugar de dejar la sesión en silencio sin avisar.
       if (!playedRef.current) {
         silentTicks += 1;
-        if (silentTicks >= 4) setNeedsTap(true);
+        // El toque solo se pide cuando el navegador ya tiene datos y aun así no
+        // reproduce (autoplay bloqueado). Si aún descarga, se muestra el aviso de
+        // carga y no se reinicia la descarga con un toque.
+        if (silentTicks >= 4 && el.readyState >= 2) setNeedsTap(true);
       }
     }, 2000);
     document.addEventListener("visibilitychange", onVisible);
@@ -403,18 +426,21 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   };
 
   return (
-    <div className="relative -mt-4 mx-auto w-full max-w-[440px] flex flex-col overflow-hidden rounded-[1.75rem] ring-1 ring-primary/40 shadow-[0_0_30px_hsl(var(--gold)/0.35),0_0_70px_hsl(var(--gold)/0.18),0_18px_45px_rgba(0,0,0,0.55)] min-h-[calc(100svh-3.5rem-8rem)]">
+    <div className="relative -mt-4 mx-auto w-full max-w-[440px] flex flex-col overflow-hidden rounded-[1.75rem] ring-1 ring-primary/40 shadow-[0_0_30px_hsl(var(--gold)/0.35),0_0_70px_hsl(var(--gold)/0.18),0_18px_45px_rgba(0,0,0,0.55)] min-h-[calc(100svh-9rem)]">
       <img src={ZEN_BG} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "center 40%" }} />
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/45" />
 
-      <div className="relative z-10 flex flex-col min-h-[calc(100svh-3.5rem-8rem)] justify-between py-6 px-4">
-        <div className="w-full flex items-center justify-end">
-          <span className="uppercase tracking-[0.18em] text-xs text-foreground/80 drop-shadow">
+      <div className="relative z-10 flex flex-col min-h-[calc(100svh-9rem)] justify-between gap-4 py-5 px-4 pb-[calc(1.25rem+env(safe-area-inset-bottom))]">
+        <div className="w-full flex items-center justify-between gap-2">
+          <span className="uppercase tracking-[0.16em] text-[11px] text-foreground/75 drop-shadow">
+            {isGuided ? "Voz guiada" : "Sonido ambiente"}
+          </span>
+          <span className="uppercase tracking-[0.16em] text-[11px] text-primary drop-shadow">
             {isGuided ? "Guiada" : "No guiada"}
           </span>
         </div>
 
-        <div className="flex-1 flex flex-col items-center justify-center gap-6 w-full">
+        <div className="flex-1 flex flex-col items-center justify-center gap-4 sm:gap-6 w-full py-2">
           {countdown > 0 ? (
             <div className="text-center">
               <motion.p
@@ -436,7 +462,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
                   {mm}:{ss}
                 </p>
                 <p className="text-xs text-foreground/70 mt-2 uppercase tracking-[0.18em]">
-                  {paused ? "En pausa" : "Respira con calma"}
+                  {paused ? "En pausa" : buffering && !playedRef.current ? "Cargando la voz…" : "Respira con calma"}
                 </p>
               </div>
 
@@ -467,7 +493,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
           )}
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden">
             <motion.div
               className="h-full bg-gradient-to-r from-primary to-glow-cyan"
@@ -515,14 +541,9 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
               Terminar y guardar
             </button>
           )}
-        </div>
-      </div>
-
-      <div className="absolute left-2 top-1/2 -translate-y-1/2 z-10 max-w-[128px]">
-        <div className="inline-flex items-start gap-1.5 px-2.5 py-2 rounded-xl border border-primary/30 bg-black/45 backdrop-blur-sm">
-          <Headphones className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
-          <p className="text-[10px] text-foreground/85 font-light leading-tight text-left">
-            Sugerimos audífonos para un viaje sonoro más profundo ✦
+          <p className="mx-auto flex items-center justify-center gap-1.5 max-w-[260px] text-[11px] text-foreground/75 font-light leading-snug text-center">
+            <Headphones className="w-3.5 h-3.5 text-primary shrink-0" />
+            Sugerimos audífonos para un viaje sonoro más profundo
           </p>
         </div>
       </div>
