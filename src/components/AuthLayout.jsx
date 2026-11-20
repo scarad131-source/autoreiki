@@ -5,11 +5,11 @@ export default function AuthLayout({ icon: Icon, logo, title, subtitle, footer, 
   return (
     <div
       className="relative flex min-h-[100svh] flex-col overflow-y-auto bg-background px-4 pt-[calc(1.5rem+env(safe-area-inset-top))] pb-[calc(1.5rem+env(safe-area-inset-bottom))]"
-      style={{ "--art-h": "min(112svh, 900px)" }}
+      style={{ "--art-h": "min(100svh, 820px)" }}
     >
       {backgroundImage && (
         // Móvil: fondo a pantalla completa, cubriendo toda la vista.
-        <div className="fixed inset-0 overflow-hidden lg:hidden" aria-hidden="true">
+        <div className="absolute inset-x-0 top-0 h-[100svh] overflow-hidden lg:hidden" aria-hidden="true">
           <Image
             src={backgroundImage}
             alt=""
@@ -28,7 +28,7 @@ export default function AuthLayout({ icon: Icon, logo, title, subtitle, footer, 
         // misma imagen difuminada rellenando los laterales. El arte se ancla
         // arriba y mide --art-h, así el mensaje de bienvenida queda visible y
         // el recuadro se coloca justo debajo, en su espacio vacío.
-        <div className="hidden lg:block fixed inset-0 overflow-hidden" aria-hidden="true">
+        <div className="hidden lg:block absolute inset-x-0 top-0 overflow-hidden" style={{ height: "var(--art-h)" }} aria-hidden="true">
           <div
             className="absolute inset-0 opacity-50 blur-2xl"
             style={{
