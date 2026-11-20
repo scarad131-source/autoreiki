@@ -5,6 +5,7 @@ export default function AuthLayout({ icon: Icon, logo, title, subtitle, footer, 
   return (
     <div
       className="relative flex min-h-[100svh] flex-col overflow-y-auto bg-background px-4 pt-[calc(1.5rem+env(safe-area-inset-top))] pb-[calc(1.5rem+env(safe-area-inset-bottom))]"
+      style={{ "--art-h": "min(112svh, 900px)" }}
     >
       {backgroundImage && (
         // Móvil: fondo a pantalla completa, cubriendo toda la vista.
@@ -23,29 +24,30 @@ export default function AuthLayout({ icon: Icon, logo, title, subtitle, footer, 
       )}
 
       {backgroundImage && (
-        // Escritorio: la ilustración como marco de fondo, reducida para que
-        // quepa a lo alto, con un relleno difuminado de la misma imagen a los
-        // lados. Así el mensaje de bienvenida queda libre y el recuadro se
-        // coloca en el espacio vacío del arte.
+        // Escritorio: la ilustración completa como marco de fondo, con la
+        // misma imagen difuminada rellenando los laterales. El arte se ancla
+        // arriba y mide --art-h, así el mensaje de bienvenida queda visible y
+        // el recuadro se coloca justo debajo, en su espacio vacío.
         <div className="hidden lg:block fixed inset-0 overflow-hidden" aria-hidden="true">
-          <Image
-            src={backgroundImage}
-            alt=""
-            fittingType="fill"
-            focalPointX={0.5}
-            focalPointY={0.5}
-            quality={50}
-            className="block w-full h-full blur-2xl scale-110 opacity-60"
+          <div
+            className="absolute inset-0 opacity-50 blur-2xl"
+            style={{
+              backgroundImage: `url(${backgroundImage})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
           />
-          <div className="absolute inset-0 bg-background/45" />
-          <Image
-            src={backgroundImage}
-            alt=""
-            fittingType="fit"
-            quality={85}
-            className="relative block w-full h-full"
+          <div className="absolute inset-0 bg-background/55" />
+          <div
+            className="absolute inset-x-0 top-0 bg-no-repeat"
+            style={{
+              height: "var(--art-h)",
+              backgroundImage: `url(${backgroundImage})`,
+              backgroundSize: "contain",
+              backgroundPosition: "center top",
+            }}
           />
-          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-background/70" />
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-background/70" />
         </div>
       )}
 
@@ -53,7 +55,7 @@ export default function AuthLayout({ icon: Icon, logo, title, subtitle, footer, 
         {backgroundImage && (
           // Reserva la franja del arte que ocupa el logo y el mensaje de
           // bienvenida, para que el recuadro nunca los tape.
-          <div aria-hidden="true" className="h-[max(36vh,50vw)] w-full shrink-0 lg:h-[36vh]" />
+          <div aria-hidden="true" className="h-[max(36vh,50vw)] w-full shrink-0 lg:h-[calc(var(--art-h)*0.34)]" />
         )}
         <div
           className={`relative w-full ${
