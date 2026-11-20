@@ -146,7 +146,10 @@ class SessionAudio {
     };
     this._onUnlockPlaying = onPlaying;
     el.addEventListener("playing", onPlaying);
-    const p = el.play();
+    // play() se invoca dentro del gesto del usuario: eso es lo que autoriza a
+    // iOS a reproducir este elemento después, ya sin gesto (tras la cuenta).
+    let p = null;
+    try { p = el.play(); } catch (e) { p = null; }
     if (p && typeof p.then === "function") {
       p.catch(() => {
         el.removeEventListener("playing", onPlaying);

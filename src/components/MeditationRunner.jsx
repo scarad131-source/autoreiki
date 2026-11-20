@@ -21,9 +21,13 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   // prácticas cortas) se recortan al tiempo previsto.
   // Mientras llega la duración real se usa el tiempo previsto: con Infinity el
   // reloj mostraba "Infinity:NaN" y la sesión no podía terminar.
+  // iOS puede informar una duración parcial (o casi cero) mientras descarga la
+  // pista: solo se acepta una duración de voz real, nunca una estimación corta
+  // que cerraría la sesión apenas empieza.
+  const realVoiceDuration = audioDuration && audioDuration > MIN_VOICE_DURATION ? audioDuration : null;
   const totalSeconds = isVoiceTrack(config.audio)
-    ? audioDuration
-      ? Math.max(1, Math.round(config.journeyDay ? Math.min(audioDuration, plannedSeconds) : audioDuration))
+    ? realVoiceDuration
+      ? Math.max(1, Math.round(config.journeyDay ? Math.min(realVoiceDuration, plannedSeconds) : realVoiceDuration))
       : plannedSeconds
     : plannedSeconds;
   const [countdown, setCountdown] = useState(isVoiceTrack(config.audio) ? 2 : 3);
@@ -124,7 +128,9 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     };
     const onLoaded = () => {
       const d = el.duration;
-      if (isVoiceTrack(config.audio) && d && isFinite(d)) setAudioDuration(d);
+      // Solo una duración de voz real: Safari/iOS informa la duración de la
+      // parte descargada, y un valor mínimo cerraba la sesión al instante.
+      if (isVoiceTrack(config.audio) && d && isFinite(d) && d > MIN_VOICE_DURATION) setAudioDuration(d);
     };
     const onTime = (e) => {
       const cur = e.currentTarget.currentTime;
@@ -134,22 +140,17 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         // Solo se acepta la duración real de una pista guiada (minutos): una
         // estimación mínima del reproductor cerraría la sesión al instante.
         if (d && isFinite(d) && d > MIN_VOICE_DURATION) setAudioDuration(d);
-        if (started && !paused && !finishedRef.current) {
-          // El reloj lo lleva únicamente el intervalo de 1 s (más abajo). Aquí
-          // solo se detecta el final: si además escribiera el tiempo, ambos
-          // valores chocarían y el temporizador saltaría hacia atrás.
-          // Detección de fin: cuando el audio llega casi al final. Se exige una
-          // duración real (> 2 s) para no cerrar la sesión si el reproductor
-          // informa un final vacío antes de cargar la pista.
-          if (d && isFinite(d) && d > MIN_VOICE_DURATION && cur >= d - 0.4) finishGuided();
-        }
+        // La sesión se cierra únicamente con el evento "ended": ni un error,
+        // ni una pausa, ni una duración estimada la dan por terminada.
       }
     };
     const onEnded = () => {
       if (isVoiceTrack(config.audio)) {
-        // Solo cuenta como final válido si el audio realmente avanzó.
+        // Solo cuenta como final válido si el audio realmente sonó y avanzó:
+        // un "ended" vacío antes de cargar no cierra la sesión.
         const dur = el.duration;
-        if ((dur && isFinite(dur) && dur > MIN_VOICE_DURATION) || el.currentTime > 2) finishGuided();
+        const realEnd = (dur && isFinite(dur) && dur > MIN_VOICE_DURATION) || el.currentTime > 2;
+        if (playedRef.current && realEnd) finishGuided();
         return;
       }
       // No guiada: si el loop falla y el audio termina, reiniciarlo manualmente
@@ -207,7 +208,9 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     // Solo se rebobina si la pista ya tiene metadata: en archivos largos pedir
     // currentTime antes de cargar reinicia la descarga y retrasa el sonido.
     if (el.readyState >= 1) { try { el.currentTime = 0; } catch (e) {} }
-    if (el.paused) playAudio();
+    // Siempre se pide play (sobre el mismo elemento ya desbloqueado): si iOS
+    // pausó el audio al reactivar el sonido, esta llamada lo devuelve a sonar.
+    playAudio();
   }, [started]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // calcular paso actual guiado (solo para texto visual en pantalla)
@@ -327,10 +330,13 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     if (bowlsOn) ambient.preloadBowl();
   }, [bowlsOn]);
 
-  // fin de sesión (todos los modos): por temporizador. Es la red de seguridad
-  // cuando el audio guiado no puede reproducirse y no dispara "ended".
+  // Fin de sesión por temporizador: solo para las sesiones con sonido ambiente
+  // (su duración es la prevista). Las sesiones con voz terminan únicamente
+  // cuando el audio termina de verdad (evento "ended"); si iOS bloquea el
+  // sonido, se muestra el botón para tocarlo en lugar de cerrar la sesión.
   useEffect(() => {
     if (!started || finishedRef.current) return;
+    if (isVoiceTrack(config.audio)) return;
     if (elapsed >= totalSeconds) {
       finishedRef.current = true;
       try { el.pause(); } catch (e) {}
@@ -340,22 +346,20 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     }
   }, [elapsed, totalSeconds, started, onFinish, config.audio]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // fin de sesión (guiadas): watchdog de respaldo por si onTime/onEnded fallan
+  // Respaldo del evento "ended" en las sesiones con voz: si el sistema pierde
+  // el aviso, el elemento queda marcado como terminado y recién ahí se cierra
+  // la sesión. Nunca se cierra por un error, una pausa o una duración estimada.
   useEffect(() => {
     if (!started || !isVoiceTrack(config.audio)) return;
     const id = setInterval(() => {
-      if (finishedRef.current) return;
+      if (finishedRef.current || !el.ended || !playedRef.current) return;
+      finishedRef.current = true;
+      clearInterval(id);
       const d = el.duration;
       const knownDuration = d && isFinite(d) && d > MIN_VOICE_DURATION;
-      const realEnd = el.ended && (knownDuration || el.currentTime > 2);
-      const nearEnd = knownDuration && el.currentTime >= d - 0.4;
-      if (realEnd || nearEnd) {
-        finishedRef.current = true;
-        clearInterval(id);
-        const secs = knownDuration ? d : Math.max(el.currentTime || 0, elapsedRef.current);
-        onFinish({ actualSeconds: Math.max(1, Math.round(secs)), completed: true });
-      }
-    }, 500);
+      const secs = knownDuration ? d : Math.max(el.currentTime || 0, elapsedRef.current);
+      onFinish({ actualSeconds: Math.max(1, Math.round(secs)), completed: true });
+    }, 1000);
     return () => clearInterval(id);
   }, [started, config.audio, onFinish, el]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -408,7 +412,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const remaining = Math.max(0, totalSeconds - elapsed);
   const mm = String(Math.floor(remaining / 60)).padStart(2, "0");
   const ss = String(remaining % 60).padStart(2, "0");
-  const progress = elapsed / totalSeconds * 100;
+  const progress = Math.min(100, elapsed / totalSeconds * 100);
   const currentStep = script ? script.steps[stepIndex] : null;
 
   // Toque de inicio: desbloquea la pista dentro del gesto (lo que autoriza el
@@ -493,7 +497,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
                   onClick={retryAudio}
                   className="min-h-[44px] px-5 rounded-full bg-primary text-primary-foreground text-sm font-semibold shadow-lg active:scale-[0.98]"
                 >
-                  Toca para activar el sonido
+                  Toca para comenzar
                 </button>
               )}
 
