@@ -5,7 +5,7 @@ export default function AuthLayout({ icon: Icon, logo, title, subtitle, footer, 
   return (
     <div
       className="relative flex min-h-[100svh] flex-col overflow-y-auto bg-background px-4 pt-[calc(1.5rem+env(safe-area-inset-top))] pb-[calc(1.5rem+env(safe-area-inset-bottom))]"
-      style={{ "--art-h": "min(100svh, 820px)" }}
+      style={{ "--art-h": "1200px" }}
     >
       {backgroundImage && (
         // Móvil: fondo a pantalla completa, cubriendo toda la vista.
@@ -47,7 +47,6 @@ export default function AuthLayout({ icon: Icon, logo, title, subtitle, footer, 
               backgroundPosition: "center top",
             }}
           />
-          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-background/70" />
         </div>
       )}
 
