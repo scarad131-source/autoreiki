@@ -145,14 +145,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   useEffect(() => {
     const finishGuided = () => {
       if (finishedRef.current) return;
-      // DEBUG TEMPORAL: no se navega a "sesión terminada".
-      if (DEBUG_AUDIO) {
-        setDebug((d) => ({
-          ...d,
-          endedReason: "finishGuided() desde el evento 'ended' del audio — navegación bloqueada",
-        }));
-        return;
-      }
       finishedRef.current = true;
       const d = el.duration;
       // Duración real del audio; si aún no se conoce, el tiempo del reloj.
@@ -179,11 +171,18 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     };
     const onEnded = () => {
       if (isVoiceTrack(config.audio)) {
-        // Solo cuenta como final válido si el audio realmente sonó y avanzó:
-        // un "ended" vacío antes de cargar no cierra la sesión.
+        // Único cierre automático válido: "ended" con duración real y posición
+        // al final de la pista (un "ended" con dur=0 y t=0 no cierra nada).
         const dur = el.duration;
-        const realEnd = (dur && isFinite(dur) && dur > MIN_VOICE_DURATION) || el.currentTime > 2;
-        if (playedRef.current && realEnd) finishGuided();
+        const cur = el.currentTime;
+        const atEnd = isFinite(dur) && dur > 0 && cur > 0 && Math.abs(dur - cur) <= 1.5;
+        setDebug((d) => ({
+          ...d,
+          endedReason: atEnd
+            ? `evento 'ended' con t=${cur.toFixed(1)}s de ${dur.toFixed(1)}s — cerrando sesión`
+            : `evento 'ended' ignorado: t=${cur}s dur=${dur}s (no está al final)`,
+        }));
+        if (atEnd) finishGuided();
         return;
       }
       // No guiada: si el loop falla y el audio termina, reiniciarlo manualmente
@@ -240,17 +239,16 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     return () => clearTimeout(t);
   }, [countdown, armed]);
 
-  // al terminar la cuenta, reproducir el audio (ya desbloqueado en el gesto)
+  // Al terminar la cuenta regresiva se reutiliza el MISMO elemento de audio que
+  // se desbloqueó en el toque de inicio: rebobinar, quitar el silencio y sonar.
   useEffect(() => {
     if (!started) return;
-    el.muted = muted;
-    el.volume = muted ? 0 : volume;
+    // Cancela el pausado pendiente del desbloqueo: la sesión ya arrancó.
+    sessionAudio.startSession();
     el.loop = !isVoiceTrack(config.audio);
-    // Solo se rebobina si la pista ya tiene metadata: en archivos largos pedir
-    // currentTime antes de cargar reinicia la descarga y retrasa el sonido.
-    if (el.readyState >= 1) { try { el.currentTime = 0; } catch (e) {} }
-    // Siempre se pide play (sobre el mismo elemento ya desbloqueado): si iOS
-    // pausó el audio al reactivar el sonido, esta llamada lo devuelve a sonar.
+    try { el.currentTime = 0; } catch (e) {}
+    el.muted = false;
+    el.volume = 1;
     playAudio();
   }, [started]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -290,43 +288,8 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     }
   }, [paused, started]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // iOS/Android: al bloquear el teléfono, entrar una llamada o volver de otra app,
-  // el sistema pausa el audio. Reanudamos al instante (visibilitychange/pageshow)
-  // y además revisamos cada 2 s que la sesión siga sonando, para que el sonido de
-  // fondo no se corte a media meditación.
-  useEffect(() => {
-    if (!started) return;
-    const onVisible = () => {
-      if (document.visibilityState !== "visible" || paused || finishedRef.current) return;
-      sessionAudio.ensurePlaying();
-    };
-    let silentTicks = 0;
-    const watchdog = setInterval(() => {
-      if (paused || finishedRef.current || document.visibilityState === "hidden") return;
-      sessionAudio.ensurePlaying();
-      // Si el sistema mantiene el audio detenido (bloqueo de autoplay, corte del
-      // contexto), se ofrece el toque de reactivación en pantalla.
-      if (el.paused && !el.ended) setNeedsTap(true);
-      // Si el audio aún no ha sonado nada, se ofrece el mismo toque: recarga la
-      // pista en lugar de dejar la sesión en silencio sin avisar.
-      if (!playedRef.current) {
-        silentTicks += 1;
-        // El toque solo se pide cuando el navegador ya tiene datos y aun así no
-        // reproduce (autoplay bloqueado). Si aún descarga, se muestra el aviso de
-        // carga y no se reinicia la descarga con un toque.
-        if (silentTicks >= 4 && el.readyState >= 2) setNeedsTap(true);
-      }
-    }, 2000);
-    document.addEventListener("visibilitychange", onVisible);
-    window.addEventListener("pageshow", onVisible);
-    window.addEventListener("focus", onVisible);
-    return () => {
-      clearInterval(watchdog);
-      document.removeEventListener("visibilitychange", onVisible);
-      window.removeEventListener("pageshow", onVisible);
-      window.removeEventListener("focus", onVisible);
-    };
-  }, [started, paused, el]);
+  // El cierre de la sesión ya no depende de ningún vigilante (watchdog): solo el
+  // evento "ended" del propio audio puede darla por terminada.
 
   // Mantiene la pantalla encendida durante la sesión: si el teléfono se bloquea,
   // Android e iOS detienen el audio. Soportado en Chrome/Android y Safari 16.4+.
@@ -387,32 +350,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     }
   }, [elapsed, totalSeconds, started, onFinish, config.audio]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Respaldo del evento "ended" en las sesiones con voz: si el sistema pierde
-  // el aviso, el elemento queda marcado como terminado y recién ahí se cierra
-  // la sesión. Nunca se cierra por un error, una pausa o una duración estimada.
-  useEffect(() => {
-    if (!started || !isVoiceTrack(config.audio)) return;
-    const id = setInterval(() => {
-      if (finishedRef.current || !el.ended || !playedRef.current) return;
-      // DEBUG TEMPORAL: no se navega a "sesión terminada".
-      if (DEBUG_AUDIO) {
-        setDebug((d) => ({
-          ...d,
-          endedReason: "respaldo watchdog (el.ended === true) — navegación bloqueada",
-        }));
-        clearInterval(id);
-        return;
-      }
-      finishedRef.current = true;
-      clearInterval(id);
-      const d = el.duration;
-      const knownDuration = d && isFinite(d) && d > MIN_VOICE_DURATION;
-      const secs = knownDuration ? d : Math.max(el.currentTime || 0, elapsedRef.current);
-      onFinish({ actualSeconds: Math.max(1, Math.round(secs)), completed: true });
-    }, 1000);
-    return () => clearInterval(id);
-  }, [started, config.audio, onFinish, el]); // eslint-disable-line react-hooks/exhaustive-deps
-
   useEffect(() => {
     if (started) {
       el.muted = muted;
@@ -469,7 +406,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const debugUrl = (el && (el.currentSrc || el.src)) || audioUrlFor(config.audio);
   const debugExt = (debugUrl.split("?")[0].match(/\.([a-z0-9]+)$/i) || [])[1] || "desconocida";
   const debugState = el
-    ? `paused=${el.paused} muted=${el.muted} readyState=${el.readyState} red=${el.networkState} t=${Math.round(el.currentTime || 0)}s dur=${isFinite(el.duration) ? Math.round(el.duration) : "?"}s`
+    ? `paused=${el.paused} ended=${el.ended} muted=${el.muted} readyState=${el.readyState} red=${el.networkState} t=${Math.round(el.currentTime || 0)}s dur=${isFinite(el.duration) ? Math.round(el.duration) : "?"}s`
     : "—";
 
   // Toque de inicio: desbloquea la pista dentro del gesto (lo que autoriza el
