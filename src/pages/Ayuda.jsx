@@ -14,7 +14,15 @@ const TIPS = [
   {
     icon: Brain,
     title: "No logro acallar la mente",
-    body: "No luches contra los pensamientos. Activa la meditación de 5 minutos en la preparación y vuelve una y otra vez a la respiración.",
+    body: "No hay que vaciar la mente: basta con volver, sin juicio, cada vez que te des cuenta de que te fuiste. Elige la opción que te resulte más fácil hoy.",
+    options: [
+      "Nombra lo que llega en voz baja: «pensamiento», «ruido», «prisa». Nombrarlo lo afloja y te devuelve al sonido.",
+      "Deja que el pensamiento pase como una nube y regresa a la respiración, sin pelear con él.",
+      "Cuenta las respiraciones del 1 al 10 y empieza otra vez. Cuando pierdas la cuenta, ese momento ya es meditación.",
+      "Apoya las manos sobre el pecho y siente cómo se mueve al respirar: el cuerpo te ancla cuando la cabeza no para.",
+      "Elige una sesión no guiada de 10 minutos con sonido ambiente y limítate a escuchar. Menos instrucciones, menos exigencia.",
+      "Si hoy hay demasiado ruido interno, acorta: termina antes de tiempo y guarda la sesión. La constancia importa más que la duración.",
+    ],
   },
   {
     icon: PersonStanding,
@@ -46,6 +54,16 @@ export default function Ayuda() {
               <div>
                 <p className="font-medium text-sm">{t.title}</p>
                 <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">{t.body}</p>
+                {t.options && (
+                  <ul className="mt-3 space-y-2">
+                    {t.options.map((o) => (
+                      <li key={o} className="flex gap-2 text-sm text-muted-foreground leading-relaxed">
+                        <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary shrink-0" aria-hidden="true" />
+                        <span>{o}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </div>
           );
