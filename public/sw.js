@@ -4,7 +4,7 @@
 //   2) imágenes y fuentes que usa la interfaz             -> MEDIA_CACHE
 //   3) los audios de las sesiones (ambiente y voz guiada) -> AUDIO_CACHE
 
-const SHELL_CACHE = 'autoreiki-shell-v4';
+const SHELL_CACHE = 'autoreiki-shell-v5';
 const MEDIA_CACHE = 'autoreiki-media-v4';
 const AUDIO_CACHE = 'autoreiki-audio-v4';
 const CACHES = [SHELL_CACHE, MEDIA_CACHE, AUDIO_CACHE];
@@ -122,6 +122,20 @@ async function rangedResponse(res, range) {
   return new Response(body, { status: 206, headers });
 }
 
+// Red primero: cada actualización de la app llega al instante al teléfono. Sin
+// conexión se usa la copia guardada (modo offline).
+async function networkFirst(req, cacheName) {
+  const cache = await caches.open(cacheName);
+  try {
+    const res = await fetch(req);
+    if (res.ok) cache.put(req, res.clone()).catch(() => {});
+    return res;
+  } catch (err) {
+    const cached = await cache.match(req, { ignoreVary: true });
+    return cached || new Response(null, { status: 503 });
+  }
+}
+
 // Caché primero (para abrir sin conexión) con red de respaldo la primera vez.
 async function cacheFirst(req, cacheName) {
   const cache = await caches.open(cacheName);
@@ -173,8 +187,9 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
-  // Assets (JS/CSS): caché primero para que la app abra sin conexión.
-  e.respondWith(cacheFirst(req, SHELL_CACHE));
+  // Assets (JS/CSS): red primero para recibir siempre la última versión, con la
+  // copia guardada como respaldo sin conexión.
+  e.respondWith(networkFirst(req, SHELL_CACHE));
 });
 
 // --- Avisos push: los entrega el sistema aunque la app esté cerrada ---

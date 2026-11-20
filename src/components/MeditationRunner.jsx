@@ -3,7 +3,7 @@ import { Pause, Play, Headphones, Rewind, RotateCcw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { RELEASE_SCRIPTS, CHAKRAS } from "@/lib/guidedScripts";
 import { ambient } from "@/lib/audioEngine";
-import { isVoiceTrack } from "@/lib/audioSources";
+import { audioUrlFor, isVoiceTrack } from "@/lib/audioSources";
 
 // Fondo de pantalla para la sesión de meditación (piedras zen sobre el agua).
 const ZEN_BG = "https://media.base44.com/images/public/6a7d30a899098694894dbd88/c9ee16c53_Piedraszen2.jpeg";
@@ -27,6 +27,10 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
       : plannedSeconds
     : plannedSeconds;
   const [countdown, setCountdown] = useState(isVoiceTrack(config.audio) ? 2 : 3);
+  // La sesión no arranca sola: espera un toque en esta misma pantalla. Los
+  // navegadores móviles solo permiten reproducir audio con sonido desde un
+  // gesto del usuario, y al llegar desde otra pantalla ese gesto se pierde.
+  const [armed, setArmed] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [paused, setPaused] = useState(false);
   // El navegador puede bloquear el audio guiado (política de autoplay): en ese
@@ -39,7 +43,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   // aplicamos una amplificación extra vía Web Audio para que se escuche claro.
   const isBowls = config.audio === "bowls";
   // La voz guiada suena a volumen pleno: es lo que el usuario necesita oír.
-  const [volume, setVolume] = useState(isVoiceTrack(config.audio) ? 1 : isBowls ? 0.7 : 0.5);
+  const [volume, setVolume] = useState(isVoiceTrack(config.audio) ? 1 : isBowls ? 1 : 0.5);
   const [muted, setMuted] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
   const bowlsOn = config.bowlsMarkers === true;
@@ -53,7 +57,7 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   // ¿El audio llegó a sonar? Evita registrar como "completada" una sesión muda.
   const playedRef = useRef(false);
 
-  const started = countdown === 0;
+  const started = armed && countdown === 0;
   const el = audioRef.current;
 
   // Reproductor con aviso: si el navegador rechaza el play (autoplay), se pide
@@ -187,10 +191,10 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
 
   // cuenta regresiva de inicio
   useEffect(() => {
-    if (countdown <= 0) return;
+    if (!armed || countdown <= 0) return;
     const t = setTimeout(() => setCountdown((c) => c - 1), 1000);
     return () => clearTimeout(t);
-  }, [countdown]);
+  }, [countdown, armed]);
 
   // al terminar la cuenta, reproducir el audio (ya desbloqueado en el gesto)
   useEffect(() => {
@@ -405,6 +409,17 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const progress = elapsed / totalSeconds * 100;
   const currentStep = script ? script.steps[stepIndex] : null;
 
+  // Toque de inicio: desbloquea la pista dentro del gesto (lo que autoriza el
+  // sonido en móvil) y arranca la cuenta regresiva. Al terminar, el audio ya
+  // está permitido y empieza solo.
+  const handleArm = () => {
+    sessionAudio.unlock(audioUrlFor(config.audio), {
+      loop: !isVoiceTrack(config.audio),
+      boost: config.audio === "bowls" ? 2.5 : 1,
+    });
+    setArmed(true);
+  };
+
   const handleRewind = () => {
     setElapsed((e) => Math.max(0, e - 10));
     try { el.currentTime = Math.max(0, (el.currentTime || 0) - 10); } catch (err) {}
@@ -441,7 +456,21 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         </div>
 
         <div className="flex-1 flex flex-col items-center justify-center gap-4 sm:gap-6 w-full py-2">
-          {countdown > 0 ? (
+          {!armed ? (
+            <div className="flex flex-col items-center gap-4 text-center">
+              <button
+                onClick={handleArm}
+                className="w-24 h-24 rounded-full flex items-center justify-center bg-gradient-to-br from-primary to-glow-cyan text-primary-foreground shadow-[0_0_35px_hsl(var(--gold)/0.55)] active:scale-95 transition-transform"
+                aria-label="Comenzar la sesión"
+              >
+                <Play className="w-9 h-9 ml-1" />
+              </button>
+              <div>
+                <p className="text-xl font-display font-semibold">Comenzar</p>
+                <p className="text-[11px] text-foreground/75 uppercase tracking-[0.18em] mt-1">Toca para iniciar el audio</p>
+              </div>
+            </div>
+          ) : countdown > 0 ? (
             <div className="text-center">
               <motion.p
                 key={countdown}

@@ -11,6 +11,7 @@
 class SessionAudio {
   constructor() {
     this.el = null;
+    this.url = null;
     this.audioCtx = null;
     this.sourceNode = null;
     this.gainNode = null;
@@ -35,31 +36,16 @@ class SessionAudio {
     if (!this.el) {
       this.el = new Audio();
       this.el.preload = "auto";
-      this.el.crossOrigin = "anonymous";
     }
     return this.el;
   }
 
-  // Configura la cadena Web Audio (element -> gain -> destination) una sola vez.
-  // Esto permite aplicar un factor de ganancia > 1 al audio reproducido.
-  _setupWebAudio() {
-    if (this.audioCtx) return;
-    try {
-      const AC = window.AudioContext || window.webkitAudioContext;
-      if (!AC) return;
-      this.audioCtx = new AC();
-      this.sourceNode = this.audioCtx.createMediaElementSource(this.el);
-      this.gainNode = this.audioCtx.createGain();
-      this.gainNode.gain.value = this.boostFactor;
-      this.sourceNode.connect(this.gainNode);
-      this.gainNode.connect(this.audioCtx.destination);
-    } catch (e) {
-      // Si falla, el audio sigue saliendo por el elemento nativo.
-      this.audioCtx = null;
-      this.sourceNode = null;
-      this.gainNode = null;
-    }
-  }
+  // El audio suena siempre por la ruta nativa del elemento. Antes se enrutaba
+  // por Web Audio para amplificar, pero en móvil esa ruta deja el sonido mudo
+  // cuando el contexto se suspende (llamadas, segundo plano) o con el
+  // interruptor de silencio activo; y como el reproductor es único, después de
+  // usar "Frecuencias Sanadoras" la voz guiada se quedaba sin sonido.
+  _setupWebAudio() {}
 
   // Reanuda el AudioContext si quedó suspendido (políticas de autoplay).
   _resumeCtx() {
@@ -104,19 +90,9 @@ class SessionAudio {
   // límite nativo). Debe llamarse dentro o cerca de un gesto del usuario.
   setBoost(factor) {
     this.boostFactor = factor || 1;
-    // Solo se enruta el audio por Web Audio cuando hay que amplificar. Así una
-    // pista normal (voz de Reiki, ambiente) sale por la ruta nativa del
-    // navegador, la más fiable, y no puede quedarse muda porque el contexto de
-    // audio de Web Audio esté suspendido.
-    if (this.boostFactor > 1) this._setupWebAudio();
-    this._resumeCtx();
-    if (this.gainNode) {
-      try {
-        const t = this.audioCtx.currentTime;
-        this.gainNode.gain.cancelScheduledValues(t);
-        this.gainNode.gain.linearRampToValueAtTime(this.boostFactor, t + 0.05);
-      } catch (e) {}
-    }
+    // La amplificación se aplica con el volumen nativo al máximo: es la ruta
+    // fiable en todos los dispositivos y nunca deja la sesión en silencio.
+    if (this.el && this.boostFactor > 1) this.el.volume = 1;
   }
 
   // Debe llamarse dentro del gesto del usuario (onClick).
@@ -132,7 +108,12 @@ class SessionAudio {
       this._onUnlockPlaying = null;
     }
     try { el.pause(); } catch (e) {}
-    el.src = url;
+    // No se reinicia la descarga si la pista ya es la misma: pudo prepararse en
+    // la pantalla anterior y volver a asignarla tiraría el audio ya cargado.
+    if (this.url !== url) {
+      el.src = url;
+      this.url = url;
+    }
     el.loop = !!loop;
     this.setSessionActive(true);
     // Silenciamos durante el ciclo play-pause del desbloqueo: en pistas largas
