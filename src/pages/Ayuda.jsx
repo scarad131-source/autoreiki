@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Clock, Pause, Brain, PersonStanding, ChevronDown } from "lucide-react";
 
 const TIPS = [
@@ -61,36 +62,56 @@ export default function Ayuda() {
           const Icon = t.icon;
           const isOpen = open === i;
           return (
-            <div key={t.title} className="rounded-2xl bg-card border border-white/5 overflow-hidden">
+            <div
+              key={t.title}
+              className={`rounded-2xl bg-card overflow-hidden transition-all duration-300 ${
+                isOpen
+                  ? "border border-primary/50 ring-1 ring-primary/40 shadow-[0_0_24px_hsl(var(--gold)/0.45),0_0_60px_hsl(var(--gold)/0.18)]"
+                  : "border border-white/5"
+              }`}
+            >
               <button
                 type="button"
                 onClick={() => setOpen(isOpen ? null : i)}
                 aria-expanded={isOpen}
                 className="w-full flex items-start gap-3 p-4 text-left active:scale-[0.995] transition-transform"
               >
-                <Icon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
-                <span className="flex-1 font-medium text-sm">{t.title}</span>
+                <Icon className={`w-5 h-5 shrink-0 mt-0.5 transition-colors ${isOpen ? "text-primary drop-shadow-[0_0_6px_hsl(var(--gold)/0.6)]" : "text-primary/80"}`} />
+                <span className={`flex-1 font-medium text-sm transition-colors ${isOpen ? "text-foreground" : "text-foreground/90"}`}>
+                  {t.title}
+                </span>
                 <ChevronDown
                   className={`w-4 h-4 shrink-0 mt-0.5 text-primary transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
                   aria-hidden="true"
                 />
               </button>
 
-              {isOpen && (
-                <div className="px-4 pb-4 pl-12">
-                  <p className="text-sm text-muted-foreground leading-relaxed">{t.body}</p>
-                  {t.options && (
-                    <ul className="mt-3 space-y-2">
-                      {t.options.map((o) => (
-                        <li key={o} className="flex gap-2 text-sm text-muted-foreground leading-relaxed">
-                          <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary shrink-0" aria-hidden="true" />
-                          <span>{o}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              )}
+              <AnimatePresence initial={false}>
+                {isOpen && (
+                  <motion.div
+                    key="answer"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-4 pb-4 pl-12">
+                      <p className="text-sm text-muted-foreground leading-relaxed">{t.body}</p>
+                      {t.options && (
+                        <ul className="mt-3 space-y-2">
+                          {t.options.map((o) => (
+                            <li key={o} className="flex gap-2 text-sm text-muted-foreground leading-relaxed">
+                              <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary shrink-0" aria-hidden="true" />
+                              <span>{o}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           );
         })}
