@@ -22,33 +22,42 @@ export default function AuthLayout({ icon: Icon, logo, title, subtitle, footer, 
         </div>
       )}
 
-      <div className={`relative w-full flex-1 ${backgroundImage ? "lg:flex lg:items-center lg:justify-center lg:gap-12" : ""}`}>
+      {backgroundImage && (
+        // Escritorio: la ilustración como marco de fondo, reducida para que
+        // quepa a lo alto, con un relleno difuminado de la misma imagen a los
+        // lados. Así el mensaje de bienvenida queda libre y el recuadro se
+        // coloca en el espacio vacío del arte.
+        <div className="hidden lg:block fixed inset-0 overflow-hidden" aria-hidden="true">
+          <Image
+            src={backgroundImage}
+            alt=""
+            fittingType="fill"
+            focalPointX={0.5}
+            focalPointY={0.5}
+            quality={50}
+            className="block w-full h-full blur-2xl scale-110 opacity-60"
+          />
+          <div className="absolute inset-0 bg-background/45" />
+          <Image
+            src={backgroundImage}
+            alt=""
+            fittingType="fit"
+            quality={85}
+            className="relative block w-full h-full"
+          />
+          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-background/70" />
+        </div>
+      )}
+
+      <div className="relative w-full flex-1">
         {backgroundImage && (
-          // Escritorio: la ilustración se reduce a un panel completo junto al
-          // recuadro de acceso, así el mensaje de bienvenida nunca queda tapado.
-          <div
-            className="hidden lg:block shrink-0 h-[min(76vh,600px)] aspect-[2/3] overflow-hidden rounded-[2rem] ring-1 ring-primary/25 shadow-[0_0_45px_hsl(var(--gold)/0.18)]"
-            aria-hidden="true"
-          >
-            <Image
-              src={backgroundImage}
-              alt=""
-              fittingType="fill"
-              focalPointX={0.5}
-              focalPointY={0.5}
-              quality={85}
-              className="block w-full h-full"
-            />
-          </div>
-        )}
-        {backgroundImage && (
-          // Reserva la franja superior del arte solo en móvil (en escritorio la
-          // ilustración va al lado y no se superpone).
-          <div aria-hidden="true" className="h-[max(36vh,50vw)] w-full shrink-0 lg:hidden" />
+          // Reserva la franja del arte que ocupa el logo y el mensaje de
+          // bienvenida, para que el recuadro nunca los tape.
+          <div aria-hidden="true" className="h-[max(36vh,50vw)] w-full shrink-0 lg:h-[36vh]" />
         )}
         <div
           className={`relative w-full ${
-            backgroundImage ? "mx-auto my-auto max-w-[350px] lg:mx-0 lg:my-0" : "m-auto max-w-md"
+            backgroundImage ? "mx-auto my-auto max-w-[350px] lg:my-0" : "m-auto max-w-md"
           }`}
         >
           {title && (
@@ -84,7 +93,7 @@ export default function AuthLayout({ icon: Icon, logo, title, subtitle, footer, 
       </div>
       {backgroundImage && (
         // Reserva inferior solo en móvil: sube un poco el recuadro dentro del hueco del arte.
-        <div aria-hidden="true" className="h-[10vh] w-full shrink-0 lg:hidden" />
+        <div aria-hidden="true" className="h-[10vh] w-full shrink-0 lg:h-[5vh]" />
       )}
     </div>
   );
