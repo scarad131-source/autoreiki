@@ -8,15 +8,10 @@ import { audioUrlFor, isVoiceTrack } from "@/lib/audioSources";
 // Fondo de pantalla para la sesión de meditación (piedras zen sobre el agua).
 const ZEN_BG = "https://media.base44.com/images/public/6a7d30a899098694894dbd88/c9ee16c53_Piedraszen2.jpeg";
 import { sessionAudio } from "@/lib/sessionAudio";
-import AudioDebugPanel from "@/components/AudioDebugPanel";
 
 // Una pista de voz guiada dura minutos: cualquier duración menor es una
 // estimación temporal del reproductor y cerraría la sesión al instante.
 const MIN_VOICE_DURATION = 60;
-
-// DEBUG TEMPORAL: muestra en pantalla los datos del audio y bloquea la
-// navegación a "sesión terminada". Poner en false para volver a lo normal.
-const DEBUG_AUDIO = true;
 
 export default function MeditationRunner({ config, onFinish, onCancel }) {
   const [audioDuration, setAudioDuration] = useState(null);
@@ -67,34 +62,22 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const elapsedRef = useRef(0);
   // ¿El audio llegó a sonar? Evita registrar como "completada" una sesión muda.
   const playedRef = useRef(false);
-  // DEBUG TEMPORAL: datos que se muestran en la caja de diagnóstico.
-  const [debug, setDebug] = useState({ playError: "", mediaError: "", endedReason: "" });
 
   const started = armed && countdown === 0;
   const el = audioRef.current;
 
   // Reproductor con aviso: si el navegador rechaza el play (autoplay), se pide
   // un toque del usuario en lugar de quedarse en silencio.
-  // DEBUG TEMPORAL: guarda el nombre y el mensaje del error de play().
-  const recordPlayError = (err) => {
-    setDebug((d) => ({
-      ...d,
-      playError: `${(err && err.name) || "Error"}: ${(err && err.message) || String(err)}`,
-    }));
-  };
-
   const playAudio = () => {
     let p = null;
     try {
       p = el.play();
     } catch (err) {
-      recordPlayError(err);
       setNeedsTap(true);
       return;
     }
     if (p && typeof p.then === "function") {
-      p.then(() => setNeedsTap(false)).catch((err) => {
-        recordPlayError(err);
+      p.then(() => setNeedsTap(false)).catch(() => {
         setNeedsTap(true);
       });
     }
@@ -176,12 +159,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         const dur = el.duration;
         const cur = el.currentTime;
         const atEnd = isFinite(dur) && dur > 0 && cur > 0 && Math.abs(dur - cur) <= 1.5;
-        setDebug((d) => ({
-          ...d,
-          endedReason: atEnd
-            ? `evento 'ended' con t=${cur.toFixed(1)}s de ${dur.toFixed(1)}s — cerrando sesión`
-            : `evento 'ended' ignorado: t=${cur}s dur=${dur}s (no está al final)`,
-        }));
         if (atEnd) finishGuided();
         return;
       }
@@ -200,14 +177,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
     };
     const onError = () => {
       setBuffering(false);
-      // DEBUG TEMPORAL: código del MediaError del elemento de audio.
-      const err = el.error;
-      setDebug((d) => ({
-        ...d,
-        mediaError: err
-          ? `code ${err.code}${err.message ? ` — ${err.message}` : ""}`
-          : "evento 'error' sin MediaError",
-      }));
       if (!finishedRef.current) setNeedsTap(true);
     };
     const onWaiting = () => setBuffering(true);
@@ -402,13 +371,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   const progress = Math.min(100, elapsed / totalSeconds * 100);
   const currentStep = script ? script.steps[stepIndex] : null;
 
-  // DEBUG TEMPORAL: datos visibles del reproductor.
-  const debugUrl = (el && (el.currentSrc || el.src)) || audioUrlFor(config.audio);
-  const debugExt = (debugUrl.split("?")[0].match(/\.([a-z0-9]+)$/i) || [])[1] || "desconocida";
-  const debugState = el
-    ? `paused=${el.paused} ended=${el.ended} muted=${el.muted} readyState=${el.readyState} red=${el.networkState} t=${Math.round(el.currentTime || 0)}s dur=${isFinite(el.duration) ? Math.round(el.duration) : "?"}s`
-    : "—";
-
   // Toque de inicio: desbloquea la pista dentro del gesto (lo que autoriza el
   // sonido en móvil) y arranca la cuenta regresiva. Al terminar, el audio ya
   // está permitido y empieza solo.
@@ -441,7 +403,6 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   };
 
   return (
-    <>
     <div className="relative -mt-4 mx-auto w-full max-w-[440px] flex flex-col overflow-hidden rounded-[1.75rem] ring-1 ring-primary/40 shadow-[0_0_30px_hsl(var(--gold)/0.35),0_0_70px_hsl(var(--gold)/0.18),0_18px_45px_rgba(0,0,0,0.55)] min-h-[calc(100svh-9rem)]">
       <img src={ZEN_BG} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "center 40%" }} />
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/45" />
@@ -583,15 +544,5 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         </div>
       </div>
     </div>
-    {DEBUG_AUDIO && (
-      <AudioDebugPanel
-        url={debugUrl}
-        format={debugExt}
-        playError={debug.playError}
-        mediaError={debug.mediaError}
-        endedReason={debug.endedReason}
-        state={debugState}
-      />
-    )}
-    </>);
+  );
 }
