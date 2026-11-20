@@ -1,4 +1,5 @@
-import { Clock, Pause, Brain, PersonStanding } from "lucide-react";
+import { useState } from "react";
+import { Clock, Pause, Brain, PersonStanding, ChevronDown } from "lucide-react";
 
 const TIPS = [
   {
@@ -28,10 +29,20 @@ const TIPS = [
     icon: PersonStanding,
     title: "Me cansé de una postura",
     body: "El confort es esencial. Cambia la posición o apoya los brazos en cojines; esta práctica no exige rigidez.",
+    options: [
+      "Muévete sin pedir permiso: cambia de pierna, estira el cuello o gira los hombros muy despacio. Ajustarte no interrumpe la sesión.",
+      "Puedes practicar sentado en una silla, con la espalda apoyada y los pies en el suelo, o incluso acostado de lado con una manta.",
+      "Si sientes hormigueo o adormecimiento, no lo aguantes: es la señal de que el cuerpo necesita otra posición.",
+      "Apoya las manos sobre el regazo o el vientre en lugar de mantenerlas levantadas; los brazos cargados cansan más que la espalda.",
+      "Antes de empezar, prepara un cojín bajo la cadera y otro bajo las rodillas: unos centímetros hacen la diferencia en sesiones largas.",
+      "Si el cansancio aparece a mitad de la sesión, termina antes de tiempo y guarda lo practicado. Volver mañana cuenta más que resistir hoy.",
+    ],
   },
 ];
 
 export default function Ayuda() {
+  const [open, setOpen] = useState(null);
+
   return (
     <div className="space-y-6">
       <header className="pt-2 text-center">
@@ -46,25 +57,40 @@ export default function Ayuda() {
       </section>
 
       <div className="space-y-3">
-        {TIPS.map((t) => {
+        {TIPS.map((t, i) => {
           const Icon = t.icon;
+          const isOpen = open === i;
           return (
-            <div key={t.title} className="rounded-2xl bg-card border border-white/5 p-4 flex gap-3">
-              <Icon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
-              <div>
-                <p className="font-medium text-sm">{t.title}</p>
-                <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">{t.body}</p>
-                {t.options && (
-                  <ul className="mt-3 space-y-2">
-                    {t.options.map((o) => (
-                      <li key={o} className="flex gap-2 text-sm text-muted-foreground leading-relaxed">
-                        <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary shrink-0" aria-hidden="true" />
-                        <span>{o}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
+            <div key={t.title} className="rounded-2xl bg-card border border-white/5 overflow-hidden">
+              <button
+                type="button"
+                onClick={() => setOpen(isOpen ? null : i)}
+                aria-expanded={isOpen}
+                className="w-full flex items-start gap-3 p-4 text-left active:scale-[0.995] transition-transform"
+              >
+                <Icon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
+                <span className="flex-1 font-medium text-sm">{t.title}</span>
+                <ChevronDown
+                  className={`w-4 h-4 shrink-0 mt-0.5 text-primary transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+                  aria-hidden="true"
+                />
+              </button>
+
+              {isOpen && (
+                <div className="px-4 pb-4 pl-12">
+                  <p className="text-sm text-muted-foreground leading-relaxed">{t.body}</p>
+                  {t.options && (
+                    <ul className="mt-3 space-y-2">
+                      {t.options.map((o) => (
+                        <li key={o} className="flex gap-2 text-sm text-muted-foreground leading-relaxed">
+                          <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary shrink-0" aria-hidden="true" />
+                          <span>{o}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              )}
             </div>
           );
         })}
