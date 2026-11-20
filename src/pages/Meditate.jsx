@@ -50,7 +50,8 @@ export default function Meditate() {
       }
     }
     if (preset) {
-      const cfg = { ...preset, journeyDay: location.state?.journeyDay ?? preset.journeyDay ?? null };
+      // Viene de "Iniciar terapia" (Reiki): ya hubo un toque, arranca directo.
+      const cfg = { ...preset, autoStart: true, journeyDay: location.state?.journeyDay ?? preset.journeyDay ?? null };
       if (cfg.mode === "guided" && cfg.chakras && cfg.chakras.length) {
         cfg.customScript = buildChakraScript(cfg.chakras);
       }
@@ -66,7 +67,8 @@ export default function Meditate() {
   }, [location.state]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const start = (cfg) => {
-    const finalCfg = { ...cfg, journeyDay };
+    // El usuario ya tocó "Comenzar sesión": la sesión arranca sin pedir otro toque.
+    const finalCfg = { ...cfg, journeyDay, autoStart: true };
     if (finalCfg.mode === "guided" && finalCfg.chakras && finalCfg.chakras.length) {
       finalCfg.customScript = buildChakraScript(finalCfg.chakras);
     }

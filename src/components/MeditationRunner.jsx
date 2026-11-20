@@ -30,7 +30,9 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
   // La sesión no arranca sola: espera un toque en esta misma pantalla. Los
   // navegadores móviles solo permiten reproducir audio con sonido desde un
   // gesto del usuario, y al llegar desde otra pantalla ese gesto se pierde.
-  const [armed, setArmed] = useState(false);
+  // Si la sesión se lanzó desde "Comenzar sesión" (Meditar) o "Iniciar terapia"
+  // (Reiki) ya hubo un toque del usuario: arranca directo, sin pedir otro.
+  const [armed, setArmed] = useState(config.autoStart === true);
   const [elapsed, setElapsed] = useState(0);
   const [paused, setPaused] = useState(false);
   // El navegador puede bloquear el audio guiado (política de autoplay): en ese
@@ -457,18 +459,9 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
 
         <div className="flex-1 flex flex-col items-center justify-center gap-4 sm:gap-6 w-full py-2">
           {!armed ? (
-            <div className="flex flex-col items-center gap-4 text-center">
-              <button
-                onClick={handleArm}
-                className="w-24 h-24 rounded-full flex items-center justify-center bg-gradient-to-br from-primary to-glow-cyan text-primary-foreground shadow-[0_0_35px_hsl(var(--gold)/0.55)] active:scale-95 transition-transform"
-                aria-label="Comenzar la sesión"
-              >
-                <Play className="w-9 h-9 ml-1" />
-              </button>
-              <div>
-                <p className="text-xl font-display font-semibold">Comenzar</p>
-                <p className="text-[11px] text-foreground/75 uppercase tracking-[0.18em] mt-1">Toca para iniciar el audio</p>
-              </div>
+            <div className="text-center">
+              <p className="text-2xl font-display font-semibold neon-text">Tu sesión está lista</p>
+              <p className="text-[11px] text-foreground/75 uppercase tracking-[0.18em] mt-2">Toca Comenzar para iniciar el audio</p>
             </div>
           ) : countdown > 0 ? (
             <div className="text-center">
@@ -523,6 +516,18 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
         </div>
 
         <div className="space-y-4 sm:space-y-6">
+          {!armed && (
+            <button
+              onClick={handleArm}
+              className="w-full min-h-[56px] rounded-2xl bg-gradient-to-r from-primary to-glow-cyan text-primary-foreground font-semibold text-lg flex items-center justify-center gap-2 shadow-[0_0_28px_hsl(var(--gold)/0.5)] active:scale-[0.99] transition-transform"
+            >
+              <Play className="w-5 h-5" />
+              Comenzar
+            </button>
+          )}
+
+          {armed && (
+          <>
           <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden">
             <motion.div
               className="h-full bg-gradient-to-r from-primary to-glow-cyan"
@@ -561,6 +566,8 @@ export default function MeditationRunner({ config, onFinish, onCancel }) {
               </button>
             )}
           </div>
+          </>
+          )}
 
           {started && (
             <button
