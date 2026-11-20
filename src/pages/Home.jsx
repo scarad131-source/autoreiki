@@ -168,32 +168,32 @@ export default function Home() {
         <button
           type="button"
           onClick={() => navigate("/agenda-reiki")}
-          className="mt-5 w-full rounded-2xl border border-white/10 px-4 py-3 text-left transition-colors hover:border-primary/40 active:scale-[0.99]"
+          className="mt-5 w-full rounded-2xl border border-white/10 px-4 py-3.5 text-left transition-colors hover:border-primary/40 active:scale-[0.99]"
         >
           <div className="flex items-center justify-between gap-2">
-            <p className="font-body text-[10px] uppercase tracking-[0.24em] text-muted-foreground">Agenda hoy</p>
-            <span className="inline-flex items-center gap-1 font-body text-[11px] text-primary">
-              Ver agenda <ArrowRight className="w-3 h-3" />
+            <p className="font-body text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">Agenda hoy</p>
+            <span className="inline-flex items-center gap-1 font-body text-xs font-medium text-primary">
+              Ver agenda <ArrowRight className="w-3.5 h-3.5" />
             </span>
           </div>
           {todaySessions.length > 0 ?
-          <div className="mt-2 space-y-1.5">
+          <div className="mt-2.5 space-y-2">
               {todaySessions.map((s, i) =>
             <div key={i}>
-                  <p className="font-body text-xs leading-snug text-primary">
+                  <p className="font-body text-[13px] leading-relaxed text-primary">
                     <span className="tabular-nums font-semibold">{s.time}</span>
                     {s.endTime ? <span className="text-muted-foreground/70"> – {s.endTime}</span> : null}
                     <span className="text-muted-foreground/70"> · </span>
                     {s.label || "Reiki"}
                   </p>
                   {s.details ?
-              <p className="font-body text-[11px] leading-snug text-muted-foreground/80">{s.details}</p> :
+              <p className="font-body text-xs leading-relaxed text-muted-foreground/85">{s.details}</p> :
               null}
                 </div>
             )}
             </div> :
 
-          <p className="mt-2 font-body text-xs text-muted-foreground/70">Sin sesiones programadas</p>
+          <p className="mt-2.5 font-body text-[13px] leading-relaxed text-muted-foreground/85">Sin sesiones programadas</p>
           }
         </button>
 
